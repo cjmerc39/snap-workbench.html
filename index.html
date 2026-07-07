@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Snap Workbench</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b0e1c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Workbench">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#0b0e1c; --panel:#161b31; --card:#1b2140; --raise:#232a4e; --line:#2d3560;
+  --text:#f2f4fb; --dim:#9aa3c4; --faint:#66708f;
+  --cost:#4fb3ff; --costbg:#0c2b47; --pow:#ffa22e; --powbg:#3a230c;
+  --gold:#ffd34d; --ok:#4fe0a5; --warn:#ff8a5c;
+  --disp:'Anton','Arial Narrow',sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0; padding:0; color:var(--text); font-family:var(--body);
+  background: radial-gradient(1100px 520px at 50% -120px, #202a5e 0%, rgba(32,42,94,0) 62%), var(--bg0);}
+body{padding-bottom:calc(122px + env(safe-area-inset-bottom));}
+button{font-family:var(--body); cursor:pointer; touch-action:manipulation;}
+input,textarea{font-size:16px;}
+
+/* ---------- header ---------- */
+header{
+  padding:12px 14px; display:flex; align-items:center; justify-content:space-between;
+  background:
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,.07) 1px, transparent 1.5px) 0 0/7px 7px,
+    linear-gradient(120deg,#161d3e,#0d1126);
+  border-bottom:1px solid var(--line);
+  position:sticky; top:0; z-index:30;
+}
+h1{font-family:var(--disp); font-size:19px; letter-spacing:1.6px; margin:0; font-weight:400;}
+h1 .h-snap{color:var(--gold);}
+.gear{background:rgba(255,255,255,.05); border:1px solid var(--line); color:var(--dim); border-radius:10px; padding:7px 12px; font-size:15px;}
+
+/* ---------- tabs ---------- */
+#tabbar{
+  position:fixed; bottom:0; left:0; right:0; z-index:40;
+  display:flex; background:rgba(13,16,33,.92); backdrop-filter:blur(12px);
+  border-top:1px solid var(--line); padding-bottom:env(safe-area-inset-bottom);
+}
+#tabbar button{
+  flex:1; background:none; border:none; color:var(--faint); padding:10px 0 8px;
+  font-size:10.5px; font-weight:700; letter-spacing:.4px; display:flex; flex-direction:column; align-items:center; gap:3px;
+}
+#tabbar button svg{width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;}
+#tabbar button.on{color:var(--gold);}
+
+/* ---------- deck bar ---------- */
+#deckbar{
+  position:fixed; left:10px; right:10px; z-index:39;
+  bottom:calc(58px + env(safe-area-inset-bottom));
+  background:linear-gradient(160deg,#252c52,#1b2140); border:1px solid var(--line); border-radius:14px;
+  padding:9px 14px; display:flex; align-items:center; gap:10px;
+  box-shadow:0 8px 22px rgba(0,0,0,.5);
+}
+#deckbar .db-name{font-weight:700; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:38%;}
+#deckbar .db-dots{display:flex; gap:3px; flex:1;}
+#deckbar .db-dots i{width:7px; height:11px; border-radius:2px; background:#333c6e;}
+#deckbar .db-dots i.f{background:var(--gold);}
+#deckbar .db-count{font-family:var(--disp); font-size:16px; letter-spacing:.5px; color:var(--gold);}
+
+/* ---------- views ---------- */
+.view{display:none; padding:12px 12px 8px;}
+.view.on{display:block;}
+.section-label{font-family:var(--disp); font-weight:400; letter-spacing:1.4px; font-size:12px; color:var(--faint); margin:16px 2px 8px; text-transform:uppercase;}
+
+/* ---------- search & chips ---------- */
+#q{
+  width:100%; background:var(--panel); border:1px solid var(--line); color:var(--text);
+  border-radius:12px; padding:11px 14px; outline:none; margin-bottom:8px;
+}
+#q:focus{border-color:var(--cost);}
+.chiprow{display:flex; gap:6px; overflow-x:auto; padding:1px 0 8px; scrollbar-width:none;}
+.chiprow::-webkit-scrollbar{display:none;}
+.chip{
+  flex:0 0 auto; background:var(--panel); border:1px solid var(--line); color:var(--dim);
+  border-radius:999px; padding:7px 13px; font-size:13px; font-weight:600;
+}
+.chip.on{background:var(--gold); border-color:var(--gold); color:#17130a;}
+.chip.c-cost.on{background:var(--cost); border-color:var(--cost); color:#08131f;}
+.chip.c-own.on{background:var(--ok); border-color:var(--ok); color:#0a1f16;}
+#matchcount{font-size:12px; color:var(--faint); margin:0 2px 10px;}
+#artnote{display:none; background:#241f33; border:1px solid #3e3560; color:#c9bfe8; border-radius:12px; padding:9px 12px; font-size:12px; margin-bottom:10px;}
+
+/* ---------- card grid ---------- */
+.tilegrid{display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:10px;}
+.tile{background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; position:relative; transition:transform .08s;}
+.tile:active{transform:scale(.97);}
+.tile.indeck{border-color:var(--gold); box-shadow:0 0 0 1.5px var(--gold), 0 5px 16px rgba(255,211,77,.14);}
+.tart{position:relative; aspect-ratio:33/38; overflow:hidden; display:flex; align-items:center; justify-content:center;}
+.tart img{width:100%; height:100%; object-fit:contain; display:block; filter:drop-shadow(0 4px 8px rgba(0,0,0,.45));}
+.tile.noart .tart img{display:none;}
+.tinit{display:none; font-family:var(--disp); font-size:38px; letter-spacing:1px; color:rgba(255,255,255,.9); text-shadow:0 3px 10px rgba(0,0,0,.5);}
+.tile.noart .tinit{display:block;}
+.ovl{position:absolute; display:none; align-items:center; justify-content:center; font-family:var(--disp); border-radius:50%; width:27px; height:27px; font-size:14px;}
+.tile.noart .ovl{display:flex;}
+.ovl.tc{top:6px; left:6px; background:var(--costbg); border:2px solid var(--cost); color:var(--cost);}
+.ovl.tp{top:6px; right:6px; background:var(--powbg); border:2px solid var(--pow); color:var(--pow); border-radius:9px;}
+.tick{position:absolute; bottom:6px; right:6px; background:var(--gold); color:#17130a; border-radius:999px;
+  width:22px; height:22px; display:none; align-items:center; justify-content:center; font-weight:800; font-size:13px;
+  box-shadow:0 2px 8px rgba(0,0,0,.4);}
+.tile.indeck .tick{display:flex;}
+.tinfo{padding:8px 9px 9px; background:linear-gradient(180deg, rgba(255,255,255,.025), transparent);}
+.tname{font-size:12.5px; font-weight:700; line-height:1.2; display:flex; align-items:center; gap:5px;}
+.ownpip{width:7px; height:7px; border-radius:50%; background:var(--ok); display:none; flex:0 0 auto;}
+.tile.owned .ownpip{display:block;}
+.tab{font-size:10.5px; color:var(--dim); line-height:1.4; margin-top:4px; min-height:44px;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
+.tab .flav{font-style:italic; color:var(--faint);}
+.tfoot{display:flex; justify-content:space-between; align-items:center; margin-top:5px;}
+.serpill{font-size:9.5px; font-weight:800; color:var(--faint); border:1px solid var(--line); border-radius:5px; padding:1px 6px; letter-spacing:.5px;}
+.ib{background:var(--panel); border:1px solid var(--line); color:var(--dim); border-radius:8px; min-width:30px; height:23px; font-size:12px; font-weight:700;}
+
+/* ---------- deck view ---------- */
+#deckname{
+  width:100%; background:var(--panel); border:1px solid var(--line); color:var(--text);
+  border-radius:12px; padding:11px 14px; font-weight:700;
+}
+.statrow{display:flex; gap:8px; margin:10px 0;}
+.stat{flex:1; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:9px 6px; text-align:center;}
+.stat b{font-family:var(--disp); font-weight:400; font-size:19px; display:block;}
+.stat span{font-size:9.5px; color:var(--faint); text-transform:uppercase; letter-spacing:.7px;}
+.stat b.s-cnt{color:var(--gold);} .stat b.s-avg{color:var(--cost);} .stat b.s-pow{color:var(--pow);}
+#curve{display:flex; align-items:flex-end; gap:6px; height:88px; background:var(--panel);
+  border:1px solid var(--line); border-radius:12px; padding:12px 12px 6px; margin-bottom:12px;}
+.cv{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; gap:3px;}
+.cv .bar{width:100%; border-radius:4px 4px 0 0; min-height:2px; transition:height .2s;
+  background:linear-gradient(180deg, #7ccaff, var(--cost));}
+.cv .bar.z{background:#272f57;}
+.cv label{font-size:10px; color:var(--faint); font-weight:700;}
+.cv .n{font-size:10px; color:var(--dim); font-weight:700;}
+.minigrid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
+.mini{position:relative; border-radius:12px; overflow:hidden; border:1px solid var(--line); background:var(--card); aspect-ratio:33/44;}
+.mini:active{transform:scale(.97);}
+.mini img{width:100%; height:78%; object-fit:contain; display:block; margin-top:2%;}
+.mini.noart img{display:none;}
+.mini .minit{display:none; position:absolute; top:26%; left:0; right:0; text-align:center;
+  font-family:var(--disp); font-size:26px; color:rgba(255,255,255,.9); text-shadow:0 2px 8px rgba(0,0,0,.5);}
+.mini.noart .minit{display:block;}
+.mini .ovl{width:22px; height:22px; font-size:12px;}
+.mini.noart .ovl{display:flex;}
+.mname{position:absolute; bottom:0; left:0; right:0; padding:16px 5px 6px; font-size:10px; font-weight:700;
+  text-align:center; background:linear-gradient(transparent, rgba(7,9,20,.95) 55%); line-height:1.15;}
+.mini.stubby{border-style:dashed; border-color:#4a3d63;}
+.mini.empty{border-style:dashed; display:flex; align-items:center; justify-content:center; color:var(--faint); font-size:22px;}
+.deckactions{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:14px 0 6px;}
+.abtn{
+  border-radius:12px; padding:13px 8px; font-size:14px; font-weight:700;
+  background:var(--raise); color:var(--text); border:1px solid var(--line);
+}
+.abtn.primary{background:var(--gold); color:#17130a; border-color:var(--gold);}
+.abtn.subtle{color:var(--dim);}
+.abtn.danger{color:var(--warn); border-color:#5a3a34;}
+.warnbox{background:#33231d; border:1px solid #5a3a34; color:#ffc4ab; border-radius:12px; padding:10px 12px; font-size:12.5px; margin-bottom:10px;}
+
+/* ---------- saved ---------- */
+.saverow{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:8px; display:flex; align-items:center; gap:10px;}
+.saverow.active{border-color:var(--gold);}
+.saverow .sv-main{flex:1; min-width:0;}
+.saverow .sv-name{font-weight:700; font-size:14px;}
+.saverow .sv-meta{font-size:11.5px; color:var(--faint); margin-top:2px;}
+.sv-btn{background:var(--panel); border:1px solid var(--line); color:var(--dim); border-radius:9px; padding:8px 11px; font-size:13px; font-weight:700;}
+.sv-btn.load{color:var(--gold); border-color:var(--gold);}
+
+/* ---------- AI ---------- */
+.presets{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;}
+#aiq{width:100%; background:var(--panel); border:1px solid var(--line); color:var(--text);
+  border-radius:12px; padding:11px 14px; min-height:74px; resize:vertical; outline:none;}
+#aiq:focus{border-color:var(--cost);}
+.aitools{display:flex; align-items:center; gap:10px; margin:10px 0;}
+.togglelab{display:flex; align-items:center; gap:7px; font-size:13px; color:var(--dim); font-weight:600;}
+#aiout{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px;
+  font-size:14px; line-height:1.55; white-space:pre-wrap; display:none; margin-top:12px;
+}
+#aiout.err{border-color:#5a3a34; color:#ffc4ab;}
+.spin{display:inline-block; width:14px; height:14px; border:2px solid #17130a; border-top-color:transparent; border-radius:50%; animation:sp .7s linear infinite; vertical-align:-2px; margin-right:7px;}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ainote{font-size:11.5px; color:var(--faint); margin-top:10px; line-height:1.4;}
+
+/* ---------- modal / sheet ---------- */
+#modalwrap{position:fixed; inset:0; z-index:60; background:rgba(5,7,16,.74); display:none; align-items:flex-end;}
+#modalwrap.on{display:flex;}
+#modal{
+  background:var(--panel); width:100%; border-radius:18px 18px 0 0; border-top:1px solid var(--line);
+  max-height:84vh; overflow-y:auto; padding:18px 16px calc(18px + env(safe-area-inset-bottom));
+}
+#modal h2{font-family:var(--disp); font-weight:400; letter-spacing:1px; font-size:17px; margin:0 0 12px;}
+#modal textarea{
+  width:100%; background:var(--bg0); border:1px solid var(--line); color:var(--text);
+  border-radius:10px; padding:10px; min-height:96px; font-family:var(--mono); font-size:12px; resize:vertical;
+}
+.mrow{display:flex; gap:8px; margin-top:12px;}
+.mrow .abtn{flex:1;}
+.mnote{font-size:12px; color:var(--dim); line-height:1.45; margin-top:10px;}
+.mnote code{font-family:var(--mono); font-size:11px; color:var(--cost); word-break:break-all;}
+.mgood{color:var(--ok); font-size:13px; font-weight:600; margin-top:10px;}
+.mbad{color:var(--warn); font-size:13px; font-weight:600; margin-top:10px;}
+.bulkgrid{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px;}
+.sheetart{position:relative; border-radius:14px; overflow:hidden; margin-bottom:12px;
+  display:flex; align-items:center; justify-content:center; min-height:150px; max-height:36vh;}
+.sheetart img{max-width:78%; max-height:34vh; object-fit:contain; display:block; filter:drop-shadow(0 6px 14px rgba(0,0,0,.5));}
+.sheetart.noart img{display:none;}
+.sheetart .sinit{display:none; font-family:var(--disp); font-size:56px; color:rgba(255,255,255,.9); text-shadow:0 4px 14px rgba(0,0,0,.5);}
+.sheetart.noart .sinit{display:block;}
+.sheethead{display:flex; align-items:center; gap:9px; margin-bottom:8px;}
+.sheethead .bignum{font-family:var(--disp); font-size:16px; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center;}
+.bignum.bc{background:var(--costbg); border:2px solid var(--cost); color:var(--cost);}
+.bignum.bp{background:var(--powbg); border:2px solid var(--pow); color:var(--pow); border-radius:10px;}
+.sheethead .sname{font-size:17px; font-weight:800; flex:1;}
+.sheetab{font-size:14px; line-height:1.5; color:var(--text); margin:4px 0 2px;}
+.sheetflav{font-size:12.5px; font-style:italic; color:var(--faint); margin-top:6px;}
+#toast{
+  position:fixed; left:50%; transform:translateX(-50%); bottom:calc(122px + env(safe-area-inset-bottom));
+  background:var(--gold); color:#17130a; font-weight:700; font-size:13px; padding:10px 18px;
+  border-radius:999px; z-index:70; display:none; box-shadow:0 6px 18px rgba(0,0,0,.4); max-width:86vw; text-align:center;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="h-snap">SNAP</span> WORKBENCH</h1>
+  <button class="gear" id="btn-settings">&#9881;</button>
+</header>
+
+<main>
+  <!-- CARDS -->
+  <section class="view on" id="view-cards">
+    <input id="q" type="search" placeholder="Search name or ability text" autocomplete="off">
+    <div class="chiprow" id="chips-cost"></div>
+    <div class="chiprow" id="chips-mech"></div>
+    <div class="chiprow" id="chips-series"></div>
+    <div id="artnote">Card art seems blocked in this environment, so you&rsquo;re seeing tile view. Everything else works the same.</div>
+    <div id="matchcount"></div>
+    <div id="cardlist" class="tilegrid"></div>
+  </section>
+
+  <!-- DECK -->
+  <section class="view" id="view-deck">
+    <input id="deckname" placeholder="Deck name">
+    <div class="statrow">
+      <div class="stat"><b class="s-cnt" id="st-count">0</b><span>cards</span></div>
+      <div class="stat"><b class="s-avg" id="st-avg">&ndash;</b><span>avg cost</span></div>
+      <div class="stat"><b class="s-pow" id="st-pow">0</b><span>total pwr</span></div>
+    </div>
+    <div id="curve"></div>
+    <div id="deckwarn"></div>
+    <div id="decklist" class="minigrid"></div>
+    <div class="deckactions">
+      <button class="abtn primary" id="btn-copycode">Copy deck code</button>
+      <button class="abtn" id="btn-import">Import code</button>
+      <button class="abtn subtle" id="btn-dupe">Duplicate deck</button>
+      <button class="abtn danger" id="btn-cleardeck">Clear cards</button>
+    </div>
+  </section>
+
+  <!-- SAVED -->
+  <section class="view" id="view-saved">
+    <button class="abtn primary" id="btn-newdeck" style="width:100%">+ New deck</button>
+    <div class="section-label">Saved decks</div>
+    <div id="savedlist"></div>
+  </section>
+
+  <!-- AI -->
+  <section class="view" id="view-ai">
+    <div class="section-label" style="margin-top:2px">Ask the coach</div>
+    <div class="presets" id="presets"></div>
+    <textarea id="aiq" placeholder="Or ask anything about this deck..."></textarea>
+    <div class="aitools">
+      <label class="togglelab"><input type="checkbox" id="ai-owned"> Only suggest cards I own</label>
+    </div>
+    <button class="abtn primary" id="btn-ask" style="width:100%">Ask about current deck</button>
+    <div id="aiout"></div>
+    <div class="ainote">The coach reads your deck plus the card database in this app. It reasons well about curve, synergy, and win conditions; treat this-week meta claims with a grain of salt.</div>
+  </section>
+</main>
+
+<div id="deckbar">
+  <span class="db-name" id="dbar-name"></span>
+  <span class="db-dots" id="dbar-dots"></span>
+  <span class="db-count" id="dbar-count"></span>
+</div>
+
+<nav id="tabbar">
+  <button data-tab="cards" class="on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>Cards</button>
+  <button data-tab="deck"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="12" height="16" rx="2"/><path d="M9 19l1.5 2h5a2 2 0 0 0 2-2V8"/></svg>Deck</button>
+  <button data-tab="saved"><svg viewBox="0 0 24 24"><path d="M4 6a2 2 0 0 1 2-2h4l2 2.5h6a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>Saved</button>
+  <button data-tab="ai"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg>Coach</button>
+</nav>
+
+<div id="modalwrap"><div id="modal"></div></div>
+<div id="toast"></div>
+
+<script>
+'use strict';
+/* ============ DATA ============ */
+const DB_BASE = [{"n":"Wasp","d":"Wasp","c":0,"p":1,"a":"My secret power is that I get things done.","s":"3"},{"n":"Yellowjacket","d":"Yellowjacket","c":0,"p":2,"a":"On Reveal: Afflict your other cards here with -1 Power.","s":"3"},{"n":"Agent 13","d":"Agent13","c":1,"p":2,"a":"On Reveal: Add a random card to your hand.","s":"2"},{"n":"Agony","d":"Agony","c":1,"p":2,"a":"After you play a card here, merge this with it.","s":"4"},{"n":"America Chavez","d":"AmericaChavez","c":1,"p":2,"a":"On Reveal: Give the top card of your deck +2 Power.","s":"1"},{"n":"Angel","d":"Angel","c":1,"p":2,"a":"When one of your cards is destroyed, this flies out of your hand or deck to replace it.","s":"1"},{"n":"Ant Man","d":"AntMan","c":1,"p":1,"a":"Ongoing: If your side of this location is full, +4 Power.","s":"Base"},{"n":"Araña","d":"Arana","c":1,"p":2,"a":"Activate: After you play your next card, give it +1 Power and move it to the right.","s":"5"},{"n":"Bast","d":"Bast","c":1,"p":1,"a":"On Reveal: Set the Power of all cards in your hand to 3.","s":"3"},{"n":"Black Knight","d":"BlackKnight","c":1,"p":2,"a":"After you discard a card, add the Ebony Blade to your hand with that card's Power. (once per game)","s":"4"},{"n":"Blade","d":"Blade","c":1,"p":3,"a":"On Reveal: Discard the rightmost card from your hand.","s":"1"},{"n":"Clea","d":"Clea","c":1,"p":1,"a":"When this permanently gains Power, add Flames of the Faltine to your hand. (if in hand or in play)","s":"5"},{"n":"Deadpool","d":"Deadpool","c":1,"p":1,"a":"When this is destroyed, return it to your hand with double the Power.","s":"3"},{"n":"Ebony Maw","d":"EbonyMaw","c":1,"p":7,"a":"You can't play this after turn 3.Ongoing: You can't play cards here.","s":"2"},{"n":"Echo","d":"Echo","c":1,"p":2,"a":"After your opponent plays an Ongoing card here, remove its abilities.","s":"3"},{"n":"Elektra","d":"Elektra","c":1,"p":2,"a":"On Reveal: Destroy an enemy 1-Cost card here.","s":"1"},{"n":"Ghost-Spider","d":"GhostSpider","c":1,"p":2,"a":"On Reveal: The last card you played moves here.","s":"3"},{"n":"Hawkeye","d":"Hawkeye","c":1,"p":1,"a":"On Reveal: If you play a card at this location next turn, +3 Power.","s":"Base"},{"n":"Howard the Duck","d":"HowardTheDuck","c":1,"p":2,"a":"Ongoing: Tap this to see the top card of your deck.","s":"3"},{"n":"Human Torch","d":"HumanTorch","c":1,"p":2,"a":"When this moves, doubleits Power.","s":"3"},{"n":"Iceman","d":"Iceman","c":1,"p":2,"a":"On Reveal: Give a card in your opponent's hand +1 Cost.(maximum 6)","s":"2"},{"n":"Iron Fist","d":"IronFist","c":1,"p":2,"a":"On Reveal: After you play your next card, move it one location to the left.","s":"1"},{"n":"King Eitri","d":"KingEitri","c":1,"p":2,"a":"Activate: Draw a created card from your deck.","s":"5"},{"n":"Kingpin","d":"Kingpin","c":1,"p":2,"a":"When an enemy card moves here, afflict it with -2 Power.","s":"3"},{"n":"Kitty Pryde","d":"KittyPryde","c":1,"p":1,"a":"When this returns to your hand,+1 Power. Returns at the startof each turn.","s":"3"},{"n":"Korg","d":"Korg","c":1,"p":2,"a":"On Reveal: Shuffle a Rock into your opponent's deck.","s":"1"},{"n":"Loki","d":"Loki","c":1,"p":2,"a":"On Reveal: Replace your deck with your opponent's starting deck. Give those cards -1 Cost.","s":"4"},{"n":"M'Baku","d":"MBaku","c":1,"p":2,"a":"At the end of the game, this jumps from your deck to your lowest-Power location. (that isn't full)","s":"3"},{"n":"Martyr","d":"Martyr","c":1,"p":5,"a":"At the end of the game, move to a location that LOSES you thegame. (if possible)","s":"3"},{"n":"Miek","d":"Miek","c":1,"p":1,"a":"When you discard a card, this gains +1 Power and can move next turn.","s":"4"},{"n":"Misty Knight","d":"MistyKnight","c":1,"p":2,"a":"","s":"Base","f":"We've got to save this city."},{"n":"Nebula","d":"Nebula","c":1,"p":1,"a":"Each turn your opponent doesn't play a card here, +2 Power. (except the turn you play this)","s":"3"},{"n":"Nicholas Scratch","d":"NicholasScratch","c":1,"p":2,"a":"After you play a skill, +1 Power.","s":"4"},{"n":"Nico Minoru","d":"NicoMinoru","c":1,"p":2,"a":"On Reveal: After you play your next card, cast a spell. (The spellchanges each turn.)","s":"5"},{"n":"Nightcrawler","d":"Nightcrawler","c":1,"p":2,"a":"You can move this once.","s":"Base"},{"n":"Nova","d":"Nova","c":1,"p":1,"a":"When this is destroyed, give your cards +1 Power.","s":"1"},{"n":"Quicksilver","d":"Quicksilver","c":1,"p":2,"a":"Starts in your opening hand.","s":"Base"},{"n":"Quinjet","d":"Quinjet","c":1,"p":2,"a":"Ongoing: Your created cards cost 1 less. (minimum 1)","s":"3"},{"n":"Rocket Raccoon","d":"RocketRaccoon","c":1,"p":1,"a":"On Reveal: If your opponent played a card here this turn, +4 Power.","s":"1"},{"n":"Sauron","d":"Sauron","c":1,"p":3,"a":"On Reveal: Remove the abilities from all Ongoing cards in your deck.","s":"3"},{"n":"Scorn","d":"Scorn","c":1,"p":2,"a":"When you discard this, return it to your hand and give +2 Power to itself and one of your cards in play","s":"5"},{"n":"Selene","d":"Selene","c":1,"p":2,"a":"On Reveal: Afflict the lowest-Power card in each player's handwith -3 Power.","s":"3"},{"n":"Silver Sable","d":"SilverSable","c":1,"p":0,"a":"On Reveal: Steal 2 Power from the top card of your opponent’s deck.","s":"5"},{"n":"Snowguard","d":"Snowguard","c":1,"p":2,"a":"On Reveal: Add the Hawk and Bear auroras to your hand.","s":"3"},{"n":"Spider-Ham","d":"SpiderHam","c":1,"p":2,"a":"Activate: Replace the text of a random character in your opponent's hand with oink!","s":"3"},{"n":"Squirrel Girl","d":"SquirrelGirl","c":1,"p":2,"a":"On Reveal: Add a 1-Power Squirrel to each other location.","s":"1"},{"n":"Sunspot","d":"Sunspot","c":1,"p":1,"a":"End of Turn: Gain +1 Power for each unspent Energy.","s":"2"},{"n":"The Hood","d":"Hood","c":1,"p":-3,"a":"On Reveal: Add a Demon to your hand.","s":"3"},{"n":"Titania","d":"Titania","c":1,"p":5,"a":"After ANY card is played here, this card switches sides.","s":"3"},{"n":"Uatu the Watcher","d":"Uatu","c":1,"p":2,"a":"At the start of the game, shows unrevealed locations to you.","s":"1"},{"n":"Uncle Ben","d":"UncleBen","c":1,"p":2,"a":"When this card is destroyed, replace it with Spider-Man.","s":"5"},{"n":"X-23","d":"X23","c":1,"p":2,"a":"When this is discarded or destroyed, regenerate it at a random location and you get +1 Energy next turn.","s":"4"},{"n":"Yondu","d":"Yondu","c":1,"p":2,"a":"On Reveal: Banish the card that costs the least in your opponent’s deck.","s":"1"},{"n":"Zabu","d":"Zabu","c":1,"p":1,"a":"On Reveal: Give each 4-Cost card in your deck -1 Cost.","s":"3"},{"n":"Zero","d":"Zero","c":1,"p":3,"a":"On Reveal: Remove the abilities on the next card you play.","s":"3"},{"n":"Adam Warlock","d":"AdamWarlock","c":2,"p":0,"a":"End of Turn: Draw a card if you're winning here. Otherwise, +1 Power.","s":"3"},{"n":"Agent Venom","d":"AgentVenom","c":2,"p":5,"a":"On Reveal: Set the Power of all cards in your deck to 3.","s":"5"},{"n":"Angela","d":"Angela","c":2,"p":3,"a":"After you play a card here,+1 Power.","s":"1"},{"n":"Armor","d":"Armor","c":2,"p":3,"a":"Ongoing: Cards here can'tbe destroyed.","s":"1"},{"n":"Baron Mordo","d":"BaronMordo","c":2,"p":3,"a":"On Reveal: The top card of your opponent's deck costs 6 until turn 6.","s":"3"},{"n":"Black Cat","d":"BlackCat","c":2,"p":6,"a":"End of Turn: Discard this from your hand.","s":"3"},{"n":"Black Swan","d":"BlackSwan","c":2,"p":3,"a":"Activate: Until the end of next turn, your 1-Cost cards cost 0.","s":"5"},{"n":"Bruce Banner","d":"BruceBanner","c":2,"p":1,"a":"End of Turn: if you have unspent Energy, 33% chance to HULK OUT!","s":"5"},{"n":"Bucky Barnes","d":"BuckyBarnes","c":2,"p":1,"a":"When this is destroyed, replace it with the Winter Soldier.","s":"2"},{"n":"Cable","d":"Cable","c":2,"p":3,"a":"On Reveal: Draw a card from your opponent's deck.","s":"1"},{"n":"Carnage","d":"Carnage","c":2,"p":2,"a":"On Reveal: Destroy your other cards here. +2 Power for each destroyed.","s":"1"},{"n":"Cloak","d":"Cloak","c":2,"p":4,"a":"On Reveal: Next turn, both players can move cards to this location.","s":"2"},{"n":"Cobra","d":"Cobra","c":2,"p":3,"a":"Activate: Destroy an enemy created card here.","s":"4"},{"n":"Colleen Wing","d":"ColleenWing","c":2,"p":4,"a":"On Reveal: Discard the card that costs least from your hand.","s":"3"},{"n":"Colossus","d":"Colossus","c":2,"p":3,"a":"Ongoing: Can't be destroyed, moved, or have its Power reduced.","s":"Base"},{"n":"Dagger","d":"Dagger","c":2,"p":2,"a":"When this moves to a location,+2 Power for each enemy card there.","s":"3"},{"n":"Daredevil","d":"Daredevil","c":2,"p":3,"a":"On turn 5, you get to see your opponent's plays before youmake your own.","s":"3"},{"n":"Dazzler","d":"Dazzler","c":2,"p":2,"a":"Ongoing: +2 Power for each location that's full on your side.","s":"3"},{"n":"Doctor Strange","d":"DoctorStrange","c":2,"p":3,"a":"On Reveal: Move your highest-Power card(s) to this location.","s":"1"},{"n":"Domino","d":"Domino","c":2,"p":3,"a":"You always draw this card on turn 2, and not before.","s":"1"},{"n":"Elixir","d":"Elixir","c":2,"p":3,"a":"On Reveal: One of your cards destroyed last turn gets revived here.","s":"5"},{"n":"Falcon","d":"Falcon","c":2,"p":3,"a":"On Reveal: Return your 1-Cost cards to your hand.","s":"3"},{"n":"Fenris Wolf","d":"FenrisWolf","c":2,"p":3,"a":"Activate: Resurrect the highest-Power discarded or destroyed enemy card to your side of this location.","s":"5"},{"n":"Firehair","d":"Firehair","c":2,"p":3,"a":"When one of your cards is destroyed, this uses that card’s On Reveal.","s":"5"},{"n":"Forge","d":"Forge","c":2,"p":2,"a":"On Reveal: Give the next card you play +2 Power.","s":"1"},{"n":"Goliath","d":"Goliath","c":2,"p":1,"a":"Ongoing: +1 Power for each other Ongoing you have in play.","s":"5"},{"n":"Goose","d":"Goose","c":2,"p":2,"a":"Ongoing: Nobody can play cards that cost 4, 5, or 6 here.","s":"3"},{"n":"Grand Master","d":"GrandMaster","c":2,"p":3,"a":"On Reveal: Move one of your other On Reveal cards here to the middle location. Its ability happens again.","s":"4"},{"n":"H.E.R.B.I.E.","d":"Herbie","c":2,"p":3,"a":"Each turn this is in play, swap to a new Activate ability until one is used.","s":"5"},{"n":"Havok","d":"Havok","c":2,"p":0,"a":"End of Turn: You lose 1 Max Energy and this gains +4 Power.","s":"3"},{"n":"Hawkeye Kate Bishop","d":"KateBishop","c":2,"p":3,"a":"On Reveal: Add 2 Arrows to your hand.","s":"5"},{"n":"Hulkbuster","d":"Hulkbuster","c":2,"p":3,"a":"On Reveal: Merge this with one of your cards here.","s":"1"},{"n":"Invisible Woman","d":"InvisibleWoman","c":2,"p":3,"a":"Ongoing: Cards you play here are not revealed until the game ends.","s":"3"},{"n":"Iron Patriot","d":"IronPatriot","c":2,"p":3,"a":"On Reveal: Add a random 4, 5, or 6-Cost card to your hand. If you’re winning here after next turn, give it -4 Cost.","s":"5"},{"n":"Jeff the Baby Land Shark","d":"JeffTheBabyLandShark","c":2,"p":3,"a":"You can move this once. Nothing can stop you from moving or playing this to any location.","s":"5"},{"n":"Jennifer Kale","d":"JenniferKale","c":2,"p":3,"a":"Activate: Next turn, you get +1 Energy.","s":"4"},{"n":"Joaquin Torres Falcon II","d":"JoaquinTorres","c":2,"p":2,"a":"Ongoing: The On Reveal abilities of your 1-Cost cards here happen twice.","s":"5"},{"n":"Kid Omega","d":"KidOmega","c":2,"p":1,"a":"Activate: Destroy the next card you play this turn to gain its Power.","s":"5"},{"n":"Kraven","d":"Kraven","c":2,"p":2,"a":"When a card moves here, this gains +2 Power.","s":"1"},{"n":"Lasher","d":"Lasher","c":2,"p":2,"a":"Activate: Afflict an enemy card here with negative Power equal to this card's Power.","s":"4"},{"n":"Lizard","d":"Lizard","c":2,"p":6,"a":"Ongoing: -4 Power if your opponent has 4 cards here.","s":"1"},{"n":"Lockjaw","d":"Lockjaw","c":2,"p":2,"a":"Activate: After you play your next card, swap it with a card in your deck.","s":"3"},{"n":"Madame Web","d":"MadameWeb","c":2,"p":1,"a":"Ongoing: You can move one of your other cards away from here each turn.","s":"5"},{"n":"Mantis","d":"Mantis","c":2,"p":2,"a":"On Reveal: If your opponent played any cards here this turn, copy one of them into your hand.","s":"1"},{"n":"Maria Hill","d":"MariaHill","c":2,"p":2,"a":"On Reveal: Add a random 2-Cost card to your hand.","s":"3"},{"n":"Master Mold","d":"MasterMold","c":2,"p":2,"a":"On Reveal: Add 2 Sentinel to your opponent's hand.","s":"3"},{"n":"Maximus","d":"Maximus","c":2,"p":6,"a":"On Reveal: Your opponentdraws 2 cards.","s":"3"},{"n":"Medusa","d":"Medusa","c":2,"p":2,"a":"On Reveal: If this is at the middle location, +3 Power.","s":"Base"},{"n":"Mercury","d":"Mercury","c":2,"p":2,"a":"You can move this once. Ongoing: Enemy cards here can't move.","s":"4"},{"n":"Merlin","d":"Merlin","c":2,"p":3,"a":"At the start of each turn, add an Incantation to your hand.","s":"5"},{"n":"Mirage","d":"Mirage","c":2,"p":3,"a":"On Reveal: Copy the card that costs the least from your opponent's hand into your hand. Give it +2 Power.","s":"3"},{"n":"Mister Fantastic","d":"MrFantasticFirstSteps","c":2,"p":2,"a":"End of Turn: Give a card in your hand -1 Cost or +2 Power.","s":"5"},{"n":"Mister Sinister","d":"MrSinister","c":2,"p":2,"a":"On Reveal: Add a Sinister Clone here with the same Power.","s":"3"},{"n":"Mojo","d":"Mojo","c":2,"p":2,"a":"Ongoing: If both sides here are full, +6 Power.","s":"3"},{"n":"Morbius","d":"Morbius","c":2,"p":0,"a":"Ongoing: +2 Power for each time you discarded a card this game.","s":"2"},{"n":"Multiple Man","d":"MultipleMan","c":2,"p":3,"a":"When this moves, add a copy to the old location.","s":"1"},{"n":"Mysterio","d":"Mysterio","c":2,"p":4,"a":"As you play this, play Illusions to other locations. Disguise this as an Illusion until the game ends.","s":"3"},{"n":"Okoye","d":"Okoye","c":2,"p":3,"a":"On Reveal: Give every card in your deck +1 Power.","s":"2"},{"n":"Peni Parker","d":"PeniParker","c":2,"p":3,"a":"On Reveal: Add SP//dr to your hand. When this merges, you get +1 Energy next turn.","s":"5"},{"n":"Pixie","d":"Pixie","c":2,"p":1,"a":"On Reveal: Shuffle the base Costsof all cards in your deckthat started there.","s":"4"},{"n":"Psylocke","d":"Psylocke","c":2,"p":2,"a":"On Reveal: Next turn, you get +1 Energy.","s":"3"},{"n":"Quake","d":"Quake","c":2,"p":3,"a":"On Reveal: Swap the positions of the other two locations.","s":"3"},{"n":"Ravonna Renslayer","d":"RavonnaRenslayer","c":2,"p":3,"a":"Ongoing: Your cards with 1 or less Power cost 1 less. (minimum 1)","s":"4"},{"n":"Rhino","d":"Rhino","c":2,"p":5,"a":"On Reveal: Add a Rock to your side of this location.","s":"2"},{"n":"Sam Wilson Captain America","d":"SamWilson","c":2,"p":2,"a":"Game Start: Add Cap's Shield to a random location. Ongoing: You can move Cap's Shield.","s":"5"},{"n":"Scarlet Witch","d":"ScarletWitch","c":2,"p":3,"a":"On Reveal: Replace this location with a new one.","s":"1"},{"n":"Scorpion","d":"Scorpion","c":2,"p":3,"a":"On Reveal: Afflict cards in your opponent's hand with -1 Power.","s":"2"},{"n":"Scream","d":"Scream","c":2,"p":1,"a":"When an enemy card moves, steal 2 power from it. (once per turn)","s":"5"},{"n":"Sentinel","d":"Sentinel","c":2,"p":3,"a":"On Reveal: Add another Sentinel to your hand.","s":"Base"},{"n":"Shadow King","d":"ShadowKing","c":2,"p":2,"a":"On Reveal: Reset all cards here to their original Power.","s":"3"},{"n":"Shocker","d":"Shocker","c":2,"p":3,"a":"","s":"Base","f":"I'm gonna blast you!"},{"n":"Silk","d":"Silk","c":2,"p":3,"a":"After ANY card is played here, move this to another location.","s":"4"},{"n":"Star-Lord","d":"Starlord","c":2,"p":2,"a":"On Reveal: If your opponent played a card here this turn, +4 Power.","s":"Base"},{"n":"Strange Supreme","d":"StrangeSupreme","c":2,"p":1,"a":"Gains +2 Power from merging. End of Turn: Merge one of your created cards into this.","s":"5"},{"n":"Surge","d":"Surge","c":2,"p":2,"a":"On Reveal: Give the top card of your deck -1 Cost and +1 Power. After you play it, repeat this ability.","s":"5"},{"n":"Swarm","d":"Swarm","c":2,"p":3,"a":"When you discard this, add two copies that cost 0 to your hand.","s":"2"},{"n":"Thaddeus Ross","d":"ThaddeusRoss","c":2,"p":2,"a":"End of Turn: If your opponent has unspent Energy, draw a card with 10 or more Power.","s":"5"},{"n":"The Collector","d":"TheCollector","c":2,"p":2,"a":"When a card enters your hand from anywhere (except your deck),+1 Power.","s":"2"},{"n":"The First Ghost Rider","d":"GhostTheFirstRider","c":2,"p":6,"a":"On Reveal: Discard the lowest-Power card from your hand. Remove that card's Power from this.","s":"5"},{"n":"Thena","d":"Thena","c":2,"p":1,"a":"End of turn: +3 Power if you played (exactly) 2 cards.","s":"5"},{"n":"Toxie Doxie","d":"ToxieDoxie","c":2,"p":3,"a":"On Reveal: Give 2 characters in your hand +2 Power. You can't play them next turn.","s":"4"},{"n":"Toxin","d":"Toxin","c":2,"p":2,"a":"On Reveal: Return your other cards here to your hand. +2 Power for each returned.","s":"5"},{"n":"U.S. Agent","d":"USAgent","c":2,"p":3,"a":"Ongoing: 4, 5, and 6-Cost cards here have -4 Power.","s":"5"},{"n":"Valentina","d":"Valentina","c":2,"p":3,"a":"On Reveal: Add a random 6-Cost card to your hand. Give it -2 Cost and -2 Power.","s":"4"},{"n":"Victoria Hand","d":"VictoriaHand","c":2,"p":3,"a":"Ongoing: Your cards created in your hand have +2 Power.","s":"5"},{"n":"White Widow","d":"WhiteWidow","c":2,"p":2,"a":"On Reveal: Add a Widow's Kiss to your opponent's side of this location.","s":"5"},{"n":"Wolverine","d":"Wolverine","c":2,"p":3,"a":"When this is discarded or destroyed, regenerate it with +2 Power at a random location.","s":"1"},{"n":"Xorn","d":"Xorn","c":2,"p":3,"a":"After ANY 3 or 4-Cost card is played here, move it to another location.","s":"5"},{"n":"Agent Coulson","d":"AgentCoulson","c":3,"p":4,"a":"On Reveal: Add a random 4-Cost and 5-Cost card to your hand.","s":"3"},{"n":"Baron Zemo","d":"BaronZemo","c":3,"p":5,"a":"On Reveal: Recruit the a card that costs the least from your opponent's deck to your side of this location.","s":"5"},{"n":"Beast","d":"Beast","c":3,"p":5,"a":"On Reveal: Return your other cards here to your hand. They cost 1 less next turn.","s":"3"},{"n":"Bishop","d":"Bishop","c":3,"p":2,"a":"After you play a card, this gains +1 Power.","s":"1"},{"n":"Black Widow","d":"BlackWidow","c":3,"p":4,"a":"Activate: Add a Widow's Bite to your opponent’s hand.","s":"3"},{"n":"Brood","d":"Brood","c":3,"p":2,"a":"On Reveal: Add 2 Broodlings here with the same Power.","s":"3"},{"n":"Bullseye","d":"Bullseye","c":3,"p":2,"a":"Activate: Discard all cards that cost 1 or less from your hand. Afflict that many different enemy cards with -2 Power.","s":"5"},{"n":"Caiera","d":"Caiera","c":3,"p":4,"a":"Ongoing: Your 1 and 6-Cost cards can't be destroyed.","s":"5"},{"n":"Captain America","d":"CaptainAmerica","c":3,"p":3,"a":"Ongoing: Your other Ongoing cards here have +2 Power.","s":"1"},{"n":"Captain Carter","d":"CaptainCarter","c":3,"p":2,"a":"Ongoing: Add this card's Power to your back-row cards here. (can't add to itself)","s":"5"},{"n":"Cassandra Nova","d":"CassandraNova","c":3,"p":1,"a":"On Reveal: Steal 1 Power from each card in your opponent's deck.","s":"5"},{"n":"Cerebro","d":"Cerebro","c":3,"p":0,"a":"Ongoing: Your highest-Power cards have +3 Power.","s":"3"},{"n":"Copycat","d":"Copycat","c":3,"p":5,"a":"When you draw this, copy the text from the bottom card of your opponent's deck.","s":"5"},{"n":"Corvus Glaive","d":"CorvusGlaive","c":3,"p":5,"a":"On Reveal: Discard 2 cards from your hand to get +1 Max Energy.","s":"4"},{"n":"Cosmo","d":"Cosmo","c":3,"p":3,"a":"Ongoing: On Reveal abilities won't happen here.","s":"1"},{"n":"Crystal","d":"Crystal","c":3,"p":4,"a":"On Reveal: Each playerdraws a card.","s":"3"},{"n":"Cyclops","d":"Cyclops","c":3,"p":4,"a":"Let's move, X-Men.","s":"Base"},{"n":"Daken","d":"Daken","c":3,"p":4,"a":"On Reveal: Add the Muramasa Shard to your hand.","s":"4"},{"n":"Debrii","d":"Debrii","c":3,"p":3,"a":"On Reveal: Add a Rock to each other location, for both players.","s":"3"},{"n":"Diamondback","d":"Diamondback","c":3,"p":3,"a":"Ongoing: Enemy cards here afflicted with negative Power have an additional -2 Power.","s":"5"},{"n":"Electro","d":"Electro","c":3,"p":4,"a":"On Reveal: +1 Max Energy. Ongoing: You can only play1 card a turn.","s":"3"},{"n":"Elsa Bloodstone","d":"ElsaBloodstone","c":3,"p":3,"a":"Each card you play to fill your side of a location gains +2 Power.","s":"4"},{"n":"Esme Cuckoo","d":"EsmeCuckoo","c":3,"p":4,"a":"On Reveal: Copy a card from your deck into your hand. Set its Cost to 3 and Power to 4.","s":"5"},{"n":"Frigga","d":"Frigga","c":3,"p":3,"a":"On Reveal: Add a copy of the last card you played to your hand. (if able).","s":"5"},{"n":"Gambit","d":"Gambit","c":3,"p":3,"a":"On Reveal: Discard a card from your hand to destroy a random enemy card.","s":"3"},{"n":"Ghost","d":"Ghost","c":3,"p":5,"a":"Ongoing: Your cards are always revealed last. (Their On Reveal abilities happen last.)","s":"3"},{"n":"Gladiator","d":"Gladiator","c":3,"p":8,"a":"On Reveal: Add a card from your opponent's deck to their side of this location. If it has less Power, destroy it.","s":"4"},{"n":"Green Goblin","d":"GreenGoblin","c":3,"p":-4,"a":"On Reveal: Switch sides.","s":"3"},{"n":"Groot","d":"Groot","c":3,"p":3,"a":"On Reveal: If your opponent played a card here this turn, +4 Power.","s":"1"},{"n":"Hazmat","d":"Hazmat","c":3,"p":3,"a":"On Reveal: Afflict all other cards with -1 Power.","s":"3"},{"n":"Hercules","d":"Hercules","c":3,"p":5,"a":"The first time another one of your cards moves here each turn, move it to another location.","s":"3"},{"n":"Hit-Monkey","d":"HitMonkey","c":3,"p":2,"a":"On Reveal: Gain +2 Power for each other card you played this turn.","s":"4"},{"n":"Hope Summers","d":"HopeSummers","c":3,"p":4,"a":"After you play a card here, you get +1 Energy next turn.","s":"5"},{"n":"Human Torch First Steps","d":"HumanTorchFirstSteps","c":3,"p":2,"a":"End of Turn: +1 Power. Once per game, if your side here is full, double this card’s Power instead.","s":"5"},{"n":"Hydra Stomper","d":"HydraStomper","c":3,"p":2,"a":"Ongoing: +1 Power for each time one of your cards moved this game.","s":"5"},{"n":"Ironheart","d":"Ironheart","c":3,"p":0,"a":"On Reveal: Give 2 of your other cards +3 Power.","s":"Base"},{"n":"Jean Grey","d":"JeanGrey","c":3,"p":4,"a":"Ongoing: Players must play their first card here each turn. (if possible)","s":"3"},{"n":"Juggernaut","d":"Juggernaut","c":3,"p":3,"a":"On Reveal: Move away all enemy cards played here this turn. (including unrevealed cards)","s":"3"},{"n":"Killmonger","d":"Killmonger","c":3,"p":3,"a":"On Reveal: Destroy ALL 1-Cost cards.","s":"2"},{"n":"Lady Sif","d":"LadySif","c":3,"p":5,"a":"On Reveal: Discard the card that costs the most from your hand.","s":"1"},{"n":"Luke Cage","d":"LukeCage","c":3,"p":3,"a":"Ongoing: Your cards can't have their Power reduced.","s":"3"},{"n":"Luna Snow","d":"LunaSnow","c":3,"p":5,"a":"On Reveal: Add an Ice Cube to each side of this location.","s":"6"},{"n":"Magik","d":"Magik","c":3,"p":2,"a":"On Reveal: Replace this location with 'Limbo'. Doesn't workafter turn 5.","s":"3"},{"n":"Makkari","d":"Makkari","c":3,"p":3,"a":"End of Turn: Runs from your hand to a random location. (if possible)","s":"5"},{"n":"Marvel Boy","d":"MarvelBoy","c":3,"p":2,"a":"End of Turn: Give 3 of your 1-Cost cards +1 Power.","s":"5"},{"n":"Mister Fantastic","d":"MrFantastic","c":3,"p":2,"a":"Ongoing: Adjacent locations have +2 Power.","s":"1"},{"n":"Mister Negative","d":"MrNegative","c":3,"p":-1,"a":"On Reveal: Swap the Power and Cost of all cards in your deck.","s":"3"},{"n":"Mobius M. Mobius","d":"MobiusMMobius","c":3,"p":3,"a":"Ongoing: Your Costs can't be increased. Your opponent's Costs can't be reduced.","s":"3"},{"n":"Moon Knight","d":"MoonKnight","c":3,"p":3,"a":"On Reveal: Discard an even-costed card from each player's hand.","s":"3"},{"n":"Morph","d":"Morph","c":3,"p":0,"a":"On Reveal: Become a copy of a card in your opponent's hand.","s":"1"},{"n":"Mystique","d":"Mystique","c":3,"p":0,"a":"On Reveal: If the last card you played has an Ongoing, copy its text. (if it's in play)","s":"3"},{"n":"Nakia","d":"Nakia","c":3,"p":3,"a":"On Reveal: Give all cards in your hand +1 Power.","s":"2"},{"n":"Negasonic Teenage Warhead","d":"NegasonicTeenageWarhead","c":3,"p":3,"a":"After an enemy character is played here, destroy it. (once per game)","s":"3"},{"n":"Nightmare","d":"Nightmare","c":3,"p":-1,"a":"On Reveal: Replace the text of each card in your hand with text from a random card of the same Cost.","s":"5"},{"n":"Nocturne","d":"Nocturne","c":3,"p":5,"a":"You can move this once. When this moves, replace its location with a random new one.","s":"5"},{"n":"Patriot","d":"Patriot","c":3,"p":2,"a":"Ongoing: Your cards with no abilities have +2 Power.","s":"3"},{"n":"Phastos","d":"Phastos","c":3,"p":4,"a":"On Reveal: Give each card in your deck -1 Cost or +2 Power.","s":"4"},{"n":"Polaris","d":"Polaris","c":3,"p":5,"a":"On Reveal: Move an enemy1 or 2-Cost card to this location.","s":"3"},{"n":"Prodigy","d":"Prodigy","c":3,"p":4,"a":"On Reveal: If this is in the back row, copy the text of the card in front of it.","s":"5"},{"n":"Punisher","d":"Punisher","c":3,"p":3,"a":"Ongoing: +1 Power for each enemy card here.","s":"Base"},{"n":"Red Guardian","d":"RedGuardian","c":3,"p":2,"a":"On Reveal: Afflict the lowest-Power enemy card here with -2 Power and remove its text.","s":"5"},{"n":"Redwing","d":"Redwing","c":3,"p":5,"a":"The first time this moves, add a card from your hand to the old location.","s":"5"},{"n":"Rocket Raccoon and Groot","d":"RocketAndGroot","c":3,"p":2,"a":"You can move this once. After your opponent plays a card here, steal 1 Power from it.","s":"5"},{"n":"Rogue","d":"Rogue","c":3,"p":2,"a":"On Reveal: Steal the text from an enemy Ongoing card here.","s":"3"},{"n":"Sabretooth","d":"Sabretooth","c":3,"p":5,"a":"When this is destroyed, return it to your hand. It costs 0.","s":"2"},{"n":"Sage","d":"Sage","c":3,"p":0,"a":"On Reveal: +2 Power for each different Power among allother cards here.","s":"5"},{"n":"Sebastian Shaw","d":"SebastianShaw","c":3,"p":4,"a":"When this permanently gains Power, gain +2 more Power. (wherever this is)","s":"4"},{"n":"Shanna","d":"Shanna","c":3,"p":4,"a":"On Reveal: Add a random1-Cost card to each location.","s":"3"},{"n":"Silver Surfer","d":"SilverSurfer","c":3,"p":2,"a":"On Reveal: Give your other3-Cost cards +2 Power.","s":"3"},{"n":"Spider-Man","d":"SpiderMan","c":3,"p":5,"a":"On Reveal: Move to another location and pull an enemy card fromhere to there.","s":"3"},{"n":"Starbrand","d":"Starbrand","c":3,"p":10,"a":"Ongoing: Your opponent has +3 Power at each other location.","s":"5"},{"n":"Storm","d":"Storm","c":3,"p":2,"a":"On Reveal: Flood this location. Next turn is the last turn cards canbe played here.","s":"2"},{"n":"Strong Guy","d":"StrongGuy","c":3,"p":3,"a":"Ongoing: +6 Power if your hand has 1 or fewer cards.","s":"1"},{"n":"Surtur","d":"Surtur","c":3,"p":5,"a":"After you play a card with 10 or more Power, this gains +2 Power.","s":"5"},{"n":"Sword Master","d":"SwordMaster","c":3,"p":6,"a":"On Reveal: Discard an odd-costted card from your hand.","s":"1"},{"n":"The Ancient One","d":"TheAncientOne","c":3,"p":5,"a":"On Reveal: Add Tao Mandala to your hand.","s":"5"},{"n":"Thor","d":"Thor","c":3,"p":4,"a":"On Reveal: Shuffle Mjolnir into your deck.","s":"3"},{"n":"Venom","d":"Venom","c":3,"p":3,"a":"On Reveal: Destroy your other cards here. Add their Power to this card.","s":"3"},{"n":"Viper","d":"Viper","c":3,"p":4,"a":"On Reveal: One of your other cards here switches sides.","s":"3"},{"n":"Vulture","d":"Vulture","c":3,"p":3,"a":"When this card moves,+6 Power.","s":"2"},{"n":"Wave","d":"Wave","c":3,"p":5,"a":"On Reveal: All cards cost a maximum of 4 until the endof next turn.","s":"3"},{"n":"Werewolf By Night","d":"WerewolfByNight","c":3,"p":3,"a":"After you play a card, move there to gain +2 Power if it has an On Reveal.","s":"4"},{"n":"White Queen","d":"WhiteQueen","c":3,"p":4,"a":"On Reveal: Copy the card that costs the most in your opponent's handinto your hand.","s":"1"},{"n":"Wolfsbane","d":"Wolfsbane","c":3,"p":2,"a":"On Reveal: +2 Power for each other card you have here.","s":"Base"},{"n":"Absorbing Man","d":"AbsorbingMan","c":4,"p":5,"a":"On Reveal: If the last card you played has an On Reveal, copy its text. (if it's in play)","s":"3"},{"n":"Anti Venom","d":"AntiVenom","c":4,"p":6,"a":"On Reveal: Set the Cost and Power of your deck's top card to 0.","s":"5"},{"n":"Ares","d":"Ares","c":4,"p":6,"a":"On Reveal: Compare the Power of the top 3 cards of both decks. If your total is higher, +6 Power.","s":"5"},{"n":"Attuma","d":"Attuma","c":4,"p":10,"a":"End of Turn: Destroy one of your cards here with less Power.","s":"3"},{"n":"Captain Marvel","d":"CaptainMarvel","c":4,"p":5,"a":"At the end of the game, move to a location that wins you thegame. (If possible)","s":"3"},{"n":"Crossbones","d":"Crossbones","c":4,"p":10,"a":"You can only play this at locations where you are winning.","s":"3"},{"n":"Cull Obsidian","d":"CullObsidian","c":4,"p":10,"a":"You can only play this where you have a 1-Cost card.","s":"4"},{"n":"Darkhawk","d":"Darkhawk","c":4,"p":3,"a":"Ongoing: +2 Power for each card in your opponent's deck.","s":"4"},{"n":"Doctor Octopus","d":"DoctorOctopus","c":4,"p":8,"a":"On Reveal: Pull the lowest-Power card from your opponent’s hand to their side of this location.","s":"3"},{"n":"Doom 2099","d":"Doom2099","c":4,"p":4,"a":"End of Turn: Add a DoomBot 2099 to a random location if you played (exactly) 1 card.","s":"5"},{"n":"Dracula","d":"Dracula","c":4,"p":1,"a":"At the end of the game, discard a card from your hand to gain its Power.","s":"3"},{"n":"Drax","d":"Drax","c":4,"p":5,"a":"On Reveal: If your opponent played a card here this turn, +4 Power.","s":"3"},{"n":"Enchantress","d":"Enchantress","c":4,"p":6,"a":"On Reveal: Remove the abilities from all Ongoing cards here.","s":"1"},{"n":"Fantasticar","d":"Fantasticar","c":4,"p":7,"a":"Activate: Give your End of Turn cards +2 Power.","s":"5"},{"n":"Galacta","d":"Galacta","c":4,"p":6,"a":"Each turn, the first card you play another location reveals with +2 Power.","s":"5"},{"n":"Ghost Rider","d":"GhostRider","c":4,"p":3,"a":"On Reveal: Bring back one of your discarded cards to this location.","s":"3"},{"n":"Gwenpool","d":"Gwenpool","c":4,"p":6,"a":"On Reveal: Pick a random character in your hand 3 times. Give +2 Power each time.","s":"3"},{"n":"Hellcow","d":"Hellcow","c":4,"p":6,"a":"Activate: Discard a card from your hand.","s":"3"},{"n":"High Evolutionary","d":"HighEvolutionary","c":4,"p":7,"a":"At the start of the game, unlock the potential of your cards with no abilities.","s":"5"},{"n":"Iron Lad","d":"IronLad","c":4,"p":6,"a":"On Reveal: Copy the text of your deck's top card.","s":"4"},{"n":"Jessica Jones","d":"JessicaJones","c":4,"p":5,"a":"On Reveal: If you don't play a card at this location next turn, +5 Power.","s":"Base"},{"n":"Jubilee","d":"Jubilee","c":4,"p":1,"a":"On Reveal: Add the top card of your deck to this location.","s":"2"},{"n":"Ka-Zar","d":"KaZar","c":4,"p":4,"a":"Ongoing: Your 1-Cost cards have +1 Power.","s":"Base"},{"n":"Kahhori","d":"Kahhori","c":4,"p":6,"a":"On Reveal: Each card in your hand gives one of your other cards in play +1 Power.","s":"5"},{"n":"Laufey","d":"Laufey","c":4,"p":5,"a":"On Reveal: Steal 1 Power from each other card here.","s":"5"},{"n":"Leech","d":"Leech","c":4,"p":4,"a":"On Reveal: Remove the text from 6-Cost cards in your opponent’s hand.","s":"2"},{"n":"Malekith","d":"Malekith","c":4,"p":6,"a":"On Reveal: Add a 1, 2, or 3-Cost card from your deck here. It reveals at the end of the game.","s":"5"},{"n":"Man-Thing","d":"ManThing","c":4,"p":5,"a":"Ongoing: 1, 2, and 3-Cost cards here have -2 Power.","s":"4"},{"n":"Miles Morales","d":"MilesMorales","c":4,"p":6,"a":"If a card moved last turn, this costs 1.","s":"3"},{"n":"Misery","d":"Misery","c":4,"p":9,"a":"On Reveal: Repeat the On Reveal abilities of your other cards here, then destroy them.","s":"5"},{"n":"Moon Girl","d":"MoonGirl","c":4,"p":5,"a":"On Reveal: Copy your hand.","s":"1"},{"n":"Moonstone","d":"Moonstone","c":4,"p":5,"a":"Ongoing: Has the Ongoing effects of your 1, 2, and 3-Cost cards here.","s":"5"},{"n":"Morgan le Fay","d":"MorganLeFay","c":4,"p":7,"a":"On Reveal: Return all your discarded and destroyed cards to hand with +3 Power.","s":"5"},{"n":"Ms. Marvel","d":"MsMarvel","c":4,"p":5,"a":"Ongoing: Your adjacent locations with 2+ cards and no repeated Costs have +5 Power.","s":"4"},{"n":"Namor","d":"Namor","c":4,"p":6,"a":"Ongoing: +5 Power if this is your only card here.","s":"1"},{"n":"Nick Fury","d":"NickFury","c":4,"p":6,"a":"On Reveal: Add 3 random6-Cost cards to your hand.","s":"3"},{"n":"Omega Red","d":"OmegaRed","c":4,"p":5,"a":"Ongoing: If you're winning here, +3 Power to other locations.","s":"3"},{"n":"Phoenix Force","d":"ThePhoenixForce","c":4,"p":5,"a":"On Reveal: Revive one of your destroyed cards and merge with it. That card can move each turn.","s":"4"},{"n":"Proxima Midnight","d":"ProximaMidnight","c":4,"p":7,"a":"When this is discarded, jumps to your lowest-Power location. (that isn't full)","s":"5"},{"n":"Rescue","d":"Rescue","c":4,"p":4,"a":"On Reveal: If you play a card at this location next turn, +5 Power.","s":"3"},{"n":"Rockslide","d":"Rockslide","c":4,"p":5,"a":"On Reveal: Shuffle 2 Rocks into your opponent's deck.","s":"3"},{"n":"Scarlet Spider","d":"ScarletSpider","c":4,"p":5,"a":"Activate: Add an exact clone of this to another location.","s":"5"},{"n":"Sentry","d":"Sentry","c":4,"p":8,"a":"You can't play this at the right location.On Reveal: Add a -8 Power Void to the right location.","s":"3"},{"n":"Shang-Chi","d":"ShangChi","c":4,"p":3,"a":"On Reveal: Destroy all enemy cards here that have 10 or more Power.","s":"2"},{"n":"Shuri","d":"Shuri","c":4,"p":1,"a":"On Reveal: If you play your next card at this location, double its Power.","s":"3"},{"n":"Silver Samurai","d":"SilverSamurai","c":4,"p":5,"a":"On Reveal: Each player discards the lowest-Power card from their hand.","s":"3"},{"n":"Stegron","d":"Stegron","c":4,"p":7,"a":"On Reveal: Move an enemy card here one location to the right.","s":"3"},{"n":"Super-Skrull","d":"SuperSkrull","c":4,"p":2,"a":"Ongoing: Has the Ongoing effects of all enemy cards.","s":"3"},{"n":"Supergiant","d":"Supergiant","c":4,"p":5,"a":"On Reveal: All cards played next turn don't reveal until the game ends.","s":"4"},{"n":"Symbiote Spider-Man","d":"SymbioteSpiderMan","c":4,"p":7,"a":"Activate: Merge your lowest-Cost card here with this. Copy its text like it just revealed.","s":"5"},{"n":"The Thing","d":"TheThing","c":4,"p":7,"a":"","s":"Base","f":"It's clobberin' time!"},{"n":"Typhoid Mary","d":"TyphoidMary","c":4,"p":10,"a":"Ongoing: Your other cards here have -1 Power.","s":"3"},{"n":"War Machine","d":"WarMachine","c":4,"p":6,"a":"On Reveal: Ongoing: Nothing can stop you from playing cards anywhere.","s":"5"},{"n":"Warpath","d":"Warpath","c":4,"p":5,"a":"Ongoing: If any of your locations are empty, +5 Power.","s":"2"},{"n":"Wiccan","d":"Wiccan","c":4,"p":6,"a":"On Reveal: If you've spent all your Energy on previous turns, +2 Max Energy.","s":"5"},{"n":"Wong","d":"Wong","c":4,"p":2,"a":"Ongoing: Your On Reveal abilities here happen twice.","s":"3"},{"n":"Abomination","d":"Abomination","c":5,"p":9,"a":"","s":"Base","f":"Foolish rabble! You are beneath me!"},{"n":"Aero","d":"Aero","c":5,"p":9,"a":"On Reveal: Move the last enemy card played anywhere to this location.","s":"3"},{"n":"Agamotto","d":"Agamotto","c":5,"p":10,"a":"Game Start: Shuffle 4 Ancient Arcana into your deck.","s":"5"},{"n":"Ajax","d":"Ajax","c":5,"p":7,"a":"Ongoing: +1 Power for each card in play afflicted with negative Power.","s":"5"},{"n":"Annihilus","d":"Annihilus","c":5,"p":8,"a":"On Reveal: Your cards with Power below 0 switch sides. Destroythose that can't.","s":"4"},{"n":"Beta Ray Bill","d":"BetaRayBill","c":5,"p":6,"a":"On Reveal: Shuffle Stormbreaker into your deck.","s":"4"},{"n":"Black Bolt","d":"BlackBolt","c":5,"p":7,"a":"On Reveal: Discard the card that costs the least from your opponent's hand.","s":"3"},{"n":"Black Panther","d":"BlackPanther","c":5,"p":5,"a":"On Reveal: Double thiscard's Power.","s":"3"},{"n":"Blink","d":"Blink","c":5,"p":7,"a":"On Reveal: Swap the last card you played with a card that costs more from your deck.","s":"5"},{"n":"Blue Marvel","d":"BlueMarvel","c":5,"p":3,"a":"Ongoing: Your other cards have +1 Power.","s":"Base"},{"n":"Cannonball","d":"Cannonball","c":5,"p":7,"a":"On Reveal: Move the highest-Power enemy card here away. If you can't, destroy it with a Rock.","s":"4"},{"n":"Deathlok","d":"Deathlok","c":5,"p":5,"a":"On Reveal: Destroy yourother cards here.","s":"1"},{"n":"Devil Dinosaur","d":"DevilDinosaur","c":5,"p":4,"a":"Ongoing: +2 Power for each card in your hand.","s":"1"},{"n":"Gamora","d":"Gamora","c":5,"p":8,"a":"On Reveal: If your opponent played a card here this turn, +4 Power.","s":"Base"},{"n":"Gilgamesh","d":"Gilgamesh","c":5,"p":9,"a":"On Reveal: +1 Power for each of your other cards in play with increased Power.","s":"5"},{"n":"Hellion","d":"Hellion","c":5,"p":8,"a":"On Reveal: Next turn, you can move cards to this location.","s":"4"},{"n":"Hobgoblin","d":"Hobgoblin","c":5,"p":-8,"a":"On Reveal: Switch sides.","s":"2"},{"n":"Infinity Ultron","d":"InfinityUltron","c":5,"p":8,"a":"On Reveal: Add 2 of Ultron's Stones to your hand.","s":"5"},{"n":"Iron Man","d":"IronMan","c":5,"p":0,"a":"Ongoing: Your total Poweris doubled here.","s":"Base"},{"n":"Jane Foster Mighty Thor","d":"JaneFoster","c":5,"p":9,"a":"On Reveal: Draw all cards that cost 0 from your deck.","s":"3"},{"n":"Klaw","d":"Klaw","c":5,"p":4,"a":"Ongoing: The location to the right has +7 Power.","s":"1"},{"n":"Lady Deathstrike","d":"LadyDeathstrike","c":5,"p":6,"a":"On Reveal: Destroy each card here with 3 or less Power.","s":"3"},{"n":"Legion","d":"Legion","c":5,"p":7,"a":"On Reveal: Replace each other location with this one.","s":"4"},{"n":"M.O.D.O.K.","d":"Modok","c":5,"p":7,"a":"On Reveal: Discard your hand.","s":"3"},{"n":"Namora","d":"Namora","c":5,"p":7,"a":"On Reveal: Give +5 Power to each of your cards alone at another location.","s":"5"},{"n":"Nimrod","d":"Nimrod","c":5,"p":6,"a":"When this is destroyed, add a copy to each other location.","s":"3"},{"n":"Professor X","d":"ProfessorX","c":5,"p":2,"a":"Ongoing: Moving is the only way to add or remove a character from here.","s":"1"},{"n":"Red Skull","d":"RedSkull","c":5,"p":14,"a":"Ongoing: Enemy cards here have +2 Power.","s":"3"},{"n":"Ronan the Accuser","d":"Ronan","c":5,"p":5,"a":"Ongoing: +2 Power for each card in your opponent's hand.","s":"3"},{"n":"Sandman","d":"Sandman","c":5,"p":8,"a":"On Reveal: Next turn, cards cost 1 more. (Maximum 6)","s":"2"},{"n":"Sera","d":"Sera","c":5,"p":5,"a":"Ongoing: Cards in your hand cost 1 less. (minimum 1)","s":"3"},{"n":"Sersi","d":"Sersi","c":5,"p":7,"a":"On Reveal: Transform your other cards here into random cards thatcost 1 more. (if possible)","s":"5"},{"n":"Spider-Man 2099","d":"SpiderMan2099","c":5,"p":9,"a":"The first time this moves to any location, destroy an enemy card there.","s":"3"},{"n":"Spider-Woman","d":"SpiderWoman","c":5,"p":8,"a":"On Reveal: Afflict all enemy cards here with -1 Power.","s":"1"},{"n":"Stature","d":"Stature","c":5,"p":7,"a":"Costs 1 if your opponent discarded a card this game.","s":"3"},{"n":"Valkyrie","d":"Valkyrie","c":5,"p":3,"a":"On Reveal: Set ALL cards here to 3 Power.","s":"3"},{"n":"Vision","d":"Vision","c":5,"p":8,"a":"You can move this each turn.","s":"2"},{"n":"White Tiger","d":"WhiteTiger","c":5,"p":1,"a":"On Reveal: Add a 8-Power Tiger to another location.","s":"Base"},{"n":"Agatha Harkness","d":"AgathaHarkness","c":6,"p":14,"a":"At the start of the game, draw Agatha. She controls your cards on even turns.","s":"3"},{"n":"Alioth","d":"Alioth","c":6,"p":10,"a":"On Reveal: Remove the text from all unrevealed enemy characters here.","s":"5"},{"n":"Apocalypse","d":"Apocalypse","c":6,"p":8,"a":"When you discard this, put it back with +4 Power.","s":"1"},{"n":"Arnim Zola","d":"ArnimZola","c":6,"p":0,"a":"On Reveal: Destroy one of yourother cards here to copy itat the other locations.","s":"3"},{"n":"Blob","d":"Blob","c":6,"p":0,"a":"On Reveal: Merge cards from your deck into this until it gains 13 or more Power.","s":"4"},{"n":"Destroyer","d":"Destroyer","c":6,"p":16,"a":"On Reveal: Destroy your cards at other locations.","s":"3"},{"n":"Doctor Doom","d":"DrDoom","c":6,"p":5,"a":"On Reveal: Add a 5-Power DoomBot to each other location.","s":"3"},{"n":"Eson","d":"Eson","c":6,"p":10,"a":"End of Turn: Put a created card from your hand here.","s":"5"},{"n":"Galactus","d":"Galactus","c":6,"p":6,"a":"On Reveal: If you're winning this location and this is your only card here, destroy all other locations.","s":"5"},{"n":"Giganto","d":"Giganto","c":6,"p":14,"a":"You can only play this at the left location.","s":"3"},{"n":"Gorr the God Butcher","d":"Gorr","c":6,"p":-2,"a":"Ongoing: +2 Power for EACH On Reveal card in play.","s":"5"},{"n":"Heimdall","d":"Heimdall","c":6,"p":10,"a":"On Reveal: Move your other cards one location to the left.","s":"1"},{"n":"Hela","d":"Hela","c":6,"p":6,"a":"On Reveal: For each different Cost among them, resurrect a card you discarded to a random location.","s":"3"},{"n":"Helicarrier","d":"Helicarrier","c":6,"p":10,"a":"When you discard this, fill your hand with random cards.","s":"3"},{"n":"Hulk","d":"Hulk","c":6,"p":12,"a":"","s":"Base","f":"HULK SMASH!"},{"n":"Kang","d":"Kang","c":6,"p":0,"a":"On Reveal: Look at what your opponent did, then restart the turn. (without this)","s":"5"},{"n":"Khonshu","d":"Khonshu","c":6,"p":5,"a":"When discarded, returns in its next phase. On Reveal: Resurrect a card you discarded to another location with its Power set to 5.","s":"5"},{"n":"Knull","d":"Knull","c":6,"p":0,"a":"Ongoing: Has the combined Power of all cards destroyed this game.","s":"3"},{"n":"Leader","d":"Leader","c":6,"p":4,"a":"On Reveal: Copy the enemy card(s) with the highest Power played this turn, but on your side.","s":"3"},{"n":"Magneto","d":"Magneto","c":6,"p":12,"a":"On Reveal: Move all enemy3 and 4-Cost cards to this location.","s":"3"},{"n":"Mockingbird","d":"Mockingbird","c":6,"p":9,"a":"Costs 1 less for each of your created cards in play.","s":"5"},{"n":"Odin","d":"Odin","c":6,"p":8,"a":"On Reveal: Repeat the On Reveal abilities of your other cards here.","s":"Base"},{"n":"Onslaught","d":"Onslaught","c":6,"p":7,"a":"Ongoing: Double your other Ongoing effects here.","s":"1"},{"n":"Orka","d":"Orka","c":6,"p":11,"a":"Ongoing: +5 Power if this is your only card here.","s":"3"},{"n":"Red Hulk","d":"RedHulk","c":6,"p":10,"a":"End of Turn: If your opponent has unspent Energy, +3 Power.(if in hand or in play)","s":"5"},{"n":"Sasquatch","d":"Sasquatch","c":6,"p":10,"a":"Costs 1 less for each card you played last turn.","s":"4"},{"n":"She-Hulk","d":"SheHulk","c":6,"p":10,"a":"Costs 1 less for each unspent Energy last turn.","s":"3"},{"n":"Spectrum","d":"Spectrum","c":6,"p":7,"a":"On Reveal: Give your Ongoing cards +2 Power.","s":"Base"},{"n":"Taskmaster","d":"Taskmaster","c":6,"p":0,"a":"On Reveal: Set this cardâ€™s Power equal to that of the last card you played. (if that card's in play)","s":"3"},{"n":"Thanos","d":"Thanos","c":6,"p":12,"a":"Game Start: Shuffle the six Infinity Stones into your deck.","s":"5"},{"n":"The Infinaut","d":"Infinaut","c":6,"p":20,"a":"If you played a card last turn, you can't play this.","s":"2"},{"n":"The Living Tribunal","d":"LivingTribunal","c":6,"p":9,"a":"Ongoing: Split your total Power evenly among all locations.","s":"4"},{"n":"Ultron","d":"Ultron","c":6,"p":8,"a":"On Reveal: Deploy four 2-Power Drones to each other location.","s":"3"},{"n":"Arishem","d":"Arishem","c":7,"p":7,"a":"At the start of the game, +1 Max Energy. Shuffle 12 random cards into your deck.","s":"5"},{"n":"Skaar","d":"Skaar","c":7,"p":12,"a":"Costs 2 less for each of your cards that has 10 or more Power.","s":"4"},{"n":"Death","d":"Death","c":8,"p":12,"a":"Costs 1 less for each card destroyed this game.","s":"3"}];
+const DB_BASE_LABEL = 'snapshot mid-2025';
+const ART_ROOT = 'https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/';
+// Self-hosted one-click refresh: deploy the companion Cloudflare Worker (snap-workbench-worker.js),
+// paste its URL here, and Settings grows a "Refresh card list" button. Leave empty inside Claude.
+const REFRESH_URL = '';
+// Self-hosted AI coach: same worker, /coach route (it holds your Anthropic API key as a secret).
+// e.g. 'https://your-worker.workers.dev/coach'. Leave empty inside Claude (direct API works there).
+const COACH_URL = '';
+
+/* ============ STATE ============ */
+const S = {
+  db: DB_BASE.slice(),
+  dbLabel: DB_BASE_LABEL,
+  byId: {},
+  stubs: {},
+  decks: [],
+  activeId: null,
+  owned: new Set(),
+  filters: { q:'', cost:new Set(), mech:new Set(), series:new Set(), owned:false },
+  tab: 'cards',
+  storageOK: (typeof window !== 'undefined' && !!window.storage),
+};
+const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb' };
+
+/* ============ UTIL ============ */
+const $ = s => document.querySelector(s);
+const el = (t, cls, txt) => { const e=document.createElement(t); if(cls)e.className=cls; if(txt!=null)e.textContent=txt; return e; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const uid = () => 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.style.display='block'; clearTimeout(toast._t); toast._t=setTimeout(()=>t.style.display='none', 1900); }
+
+function b64e(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin=''; for(let i=0;i<bytes.length;i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+function b64d(b64){
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+/* ============ ART & COLOR ============ */
+function artUrl(c){
+  if(c.i) return c.i;
+  if(c.stub) return null;
+  const slug = c.n.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/['\u2019.]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
+  return slug ? ART_ROOT + slug + '.webp' : null;
+}
+function hueOf(id){
+  let h = 0;
+  for(let i=0;i<id.length;i++) h = (h*31 + id.charCodeAt(i)) >>> 0;
+  return h % 360;
+}
+function tileGrad(c){
+  const h = hueOf(c.d);
+  return 'background:linear-gradient(160deg, hsl('+h+',52%,34%), hsl('+((h+42)%360)+',58%,16%))';
+}
+function initials(c){
+  return c.n.split(/\s+/).slice(0,2).map(w => w[0]).join('').toUpperCase();
+}
+
+/* ============ STORAGE (dual backend) ============ */
+/* Inside Claude artifacts: window.storage (persists on your account).
+   Self-hosted: falls back to browser localStorage on your own origin.
+   Neither available: in-memory for the session, with a warning in Settings. */
+const HAS_CLAUDE_STORE = (typeof window !== 'undefined' && !!window.storage);
+const HAS_LOCAL_STORE = !HAS_CLAUDE_STORE && (function(){
+  try{ localStorage.setItem('__swb_t','1'); localStorage.removeItem('__swb_t'); return true; }
+  catch(e){ return false; }
+})();
+S.storageOK = HAS_CLAUDE_STORE || HAS_LOCAL_STORE;
+async function sGet(key){
+  try{
+    if(HAS_CLAUDE_STORE){
+      const r = await window.storage.get(key);
+      return r ? JSON.parse(r.value) : null;
+    }
+    if(HAS_LOCAL_STORE){
+      const v = localStorage.getItem(key);
+      return v == null ? null : JSON.parse(v);
+    }
+  }catch(e){}
+  return null;
+}
+async function sPut(key, str){
+  if(HAS_CLAUDE_STORE){ await window.storage.set(key, str); return; }
+  if(HAS_LOCAL_STORE){ localStorage.setItem(key, str); return; }
+}
+const _saveTimers = {};
+function sSet(key, obj){
+  if(!S.storageOK) return;
+  clearTimeout(_saveTimers[key]);
+  _saveTimers[key] = setTimeout(async () => {
+    try{ await sPut(key, JSON.stringify(obj)); }
+    catch(e){ console.error('save failed', key, e); }
+  }, 400);
+}
+function persistDecks(){ sSet(K.decks, { decks:S.decks, activeId:S.activeId }); }
+function persistColl(){ sSet(K.coll, { owned:[...S.owned] }); }
+
+/* ============ DB ============ */
+function indexDb(){
+  S.byId = {};
+  for(const c of S.db) S.byId[c.d] = c;
+}
+function getCard(defid){
+  return S.byId[defid] || S.stubs[defid] || null;
+}
+function makeStub(defid){
+  if(!S.stubs[defid]) S.stubs[defid] = {
+    n: defid.replace(/([a-z])([A-Z0-9])/g,'$1 $2'), d: defid,
+    c: 0, p: 0, a: '(not in local card database)', s:'?', stub:true
+  };
+  return S.stubs[defid];
+}
+function mech(c){
+  const a = c.a || '';
+  const m = [];
+  if(!a) m.push('Vanilla');
+  if(/on reveal/i.test(a)) m.push('On Reveal');
+  if(/ongoing/i.test(a)) m.push('Ongoing');
+  if(/discard/i.test(a)) m.push('Discard');
+  if(/destroy/i.test(a)) m.push('Destroy');
+  if(/\bmove[sd]?\b/i.test(a)) m.push('Move');
+  if(/activate/i.test(a)) m.push('Activate');
+  return m;
+}
+
+/* ============ DECKS ============ */
+function activeDeck(){ return S.decks.find(d => d.id === S.activeId) || null; }
+function ensureDeck(){
+  if(!activeDeck()){
+    const d = { id:uid(), name:'New Deck', cards:[], updated:Date.now() };
+    S.decks.unshift(d); S.activeId = d.id; persistDecks();
+  }
+  return activeDeck();
+}
+function touch(d){ d.updated = Date.now(); persistDecks(); }
+function inDeck(defid){ const d=activeDeck(); return !!d && d.cards.includes(defid); }
+function toggleCard(defid){
+  const d = ensureDeck();
+  const i = d.cards.indexOf(defid);
+  if(i >= 0){ d.cards.splice(i,1); }
+  else {
+    if(d.cards.length >= 12){ toast('Deck is full (12 cards)'); return; }
+    d.cards.push(defid);
+  }
+  touch(d);
+  renderAll();
+}
+function sortedDeckCards(d){
+  return d.cards.map(id => getCard(id) || makeStub(id))
+    .sort((a,b) => (a.c-b.c) || a.n.localeCompare(b.n));
+}
+
+/* ============ DECK CODES ============ */
+function exportCode(d){
+  const cards = sortedDeckCards(d).map(c => ({ CardDefId: c.d }));
+  return b64e(JSON.stringify({ Name: d.name || 'Deck', Cards: cards }));
+}
+function parseCode(text){
+  const cleaned = String(text||'').replace(/\s+/g,'');
+  const m = cleaned.match(/[A-Za-z0-9+/=_-]{24,}/);
+  const token = m ? m[0].replace(/-/g,'+').replace(/_/g,'/') : cleaned;
+  let obj;
+  try{ obj = JSON.parse(b64d(token)); }
+  catch(e){
+    try{ obj = JSON.parse(text); }
+    catch(e2){ return { err:'Could not decode that. Paste the code exactly as Snap copied it.' }; }
+  }
+  const list = obj && (obj.Cards || obj.cards);
+  if(!Array.isArray(list) || !list.length) return { err:'Decoded, but no card list found inside.' };
+  const ids = list.map(x => x.CardDefId || x.cardDefId || x.carddefid).filter(Boolean);
+  if(!ids.length) return { err:'Decoded, but no CardDefIds found.' };
+  return { name: obj.Name || obj.name || '', ids: ids.slice(0,12) };
+}
+
+/* ============ RENDER: CARD GRID ============ */
+function buildChips(){
+  const mk = (wrap, items, set, cls) => {
+    wrap.innerHTML='';
+    items.forEach(v => {
+      const b = el('button','chip '+cls, v.label);
+      b.dataset.v = v.value;
+      if(set.has(v.value)) b.classList.add('on');
+      b.onclick = () => {
+        set.has(v.value) ? set.delete(v.value) : set.add(v.value);
+        b.classList.toggle('on');
+        renderCards();
+      };
+      wrap.appendChild(b);
+    });
+  };
+  mk($('#chips-cost'), [0,1,2,3,4,5,6].map(n => ({value:String(n), label: n===6 ? '6+' : String(n)})), S.filters.cost, 'c-cost');
+  mk($('#chips-mech'), ['On Reveal','Ongoing','Discard','Destroy','Move','Activate','Vanilla'].map(v=>({value:v,label:v})), S.filters.mech, 'c-mech');
+  const serWrap = $('#chips-series');
+  mk(serWrap, ['1','2','3','4','5','Base'].map(v=>({value:v,label: v==='Base' ? 'Base' : 'S'+v})), S.filters.series, 'c-ser');
+  const ownChip = el('button','chip c-own','Owned');
+  if(S.filters.owned) ownChip.classList.add('on');
+  ownChip.onclick = () => { S.filters.owned = !S.filters.owned; ownChip.classList.toggle('on'); renderCards(); };
+  serWrap.appendChild(ownChip);
+}
+function filteredCards(){
+  const f = S.filters, q = f.q.trim().toLowerCase();
+  return S.db.filter(c => {
+    if(q && !(c.n.toLowerCase().includes(q) || (c.a||'').toLowerCase().includes(q))) return false;
+    if(f.cost.size){ const b = String(Math.min(c.c,6)); if(!f.cost.has(b)) return false; }
+    if(f.series.size && !f.series.has(c.s)) return false;
+    if(f.mech.size){ const ms = mech(c); if(![...f.mech].every(m => ms.includes(m))) return false; }
+    if(f.owned && !S.owned.has(c.d)) return false;
+    return true;
+  });
+}
+function tileHtml(c){
+  const url = artUrl(c);
+  const img = url
+    ? '<img src="'+esc(url)+'" alt="" loading="lazy" decoding="async" onload="window._artOK=(window._artOK||0)+1" onerror="this.closest(\'.tile\').classList.add(\'noart\')">'
+    : '';
+  const ab = c.a ? esc(c.a) : (c.f ? '<span class="flav">&ldquo;'+esc(c.f)+'&rdquo;</span> <span class="flav">(no ability)</span>' : '<span class="flav">No ability</span>');
+  return '<div class="tile'+(inDeck(c.d)?' indeck':'')+(S.owned.has(c.d)?' owned':'')+(url?'':' noart')+'" data-d="'+esc(c.d)+'">'+
+    '<div class="tart" style="'+tileGrad(c)+'">'+img+
+      '<span class="tinit">'+esc(initials(c))+'</span>'+
+      '<span class="ovl tc">'+c.c+'</span><span class="ovl tp">'+c.p+'</span>'+
+      '<span class="tick">&#10003;</span>'+
+    '</div>'+
+    '<div class="tinfo">'+
+      '<div class="tname"><span class="ownpip"></span>'+esc(c.n)+'</div>'+
+      '<div class="tab">'+ab+'</div>'+
+      '<div class="tfoot"><span class="serpill">'+esc(c.s)+'</span><button class="ib">i</button></div>'+
+    '</div></div>';
+}
+function renderCards(){
+  const list = $('#cardlist');
+  const cards = filteredCards();
+  $('#matchcount').textContent = cards.length + ' of ' + S.db.length + ' cards';
+  list.innerHTML = cards.map(tileHtml).join('');
+}
+$('#cardlist').addEventListener('click', e => {
+  const t = e.target.closest('.tile'); if(!t) return;
+  const d = t.dataset.d;
+  if(e.target.closest('.ib')){ openCardSheet(d); return; }
+  toggleCard(d);
+});
+
+/* ============ CARD DETAIL SHEET ============ */
+function openCardSheet(defid){
+  const c = getCard(defid) || makeStub(defid);
+  const url = artUrl(c);
+  const inD = inDeck(defid);
+  const own = S.owned.has(defid);
+  openModal(
+    '<div class="sheetart'+(url?'':' noart')+'" style="'+tileGrad(c)+'">'+
+      (url ? '<img src="'+esc(url)+'" alt="" onerror="this.parentElement.classList.add(\'noart\')">' : '')+
+      '<span class="sinit">'+esc(initials(c))+'</span>'+
+    '</div>'+
+    '<div class="sheethead">'+
+      '<span class="bignum bc">'+c.c+'</span>'+
+      '<span class="sname">'+esc(c.n)+'</span>'+
+      '<span class="bignum bp">'+c.p+'</span>'+
+    '</div>'+
+    '<div class="sheetab">'+(c.a ? esc(c.a) : 'No ability.')+'</div>'+
+    (c.f ? '<div class="sheetflav">&ldquo;'+esc(c.f)+'&rdquo;</div>' : '')+
+    '<div class="mnote">Series '+esc(c.s)+(c.stub ? ' &middot; <span style="color:var(--warn)">not in local database (imported)</span>' : '')+'</div>'+
+    '<div class="mrow">'+
+      '<button class="abtn'+(own?'':' subtle')+'" id="sh-own">'+(own?'&#10003; Owned':'Mark owned')+'</button>'+
+      '<button class="abtn '+(inD?'danger':'primary')+'" id="sh-add">'+(inD?'Remove from deck':'Add to deck')+'</button>'+
+    '</div>'
+  );
+  $('#sh-add').onclick = () => { closeModal(); toggleCard(defid); };
+  $('#sh-own').onclick = () => {
+    own ? S.owned.delete(defid) : S.owned.add(defid);
+    persistColl(); renderAll(); openCardSheet(defid);
+  };
+}
+
+/* ============ RENDER: DECK ============ */
+function miniHtml(c){
+  const url = artUrl(c);
+  const img = url
+    ? '<img src="'+esc(url)+'" alt="" loading="lazy" decoding="async" onerror="this.closest(\'.mini\')&&this.closest(\'.mini\').classList.add(\'noart\')">'
+    : '';
+  return '<div class="mini'+(url?'':' noart')+(c.stub?' stubby':'')+'" data-d="'+esc(c.d)+'" style="'+tileGrad(c)+'">'+
+    img+'<span class="minit">'+esc(initials(c))+'</span>'+
+    '<span class="ovl tc">'+c.c+'</span><span class="ovl tp">'+c.p+'</span>'+
+    '<div class="mname">'+esc(c.n)+'</div></div>';
+}
+function renderDeck(){
+  const d = ensureDeck();
+  const nameEl = $('#deckname');
+  if(document.activeElement !== nameEl) nameEl.value = d.name;
+
+  const cards = sortedDeckCards(d);
+  $('#st-count').textContent = cards.length + '/12';
+  $('#st-avg').textContent = cards.length ? (cards.reduce((s,c)=>s+c.c,0)/cards.length).toFixed(1) : '\u2013';
+  $('#st-pow').textContent = cards.reduce((s,c)=>s+(c.p||0),0);
+
+  const buckets = [0,0,0,0,0,0,0];
+  cards.forEach(c => buckets[Math.min(c.c,6)]++);
+  const mx = Math.max(1, ...buckets);
+  const cv = $('#curve'); cv.innerHTML='';
+  buckets.forEach((n,i) => {
+    const w = el('div','cv');
+    const nEl = el('div','n', n ? String(n) : '');
+    const bar = el('div','bar'); if(!n) bar.classList.add('z');
+    bar.style.height = Math.max(4, Math.round(n/mx*52)) + 'px';
+    w.appendChild(nEl); w.appendChild(bar); w.appendChild(el('label','',(i===6?'6+':i)));
+    cv.appendChild(w);
+  });
+
+  const warn = $('#deckwarn'); warn.innerHTML='';
+  const stubs = cards.filter(c => c.stub);
+  const unowned = S.owned.size ? cards.filter(c => !c.stub && !S.owned.has(c.d)) : [];
+  if(stubs.length){
+    warn.appendChild(Object.assign(el('div','warnbox'),
+      {innerHTML:'<b>'+stubs.length+' imported card'+(stubs.length>1?'s aren\u2019t':' isn\u2019t')+' in the local database</b> (newer than this snapshot). They\u2019ll still export correctly. Update the database in Settings to see their text.'}));
+  }
+  if(unowned.length){
+    warn.appendChild(Object.assign(el('div','warnbox'),
+      {innerHTML:'Not in your collection: <b>'+esc(unowned.map(c=>c.n).join(', '))+'</b>'}));
+  }
+
+  const dl = $('#decklist');
+  let html = cards.map(miniHtml).join('');
+  for(let i=cards.length; i<12; i++) html += '<div class="mini empty">+</div>';
+  dl.innerHTML = html;
+  dl.onclick = e => {
+    const m = e.target.closest('.mini'); if(!m) return;
+    if(m.classList.contains('empty')){ setTab('cards'); return; }
+    openCardSheet(m.dataset.d);
+  };
+}
+$('#deckname').addEventListener('input', e => {
+  const d = ensureDeck(); d.name = e.target.value; touch(d); renderDeckbar(); renderSaved();
+});
+$('#btn-cleardeck').onclick = () => {
+  const d = ensureDeck();
+  if(!d.cards.length) return;
+  if(confirm('Remove all cards from "'+d.name+'"?')){ d.cards=[]; touch(d); renderAll(); }
+};
+$('#btn-dupe').onclick = () => {
+  const d = ensureDeck();
+  const copy = { id:uid(), name:d.name+' v2', cards:d.cards.slice(), updated:Date.now() };
+  S.decks.unshift(copy); S.activeId = copy.id; persistDecks(); renderAll(); toast('Duplicated \u2192 now editing '+copy.name);
+};
+
+/* ============ RENDER: DECKBAR ============ */
+function renderDeckbar(){
+  const d = ensureDeck();
+  $('#dbar-name').textContent = d.name;
+  $('#dbar-count').textContent = d.cards.length + '/12';
+  const dots = $('#dbar-dots'); dots.innerHTML='';
+  for(let i=0;i<12;i++){ const b = el('i'); if(i < d.cards.length) b.classList.add('f'); dots.appendChild(b); }
+  $('#deckbar').style.display = (S.tab === 'cards') ? 'flex' : 'none';
+}
+$('#deckbar').onclick = () => setTab('deck');
+
+/* ============ RENDER: SAVED ============ */
+function renderSaved(){
+  const wrap = $('#savedlist'); wrap.innerHTML='';
+  if(!S.decks.length){ wrap.appendChild(el('div','warnbox','No decks yet')); return; }
+  S.decks.forEach(d => {
+    const row = el('div','saverow'); if(d.id===S.activeId) row.classList.add('active');
+    const main = el('div','sv-main');
+    main.appendChild(el('div','sv-name', d.name || 'Untitled'));
+    main.appendChild(el('div','sv-meta', d.cards.length + '/12 \u00b7 updated ' + new Date(d.updated).toLocaleDateString()));
+    row.appendChild(main);
+    const loadB = el('button','sv-btn load', d.id===S.activeId ? 'Editing' : 'Edit');
+    loadB.onclick = () => { S.activeId = d.id; persistDecks(); renderAll(); setTab('deck'); };
+    const delB = el('button','sv-btn','\u2715');
+    delB.onclick = () => {
+      if(!confirm('Delete "'+d.name+'"? This can\u2019t be undone.')) return;
+      S.decks = S.decks.filter(x => x.id !== d.id);
+      if(S.activeId === d.id) S.activeId = S.decks[0] ? S.decks[0].id : null;
+      persistDecks(); renderAll();
+    };
+    row.appendChild(loadB); row.appendChild(delB);
+    wrap.appendChild(row);
+  });
+}
+$('#btn-newdeck').onclick = () => {
+  const d = { id:uid(), name:'New Deck', cards:[], updated:Date.now() };
+  S.decks.unshift(d); S.activeId = d.id; persistDecks(); renderAll(); setTab('cards'); toast('New deck started');
+};
+
+/* ============ IMPORT / EXPORT / MODAL ============ */
+function openModal(html){
+  $('#modal').innerHTML = html;
+  $('#modalwrap').classList.add('on');
+}
+function closeModal(){ $('#modalwrap').classList.remove('on'); }
+$('#modalwrap').addEventListener('click', e => { if(e.target.id === 'modalwrap') closeModal(); });
+
+async function copyText(text){
+  try{ await navigator.clipboard.writeText(text); return true; }
+  catch(e){
+    try{
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    }catch(e2){ return false; }
+  }
+}
+$('#btn-copycode').onclick = async () => {
+  const d = ensureDeck();
+  if(!d.cards.length){ toast('Deck is empty'); return; }
+  if(d.cards.length < 12 && !confirm('Deck has '+d.cards.length+'/12 cards. Snap needs 12 to import. Copy anyway?')) return;
+  const code = exportCode(d);
+  const ok = await copyText(code);
+  openModal(
+    '<h2>Deck code</h2>'+
+    (ok ? '<div class="mgood">&#10003; Copied to clipboard</div>' : '<div class="mbad">Auto-copy was blocked \u2014 long-press the code below and copy it manually.</div>')+
+    '<textarea readonly>'+esc(code)+'</textarea>'+
+    '<div class="mnote">In Snap: Decks &rarr; New Deck &rarr; the paste/import button next to the deck name.</div>'+
+    '<div class="mrow"><button class="abtn primary" onclick="document.getElementById(\'modalwrap\').classList.remove(\'on\')">Done</button></div>'
+  );
+};
+$('#btn-import').onclick = () => {
+  openModal(
+    '<h2>Import deck code</h2>'+
+    '<textarea id="importbox" placeholder="Paste a deck code from Snap (or from a friend)"></textarea>'+
+    '<div id="importmsg"></div>'+
+    '<div class="mrow"><button class="abtn" id="m-cancel">Cancel</button><button class="abtn primary" id="m-doimport">Import</button></div>'
+  );
+  $('#m-cancel').onclick = closeModal;
+  $('#m-doimport').onclick = () => {
+    const r = parseCode($('#importbox').value);
+    if(r.err){ $('#importmsg').innerHTML = '<div class="mbad">'+esc(r.err)+'</div>'; return; }
+    const unknown = r.ids.filter(id => !S.byId[id]);
+    unknown.forEach(makeStub);
+    const d = { id:uid(), name: r.name || 'Imported Deck', cards: r.ids, updated: Date.now() };
+    S.decks.unshift(d); S.activeId = d.id; persistDecks();
+    closeModal(); renderAll(); setTab('deck');
+    toast('Imported ' + r.ids.length + ' cards' + (unknown.length ? ' (' + unknown.length + ' unknown)' : ''));
+  };
+};
+
+/* ============ SETTINGS / DB UPDATE ============ */
+$('#btn-settings').onclick = () => {
+  openModal(
+    '<h2>Settings</h2>'+
+    (!S.storageOK ? '<div class="warnbox">Persistent storage isn\u2019t available here, so changes last only this session. Open the app inside Claude, or host it on your own site, to save.</div>' : '')+
+    '<div class="section-label" style="margin-top:4px">Card database</div>'+
+    '<div class="mnote">Loaded: <b>'+S.db.length+' cards</b> ('+esc(S.dbLabel)+'). Updating also fetches exact art links for every card.</div>'+
+    '<div class="mrow">'+
+      (REFRESH_URL ? '<button class="abtn primary" id="m-refresh">Refresh card list</button>' : '')+
+      '<button class="abtn'+(REFRESH_URL?'':' primary')+'" id="m-updatedb">Update '+(REFRESH_URL?'manually':'database')+'</button>'+
+    '</div>'+
+    '<div class="section-label">My collection ('+S.owned.size+' owned)</div>'+
+    '<div class="mnote">Mark whole series as owned, then fine-tune per card via the <b>i</b> button on any card.</div>'+
+    '<div class="bulkgrid">'+
+      '<button class="abtn" data-bulk="Base">Own all Base</button>'+
+      '<button class="abtn" data-bulk="1">Own all S1</button>'+
+      '<button class="abtn" data-bulk="2">Own all S2</button>'+
+      '<button class="abtn" data-bulk="3">Own all S3</button>'+
+    '</div>'+
+    '<div class="mrow"><button class="abtn danger" id="m-clearcoll">Clear collection</button><button class="abtn" id="m-close">Done</button></div>'
+  );
+  $('#m-close').onclick = closeModal;
+  document.querySelectorAll('[data-bulk]').forEach(b => b.onclick = () => {
+    const s = b.dataset.bulk;
+    S.db.forEach(c => { if(c.s === s) S.owned.add(c.d); });
+    persistColl(); renderAll(); toast('Marked series '+s+' as owned');
+    $('#btn-settings').onclick();
+  });
+  $('#m-clearcoll').onclick = () => {
+    if(!confirm('Clear your entire owned-card list?')) return;
+    S.owned.clear(); persistColl(); renderAll(); closeModal();
+  };
+  $('#m-updatedb').onclick = openDbUpdate;
+  const rBtn = $('#m-refresh');
+  if(rBtn) rBtn.onclick = async () => {
+    rBtn.disabled = true; rBtn.textContent = 'Fetching...';
+    try{
+      const resp = await fetch(REFRESH_URL);
+      const text = await resp.text();
+      const parsed = parseDbPaste(text);
+      if(parsed.err) throw new Error(parsed.err);
+      const added = await applyDb(parsed.cards);
+      toast('Updated: '+S.db.length+' cards ('+added+' new)');
+      closeModal();
+    }catch(e){
+      toast('Refresh failed: '+(e && e.message ? e.message : 'network blocked here'));
+      rBtn.disabled = false; rBtn.textContent = 'Refresh card list';
+    }
+  };
+};
+async function applyDb(cards){
+  const before = new Set(S.db.map(c=>c.d));
+  const added = cards.filter(c => !before.has(c.d)).length;
+  S.db = cards; indexDb();
+  S.dbLabel = 'updated ' + new Date().toLocaleDateString();
+  if(S.storageOK){
+    try{ await sPut(K.db, JSON.stringify({label:S.dbLabel, cards:S.db})); }
+    catch(e){ toast('Saved for this session only (storage error)'); }
+  }
+  renderAll();
+  return added;
+}
+
+function openDbUpdate(){
+  openModal(
+    '<h2>Update card database</h2>'+
+    '<div class="mnote"><b>Fastest:</b> make an iOS Shortcut with two actions \u2014 &ldquo;Get Contents of URL&rdquo; (the URL below) then &ldquo;Copy to Clipboard.&rdquo; Run it, come back here, tap the button:</div>'+
+    '<div class="mrow"><button class="abtn primary" id="m-clip">Update from clipboard</button></div>'+
+    '<div class="mnote"><b>Manual:</b> open the URL in Safari, select all, copy, paste below.<br><code>https://marvelsnapzone.com/getinfo/?searchtype=cards&amp;searchcardstype=true</code></div>'+
+    '<div class="mrow"><button class="abtn" id="m-copyurl">Copy that URL</button></div>'+
+    '<textarea id="dbbox" placeholder="Paste the whole JSON here"></textarea>'+
+    '<div id="dbmsg"></div>'+
+    '<div class="mrow"><button class="abtn" id="m-cancel2">Cancel</button><button class="abtn primary" id="m-dodb">Parse &amp; save</button></div>'
+  );
+  const finish = async (rawText, msgEl) => {
+    const parsed = parseDbPaste(rawText);
+    if(parsed.err){ msgEl.innerHTML = '<div class="mbad">'+esc(parsed.err)+'</div>'; return false; }
+    const added = await applyDb(parsed.cards);
+    msgEl.innerHTML = '<div class="mgood">&#10003; Loaded '+S.db.length+' cards ('+added+' new vs the old set)</div>';
+    toast('Database updated');
+    return true;
+  };
+  $('#m-clip').onclick = async () => {
+    const msg = $('#dbmsg');
+    let text = '';
+    try{ text = await navigator.clipboard.readText(); }catch(e){}
+    if(!text){ msg.innerHTML = '<div class="mbad">Couldn\u2019t read the clipboard here \u2014 paste into the box below instead.</div>'; return; }
+    await finish(text, msg);
+  };
+  $('#m-copyurl').onclick = async () => {
+    const ok = await copyText('https://marvelsnapzone.com/getinfo/?searchtype=cards&searchcardstype=true');
+    toast(ok ? 'URL copied' : 'Copy blocked \u2014 type it manually');
+  };
+  $('#m-cancel2').onclick = closeModal;
+  $('#m-dodb').onclick = () => finish($('#dbbox').value, $('#dbmsg'));
+}
+const FLAVOR_KEY = /(:|\b(power|cost|cards?|locations?|draw|discard|destroy|move[sd]?|moving|merge|deck|hand|turn|reveal|cop(y|ies)|switch|add|set|gain|split|transform|shuffle|replace|banish|afflict|steal|fill|energy|abilit|play|shows?|unrevealed)\b)/i;
+function parseDbPaste(text){
+  let j;
+  try{ j = JSON.parse(String(text||'').trim()); }
+  catch(e){ return { err:'That doesn\u2019t parse as JSON. Make sure you copied the whole page.' }; }
+  let arr = Array.isArray(j) ? j : (j.success && j.success.cards) || j.cards;
+  if(!Array.isArray(arr) || !arr.length) return { err:'JSON parsed, but no card list found in it.' };
+  const out = []; const seen = new Set();
+  const stripHtml = s => String(s||'').replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/&nbsp;/g,' ').trim();
+  const serMap = { 'pool-1':'1','pool-2':'2','pool-3':'3','pool-4':'4','pool-5':'5','starter-card':'Base','recruit-season':'Base' };
+  for(const c of arr){
+    let card = null;
+    if(c.carddefid !== undefined){                     // marvelsnapzone format
+      if(c.status !== 'released' || c.type !== 'Character') continue;
+      const name = stripHtml(c.name);
+      if(!c.carddefid || !name || /[<>!]/.test(c.carddefid)) continue;
+      card = { n:name, d:c.carddefid, c:+c.cost||0, p:+c.power||0, a:stripHtml(c.ability), s: serMap[c.source_slug] || (/pool-(\d)/.test(c.source_slug||'') ? RegExp.$1 : '?') };
+      if(!card.a && c.flavor) card.f = stripHtml(c.flavor).replace(/^"|"$/g,'');
+      if(c.art && /^https?:\/\//.test(c.art)) card.i = String(c.art);
+    } else if(c.url && c.name && c.energy !== undefined){ // snap.fan dump format
+      if(c.released === false) continue;
+      const m = String(c.url).match(/\/cards\/([^/]+)\/?$/); if(!m) continue;
+      let s = String(c.series ?? '?'); if(['Starter','Recruit','0'].includes(s)) s='Base'; if(s==='Unknown') s='?';
+      card = { n:c.name.trim(), d:m[1], c:+c.energy||0, p:+c.power||0, a:(c.ability||'').trim(), s };
+      if(card.a && !FLAVOR_KEY.test(card.a)){ card.f = card.a.replace(/^['"]|['"]$/g,''); card.a=''; }
+    } else if(c.d && c.n){                             // this app's own format
+      card = { n:c.n, d:c.d, c:+c.c||0, p:+c.p||0, a:c.a||'', s:c.s||'?' }; if(c.f) card.f=c.f; if(c.i) card.i=c.i;
+    }
+    if(card && !seen.has(card.d)){ seen.add(card.d); out.push(card); }
+  }
+  if(out.length < 50) return { err:'Only found '+out.length+' usable cards \u2014 that looks like a partial paste.' };
+  out.sort((a,b) => (a.c-b.c) || a.n.localeCompare(b.n));
+  return { cards: out };
+}
+
+/* ============ AI COACH ============ */
+const PRESETS = [
+  'Critique this deck: weak slots and suggested swaps.',
+  'Fill my empty slots to sharpen the game plan.',
+  'What is this deck\u2019s plan, and what does it lose to?',
+  'Is my curve right? What should I cut or add?',
+  'Build me a fresh deck around my best synergies.'
+];
+function renderPresets(){
+  const w = $('#presets'); w.innerHTML='';
+  PRESETS.forEach(p => {
+    const b = el('button','chip', p.split(':')[0].split('?')[0]);
+    b.title = p;
+    b.onclick = () => { $('#aiq').value = p; };
+    w.appendChild(b);
+  });
+}
+function deckAsText(){
+  const d = ensureDeck();
+  if(!d.cards.length) return '(deck is currently empty)';
+  return sortedDeckCards(d).map(c =>
+    c.c+'-cost '+c.p+'-power '+c.n+(c.stub ? ' (card text unknown locally)' : (c.a ? ': '+c.a : ': no ability'))
+  ).join('\n');
+}
+$('#btn-ask').onclick = async () => {
+  const q = $('#aiq').value.trim() || PRESETS[0];
+  const out = $('#aiout');
+  const btn = $('#btn-ask');
+  out.className=''; out.style.display='block'; out.textContent='Thinking about your 12 slots...';
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Coaching...';
+  let ownedBlock = '';
+  if($('#ai-owned').checked){
+    if(!S.owned.size){ ownedBlock = '\n(The user asked to restrict to owned cards but has not marked any as owned; note that and answer generally.)'; }
+    else ownedBlock = '\nOnly suggest cards from this owned list:\n' + [...S.owned].map(id => (getCard(id)||{n:id}).n).join(', ');
+  }
+  const prompt =
+    'You are a sharp, honest Marvel Snap deck-building coach.\n' +
+    'Card data below comes from an up-to-date database and may be newer than your training; when they conflict, trust the text below.\n\n' +
+    'Current deck ("'+(activeDeck().name||'Deck')+'"):\n' + deckAsText() + '\n' +
+    ownedBlock + '\n\n' +
+    'Question: ' + q + '\n\n' +
+    'Answer in plain text (no markdown syntax), under 220 words. Be specific: name exact cards for cuts and adds, reference costs, and explain the game plan reasoning briefly.';
+  try{
+    let text = '';
+    if(COACH_URL){
+      const resp = await fetch(COACH_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ prompt })
+      });
+      const data = await resp.json();
+      if(data && data.error) throw new Error(data.error);
+      text = (data && data.text) || '';
+    } else {
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, messages:[{role:'user', content:prompt}] })
+      });
+      const data = await resp.json();
+      if(!data || !Array.isArray(data.content)){
+        throw new Error(data && data.error ? data.error.message : 'unexpected response shape');
+      }
+      text = data.content.filter(b => b.type==='text').map(b => b.text).join('\n').trim();
+    }
+    out.textContent = text || 'No response text came back \u2014 try again.';
+  }catch(e){
+    out.className='err';
+    out.textContent = COACH_URL
+      ? 'Coach error: ' + (e && e.message ? e.message : 'could not reach the worker.')
+      : 'Could not reach the coach (network error). Inside Claude this works automatically; self-hosted, set COACH_URL to your worker.';
+  }
+  btn.disabled = false; btn.textContent = 'Ask about current deck';
+};
+
+/* ============ TABS & BOOT ============ */
+function setTab(t){
+  S.tab = t;
+  document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'view-'+t));
+  renderDeckbar();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('#tabbar button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
+let _qT;
+$('#q').addEventListener('input', e => {
+  clearTimeout(_qT);
+  _qT = setTimeout(() => { S.filters.q = e.target.value; renderCards(); }, 120);
+});
+
+function renderAll(){
+  renderCards(); renderDeck(); renderDeckbar(); renderSaved();
+}
+async function boot(){
+  const dbSaved = await sGet(K.db);
+  if(dbSaved && Array.isArray(dbSaved.cards) && dbSaved.cards.length > 50){
+    S.db = dbSaved.cards; S.dbLabel = dbSaved.label || 'updated copy';
+  }
+  indexDb();
+  const decksSaved = await sGet(K.decks);
+  if(decksSaved && Array.isArray(decksSaved.decks)){
+    S.decks = decksSaved.decks; S.activeId = decksSaved.activeId;
+  }
+  const coll = await sGet(K.coll);
+  if(coll && Array.isArray(coll.owned)) S.owned = new Set(coll.owned);
+  ensureDeck();
+  buildChips(); renderPresets(); renderAll(); setTab('cards');
+  setTimeout(() => {
+    if(!window._artOK && document.querySelector('#cardlist .tile img')){
+      $('#artnote').style.display = 'block';
+    }
+  }, 3500);
+}
+boot();
+</script>
+</body>
+</html>
