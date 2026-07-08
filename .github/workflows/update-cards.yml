@@ -1,0 +1,18 @@
+              if (c.art && /^https?:\/\//.test(c.art)) card.i = String(c.art);
+              out.push(card);
+            }
+            if (out.length < 200) { console.error('sanity check failed: only', out.length, 'cards, not committing'); process.exit(1); }
+            out.sort((a,b) => (a.c-b.c) || a.n.localeCompare(b.n));
+            fs.writeFileSync('cards.json', JSON.stringify({ updated: new Date().toISOString().slice(0,10), cards: out }));
+            console.log('wrote', out.length, 'cards');
+          })().catch(e => { console.error(e); process.exit(1); });
+          EOF
+      - name: Commit if changed
+        run: |
+          git config user.name 'card-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add cards.json
+          git diff --cached --quiet && echo 'No changes today' || (git commit -m 'Update card list' && git push)
+~
+~
+                                48,12         Bot
