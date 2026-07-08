@@ -277,6 +277,54 @@ h1 .h-snap{color:var(--gold);}
   background:var(--gold); color:#17130a; font-weight:700; font-size:13px; padding:10px 18px;
   border-radius:999px; z-index:70; display:none; box-shadow:0 6px 18px rgba(0,0,0,.4); max-width:86vw; text-align:center;
 }
+
+/* ---------- v4: build screen ---------- */
+#buildtop{position:sticky; top:49px; z-index:22; background:var(--bg0);
+  margin:-12px -12px 0; padding:10px 12px 8px;
+  box-shadow:0 12px 16px -12px rgba(0,0,0,.65);}
+#bhead{display:flex; align-items:center; justify-content:space-between; margin:2px 2px 8px;}
+#bh-title{display:flex; align-items:baseline; gap:8px; min-width:0;}
+#bh-name{font-size:15px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+#bh-count{font-family:var(--disp); font-size:14px; color:var(--gold); letter-spacing:.5px;}
+#bh-btns{display:flex; gap:6px;}
+.hbtn{background:var(--panel); border:1px solid var(--line); color:var(--dim); border-radius:10px;
+  min-width:36px; height:32px; font-size:15px; font-weight:800;}
+#bh-collapse{transition:transform .2s;}
+#bh-collapse.flip{transform:rotate(180deg);}
+#deckzone{border:1px solid var(--line); border-radius:14px; background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.12));
+  padding:8px; margin-bottom:10px; overflow:hidden; transition:max-height .22s ease;}
+#deckzone.closed #dz{display:none;}
+#dz{display:grid; grid-template-columns:repeat(6,1fr); gap:5px; margin-bottom:7px;}
+#dz .mini{border-radius:8px;}
+#dz .mini .mname{font-size:7.5px; padding:10px 2px 3px;}
+#dz .mini .ovl{width:15px; height:15px; font-size:9px; border-width:1.5px;}
+#dz .mini.empty{font-size:15px;}
+#insight{display:flex; align-items:center; gap:12px;}
+#ins-curve{display:flex; align-items:flex-end; gap:3px; height:20px; flex:1;}
+#ins-curve i{flex:1; border-radius:2px 2px 0 0; background:linear-gradient(180deg,#7ccaff,var(--cost)); min-height:2px;}
+#ins-curve i.z{background:#272f57;}
+.ins-stat{font-size:11px; color:var(--faint); font-weight:700; white-space:nowrap;}
+.ins-stat b{font-family:var(--disp); font-weight:400; font-size:14px; color:var(--text); margin-right:3px;}
+.searchrow{display:flex; gap:7px; margin-bottom:8px;}
+.searchrow #q{flex:1; margin-bottom:0;}
+.fbtn{position:relative; background:var(--panel); border:1px solid var(--line); color:var(--dim);
+  border-radius:12px; min-width:44px; font-size:16px; font-weight:800;}
+#fcount{position:absolute; top:-5px; right:-5px; background:var(--gold); color:#17130a; font-size:10px;
+  font-weight:800; border-radius:999px; min-width:16px; height:16px; line-height:16px; padding:0 3px;}
+#fcount:empty{display:none;}
+
+/* hex gems on fallback tiles, Snap-style */
+.ovl{border-radius:0 !important; border:none !important;
+  clip-path:polygon(50% 0, 93% 26%, 93% 74%, 50% 100%, 7% 74%, 7% 26%);}
+.ovl.tc{background:linear-gradient(160deg,#7cc7ff,#1d6fd0); color:#eaf6ff; text-shadow:0 1px 2px rgba(0,20,50,.7);}
+.ovl.tp{background:linear-gradient(160deg,#ffc46a,#e07a12); color:#fff6e8; text-shadow:0 1px 2px rgba(70,30,0,.7);}
+
+/* collection: in-deck cards gray out like the game */
+.tilegrid.cmp{grid-template-columns:repeat(auto-fill, minmax(84px, 1fr)); gap:7px;}
+.tile.cmp.indeck{border-color:rgba(255,255,255,.09); box-shadow:none;}
+.tile.cmp.indeck .tart{filter:grayscale(1) brightness(.55);}
+.tile.cmp.indeck .cname-scrim{color:var(--faint);}
+
 </style>
 </head>
 <body>
@@ -287,12 +335,30 @@ h1 .h-snap{color:var(--gold);}
 </header>
 
 <main>
-  <!-- CARDS -->
+  <!-- BUILD -->
   <section class="view on" id="view-cards">
-    <input id="q" type="search" placeholder="Search name or ability text" autocomplete="off">
-    <div class="chiprow" id="chips-cost"></div>
-    <div class="chiprow" id="chips-mech"></div>
-    <div class="chiprow" id="chips-series"></div>
+    <div id="buildtop">
+    <div id="bhead">
+      <div id="bh-title"><b id="bh-name"></b><span id="bh-count"></span></div>
+      <div id="bh-btns">
+        <button class="hbtn" id="bh-collapse">&#9650;</button>
+        <button class="hbtn" id="bh-menu">&#8943;</button>
+      </div>
+    </div>
+    <div id="deckzone">
+      <div id="dz"></div>
+      <div id="insight">
+        <div id="ins-curve"></div>
+        <span class="ins-stat"><b id="ins-avg">&ndash;</b> avg</span>
+        <span class="ins-stat"><b id="ins-pow">0</b> pwr</span>
+      </div>
+    </div>
+    <div class="searchrow">
+      <input id="q" type="search" placeholder="Search name or ability" autocomplete="off">
+      <button class="fbtn" id="btn-sort" title="Sort">&#8645;</button>
+      <button class="fbtn" id="btn-filter" title="Filter">&#9776;<span id="fcount"></span></button>
+    </div>
+    </div>
     <div id="artnote">Card art seems blocked in this environment, so you&rsquo;re seeing tile view. Everything else works the same.</div>
     <div class="viewrow">
       <div id="matchcount"></div>
@@ -346,16 +412,8 @@ h1 .h-snap{color:var(--gold);}
   </section>
 </main>
 
-<div id="decktray"></div>
-<div id="deckbar">
-  <span class="db-name" id="dbar-name"></span>
-  <span class="db-dots" id="dbar-dots"></span>
-  <span class="db-count" id="dbar-count"></span>
-  <span class="chev">&#9650;</span>
-</div>
-
 <nav id="tabbar">
-  <button data-tab="cards" class="on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>Cards</button>
+  <button data-tab="cards" class="on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>Build</button>
   <button data-tab="deck"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="12" height="16" rx="2"/><path d="M9 19l1.5 2h5a2 2 0 0 0 2-2V8"/></svg>Deck</button>
   <button data-tab="saved"><svg viewBox="0 0 24 24"><path d="M4 6a2 2 0 0 1 2-2h4l2 2.5h6a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>Saved</button>
   <button data-tab="ai"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg>Coach</button>
@@ -556,32 +614,65 @@ function parseCode(text){
 }
 
 /* ============ RENDER: CARD GRID ============ */
-function buildChips(){
-  const mk = (wrap, items, set, cls) => {
-    wrap.innerHTML='';
-    items.forEach(v => {
-      const b = el('button','chip '+cls, v.label);
-      b.dataset.v = v.value;
-      if(set.has(v.value)) b.classList.add('on');
-      b.onclick = () => {
-        set.has(v.value) ? set.delete(v.value) : set.add(v.value);
-        b.classList.toggle('on');
-        renderCards();
-      };
-      wrap.appendChild(b);
+function chipRowHtml(id, items, set, cls){
+  return '<div class="chiprow" id="'+id+'">'+items.map(v =>
+    '<button class="chip '+cls+(set.has(v.value)?' on':'')+'" data-v="'+esc(v.value)+'">'+esc(v.label)+'</button>'
+  ).join('')+'</div>';
+}
+function activeFilterCount(){
+  const f = S.filters;
+  return f.cost.size + f.mech.size + f.series.size + (f.owned ? 1 : 0);
+}
+function updateFilterBadge(){
+  const n = activeFilterCount();
+  $('#fcount').textContent = n ? n : '';
+}
+function openFilterSheet(){
+  const f = S.filters;
+  openModal(
+    '<h2>Filters</h2>'+
+    '<div class="section-label" style="margin-top:0">Cost</div>'+
+    chipRowHtml('fs-cost', [0,1,2,3,4,5,6].map(n=>({value:String(n), label:n===6?'6+':String(n)})), f.cost, 'c-cost')+
+    '<div class="section-label">Mechanic</div>'+
+    chipRowHtml('fs-mech', ['On Reveal','Ongoing','Discard','Destroy','Move','Activate','Vanilla'].map(v=>({value:v,label:v})), f.mech, 'c-mech')+
+    '<div class="section-label">Series</div>'+
+    chipRowHtml('fs-ser', ['1','2','3','4','5','Base'].map(v=>({value:v,label:v==='Base'?'Base':'S'+v})), f.series, 'c-ser')+
+    '<div class="section-label">Collection</div>'+
+    '<button class="chip c-own'+(f.owned?' on':'')+'" id="fs-own">Owned only</button>'+
+    '<div class="mrow"><button class="abtn" id="fs-clear">Clear all</button><button class="abtn primary" id="fs-done">Done</button></div>'
+  );
+  const bind = (rowId, set) => {
+    $('#'+rowId).addEventListener('click', e => {
+      const b = e.target.closest('.chip'); if(!b) return;
+      const v = b.dataset.v;
+      set.has(v) ? set.delete(v) : set.add(v);
+      b.classList.toggle('on');
+      renderCards(); updateFilterBadge();
     });
   };
-  mk($('#chips-cost'), [0,1,2,3,4,5,6].map(n => ({value:String(n), label: n===6 ? '6+' : String(n)})), S.filters.cost, 'c-cost');
-  mk($('#chips-mech'), ['On Reveal','Ongoing','Discard','Destroy','Move','Activate','Vanilla'].map(v=>({value:v,label:v})), S.filters.mech, 'c-mech');
-  const serWrap = $('#chips-series');
-  mk(serWrap, ['1','2','3','4','5','Base'].map(v=>({value:v,label: v==='Base' ? 'Base' : 'S'+v})), S.filters.series, 'c-ser');
-  const ownChip = el('button','chip c-own','Owned');
-  if(S.filters.owned) ownChip.classList.add('on');
-  ownChip.onclick = () => { S.filters.owned = !S.filters.owned; ownChip.classList.toggle('on'); renderCards(); };
-  serWrap.appendChild(ownChip);
+  bind('fs-cost', f.cost); bind('fs-mech', f.mech); bind('fs-ser', f.series);
+  $('#fs-own').onclick = e => { f.owned = !f.owned; e.target.classList.toggle('on'); renderCards(); updateFilterBadge(); };
+  $('#fs-clear').onclick = () => { f.cost.clear(); f.mech.clear(); f.series.clear(); f.owned=false; renderCards(); updateFilterBadge(); openFilterSheet(); };
+  $('#fs-done').onclick = closeModal;
 }
+$('#btn-filter').onclick = openFilterSheet;
+const SORTS = [
+  { k:'cost',   label:'Cost (low \u2192 high)', fn:(a,b)=>(a.c-b.c)||a.n.localeCompare(b.n) },
+  { k:'name',   label:'Name (A \u2192 Z)',      fn:(a,b)=>a.n.localeCompare(b.n) },
+  { k:'power',  label:'Power (high \u2192 low)',fn:(a,b)=>(b.p-a.p)||a.n.localeCompare(b.n) },
+  { k:'series', label:'Series',                 fn:(a,b)=>String(a.s).localeCompare(String(b.s))||(a.c-b.c)||a.n.localeCompare(b.n) },
+];
+S.sort = 'cost';
+$('#btn-sort').onclick = () => {
+  openModal('<h2>Sort collection</h2>'+SORTS.map(s =>
+    '<div class="mrow"><button class="abtn'+(S.sort===s.k?' primary':'')+'" data-sort="'+s.k+'">'+s.label+'</button></div>').join(''));
+  document.querySelectorAll('[data-sort]').forEach(b => b.onclick = () => {
+    S.sort = b.dataset.sort; closeModal(); renderCards();
+  });
+};
 function filteredCards(){
   const f = S.filters, q = f.q.trim().toLowerCase();
+  const sorter = (SORTS.find(s => s.k === S.sort) || SORTS[0]).fn;
   return S.db.filter(c => {
     if(q && !(c.n.toLowerCase().includes(q) || (c.a||'').toLowerCase().includes(q))) return false;
     if(f.cost.size){ const b = String(Math.min(c.c,6)); if(!f.cost.has(b)) return false; }
@@ -589,7 +680,7 @@ function filteredCards(){
     if(f.mech.size){ const ms = mech(c); if(![...f.mech].every(m => ms.includes(m))) return false; }
     if(f.owned && !S.owned.has(c.d)) return false;
     return true;
-  });
+  }).slice().sort(sorter);
 }
 function tileHtml(c){
   const url = artUrl(c);
@@ -752,44 +843,49 @@ $('#btn-dupe').onclick = () => {
   S.decks.unshift(copy); S.activeId = copy.id; persistDecks(); renderAll(); toast('Duplicated \u2192 now editing '+copy.name);
 };
 
-/* ============ RENDER: DECKBAR & TRAY ============ */
-function renderDeckbar(){
+/* ============ RENDER: DECK ZONE (build screen) ============ */
+function renderDeckbar(){ // kept name; now renders the pinned zone + header
   const d = ensureDeck();
-  $('#dbar-name').textContent = d.name;
-  $('#dbar-count').textContent = d.cards.length + '/12';
-  const dots = $('#dbar-dots'); dots.innerHTML='';
-  for(let i=0;i<12;i++){ const b = el('i'); if(i < d.cards.length) b.classList.add('f'); dots.appendChild(b); }
-  const onCards = (S.tab === 'cards');
-  $('#deckbar').style.display = onCards ? 'flex' : 'none';
-  if(!onCards) S.trayOpen = false;
-  $('#deckbar').classList.toggle('open', !!S.trayOpen);
-  renderTray();
-}
-function renderTray(){
-  const tray = $('#decktray');
-  tray.classList.toggle('open', !!S.trayOpen && S.tab==='cards');
-  if(!S.trayOpen) return;
-  const d = ensureDeck();
+  $('#bh-name').textContent = d.name;
+  $('#bh-count').textContent = d.cards.length + '/12';
+  const open = S.zoneOpen !== false;
+  $('#deckzone').classList.toggle('closed', !open);
+  $('#bh-collapse').classList.toggle('flip', !open);
+
   const cards = sortedDeckCards(d);
-  let html = '<div class="trayhead"><b>'+esc(d.name)+' \u00b7 '+cards.length+'/12</b>'+
-    '<button class="traylink" id="tray-full">Full deck &rarr;</button></div>';
-  if(cards.length){
-    html += '<div class="traystrip">'+cards.map(c =>
-      miniHtml(c).replace('<div class="mname"', '<button class="rm">&#10005;</button><div class="mname"')
-    ).join('')+'</div>';
-    const buckets=[0,0,0,0,0,0,0];
-    cards.forEach(c => buckets[Math.min(c.c,6)]++);
-    const mx = Math.max(1, ...buckets);
-    html += '<div class="traycurve">'+buckets.map(n =>
-      '<i class="'+(n?'':'z')+'" style="height:'+Math.max(3, Math.round(n/mx*26))+'px"></i>').join('')+'</div>';
-  } else {
-    html += '<div class="trayempty">Empty deck \u2014 tap cards below to add them.</div>';
-  }
-  tray.innerHTML = html;
-  $('#tray-full').onclick = () => { S.trayOpen=false; setTab('deck'); };
-  tray.querySelectorAll('.mini').forEach(m => m.onclick = () => toggleCard(m.dataset.d));
+  const dz = $('#dz');
+  let html = cards.map(c => miniHtml(c)).join('');
+  for(let i=cards.length; i<12; i++) html += '<div class="mini empty">+</div>';
+  dz.innerHTML = html;
+  dz.onclick = e => {
+    const m = e.target.closest('.mini'); if(!m || m.classList.contains('empty')) return;
+    toggleCard(m.dataset.d);
+  };
+
+  const buckets=[0,0,0,0,0,0,0];
+  cards.forEach(c => buckets[Math.min(c.c,6)]++);
+  const mx = Math.max(1, ...buckets);
+  $('#ins-curve').innerHTML = buckets.map(n =>
+    '<i class="'+(n?'':'z')+'" style="height:'+Math.max(3, Math.round(n/mx*18))+'px"></i>').join('');
+  $('#ins-avg').textContent = cards.length ? (cards.reduce((s,c)=>s+c.c,0)/cards.length).toFixed(1) : '\u2013';
+  $('#ins-pow').textContent = cards.reduce((s,c)=>s+(c.p||0),0);
 }
-$('#deckbar').onclick = () => { S.trayOpen = !S.trayOpen; renderDeckbar(); };
+$('#bh-collapse').onclick = () => { S.zoneOpen = S.zoneOpen === false ? true : false; renderDeckbar(); };
+$('#bh-name').onclick = () => setTab('deck');
+$('#bh-menu').onclick = () => {
+  openModal(
+    '<h2>'+esc(ensureDeck().name)+'</h2>'+
+    '<div class="mrow"><button class="abtn primary" id="dm-copy">Copy deck code</button><button class="abtn" id="dm-import">Import code</button></div>'+
+    '<div class="mrow"><button class="abtn" id="dm-notes">Notes &amp; stats</button><button class="abtn" id="dm-new">New deck</button></div>'+
+    '<div class="mrow"><button class="abtn subtle" id="dm-dupe">Duplicate</button><button class="abtn danger" id="dm-clear">Clear cards</button></div>'
+  );
+  $('#dm-copy').onclick = () => { closeModal(); doCopyCode(); };
+  $('#dm-import').onclick = () => { closeModal(); openImport(); };
+  $('#dm-notes').onclick = () => { closeModal(); setTab('deck'); };
+  $('#dm-new').onclick = () => { closeModal(); $('#btn-newdeck').onclick(); };
+  $('#dm-dupe').onclick = () => { closeModal(); $('#btn-dupe').onclick(); };
+  $('#dm-clear').onclick = () => { closeModal(); $('#btn-cleardeck').onclick(); };
+};
 
 /* ============ RENDER: SAVED ============ */
 function renderSaved(){
@@ -840,7 +936,7 @@ async function copyText(text){
     }catch(e2){ return false; }
   }
 }
-$('#btn-copycode').onclick = async () => {
+async function doCopyCode(){
   const d = ensureDeck();
   if(!d.cards.length){ toast('Deck is empty'); return; }
   if(d.cards.length < 12 && !confirm('Deck has '+d.cards.length+'/12 cards. Snap needs 12 to import. Copy anyway?')) return;
@@ -853,8 +949,8 @@ $('#btn-copycode').onclick = async () => {
     '<div class="mnote">In Snap: Decks &rarr; New Deck &rarr; the paste/import button next to the deck name.</div>'+
     '<div class="mrow"><button class="abtn primary" onclick="document.getElementById(\'modalwrap\').classList.remove(\'on\')">Done</button></div>'
   );
-};
-$('#btn-import').onclick = () => {
+}
+function openImport(){
   openModal(
     '<h2>Import deck code</h2>'+
     '<textarea id="importbox" placeholder="Paste a deck code from Snap (or from a friend)"></textarea>'+
@@ -872,7 +968,9 @@ $('#btn-import').onclick = () => {
     closeModal(); renderAll(); setTab('deck');
     toast('Imported ' + r.ids.length + ' cards' + (unknown.length ? ' (' + unknown.length + ' unknown)' : ''));
   };
-};
+}
+$('#btn-copycode').onclick = doCopyCode;
+$('#btn-import').onclick = openImport;
 
 /* ============ SETTINGS / DB UPDATE ============ */
 $('#btn-settings').onclick = () => {
@@ -880,7 +978,7 @@ $('#btn-settings').onclick = () => {
     '<h2>Settings</h2>'+
     (!S.storageOK ? '<div class="warnbox">Persistent storage isn\u2019t available here, so changes last only this session. Open the app inside Claude, or host it on your own site, to save.</div>' : '')+
     '<div class="section-label" style="margin-top:4px">Card database</div>'+
-    '<div class="mnote">Loaded: <b>'+S.db.length+' cards</b> ('+esc(S.dbLabel)+'). Updating also fetches exact art links for every card.</div>'+
+    '<div class="mnote">Loaded: <b>'+S.db.length+' cards</b> ('+esc(S.dbLabel)+').'+(S.siteData ? ' Your site refreshes this list daily on its own.' : ' Updating also fetches exact art links for every card.')+'</div>'+
     '<div class="mrow">'+
       (REFRESH_URL ? '<button class="abtn primary" id="m-refresh">Refresh card list</button>' : '')+
       '<button class="abtn'+(REFRESH_URL?'':' primary')+'" id="m-updatedb">Update '+(REFRESH_URL?'manually':'database')+'</button>'+
@@ -1108,10 +1206,32 @@ $('#q').addEventListener('input', e => {
 function renderAll(){
   renderCards(); renderDeck(); renderDeckbar(); renderSaved();
 }
+async function loadSiteData(){
+  try{
+    const r = await fetch('./cards.json', {cache:'no-store'});
+    if(!r.ok) return false;
+    const j = await r.json();
+    const arr = Array.isArray(j) ? j : j.cards;
+    if(!Array.isArray(arr)) return false;
+    const cards = arr.filter(c => c && c.d && c.n).map(c => {
+      const k = { n:c.n, d:c.d, c:+c.c||0, p:+c.p||0, a:c.a||'', s:c.s||'?' };
+      if(c.f) k.f = c.f; if(c.i) k.i = c.i;
+      return k;
+    });
+    if(cards.length < 50) return false;
+    S.db = cards;
+    S.dbLabel = 'auto-updated' + (j.updated ? ' ' + j.updated : '');
+    S.siteData = true;
+    return true;
+  }catch(e){ return false; }
+}
 async function boot(){
-  const dbSaved = await sGet(K.db);
-  if(dbSaved && Array.isArray(dbSaved.cards) && dbSaved.cards.length > 50){
-    S.db = dbSaved.cards; S.dbLabel = dbSaved.label || 'updated copy';
+  const gotSite = await loadSiteData();
+  if(!gotSite){
+    const dbSaved = await sGet(K.db);
+    if(dbSaved && Array.isArray(dbSaved.cards) && dbSaved.cards.length > 50){
+      S.db = dbSaved.cards; S.dbLabel = dbSaved.label || 'updated copy';
+    }
   }
   indexDb();
   const decksSaved = await sGet(K.decks);
@@ -1123,7 +1243,7 @@ async function boot(){
   const prefs = await sGet(K.prefs);
   if(prefs && prefs.density) S.prefs = prefs;
   ensureDeck();
-  buildChips(); renderPresets(); renderAll(); setTab('cards');
+  updateFilterBadge(); renderPresets(); renderAll(); setTab('cards');
   setTimeout(() => {
     if(!window._artOK && document.querySelector('#cardlist .tile img')){
       $('#artnote').style.display = 'block';
