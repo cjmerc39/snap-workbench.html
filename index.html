@@ -219,6 +219,59 @@ h1 .h-snap{color:var(--gold);}
 .sheethead .sname{font-size:17px; font-weight:800; flex:1;}
 .sheetab{font-size:14px; line-height:1.5; color:var(--text); margin:4px 0 2px;}
 .sheetflav{font-size:12.5px; font-style:italic; color:var(--faint); margin-top:6px;}
+/* ---------- v3: compact grid ---------- */
+.tilegrid.cmp{grid-template-columns:repeat(auto-fill, minmax(104px, 1fr)); gap:8px;}
+.tile.cmp{aspect-ratio:33/46; border-color:rgba(255,255,255,.09);}
+.tile.cmp .tart{aspect-ratio:auto; position:absolute; inset:0;}
+.tile.cmp .tinfo{display:none;}
+.tile.cmp .cname-scrim{position:absolute; bottom:0; left:0; right:0; padding:18px 5px 6px; font-size:10.5px; font-weight:700;
+  text-align:center; background:linear-gradient(transparent, rgba(7,9,20,.95) 55%); line-height:1.15; z-index:2;}
+.tile.cmp .cname-scrim .ownpip{display:none; width:6px; height:6px; margin-right:3px; vertical-align:1px;}
+.tile.cmp.owned .cname-scrim .ownpip{display:inline-block;}
+.tile.cmp .tick{top:5px; right:5px; bottom:auto; width:20px; height:20px; font-size:12px;}
+.tile.cmp .ovl.tp{top:auto; bottom:26px; right:5px;}
+.tile.cmp .ovl.tc{top:5px; left:5px;}
+.cib{position:absolute; bottom:4px; right:4px; z-index:3; width:22px; height:22px; border-radius:50%;
+  background:rgba(10,13,28,.78); border:1px solid rgba(255,255,255,.22); color:var(--dim); font-size:11px; font-weight:800;}
+.viewrow{display:flex; align-items:center; justify-content:space-between; margin:0 2px 10px;}
+.viewrow #matchcount{margin:0;}
+.segment{display:flex; background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:2px;}
+.segment button{background:none; border:none; color:var(--faint); font-size:12px; font-weight:700; padding:5px 12px; border-radius:999px;}
+.segment button.on{background:var(--gold); color:#17130a;}
+
+/* ---------- v3: deck tray ---------- */
+#deckbar .chev{margin-left:2px; color:var(--faint); font-size:11px; transition:transform .2s; display:inline-block;}
+#deckbar.open .chev{transform:rotate(180deg);}
+#decktray{position:fixed; left:10px; right:10px; z-index:38;
+  bottom:calc(116px + env(safe-area-inset-bottom));
+  background:rgba(17,22,45,.97); backdrop-filter:blur(10px);
+  border:1px solid var(--line); border-radius:16px; padding:0 12px;
+  max-height:0; opacity:0; overflow:hidden; transition:max-height .22s ease, opacity .18s ease, padding .22s;
+  box-shadow:0 10px 30px rgba(0,0,0,.55);}
+#decktray.open{max-height:44vh; opacity:1; padding:12px; overflow-y:auto;}
+.trayhead{display:flex; align-items:center; justify-content:space-between; margin-bottom:9px;}
+.trayhead b{font-size:13px;}
+.traylink{background:none; border:none; color:var(--gold); font-size:12.5px; font-weight:700; padding:4px 2px;}
+.traystrip{display:flex; gap:7px; overflow-x:auto; padding-bottom:6px; scrollbar-width:none;}
+.traystrip::-webkit-scrollbar{display:none;}
+.traystrip .mini{flex:0 0 72px; aspect-ratio:33/46;}
+.traystrip .mini .mname{font-size:8.5px; padding:12px 3px 4px;}
+.traystrip .mini .ovl{width:17px; height:17px; font-size:10px;}
+.traystrip .mini .rm{position:absolute; top:3px; right:3px; z-index:3; width:17px; height:17px; border-radius:50%;
+  background:rgba(10,13,28,.8); border:1px solid rgba(255,255,255,.25); color:#ffb4a0; font-size:10px; font-weight:800;
+  display:flex; align-items:center; justify-content:center;}
+.traycurve{display:flex; align-items:flex-end; gap:4px; height:30px; margin-top:4px;}
+.traycurve i{flex:1; border-radius:2px 2px 0 0; background:linear-gradient(180deg,#7ccaff,var(--cost)); min-height:2px;}
+.traycurve i.z{background:#272f57;}
+.trayempty{color:var(--faint); font-size:12.5px; padding:6px 2px 10px;}
+
+/* ---------- v3: notes & polish ---------- */
+#decknotes{width:100%; background:var(--panel); border:1px solid var(--line); color:var(--text);
+  border-radius:12px; padding:11px 14px; min-height:88px; resize:vertical; outline:none; font-size:14px; line-height:1.5;}
+#decknotes:focus{border-color:var(--cost);}
+.abtn.primary{background:linear-gradient(160deg,#ffd95e,#f0b843); border-color:#f0b843;}
+.tile, .mini, .saverow{border-color:rgba(255,255,255,.09);}
+#ai-save{margin-top:8px; width:100%;}
 #toast{
   position:fixed; left:50%; transform:translateX(-50%); bottom:calc(122px + env(safe-area-inset-bottom));
   background:var(--gold); color:#17130a; font-weight:700; font-size:13px; padding:10px 18px;
@@ -241,7 +294,13 @@ h1 .h-snap{color:var(--gold);}
     <div class="chiprow" id="chips-mech"></div>
     <div class="chiprow" id="chips-series"></div>
     <div id="artnote">Card art seems blocked in this environment, so you&rsquo;re seeing tile view. Everything else works the same.</div>
-    <div id="matchcount"></div>
+    <div class="viewrow">
+      <div id="matchcount"></div>
+      <div class="segment" id="densityseg">
+        <button data-den="cmp">Grid</button>
+        <button data-den="det">Detail</button>
+      </div>
+    </div>
     <div id="cardlist" class="tilegrid"></div>
   </section>
 
@@ -262,6 +321,8 @@ h1 .h-snap{color:var(--gold);}
       <button class="abtn subtle" id="btn-dupe">Duplicate deck</button>
       <button class="abtn danger" id="btn-cleardeck">Clear cards</button>
     </div>
+    <div class="section-label">Game plan &amp; notes</div>
+    <textarea id="decknotes" placeholder="Win condition, mulligan priorities, tech swaps, matchup notes..."></textarea>
   </section>
 
   <!-- SAVED -->
@@ -285,10 +346,12 @@ h1 .h-snap{color:var(--gold);}
   </section>
 </main>
 
+<div id="decktray"></div>
 <div id="deckbar">
   <span class="db-name" id="dbar-name"></span>
   <span class="db-dots" id="dbar-dots"></span>
   <span class="db-count" id="dbar-count"></span>
+  <span class="chev">&#9650;</span>
 </div>
 
 <nav id="tabbar">
@@ -325,9 +388,11 @@ const S = {
   owned: new Set(),
   filters: { q:'', cost:new Set(), mech:new Set(), series:new Set(), owned:false },
   tab: 'cards',
+  trayOpen: false,
+  prefs: { density:'cmp' },
   storageOK: (typeof window !== 'undefined' && !!window.storage),
 };
-const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb' };
+const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb', prefs:'snapwb-prefs' };
 
 /* ============ UTIL ============ */
 const $ = s => document.querySelector(s);
@@ -472,14 +537,16 @@ function exportCode(d){
   return b64e(JSON.stringify({ Name: d.name || 'Deck', Cards: cards }));
 }
 function parseCode(text){
-  const cleaned = String(text||'').replace(/\s+/g,'');
-  const m = cleaned.match(/[A-Za-z0-9+/=_-]{24,}/);
-  const token = m ? m[0].replace(/-/g,'+').replace(/_/g,'/') : cleaned;
+  const raw = String(text||'').replace(/[\u200B-\u200D\uFEFF\u00A0]/g,' ');
+  const runs = raw.match(/[A-Za-z0-9+/=_-]{24,}/g) || [];
+  let token = runs.sort((a,b) => b.length - a.length)[0] || raw.replace(/\s+/g,'');
+  token = token.replace(/-/g,'+').replace(/_/g,'/').replace(/=+$/,'');
+  while(token.length % 4) token += '=';
   let obj;
   try{ obj = JSON.parse(b64d(token)); }
   catch(e){
-    try{ obj = JSON.parse(text); }
-    catch(e2){ return { err:'Could not decode that. Paste the code exactly as Snap copied it.' }; }
+    try{ obj = JSON.parse(raw.trim()); } // maybe they pasted raw JSON
+    catch(e2){ return { err:'Could not decode that ('+((e&&e.message)||'bad base64')+'). Paste exactly what Snap put on the clipboard.' }; }
   }
   const list = obj && (obj.Cards || obj.cards);
   if(!Array.isArray(list) || !list.length) return { err:'Decoded, but no card list found inside.' };
@@ -542,16 +609,40 @@ function tileHtml(c){
       '<div class="tfoot"><span class="serpill">'+esc(c.s)+'</span><button class="ib">i</button></div>'+
     '</div></div>';
 }
+function tileHtmlCompact(c){
+  const url = artUrl(c);
+  const img = url
+    ? '<img src="'+esc(url)+'" alt="" loading="lazy" decoding="async" onload="window._artOK=(window._artOK||0)+1" onerror="this.closest(\'.tile\').classList.add(\'noart\')">'
+    : '';
+  return '<div class="tile cmp'+(inDeck(c.d)?' indeck':'')+(S.owned.has(c.d)?' owned':'')+(url?'':' noart')+'" data-d="'+esc(c.d)+'">'+
+    '<div class="tart" style="'+tileGrad(c)+'">'+img+
+      '<span class="tinit">'+esc(initials(c))+'</span>'+
+      '<span class="ovl tc">'+c.c+'</span><span class="ovl tp">'+c.p+'</span>'+
+      '<span class="tick">&#10003;</span>'+
+    '</div>'+
+    '<div class="cname-scrim"><span class="ownpip"></span>'+esc(c.n)+'</div>'+
+    '<button class="cib">i</button>'+
+  '</div>';
+}
 function renderCards(){
   const list = $('#cardlist');
   const cards = filteredCards();
   $('#matchcount').textContent = cards.length + ' of ' + S.db.length + ' cards';
-  list.innerHTML = cards.map(tileHtml).join('');
+  const cmp = S.prefs.density !== 'det';
+  list.classList.toggle('cmp', cmp);
+  list.innerHTML = cards.map(cmp ? tileHtmlCompact : tileHtml).join('');
+  document.querySelectorAll('#densityseg button').forEach(b =>
+    b.classList.toggle('on', (b.dataset.den === 'det') === !cmp));
 }
+document.querySelectorAll('#densityseg button').forEach(b => b.onclick = () => {
+  S.prefs.density = b.dataset.den;
+  sSet(K.prefs, S.prefs);
+  renderCards();
+});
 $('#cardlist').addEventListener('click', e => {
   const t = e.target.closest('.tile'); if(!t) return;
   const d = t.dataset.d;
-  if(e.target.closest('.ib')){ openCardSheet(d); return; }
+  if(e.target.closest('.ib') || e.target.closest('.cib')){ openCardSheet(d); return; }
   toggleCard(d);
 });
 
@@ -601,6 +692,8 @@ function renderDeck(){
   const d = ensureDeck();
   const nameEl = $('#deckname');
   if(document.activeElement !== nameEl) nameEl.value = d.name;
+  const notesEl = $('#decknotes');
+  if(document.activeElement !== notesEl) notesEl.value = d.notes || '';
 
   const cards = sortedDeckCards(d);
   $('#st-count').textContent = cards.length + '/12';
@@ -645,6 +738,9 @@ function renderDeck(){
 $('#deckname').addEventListener('input', e => {
   const d = ensureDeck(); d.name = e.target.value; touch(d); renderDeckbar(); renderSaved();
 });
+$('#decknotes').addEventListener('input', e => {
+  const d = ensureDeck(); d.notes = e.target.value; touch(d);
+});
 $('#btn-cleardeck').onclick = () => {
   const d = ensureDeck();
   if(!d.cards.length) return;
@@ -656,16 +752,44 @@ $('#btn-dupe').onclick = () => {
   S.decks.unshift(copy); S.activeId = copy.id; persistDecks(); renderAll(); toast('Duplicated \u2192 now editing '+copy.name);
 };
 
-/* ============ RENDER: DECKBAR ============ */
+/* ============ RENDER: DECKBAR & TRAY ============ */
 function renderDeckbar(){
   const d = ensureDeck();
   $('#dbar-name').textContent = d.name;
   $('#dbar-count').textContent = d.cards.length + '/12';
   const dots = $('#dbar-dots'); dots.innerHTML='';
   for(let i=0;i<12;i++){ const b = el('i'); if(i < d.cards.length) b.classList.add('f'); dots.appendChild(b); }
-  $('#deckbar').style.display = (S.tab === 'cards') ? 'flex' : 'none';
+  const onCards = (S.tab === 'cards');
+  $('#deckbar').style.display = onCards ? 'flex' : 'none';
+  if(!onCards) S.trayOpen = false;
+  $('#deckbar').classList.toggle('open', !!S.trayOpen);
+  renderTray();
 }
-$('#deckbar').onclick = () => setTab('deck');
+function renderTray(){
+  const tray = $('#decktray');
+  tray.classList.toggle('open', !!S.trayOpen && S.tab==='cards');
+  if(!S.trayOpen) return;
+  const d = ensureDeck();
+  const cards = sortedDeckCards(d);
+  let html = '<div class="trayhead"><b>'+esc(d.name)+' \u00b7 '+cards.length+'/12</b>'+
+    '<button class="traylink" id="tray-full">Full deck &rarr;</button></div>';
+  if(cards.length){
+    html += '<div class="traystrip">'+cards.map(c =>
+      miniHtml(c).replace('<div class="mname"', '<button class="rm">&#10005;</button><div class="mname"')
+    ).join('')+'</div>';
+    const buckets=[0,0,0,0,0,0,0];
+    cards.forEach(c => buckets[Math.min(c.c,6)]++);
+    const mx = Math.max(1, ...buckets);
+    html += '<div class="traycurve">'+buckets.map(n =>
+      '<i class="'+(n?'':'z')+'" style="height:'+Math.max(3, Math.round(n/mx*26))+'px"></i>').join('')+'</div>';
+  } else {
+    html += '<div class="trayempty">Empty deck \u2014 tap cards below to add them.</div>';
+  }
+  tray.innerHTML = html;
+  $('#tray-full').onclick = () => { S.trayOpen=false; setTab('deck'); };
+  tray.querySelectorAll('.mini').forEach(m => m.onclick = () => toggleCard(m.dataset.d));
+}
+$('#deckbar').onclick = () => { S.trayOpen = !S.trayOpen; renderDeckbar(); };
 
 /* ============ RENDER: SAVED ============ */
 function renderSaved(){
@@ -947,6 +1071,16 @@ $('#btn-ask').onclick = async () => {
       text = data.content.filter(b => b.type==='text').map(b => b.text).join('\n').trim();
     }
     out.textContent = text || 'No response text came back \u2014 try again.';
+    if(text){
+      const old = document.getElementById('ai-save'); if(old) old.remove();
+      const saveB = el('button','abtn','Save to deck notes'); saveB.id='ai-save';
+      saveB.onclick = () => {
+        const dd = ensureDeck();
+        dd.notes = (dd.notes ? dd.notes + '\n\n' : '') + '\u2014 Coach ('+new Date().toLocaleDateString()+'):\n' + text;
+        touch(dd); renderDeck(); saveB.textContent = '\u2713 Saved to notes'; saveB.disabled = true;
+      };
+      out.insertAdjacentElement('afterend', saveB);
+    }
   }catch(e){
     out.className='err';
     out.textContent = COACH_URL
@@ -986,6 +1120,8 @@ async function boot(){
   }
   const coll = await sGet(K.coll);
   if(coll && Array.isArray(coll.owned)) S.owned = new Set(coll.owned);
+  const prefs = await sGet(K.prefs);
+  if(prefs && prefs.density) S.prefs = prefs;
   ensureDeck();
   buildChips(); renderPresets(); renderAll(); setTab('cards');
   setTimeout(() => {
