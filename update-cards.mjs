@@ -10,6 +10,9 @@ const strip = s => String(s || ``).replace(/<[^>]*>/g, ``).replace(/&amp;/g, `&`
 const UA = { headers: { [`user-agent`]: `snap-workbench github action (personal deck builder)` } };
 const nowMs = Date.now();
 const DAY = 86400000;
+// One-time seed: released via events but absent from the forward-looking schedule.
+// Safe to leave forever; the persistence layer below makes future entries automatic.
+const SEED = [`AuntMay`, `MaryJane`, `SpiderManBrandNewDay`];
 
 // ---- source 2: schedule -> earliest release date per CardDefId ----
 const schedResp = await fetch(SCHED, UA);
@@ -22,22 +25,30 @@ const dates = {}; // defid -> ms
   let cursor = 0;
   let match;
   while ((match = rx.exec(schedHtml)) !== null) {
-    if (match[1]) {                                   // a card link under the current date
+    if (match[1]) {
       if (cursor && (!dates[match[1]] || cursor < dates[match[1]])) dates[match[1]] = cursor;
-    } else if (match[2]) {                            // "Jul 6" or "Jul 6, 2026"
+    } else if (match[2]) {
       const y = match[4] ? +match[4] : new Date(nowMs).getFullYear();
       let t = new Date(y, MONTHS[match[2]], +match[3]).getTime();
-      if (!match[4]) {                                 // infer year for bare dates
+      if (!match[4]) {
         if (t < nowMs - 200 * DAY) t += 365 * DAY;
         if (t > nowMs + 300 * DAY) t -= 365 * DAY;
       }
       cursor = t;
-    } else if (match[5]) {                            // "07/01/2026"
+    } else if (match[5]) {
       cursor = new Date(+match[7], +match[5] - 1, +match[6]).getTime();
     }
   }
 }
 console.log(`schedule: dates for`, Object.keys(dates).length, `card ids`);
+
+// ---- memory: anything previously published stays published ----
+let prevIds = new Set();
+try {
+  const prev = JSON.parse(fs.readFileSync(`cards.json`, `utf8`));
+  prevIds = new Set((prev.cards || []).map(x => x.d));
+  console.log(`memory: `, prevIds.size, `cards in previous output`);
+} catch (e) { console.log(`memory: no previous cards.json (first run)`); }
 
 // ---- source 1: the feed ----
 const r = await fetch(FEED, UA);
@@ -48,6 +59,7 @@ const seen = new Set();
 const out = [];
 const recent = [];
 const future = [];
+const kept = [];
 let unscheduled = 0;
 
 const slim = c => {
@@ -67,6 +79,11 @@ for (const c of raw) {
   if (name.endsWith(` Champion`)) continue;    // Sanctum Showdown duplicates like Ghost-Spider Champion
   seen.add(c.carddefid);
   if (c.status === `released`) { out.push(slim(c)); continue; }
+  if (SEED.includes(c.carddefid) || prevIds.has(c.carddefid)) {
+    out.push(slim(c));
+    kept.push(name);
+    continue;
+  }
   const rel = dates[c.carddefid] || 0;
   if (!rel) { unscheduled++; continue; }       // tokens and never-scheduled entries
   if (rel <= nowMs + 12 * 3600000) {
@@ -76,11 +93,13 @@ for (const c of raw) {
     future.push(name + ` (` + new Date(rel).toISOString().slice(0, 10) + `)`);
   }
 }
+for (const id of SEED) if (!seen.has(id)) console.log(`SEED MISS >>> no feed entry for`, id, `(check the defid with Claude)`);
 
 if (out.length < 200) { console.error(`sanity check failed: only`, out.length, `cards, not writing`); process.exit(1); }
 out.sort((a, b) => (a.c - b.c) || a.n.localeCompare(b.n));
 fs.writeFileSync(`cards.json`, JSON.stringify({ updated: new Date().toISOString().slice(0, 10), cards: out }));
 console.log(`wrote`, out.length, `cards`);
 console.log(`EVENT-RELEASED via schedule:`, recent.length ? recent.join(`, `) : `(none)`);
+console.log(`KEPT via seed/memory:`, kept.length ? kept.join(`, `) : `(none)`);
 console.log(`FUTURE (auto-include on their day):`, future.length ? future.join(`, `) : `(none)`);
 console.log(`skipped`, unscheduled, `unreleased-and-unscheduled entries (tokens etc.)`);
