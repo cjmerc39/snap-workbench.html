@@ -17,6 +17,21 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(errors.length===0, 'no runtime errors on boot'+(errors.length?' -> '+errors.join(' | '):''));
   assert(d.querySelectorAll('#cardlist .tile').length===357, 'renders 357 tiles');
 
+  // --- round-2 restyle: sorting (Energy default: cost asc -> power desc -> name) ---
+  assert(w.eval('SORTS.length')===3, 'SORTS has exactly 3 entries');
+  assert(w.eval('SORTS.map(s=>s.k).join()')==='cost,power,name', 'SORTS keys are [cost,power,name]');
+  assert(w.eval('SORTS.every(s=>s.k!=="series")'), 'series removed from SORTS (stays a filter facet only)');
+  assert(w.eval('SORTS[0].fn({c:1},{c:2})')<0, 'Energy fn: lower cost sorts first');
+  assert(w.eval('SORTS[0].fn({c:2,p:3,n:"B"},{c:2,p:9,n:"A"})')>0, 'Energy fn: equal cost -> higher power first (power desc)');
+  assert(w.eval('SORTS[0].fn({c:2,p:5,n:"B"},{c:2,p:5,n:"A"})')>0, 'Energy fn: equal cost+power -> name ascending');
+  assert(/Energy/.test(d.querySelector('#fw-sort [data-sort="cost"]').textContent), 'cost sort chip is labelled "Energy"');
+  const bootOrder = w.eval('(function(){var t=[].slice.call(document.querySelectorAll("#cardlist .tile")).map(function(e){return e.dataset.d;});'+
+    'var cost=function(id){return getCard(id).c;},pow=function(id){return getCard(id).p;};var mono=true,tie=false;'+
+    'for(var i=1;i<t.length;i++){if(cost(t[i-1])>cost(t[i]))mono=false;if(cost(t[i-1])===cost(t[i])&&pow(t[i-1])>=pow(t[i]))tie=true;}'+
+    'return {mono:mono,firstLE:cost(t[0])<=cost(t[t.length-1]),tie:tie};})()');
+  assert(bootOrder.mono && bootOrder.firstLE, 'boot grid renders in Energy order (cost non-decreasing)');
+  assert(bootOrder.tie, 'Energy sort breaks equal-cost ties by power descending');
+
   // art URL synthesis
   const u1 = w.eval('artUrl(S.byId["AbsorbingMan"])');
   assert(u1.endsWith('/cards/absorbing-man.webp'), 'artUrl multi-word -> '+u1.split('/').pop());
@@ -174,6 +189,43 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   notesEl.dispatchEvent(new w.Event('input', {bubbles:true}));
   await sleep(30);
   assert(w.eval('activeDeck().notes')==='Win con: big Hulk.', 'deck notes save to the deck');
+
+  // --- round-2 restyle: flyout filter/sort rail ---
+  w.eval('setTab("cards")'); await sleep(10);
+  const fly = d.querySelector('#flyout');
+  assert(fly!==null && fly.getAttribute('role')==='dialog', 'flyout dialog wraps the relocated filter panel');
+  assert(fly.querySelector('#filterpanel')!==null, '#filterpanel now lives inside the flyout');
+  assert(!fly.classList.contains('open'), 'flyout starts closed');
+  d.querySelector('#btn-filter').click(); await sleep(20);
+  assert(fly.classList.contains('open'), 'btn-filter opens the flyout');
+  assert(d.querySelector('#btn-filter').getAttribute('aria-expanded')==='true', 'btn-filter reports aria-expanded=true when open');
+  d.querySelector('#fw-cost .chip[data-v="3"]').click(); await sleep(20);
+  assert(d.querySelector('#fcount').textContent==='1' && fly.classList.contains('open'), 'facet click inside the flyout updates #fcount and keeps it open');
+  const flyFpChip = d.querySelector('#fp-active .fp-chip');
+  flyFpChip.click(); await sleep(20);
+  assert(fly.classList.contains('open'), 'removing an active filter chip keeps the flyout open (detached-target guard)');
+  d.querySelector('#fw-cost .chip[data-v="3"]').click(); await sleep(20); // re-apply so Clear all has work to do
+  d.querySelector('#fp-clear').click(); await sleep(20);
+  assert(fly.classList.contains('open'), 'Clear all inside the flyout keeps it open (detached-target guard)');
+  d.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true})); await sleep(20);
+  assert(!fly.classList.contains('open') && d.querySelector('#btn-filter').getAttribute('aria-expanded')==='false', 'Escape closes the flyout and resets aria-expanded');
+  d.querySelector('#btn-sort').click(); await sleep(20);
+  assert(fly.classList.contains('open') && d.querySelector('#filterpanel [data-facet="sort"]').classList.contains('open'), 'btn-sort opens the flyout and expands the sort facet');
+  d.querySelector('#fly-close').click(); await sleep(20);
+  assert(!fly.classList.contains('open'), 'fly-close (×) dismisses the flyout');
+
+  // --- round-2 restyle: integrated deck sub-tabs ---
+  w.eval('setTab("deck")'); await sleep(20);
+  assert(d.querySelector('#decktabs')!==null, 'deck sub-tab bar (#decktabs) present');
+  assert(d.querySelector('.dpane[data-pane="overview"]').classList.contains('on'), 'overview sub-tab active by default');
+  d.querySelector('#decktabs [data-dtab="odds"]').click(); await sleep(20);
+  assert(d.querySelector('.dpane[data-pane="odds"]').classList.contains('on') && !d.querySelector('.dpane[data-pane="notes"]').classList.contains('on'),
+    'clicking Odds sub-tab shows odds pane and hides notes pane');
+  assert(w.eval('S.deckTab')==='odds', 'S.deckTab tracks the active sub-tab');
+  assert(d.querySelectorAll('#drawodds .odds-grid.single .oc').length===7, 'draw-odds singleton table still 7 turns after sub-tab switch');
+  assert(d.querySelectorAll('#decklist .mini').length===12, 'deck minis (#decklist) still 12 after restructure');
+  w.eval('setTab("cards")'); await sleep(10);
+  assert(d.querySelectorAll('#dz .mini').length===12, 'build-zone minis (#dz) still 12 after restructure');
 
 
   // ============ WP2: analytics + import robustness ============
