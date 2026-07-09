@@ -13,7 +13,7 @@ const relOf = c => {
   t = Date.parse(String(v));                                          // string: ISO or human text
   return Number.isFinite(t) ? t / 1000 : 0;
 };
-const DIAG = [`tombstone`, `tarantula`, `aunt may`, `mary jane`, `brand new day`];
+const DIAG = [`tombstone`, `tarantula`, `aunt may`, `mary jane`, `brand new day`, `ghost-spider`];
 
 const r = await fetch(UP, { headers: { [`user-agent`]: `snap-workbench github action (personal deck builder)` } });
 if (!r.ok) { console.error(`upstream returned`, r.status); process.exit(1); }
@@ -34,7 +34,8 @@ for (const c of raw) {
   }
   if (c.type !== `Character`) continue;
   if (!c.carddefid || !name || /[<>!]/.test(c.carddefid) || seen.has(c.carddefid)) continue;
-  if (name.includes(` - `)) continue; // event-mode duplicates
+  if (name.includes(` - `)) continue; // Team Clash duplicates like Vision - Avengers
+  if (name.endsWith(` Champion`)) continue; // Sanctum Showdown duplicates like Ghost-Spider Champion
   const rel = relOf(c);
   const isOut = (c.status === `released`) || (rel > 0 && rel <= nowSec);
   if (!isOut) continue;
