@@ -648,14 +648,25 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   d.querySelector('#coll-toggle').click(); await sleep(20);   // restore collapsed
   w.eval('setTab("cards")'); await sleep(10);
 
-  // C: Done -> done+Saved tab; a build edit re-enters editing; auto-save indicator; verdict
+  // C (R6): Done -> files the deck + BLANK bench; re-open from Saved to edit; auto-save; verdict
   w.eval('(function(){ const ids=S.db.slice(0,6).map(c=>c.d); S.decks.unshift({id:"wp1d",name:"WP1 Deck",cards:ids,updated:Date.now()}); S.activeId="wp1d"; renderAll(); })()');
   await sleep(20);
   w.eval('setTab("cards")'); await sleep(10);
   d.querySelector('#bh-done').click(); await sleep(20);
-  assert(w.eval('activeDeck().done')===true, 'C: Done marks the active deck done');
+  assert(w.eval('(S.decks.find(x=>x.id==="wp1d")||{}).done')===true, 'C: Done marks the filed deck done');
+  assert(w.eval('S.activeId')===null, 'C: Done clears activeId -> the bench goes BLANK');
   assert(w.eval('S.tab')==='saved', 'C: Done jumps to the Saved tab');
   w.eval('setTab("cards")'); await sleep(10);
+  assert(d.querySelectorAll('#dz .mini:not(.empty)').length===0, 'C: blank bench shows no filled deck-zone slots');
+  assert(d.querySelector('#bh-count').textContent==='0/12', 'C: blank bench header reads 0/12');
+  assert(d.querySelector('#bh-name').textContent==='New deck', 'C: blank bench header reads "New deck"');
+  assert(d.querySelector('#bh-done').style.display==='none', 'C: Done is hidden on a blank bench');
+  // re-open the filed deck from Saved via its pencil quick-edit
+  w.eval('setTab("saved")'); await sleep(20);
+  const _wp1row = [...d.querySelectorAll('#savedlist .saverow')].find(r => /WP1 Deck/.test(r.querySelector('.sv-name').textContent));
+  assert(_wp1row, 'C: the filed WP1 deck appears on the Saved shelf');
+  _wp1row.querySelector('.sv-btn.edit').click(); await sleep(20);
+  assert(w.eval('S.activeId')==='wp1d' && w.eval('S.tab')==='cards', 'C: pencil quick-edit re-opens the deck straight to Build');
   d.querySelector('#dz .mini:not(.empty)').click(); await sleep(20);   // a build edit
   assert(w.eval('activeDeck().done')===false, 'C: a build edit (card toggle) clears done -> back to editing');
   await sleep(600);
@@ -693,26 +704,48 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const _four = w.eval('activeDeck().cards.slice(0,4)');
   const _fbound = w.eval('lineFlags(['+JSON.stringify(_four)+',[],[],[],[],[]])');
   assert(_four.length===4 && !_fbound.some(f=>f.type==='draw'), 'F: exactly-drawable line (4 cards by T1 = DRAWN[1]) has no draw flag (boundary)');
-  // DOM: tap a pool card, tap a turn -> the card is assigned + persists
-  w.eval('activeDeck().line=null; S.plannerPick=null; setDeckTab("planner"); renderDeck();'); await sleep(20);
-  const _poolMini = d.querySelector('#planner .pl-pool .mini');
-  assert(_poolMini!==null, 'F: planner pool renders the unplaced deck cards');
-  const _pickId = _poolMini.getAttribute('data-d');
-  _poolMini.click(); await sleep(20);
-  assert(w.eval('S.plannerPick')===_pickId, 'F: tapping a pool card selects it as the pending pick');
-  d.querySelector('#planner .pl-slot[data-t="6"]').click(); await sleep(20);
-  assert(w.eval('(activeDeck().line[5]||[]).indexOf('+JSON.stringify(_pickId)+')>=0'), 'F: tapping a turn slot assigns the pick to that turn');
-  assert(w.eval('S.plannerPick')===null, 'F: placing the pick clears it');
+  // DOM (R6-C): six always-visible turn slots + tap-turn card-picker sheet (zero scroll to the card)
+  const _c3id = w.eval('(S.db.find(c=>c.c===3)||{}).d');
+  w.eval('(function(){ var c3='+JSON.stringify(_c3id)+'; var extra=S.db.filter(function(c){return c.d!==c3;}).slice(0,5).map(function(c){return c.d;}); S.decks.unshift({id:"plr6",name:"Planner R6",cards:[c3].concat(extra),updated:Date.now()}); S.activeId="plr6"; })(); activeDeck().line=null; S.plannerTurn=null; setTab("deck"); setDeckTab("planner"); renderDeck();'); await sleep(20);
+  assert(d.querySelectorAll('#planner .pl-slot[data-t]').length===6, 'F: composer renders six always-visible turn slots');
+  assert(w.eval('S.plannerTurn')===null, 'F: no picker is open until a turn is tapped');
+  // tapping a turn opens the picker bottom sheet anchored to the viewport
+  d.querySelector('#planner .pl-slot[data-t="1"]').click(); await sleep(20);
+  assert(d.querySelector('#pl-picker').classList.contains('on'), 'F: tapping a turn opens the #pl-picker bottom sheet');
+  assert(w.eval('S.plannerTurn')===1, 'F: the picker targets the tapped turn (S.plannerTurn)');
+  assert(d.querySelectorAll('#pl-picker .pl-pick .mini').length===w.eval('activeDeck().cards.length'), 'F: the picker grid lists every deck card');
+  // pick the 3-cost card -> assigned to T1, energy overspend fires live + as a flag
+  d.querySelector('#pl-picker .pl-pick .mini[data-d="'+_c3id+'"]').click(); await sleep(20);
+  assert(w.eval('(activeDeck().line[0]||[]).indexOf('+JSON.stringify(_c3id)+')>=0'), 'F: tapping a card in the picker assigns it to that turn');
+  assert(w.eval('lineFlags(activeDeck().line).some(f=>f.type==="energy" && f.turn===1)'), 'F: a 3-cost card in T1 fires the energy overspend flag');
+  assert(d.querySelector('#pl-picker-energy').classList.contains('over'), 'F: the live picker energy meter turns over-budget (red)');
+  // per-turn toggle: tapping the same card again removes it
+  d.querySelector('#pl-picker .pl-pick .mini[data-d="'+_c3id+'"]').click(); await sleep(20);
+  assert(w.eval('(activeDeck().line[0]||[]).indexOf('+JSON.stringify(_c3id)+')<0'), 'F: re-tapping the same card in the picker removes it (per-turn toggle)');
+  // re-assign, then dismiss the sheet
+  d.querySelector('#pl-picker .pl-pick .mini[data-d="'+_c3id+'"]').click(); await sleep(20);
+  d.querySelector('#pl-pick-done').click(); await sleep(20);
+  assert(!d.querySelector('#pl-picker').classList.contains('on') && w.eval('S.plannerTurn')===null, 'F: Done dismisses the picker (S.plannerTurn back to null)');
   await sleep(600);
-  const _linePersist = w.eval('(JSON.parse(localStorage.getItem("snapwb-decks")).decks.find(x=>x.id==="wp1d")||{}).line');
-  assert(Array.isArray(_linePersist) && (_linePersist[5]||[]).indexOf(_pickId)>=0, 'F: the planned line persists to storage');
-  // tap the assigned mini -> back to pool
-  d.querySelector('#planner .pl-slot[data-t="6"] .pl-mini-row .mini').click(); await sleep(20);
-  assert(w.eval('(activeDeck().line[5]||[]).indexOf('+JSON.stringify(_pickId)+')<0'), 'F: tapping an assigned mini removes it back to the pool');
+  const _linePersist = w.eval('(JSON.parse(localStorage.getItem("snapwb-decks")).decks.find(x=>x.id==="plr6")||{}).line');
+  assert(Array.isArray(_linePersist) && (_linePersist[0]||[]).indexOf(_c3id)>=0, 'F: the planned line persists to storage');
+  // tapping the assigned mini in its slot unassigns it
+  d.querySelector('#planner .pl-slot[data-t="1"] .pl-mini-row .mini').click(); await sleep(20);
+  assert(w.eval('(activeDeck().line[0]||[]).indexOf('+JSON.stringify(_c3id)+')<0'), 'F: tapping an assigned mini in its slot unassigns it');
+  // Auto-sketch / Clear still drive the whole line
   d.querySelector('#pl-auto').click(); await sleep(20);
   assert(w.eval('activeDeck().line.reduce((n,s)=>n+s.length,0)')>0, 'F: Auto-sketch button fills the line');
   d.querySelector('#pl-clear').click(); await sleep(20);
   assert(w.eval('activeDeck().line.every(s=>s.length===0)'), 'F: Clear line empties every turn');
+  // move-on-tap: re-assigning a placed card MOVES it (one-turn invariant)
+  d.querySelector('#planner .pl-slot[data-t="1"]').click(); await sleep(20);
+  d.querySelector('#pl-picker .pl-pick .mini[data-d="'+_c3id+'"]').click(); await sleep(20);
+  d.querySelector('#pl-pick-done').click(); await sleep(20);
+  d.querySelector('#planner .pl-slot[data-t="2"]').click(); await sleep(20);
+  d.querySelector('#pl-picker .pl-pick .mini[data-d="'+_c3id+'"]').click(); await sleep(20);
+  assert(w.eval('(activeDeck().line[1]||[]).indexOf('+JSON.stringify(_c3id)+')>=0 && (activeDeck().line[0]||[]).indexOf('+JSON.stringify(_c3id)+')<0'),
+    'F: re-assigning a placed card MOVES it to the new turn (stays in exactly one turn)');
+  d.querySelector('#pl-pick-done').click(); await sleep(20);
 
   // --- G: card-change flags (snapshot / diff / dot / banner / dismiss) ---
   w.eval('(function(){ const ids=S.db.slice(0,3).map(c=>c.d); S.decks.unshift({id:"gflag",name:"G Flag",cards:ids,updated:Date.now()}); S.activeId="gflag"; snapshotDeck(activeDeck()); })()');
@@ -862,9 +895,122 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(w.eval('S.addedCreatorDecks.length')===0, 'J: videos older than the 14-day window add no decks');
   w.eval('setTab("cards")'); await sleep(10);
 
+  // ============ R6 WP1: draft lifecycle · blank bench · empty states · connective flow · sync safety ============
+  // item 1: a blank draft is hidden from Saved AND the sync push; its first card promotes it
+  w.eval('S.decks = S.decks.filter(x=>!isDraft(x)); S.activeId=null; S.syncToken="";'); await sleep(10);
+  w.eval('setTab("saved"); document.getElementById("btn-newdeck").onclick();'); await sleep(20);
+  const _draftId = w.eval('S.activeId');
+  assert(w.eval('isDraft(activeDeck())')===true, 'R6: "+ New deck" creates a blank DRAFT (isDraft true)');
+  assert(w.eval('activeDeck().name')==='', 'R6: a draft is created with a blank name (not "New Deck")');
+  w.eval('setTab("saved")'); await sleep(20);
+  assert(d.querySelectorAll('#savedlist .saverow').length===w.eval('S.decks.filter(x=>!isDraft(x)).length'), 'R6: Saved lists exactly the non-draft decks (the draft is hidden)');
+  assert(w.eval('pushableBlob().decks.some(x=>x.id==='+JSON.stringify(_draftId)+')')===false, 'R6: pushableBlob() excludes the blank draft (sync push stays draft-free)');
+  assert(w.eval('buildStateBlob().decks.some(x=>x.id==='+JSON.stringify(_draftId)+')')===true, 'R6: buildStateBlob() stays FULL so a local draft survives local merges');
+  w.eval('setTab("cards"); toggleCard(S.db[0].d);'); await sleep(20);
+  assert(w.eval('isDraft(activeDeck())')===false, 'R6: adding the first card auto-promotes the draft to a real deck');
+  assert(w.eval('pushableBlob().decks.some(x=>x.id==='+JSON.stringify(_draftId)+')')===true, 'R6: the promoted deck now rides the sync push');
+  w.eval('setTab("saved")'); await sleep(20);
+  assert([...d.querySelectorAll('#savedlist .saverow')].some(r=>r.querySelector('.sv-main')) && d.querySelectorAll('#savedlist .saverow').length===w.eval('S.decks.filter(x=>!isDraft(x)).length'), 'R6: the promoted deck now appears on the Saved shelf');
+
+  // item 3: no-active-deck empty states — Deck pane, coach guard, export guard (no throws)
+  w.eval('S.decks = S.decks.filter(x=>x.id!=='+JSON.stringify(_draftId)+'); S.activeId=null; renderAll();'); await sleep(20);
+  assert(w.eval('activeDeck()')===null, 'R6: the bench is blank (activeDeck() null)');
+  const _errBase = errors.length;
+  w.eval('setTab("deck")'); await sleep(20);
+  assert(d.querySelector('#deck-empty') && d.querySelector('#deck-empty').hidden===false, 'R6: Deck tab reveals #deck-empty on a blank bench');
+  assert(d.querySelector('#view-deck').classList.contains('no-deck'), 'R6: #view-deck gets .no-deck (hides the showcase modules, keeps #decktabs in the DOM)');
+  assert(d.querySelector('#decktabs')!==null && d.querySelector('.dpane[data-pane="overview"]')!==null, 'R6: #decktabs/.dpane remain in the DOM for structural tests');
+  assert(d.querySelector('#de-build')!==null && d.querySelector('#de-saved')!==null, 'R6: empty state offers Build + Open Saved actions');
+  w.eval('renderAll()'); await sleep(10);
+  assert(errors.length===_errBase, 'R6: renderAll() with no active deck throws nothing');
+  w.eval('setTab("ai"); document.getElementById("btn-ask").click();'); await sleep(40);
+  assert(errors.length===_errBase, 'R6: Ask coach with no active deck does not throw (fixes the latent activeDeck().name crash)');
+  assert(/bench first/i.test(d.querySelector('#aiout').textContent), 'R6: coach shows the "put a deck on the bench first" guard message');
+  await w.eval('doCopyCode()'); await sleep(10);
+  assert(errors.length===_errBase, 'R6: doCopyCode() with no active deck does not throw (guarded)');
+
+  // item 4: Saved row body -> read-only showcase (Overview) -> Edit cards -> Build; pencil -> Build
+  w.eval('(function(){ S.decks.unshift({id:"r6view",name:"R6 View",cards:S.db.slice(0,4).map(c=>c.d),done:true,updated:Date.now()}); S.activeId=null; renderAll(); })()'); await sleep(10);
+  w.eval('setTab("saved")'); await sleep(20);
+  const _vrow = [...d.querySelectorAll('#savedlist .saverow')].find(r => /R6 View/.test(r.querySelector('.sv-name').textContent));
+  assert(_vrow, 'R6: the seeded deck shows on the Saved shelf');
+  _vrow.querySelector('.sv-main').click(); await sleep(20);
+  assert(w.eval('S.tab')==='deck' && w.eval('S.activeId')==='r6view', 'R6: tapping the row body opens the Deck showcase for that deck');
+  assert(w.eval('S.deckTab')==='overview', 'R6: the showcase lands on the Overview sub-tab');
+  assert(w.eval('S.decks.find(x=>x.id==="r6view").done')===true, 'R6: viewing a deck does NOT flip done (read-only showcase)');
+  d.querySelector('#btn-editcards').click(); await sleep(20);
+  assert(w.eval('S.tab')==='cards' && w.eval('S.activeId')==='r6view', 'R6: the Edit-cards CTA jumps to Build with the same deck active');
+  w.eval('setTab("saved")'); await sleep(20);
+  const _vrow2 = [...d.querySelectorAll('#savedlist .saverow')].find(r => /R6 View/.test(r.querySelector('.sv-name').textContent));
+  _vrow2.querySelector('.sv-btn.edit').click(); await sleep(20);
+  assert(w.eval('S.tab')==='cards' && w.eval('S.activeId')==='r6view', 'R6: the pencil quick-edit also jumps straight to Build');
+
+  // item 6: sync merge tolerates drafts — push filters them; a local draft survives applyStateBlob(mergeState(...))
+  w.eval('(function(){ S.decks.unshift({id:"r6draft",name:"",cards:[],updated:Date.now()}); S.activeId="r6draft"; })()');
+  assert(w.eval('isDraft(S.decks.find(x=>x.id==="r6draft"))')===true, 'R6: seeded a live blank draft on the bench');
+  await w.eval('(async()=>{ const of=window.fetch; window.__r6cap=null; window.fetch=async(u,o)=>{ window.__r6cap={o:o}; return {ok:true,status:200,json:async()=>({}),text:async()=>"{}"}; }; S.syncToken="tok-r6"; await syncPush(); window.fetch=of; S.syncToken=""; })()');
+  const _r6body = w.eval('JSON.parse(window.__r6cap.o.body)');
+  assert(_r6body.decks.every(x=>x.id!=="r6draft"), 'R6: the syncPush body (pushableBlob) excludes the live draft');
+  assert(_r6body.decks.some(x=>x.id==="r6view"), 'R6: the syncPush body still carries the real decks');
+  const _r6remote = { v:1, updatedAt:Date.now()+50000, decks:[{id:"r6remote",name:"Remote",cards:["Hulk"],updated:Date.now()+50000}], activeId:"r6remote", owned:[], creators:[], prefs:{} };
+  w.eval('applyStateBlob(mergeState(buildStateBlob(), '+JSON.stringify(_r6remote)+'))'); await sleep(10);
+  assert(w.eval('S.decks.some(isDraft)')===true, 'R6: a local draft survives applyStateBlob(mergeState(...)) (never dropped mid-session)');
+  assert(w.eval('S.decks.some(x=>x.id==="r6remote")')===true, 'R6: the remote deck merges in alongside the surviving local draft');
+  // restore a real active deck so the final AI-mocked assertion has a deck on the bench
+  w.eval('S.decks = S.decks.filter(x=>!isDraft(x)); if(!activeDeck()) S.activeId=(S.decks[0]||{}).id||null; S.syncToken="";'); await sleep(10);
+
+  // ============ R6 WP2: showcase Deck tab — art hero + keycard spotlight + header band ============
+  w.eval('(function(){ S.decks.unshift({id:"r6show",name:"R6 Show",cards:["Hulk","AntMan","Wong","Odin"],updated:Date.now()}); S.activeId="r6show"; })(); setTab("deck"); renderDeck();'); await sleep(20);
+  assert(d.querySelector('#decklist').classList.contains('hero'), 'R6-D: the showcase deck grid is the art-forward .hero');
+  assert(d.querySelectorAll('#decklist .mini').length===12, 'R6-D: hero grid still renders 12 mini slots');
+  const _keyN = d.querySelectorAll('#decklist .mini.keycard').length;
+  assert(_keyN>=1 && _keyN<=2, 'R6-D: 1-2 finishers spotlit with .keycard (max-cost card[s])');
+  const _keyIds = [...d.querySelectorAll('#decklist .mini.keycard')].map(m=>m.getAttribute('data-d'));
+  assert(_keyIds.indexOf('AntMan')<0, 'R6-D: the 1-cost card is never spotlit as a finisher');
+  assert(d.querySelector('.deck-hero-head #deckname')!==null && d.querySelector('.deck-hero-head #verdictrow')!==null, 'R6-D: header band groups the title + verdict control');
+  assert(d.querySelector('#deckglance #st-count').textContent==='4/12', 'R6-D: the glance stat strip counts the deck');
+  assert(/\.minigrid\.hero\{grid-template-columns:repeat\(4,1fr\)/.test(html) && /\.minigrid\.hero\{grid-template-columns:repeat\(6,1fr\)/.test(html),
+    'R6-D: hero grid is 4-col on phone / 6-col on desktop');
+  assert(d.querySelector('#view-deck').classList.contains('no-deck')===false, 'R6-D: an active deck clears the empty-state .no-deck flag');
+
   // AI mocked
   w.eval('setTab("ai")'); d.querySelector('#btn-ask').click(); await sleep(80);
   assert(d.querySelector('#aiout').textContent.includes('mock coach reply'), 'AI flow works');
+
+  // ============ R6 review fixes: compare filter, Editing eyebrow, 44px picker Done, blank bench survives reload ============
+  // MINOR 4: a transient blank draft never appears in the compare dropdown
+  w.eval('(function(){ S.decks.unshift({id:"r6fixdraft",name:"",cards:[],updated:Date.now()}); S.activeId="r6fixdraft"; renderAll(); })()'); await sleep(20);
+  assert(d.querySelector('#bh-mode').textContent==='', 'R6 fix: a blank draft on the bench shows no "Editing" eyebrow');
+  w.eval('openCompare()'); await sleep(20);
+  assert([...d.querySelectorAll('#cmp-a option')].every(o=>o.value!=='r6fixdraft'), 'R6 fix: compare dropdown excludes a live blank draft');
+  assert(d.querySelectorAll('#cmp-a option').length>=2, 'R6 fix: compare dropdown still lists the real decks');
+  w.eval('closeModal()'); await sleep(10);
+  // MINOR 3: Build header names the mode for a real deck (pairs with the showcase "Viewing" eyebrow)
+  w.eval('S.decks = S.decks.filter(x=>x.id!=="r6fixdraft"); S.activeId="r6show"; renderAll();'); await sleep(20);
+  assert(d.querySelector('#bh-mode').textContent==='Editing' && d.querySelector('#bh-name').textContent==='R6 Show',
+    'R6 fix: Build header reads "Editing" + the deck name for a real active deck');
+  // MINOR 2: the picker Done button meets the 44px tap target
+  assert(/\.pl-pick-done\{[^}]*min-height:44px/.test(html), 'R6 fix: play-line picker Done button is a 44px tap target');
+
+  // MINOR 1: a deliberately blank bench (post-Done) survives an app reload when sync pulls at boot.
+  // mergeState alone WOULD resurrect a deck (frozen behavior) — the boot-side guard undoes it.
+  const _bootRemote = { v:1, updatedAt:9999999999999, decks:[{id:'r6boot-b',name:'Boot B',cards:['Wong'],updated:9999999999999}], activeId:'r6boot-b', owned:[], creators:[], prefs:{} };
+  assert(w.eval('mergeState({decks:[{id:"x",updated:1}],activeId:null,owned:[],creators:[],prefs:{}}, '+JSON.stringify(_bootRemote)+').activeId')==='r6boot-b',
+    'R6 fix (context): mergeState alone resurrects an activeId onto a blank bench');
+  await sleep(450);   // flush pending debounced saves so the seeded storage below is exactly what boot reads
+  w.eval('(function(){'+
+    'localStorage.setItem("snapwb-decks", JSON.stringify({decks:[{id:"r6boot-a",name:"Boot A",cards:["Hulk"],updated:1000}],activeId:null}));'+
+    'localStorage.setItem("snapwb-synctoken", JSON.stringify("tok-boot"));'+
+    '})()');
+  await w.eval('(async()=>{ const of=window.fetch; const blob='+JSON.stringify(_bootRemote)+';'+
+    ' window.fetch=async()=>({ok:true,status:200,json:async()=>blob,text:async()=>JSON.stringify(blob)});'+
+    ' await boot(); window.fetch=of; })()'); await sleep(30);
+  assert(w.eval('S.activeId')===null, 'R6 fix: a blank bench stays blank across an app reload with sync configured');
+  assert(w.eval('S.decks.some(x=>x.id==="r6boot-b") && S.decks.some(x=>x.id==="r6boot-a")')===true,
+    'R6 fix: the reload-merged decks all land in Saved (nothing lost, just not on the bench)');
+  assert(d.querySelector('#bh-name').textContent==='New deck' && d.querySelector('#bh-mode').textContent==='',
+    'R6 fix: post-reload blank bench header reads "New deck" with no eyebrow');
+  w.eval('S.syncToken=""; localStorage.removeItem("snapwb-synctoken");');
 
   console.log('\nDONE. errors:', errors.length?errors:'none');
 })();

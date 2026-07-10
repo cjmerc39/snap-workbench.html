@@ -170,6 +170,14 @@ h1 .h-snap{color:var(--gold);}
 .cv label{font-size:10px; color:var(--faint); font-weight:700;}
 .cv .n{font-size:10px; color:var(--dim); font-weight:700;}
 .minigrid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
+/* D.1: art-forward hero deck grid on the showcase (4x3 phone / 6x2 desktop), taller art tiles */
+.minigrid.hero{grid-template-columns:repeat(4,1fr); gap:7px; margin-bottom:12px;}
+.minigrid.hero .mini{aspect-ratio:2.5/3.5;}
+.minigrid.hero .mini.empty{aspect-ratio:2.5/3.5;}
+/* finisher spotlight — gold (lilac) ring + a ★ corner, no new analytics */
+.mini.keycard{box-shadow:0 0 0 2px var(--gold), 0 6px 20px rgba(169,132,255,.30); z-index:1;}
+.mini.keycard::after{content:'\2605'; position:absolute; top:3px; left:3px; font-size:11px; line-height:1;
+  color:var(--gold); text-shadow:0 1px 3px rgba(0,0,0,.8); z-index:2;}
 .mini{position:relative; border-radius:var(--r-md); overflow:hidden; border:1px solid var(--line); background:var(--card); aspect-ratio:33/44;
   transition:transform var(--dur-1) var(--ease-out);}
 .mini:active{transform:scale(.97);}
@@ -186,6 +194,16 @@ h1 .h-snap{color:var(--gold);}
 .mini.empty{border-style:dashed; display:flex; align-items:center; justify-content:center; color:var(--faint); font-size:22px;}
 .deckactions{display:grid; grid-template-columns:1fr 1fr; gap:7px; margin:12px 0 4px;}
 .deckactions .abtn{padding:11px 6px; font-size:13px;}
+.deckactions #btn-editcards{grid-column:1/-1;}   /* R6: Edit cards is the full-width primary CTA */
+/* R6: no-active-deck showcase empty state */
+#deck-empty[hidden]{display:none;}
+#view-deck.no-deck > :not(#deck-empty){display:none;}
+.emptypane{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:var(--r-sheet); padding:40px 20px; text-align:center; margin-top:8px;}
+.emptypane .ep-head{font-family:var(--head); font-weight:700; font-size:17px; color:var(--text);}
+.emptypane .ep-sub{font-size:13px; color:var(--faint); margin-top:6px;}
+.emptypane .ep-acts{display:flex; gap:8px; justify-content:center; margin-top:16px; flex-wrap:wrap;}
+.emptypane .ep-acts .abtn{min-height:44px; padding:11px 18px;}
+.sv-btn.edit{color:var(--gold); border-color:var(--gold); font-size:15px; min-width:44px;}
 .abtn{
   border-radius:var(--r-md); padding:13px 8px; font-size:14px; font-weight:700;
   background:var(--raise); color:var(--text); border:1px solid var(--line);
@@ -206,11 +224,23 @@ h1 .h-snap{color:var(--gold);}
   transition:background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);}
 #decktabs button.on{background:var(--iris); color:var(--iris-ink);}
 .dpane{display:none;}
-.dpane.on{display:block; animation:viewin var(--dur-2) var(--ease-out);}
+/* D.4: each tool pane is one glass section — uniform padding, single label header, one-page rhythm */
+.dpane.on{display:block; animation:viewin var(--dur-2) var(--ease-out);
+  background:var(--glass); box-shadow:inset 0 0 0 1px var(--hair); border-radius:var(--r-md); padding:13px 12px 4px;}
 .dpane-label{font-family:var(--head); font-weight:800; letter-spacing:.4px; font-size:11px; color:var(--faint);
   margin:0 2px 8px; text-transform:uppercase;}
 
 /* ---------- deck: archetype + analytics (WP2) ---------- */
+/* D.2: showcase header band — eyebrow + title + verdict + slim meta line, all glass */
+.deck-hero-head{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:var(--r-md);
+  padding:12px 14px; margin-bottom:12px;}
+.dh-eyebrow{font-family:var(--head); font-weight:800; letter-spacing:1px; font-size:10px; text-transform:uppercase;
+  color:var(--faint); margin:0 0 6px 2px;}
+.deck-hero-head #deckname{font-size:19px; font-weight:800; letter-spacing:.2px; border-color:transparent;
+  background:transparent; padding:5px 6px;}
+.deck-hero-head #deckname:focus{outline:none; border-color:var(--iris); background:var(--panel);}
+.deck-hero-head #verdictrow{margin:2px 0 0;}
+.deck-hero-head #deckchanges:not(:empty), .deck-hero-head #deckmeta:not(:empty){margin-top:10px;}
 .deckname-row{display:flex; align-items:center; gap:8px;}
 .deckname-row #deckname{flex:1; min-width:0;}
 #archetag{font-family:var(--head); font-weight:800; letter-spacing:.3px; font-size:11px; text-transform:uppercase;
@@ -277,23 +307,58 @@ h1 .h-snap{color:var(--gold);}
 #simpanel:empty{margin-top:0;}
 .sim-lab{font-size:11.5px; color:var(--dim); font-weight:700; margin-bottom:6px;}
 .sim-grid{grid-template-columns:repeat(6,1fr); margin-bottom:10px;}
-/* F: play-line planner */
-.pl-slot{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:var(--r-md); padding:8px; margin-bottom:8px;}
-.pl-head{display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:800; color:var(--faint); margin-bottom:6px;}
-.pl-head.over{color:var(--warn);}
-.pl-conf{font-weight:700;}
+/* R6-C: play-line composer — six always-visible turn slots (no scroll to a card) */
+.pl-slots{display:flex; flex-direction:column; gap:7px;}
+.pl-slot{display:flex; align-items:stretch; gap:10px; min-height:64px;
+  background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:var(--r-md); padding:8px 10px; cursor:pointer;
+  transition:box-shadow var(--dur-1) var(--ease-out);}
+.pl-slot:active{box-shadow:inset 0 0 0 1px var(--line2);}
+.pl-slot.vacant .pl-mini-row{align-items:center;}
+.pl-rail{flex:0 0 92px; display:flex; flex-direction:column; justify-content:center; gap:2px;}
+.pl-t{font-family:var(--head); font-weight:800; font-size:14px; color:var(--text); letter-spacing:.3px;}
+.pl-energy{font-size:11px; font-weight:800; color:var(--faint);}
+.pl-energy.over{color:var(--warn);}
+.pl-conf{font-size:10px; font-weight:700; color:var(--dim);}
 .pl-conf.low{color:var(--warn);}
-.pl-mini-row{display:grid; grid-template-columns:repeat(6,1fr); gap:5px; min-height:18px;}
-.pl-mini-row .pl-empty{grid-column:1 / -1; font-size:11px; color:var(--faint); padding:4px 2px;}
-.pl-sub{font-family:var(--head); font-weight:800; letter-spacing:.4px; font-size:11px; color:var(--faint); text-transform:uppercase; margin:12px 2px 6px;}
-.pl-pool{display:grid; grid-template-columns:repeat(6,1fr); gap:5px; margin:6px 0 4px;}
-.pl-pool .mini.picked{outline:2px solid var(--iris); outline-offset:1px;}
-.pl-pool-empty{font-size:11.5px; color:var(--faint); padding:4px 2px;}
-.pl-flags{margin-top:8px;}
+.pl-drawwarn{color:var(--warn);}
+.pl-mini-row{flex:1; min-width:0; display:flex; flex-wrap:wrap; align-content:center; gap:5px; min-height:44px;}
+.pl-mini-row .mini{width:32px; flex:0 0 32px;}
+.pl-slot-add{background:none; border:1px dashed var(--line2); color:var(--faint); border-radius:10px;
+  min-height:44px; width:100%; font-size:12.5px; font-weight:700; letter-spacing:.2px;}
+.pl-flags{margin-top:10px;}
 .pl-flags .warnbox{margin-bottom:6px;}
 .pl-flags .warnbox:last-child{margin-bottom:0;}
-.pl-actions{display:flex; gap:8px; margin-top:10px;}
-.pl-actions .abtn{flex:1;}
+.pl-actions{display:flex; gap:8px; margin-top:12px;}
+.pl-actions .abtn{flex:1; min-height:44px;}
+/* the card picker — thumb-anchored bottom sheet over the viewport */
+#pl-picker{position:fixed; inset:0; z-index:62; background:rgba(8,4,18,.72);
+  display:flex; align-items:flex-end;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity var(--dur-3) var(--ease-out), visibility 0s linear var(--dur-3);}
+#pl-picker.on{opacity:1; visibility:visible; pointer-events:auto; transition:opacity var(--dur-3) var(--ease-out);}
+.pl-sheet{width:100%; background:var(--frost); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  border-radius:var(--r-sheet) var(--r-sheet) 0 0; box-shadow:inset 0 0 0 1px var(--hair), var(--sh-3);
+  max-height:70vh; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
+  padding:8px 16px calc(16px + env(safe-area-inset-bottom));
+  transform:translateY(100%); transition:transform var(--dur-3) var(--ease-spring);}
+#pl-picker.on .pl-sheet{transform:translateY(0);}
+.pl-pick-head{display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:2;
+  padding:2px 2px 10px; margin-bottom:6px;
+  background:linear-gradient(180deg, rgba(21,16,31,.94), rgba(21,16,31,0));}
+.pl-pick-title{font-family:var(--head); font-weight:800; letter-spacing:.2px; font-size:15px; color:var(--text);}
+#pl-picker-energy{font-size:12px; font-weight:800; color:var(--dim);}
+#pl-picker-energy.over{color:var(--warn);}
+.pl-pick-done{margin-left:auto; background:linear-gradient(160deg,#b794ff,#8f6bff); color:var(--iris-ink); border:none;
+  border-radius:var(--r-pill); min-height:44px; padding:0 16px; font-size:13px; font-weight:800;}
+.pl-pick-done:active{transform:scale(.96);}
+.pl-pick{display:grid; grid-template-columns:repeat(4,1fr); gap:8px;}
+.pl-pick .mini{aspect-ratio:2.5/3.5; cursor:pointer;}
+.pl-pick .mini.elsewhere{filter:grayscale(.5) brightness(.62);}
+.pl-pick .mini.on{box-shadow:0 0 0 2px var(--gold), 0 4px 14px rgba(169,132,255,.35);}
+.pl-pick .mini.on::after{content:'\2713'; position:absolute; top:3px; right:3px; width:16px; height:16px; line-height:16px;
+  text-align:center; font-size:11px; font-weight:800; color:var(--iris-ink); background:var(--gold); border-radius:999px; z-index:2;}
+.pl-pick .mini .pl-tag{position:absolute; top:3px; left:3px; font-size:9px; font-weight:800; color:var(--text);
+  background:rgba(0,0,0,.6); border-radius:5px; padding:1px 4px; z-index:2;}
 /* G: what-changed banner + H: per-deck meta note */
 #deckchanges:empty{display:none;}
 #deckchanges .warnbox{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-left:3px solid var(--warn); color:var(--text);}
@@ -325,7 +390,7 @@ h1 .h-snap{color:var(--gold);}
 .saverow .sv-meta{font-size:11.5px; color:var(--faint); margin-top:2px;}
 .sv-verdict{font-size:15px; margin-left:6px;}
 .sv-dot{width:8px; height:8px; border-radius:50%; background:var(--warn); box-shadow:0 0 0 2px rgba(11,7,20,.85); margin-left:6px; display:inline-block;}
-.sv-btn{background:var(--panel); border:1px solid var(--line); color:var(--dim); border-radius:9px; padding:8px 11px; font-size:13px; font-weight:700;}
+.sv-btn{background:var(--panel); border:1px solid var(--line); color:var(--dim); border-radius:9px; padding:8px 11px; font-size:13px; font-weight:700; min-height:44px; min-width:44px;}
 .sv-btn.load{color:var(--gold); border-color:var(--gold);}
 /* creator decks (Saved > Creator segment) + import-preview card strip */
 #saved-mine[hidden], #saved-creator[hidden]{display:none;}
@@ -485,6 +550,9 @@ h1 .h-snap{color:var(--gold);}
   box-shadow:inset 0 -1px 0 var(--hair), 0 14px 16px -14px rgba(0,0,0,.7);}
 #bhead{display:flex; align-items:center; justify-content:space-between; margin:2px 2px 8px;}
 #bh-title{display:flex; align-items:baseline; gap:8px; min-width:0;}
+/* R6 review: "Editing" eyebrow pairs with the showcase's "Viewing" (.dh-eyebrow) — blank/draft bench hides it */
+#bh-mode{font-family:var(--head); font-weight:800; letter-spacing:1px; font-size:10px; text-transform:uppercase; color:var(--faint); white-space:nowrap;}
+#bh-mode:empty{display:none;}
 #bh-name{font-size:15px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 #bh-count{font-family:var(--head); font-weight:800; font-size:14px; color:var(--gold); letter-spacing:.2px;}
 #bh-btns{display:flex; gap:6px;}
@@ -655,6 +723,9 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   #tabbar{max-width:560px; margin-inline:auto; border-radius:16px 16px 0 0;}
   #hdeck{display:flex;}
   #view-deck{max-width:760px; margin-inline:auto;}
+  .minigrid.hero{grid-template-columns:repeat(6,1fr);}   /* D.5: hero 6x2 on desktop */
+  .pl-sheet{max-width:760px; margin-inline:auto; border-radius:var(--r-sheet);}
+  .pl-pick{grid-template-columns:repeat(6,1fr);}          /* D.5: picker 6-col on desktop */
 }
 
 /* ---------- motion: tab/view cross-fade ---------- */
@@ -676,6 +747,8 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   .tile:active{transform:none !important;}
   .view.on, .dpane.on{animation:none !important;}
   #flyout, #searchbar{transition:opacity 1ms, visibility 0s !important;}
+  #pl-picker{transition:opacity 1ms, visibility 0s !important;}
+  #pl-picker .pl-sheet{transition:transform 1ms !important;}
 }
 
 /* ---------- fallback: solid fills where backdrop-filter is unsupported (test env / old browsers) ---------- */
@@ -702,7 +775,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   <section class="view on" id="view-cards">
     <div id="buildtop">
     <div id="bhead">
-      <div id="bh-title"><b id="bh-name"></b><span id="bh-count"></span><span class="savestate saved" id="bh-save"></span></div>
+      <div id="bh-title"><span id="bh-mode"></span><b id="bh-name"></b><span id="bh-count"></span><span class="savestate saved" id="bh-save"></span></div>
       <div id="bh-btns">
         <button class="hbtn done" id="bh-done">&#10003; Done</button>
         <button class="hbtn" id="bh-collapse">&#9650;</button>
@@ -743,11 +816,37 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 
   <!-- DECK -->
   <section class="view" id="view-deck">
-    <div class="deckname-row">
-      <input id="deckname" placeholder="Deck name">
-      <span id="archetag"></span>
-      <span class="savestate saved" id="dn-save"></span>
+    <div id="deck-empty" hidden>
+      <div class="emptypane">
+        <div class="ep-head">Nothing on the bench</div>
+        <div class="ep-sub">Build something new or open a saved deck.</div>
+        <div class="ep-acts">
+          <button class="abtn primary" id="de-build">Build a deck</button>
+          <button class="abtn" id="de-saved">Open Saved</button>
+        </div>
+      </div>
     </div>
+    <!-- D.1: art-forward hero grid — finishers spotlit with .keycard -->
+    <div id="decklist" class="minigrid hero"></div>
+    <!-- D.2: tight header band under the hero -->
+    <div class="deck-hero-head">
+      <div class="dh-eyebrow">Viewing</div>
+      <div class="deckname-row">
+        <input id="deckname" placeholder="Name this deck">
+        <span id="archetag"></span>
+        <span class="savestate saved" id="dn-save"></span>
+      </div>
+      <div id="verdictrow"><span class="vr-label">How&rsquo;s it play?</span>
+        <div class="vr-seg">
+          <button data-verdict="good" title="Good" aria-label="Good">&#128077;</button>
+          <button data-verdict="meh" title="Meh" aria-label="Meh">&#128528;</button>
+          <button data-verdict="bad" title="Bad" aria-label="Bad">&#128078;</button>
+        </div>
+      </div>
+      <div id="deckchanges"></div>
+      <div id="deckmeta"></div>
+    </div>
+    <!-- D.3: glance stat strip -->
     <div id="deckglance" class="glancerow">
       <div class="glance-chip"><b id="st-count">0/12</b><span>cards</span></div>
       <div class="glance-chip"><b id="st-avg">&ndash;</b><span>avg cost</span></div>
@@ -755,16 +854,10 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       <div class="glance-chip"><b id="gl-syn">&ndash;</b><span>synergy</span></div>
       <div class="glance-chip"><b id="gl-health">&ndash;</b><span>curve</span></div>
     </div>
-    <div id="verdictrow"><span class="vr-label">How&rsquo;s it play?</span>
-      <div class="vr-seg">
-        <button data-verdict="good" title="Good" aria-label="Good">&#128077;</button>
-        <button data-verdict="meh" title="Meh" aria-label="Meh">&#128528;</button>
-        <button data-verdict="bad" title="Bad" aria-label="Bad">&#128078;</button>
-      </div>
-    </div>
-    <div id="decklist" class="minigrid"></div>
+    <!-- D.4: actions -->
     <div class="deckactions">
-      <button class="abtn primary" id="btn-copycode">Copy code</button>
+      <button class="abtn primary" id="btn-editcards">Edit cards</button>
+      <button class="abtn" id="btn-copycode">Copy code</button>
       <button class="abtn" id="btn-import">Import</button>
       <button class="abtn subtle" id="btn-dupe">Duplicate</button>
       <button class="abtn danger" id="btn-cleardeck">Clear</button>
@@ -778,11 +871,9 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       <button data-dtab="notes" role="tab" aria-selected="false">Notes</button>
     </div>
     <div class="dpane on" data-pane="overview" role="tabpanel" aria-label="Overview">
-      <div id="deckchanges"></div>
       <div class="dpane-label">Energy curve</div>
       <div id="curve"></div>
       <div id="curvehealth"></div>
-      <div id="deckmeta"></div>
       <div id="deckwarn"></div>
     </div>
     <div class="dpane" data-pane="synergy" role="tabpanel" aria-label="Synergy">
@@ -801,7 +892,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       </div>
     </div>
     <div class="dpane" data-pane="planner" role="tabpanel" aria-label="Play line">
-      <div class="dpane-label">Optimal game — tap a card, tap a turn</div>
+      <div class="dpane-label">Optimal game — tap a turn, pick its cards</div>
       <div id="planner"></div>
     </div>
     <div class="dpane" data-pane="notes" role="tabpanel" aria-label="Notes">
@@ -879,6 +970,18 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 </nav>
 
 <div id="modalwrap"><div id="modal"></div></div>
+<!-- R6-C: play-line card picker — thumb-anchored bottom sheet, zero scroll from turn to card -->
+<div id="pl-picker" aria-hidden="true">
+  <div class="pl-sheet" role="dialog" aria-label="Assign cards to a turn">
+    <div class="sheet-grab"></div>
+    <div class="pl-pick-head">
+      <span class="pl-pick-title" id="pl-picker-title">Turn 1</span>
+      <span class="pl-energy" id="pl-picker-energy">0/1&#9889;</span>
+      <button class="pl-pick-done" id="pl-pick-done" type="button">Done</button>
+    </div>
+    <div class="pl-pick" id="pl-pick-grid"></div>
+  </div>
+</div>
 <div id="toast"></div>
 
 <script>
@@ -914,7 +1017,7 @@ const S = {
   prefs: { density:'cmp', deckTab:'overview', collOpen:false, facetOpen:{ sort:false, cost:true, series:false, mech:false, power:false } },
   storageOK: (typeof window !== 'undefined' && !!window.storage),
   oddsGroup: new Set(),    // R5-D draw-goal group (session only; pruned to the active deck)
-  plannerPick: null,       // R5-F play-line: card id awaiting a turn slot (session only)
+  plannerTurn: null,       // R6-C play-line: turn index (1-6) whose picker sheet is open (session only)
   sim: null,               // WP2 goldfish draw snapshot { order:[ids], shown:n }
   creatorDecks: [],        // R4 harvested creator decks (from creator-decks.json)
   creatorDecksLabel: '',   // R4 "updated" date from creator-decks.json
@@ -1030,6 +1133,9 @@ function buildStateBlob(){
     creatorDecksCache:S.addedCreatorDecks||[],
     prefs:S.prefs };
 }
+/* R6: the serialization boundary for the sync PUT — a draft-free blob. buildStateBlob() stays
+   FULL (so a local active draft survives local merges); only what leaves the device is filtered. */
+function pushableBlob(){ const b = buildStateBlob(); b.decks = S.decks.filter(d => !isDraft(d)); return b; }
 // Pure + testable. Newest-wins per deck, union owned/creators, never drop a local deck.
 function mergeState(local, remote){
   if(!remote) return local;
@@ -1059,7 +1165,7 @@ async function syncPush(){
   try{
     const r = await fetch(SYNC_URL, { method:'PUT',
       headers:{ 'content-type':'application/json', 'authorization':'Bearer '+S.syncToken },
-      body: JSON.stringify(buildStateBlob()) });
+      body: JSON.stringify(pushableBlob()) });
     S.syncState = r.ok ? 'ok' : 'error'; if(r.ok) S.syncLast=Date.now();
   }catch(e){ S.syncState='offline'; }
   updateSyncStatus();
@@ -1132,12 +1238,19 @@ function mech(c){
 
 /* ============ DECKS ============ */
 function activeDeck(){ return S.decks.find(d => d.id === S.activeId) || null; }
-function ensureDeck(){
-  if(!activeDeck()){
-    const d = { id:uid(), name:'New Deck', cards:[], updated:Date.now() };
+/* R6: a DRAFT is a derived (never-persisted) state — a deck physically in S.decks with
+   no cards AND a blank name. It's hidden from Saved + the sync push. The instant it gains
+   a card or a name it promotes to a real deck automatically (isDraft flips false). */
+function isDraft(d){ return !!d && !(d.cards && d.cards.length) && !((d.name||'').trim()); }
+/* R6: ensureDraft() replaces ensureDeck() — the MUTATION safety net only. Render/read paths
+   use activeDeck() + a null guard so an empty bench stays blank (never silently spawns a deck). */
+function ensureDraft(){
+  let d = activeDeck();
+  if(!d){
+    d = { id:uid(), name:'', cards:[], updated:Date.now() };
     snapshotDeck(d); S.decks.unshift(d); S.activeId = d.id; persistDecks();
   }
-  return activeDeck();
+  return d;
 }
 /* R5-G: card-change flags. A tiny per-deck snapshot (cost/power + a 32-bit ability hash)
    is captured on every build edit and create path. When the card DB later changes (patch,
@@ -1165,7 +1278,7 @@ function touch(d){ d.updated = Date.now(); d.done = false; if(typeof snapshotDec
 function touchMeta(d){ d.updated = Date.now(); persistDecks(); }
 function inDeck(defid){ const d=activeDeck(); return !!d && d.cards.includes(defid); }
 function toggleCard(defid){
-  const d = ensureDeck();
+  const d = ensureDraft();
   const i = d.cards.indexOf(defid);
   if(i >= 0){ d.cards.splice(i,1); }
   else {
@@ -1988,26 +2101,27 @@ function renderSim(){
   const rs = $('#sim-reset'); if(rs) rs.onclick = () => { S.sim = null; renderSim(); };
 }
 if($('#btn-testdraw')) $('#btn-testdraw').onclick = () => {
-  const d = ensureDeck();
-  if(!d.cards.length){ toast('Add cards to the deck first'); return; }
+  const d = activeDeck();
+  if(!d || !d.cards.length){ toast('Add cards to the deck first'); return; }
   S.sim = { order: simHand(d.cards).order, shown: Math.min(3, d.cards.length) };
   renderSim();
 };
 
 /* --- render: C6 compare --- */
 function openCompare(){
-  if(S.decks.length < 2){ toast('Need at least 2 saved decks to compare'); return; }
-  const opts = sel => S.decks.map(d =>
+  const real = S.decks.filter(d => !isDraft(d));   // R6 review: a transient blank draft never belongs in the dropdown
+  if(real.length < 2){ toast('Need at least 2 saved decks to compare'); return; }
+  const opts = sel => real.map(d =>
     '<option value="' + esc(d.id) + '"' + (sel===d.id?' selected':'') + '>' + esc(d.name || 'Untitled') + '</option>').join('');
   openModal(
     '<h2>Compare decks</h2>' +
-    '<div class="comborow"><select id="cmp-a">' + opts(S.decks[0].id) + '</select><span class="combo-amp">vs</span><select id="cmp-b">' + opts(S.decks[1].id) + '</select></div>' +
+    '<div class="comborow"><select id="cmp-a">' + opts(real[0].id) + '</select><span class="combo-amp">vs</span><select id="cmp-b">' + opts(real[1].id) + '</select></div>' +
     '<div id="comparepanel"></div>' +
     '<div class="mrow"><button class="abtn primary" id="cmp-close">Done</button></div>'
   );
   const draw = () => renderCompare(
-    S.decks.find(x => x.id === $('#cmp-a').value),
-    S.decks.find(x => x.id === $('#cmp-b').value));
+    real.find(x => x.id === $('#cmp-a').value),
+    real.find(x => x.id === $('#cmp-b').value));
   $('#cmp-a').onchange = draw; $('#cmp-b').onchange = draw;
   $('#cmp-close').onclick = closeModal;
   draw();
@@ -2030,9 +2144,11 @@ function renderCompare(a, b){
 }
 if($('#btn-compare')) $('#btn-compare').onclick = openCompare;
 
-/* ============ F: PLAY-LINE PLANNER ============ */
-/* d.line = [ [ids T1], …, [ids T6] ] (index 0 = T1). Tap a pool card -> S.plannerPick;
-   tap a turn slot -> the pick lands there; tap an assigned mini -> it returns to the pool.
+/* ============ F/R6-C: PLAY-LINE COMPOSER ============ */
+/* d.line = [ [ids T1], …, [ids T6] ] (index 0 = T1). Six turn slots are always visible (no
+   scroll). Tap a slot -> S.plannerTurn=t + the #pl-picker bottom sheet opens over the viewport;
+   tap a card there toggles/moves it for that turn (tap-tap-tap accumulate, dismiss to close);
+   tap an assigned mini in a slot -> removes it. A card lives in at most one turn (move-on-tap).
    Energy: budget(t)=t, no carryover. Draw: by the end of turn t you've seen ~DRAWN[t] cards (3+t). */
 function emptyLine(){ return [[],[],[],[],[],[]]; }
 function normLine(line){ const L = Array.isArray(line) ? line : []; const out = emptyLine(); for(let i=0;i<6;i++) out[i] = Array.isArray(L[i]) ? L[i].slice() : []; return out; }
@@ -2060,16 +2176,22 @@ function lineFlags(line){
   }
   return out;
 }
-function renderPlanner(){
-  const box = $('#planner'); if(!box) return;
-  const d = activeDeck();
-  if(!d){ box.innerHTML = ''; return; }
-  if(!d.cards.length){ box.innerHTML = '<div class="odds-hint">Add cards to the deck first.</div>'; return; }
+/* live line, pruned to the active deck — the single source both the slots and picker read */
+function currentLine(d){
   const line = normLine(d.line);
   const inDeck = new Set(d.cards);
   for(let i=0; i<6; i++) line[i] = line[i].filter(id => inDeck.has(id));   // drop ids that left the deck
+  return line;
+}
+function turnOfId(line, id){ for(let i=0;i<6;i++) if(line[i].indexOf(id) >= 0) return i+1; return 0; }
+
+function renderPlanner(){
+  const box = $('#planner'); if(!box) return;
+  const d = activeDeck();
+  if(!d){ box.innerHTML = ''; closePlPicker(true); return; }
+  if(!d.cards.length){ box.innerHTML = '<div class="odds-hint">Add cards to the deck first.</div>'; closePlPicker(true); return; }
+  const line = currentLine(d);
   const assigned = new Set(); line.forEach(sl => sl.forEach(id => assigned.add(id)));
-  if(S.plannerPick && (!inDeck.has(S.plannerPick) || assigned.has(S.plannerPick))) S.plannerPick = null;
 
   let cum = 0; const slotHtml = [];
   for(let t=1; t<=6; t++){
@@ -2077,30 +2199,30 @@ function renderPlanner(){
     const cards = ids.map(id => getCard(id) || makeStub(id));
     const spent = cards.reduce((s,c) => s + (c.c||0), 0);
     const over = spent > t;
+    const overDraw = cum > DRAWN[t];
     const conf = Math.round(pAll(cum, t) * 100);
     const low = cum > 0 && pAll(cum, t) < 0.35;
-    const minis = cards.length ? cards.map(miniHtml).join('') : '<span class="pl-empty">tap here to place the picked card</span>';
+    const minis = cards.length
+      ? cards.map(miniHtml).join('')
+      : '<button class="pl-slot-add" type="button" aria-label="Add cards to turn ' + t + '">&#65291; add cards</button>';
     slotHtml.push(
-      '<div class="pl-slot" data-t="' + t + '">' +
-        '<div class="pl-head' + (over?' over':'') + '"><span>T' + t + ' · ' + spent + '/' + t + '⚡</span>' +
-          (cum ? '<span class="pl-conf' + (low?' low':'') + '">~' + conf + '% by T' + t + '</span>' : '') +
+      '<div class="pl-slot' + (cards.length?'':' vacant') + '" data-t="' + t + '">' +
+        '<div class="pl-rail">' +
+          '<span class="pl-t">T' + t + '</span>' +
+          '<span class="pl-energy' + (over?' over':'') + '">' + spent + '/' + t + '⚡</span>' +
+          (cum ? '<span class="pl-conf' + (low?' low':'') + '">~' + conf + '% by T' + t +
+            (overDraw ? ' <span class="pl-drawwarn" title="More cards than you’ll have drawn by T' + t + '">⚠</span>' : '') + '</span>' : '') +
         '</div>' +
         '<div class="pl-mini-row">' + minis + '</div>' +
       '</div>');
   }
-  const poolCards = sortedDeckCards(d).filter(c => !assigned.has(c.d));
-  const pool = poolCards.length
-    ? poolCards.map(c => { const h = miniHtml(c); return S.plannerPick === c.d ? h.replace('class="mini', 'class="mini picked') : h; }).join('')
-    : '<div class="pl-pool-empty">Every card is placed — tap an assigned card to send it back.</div>';
   const flags = lineFlags(line);
   const flagsHtml = flags.length
     ? '<div class="pl-flags">' + flags.map(f => '<div class="warnbox">' + esc(f.msg) + '</div>').join('') + '</div>'
     : (assigned.size ? '<div class="pl-flags"><div class="odds-hint">Line looks legal — energy and draw both check out.</div></div>' : '');
-  const hint = assigned.size ? '' : '<div class="odds-hint">Tap a card, then a turn — or Auto-sketch a first draft.</div>';
+  const hint = assigned.size ? '' : '<div class="odds-hint">Tap a turn to add cards — or Auto-sketch a first draft.</div>';
   box.innerHTML =
-    slotHtml.join('') +
-    '<div class="pl-sub">Unplaced cards</div>' +
-    '<div class="pl-pool">' + pool + '</div>' +
+    '<div class="pl-slots">' + slotHtml.join('') + '</div>' +
     hint + flagsHtml +
     '<div class="pl-actions"><button class="abtn primary" id="pl-auto">Auto-sketch</button><button class="abtn danger" id="pl-clear">Clear line</button></div>';
 
@@ -2108,18 +2230,50 @@ function renderPlanner(){
     slot.onclick = e => {
       const t = +slot.dataset.t;
       const mini = e.target.closest('.pl-mini-row .mini');
-      if(mini){ line[t-1] = line[t-1].filter(x => x !== mini.dataset.d); d.line = line; touchMeta(d); renderPlanner(); return; }
-      if(S.plannerPick){ line[t-1].push(S.plannerPick); S.plannerPick = null; d.line = line; touchMeta(d); renderPlanner(); }
+      if(mini){   // tap an assigned mini -> unassign it from this turn
+        const L = currentLine(d); L[t-1] = L[t-1].filter(x => x !== mini.dataset.d);
+        d.line = L; touchMeta(d); renderPlanner(); return;
+      }
+      openPlPicker(t);   // tap empty area / the + -> open the card picker for this turn
     };
   });
-  const poolEl = box.querySelector('.pl-pool');
-  if(poolEl) poolEl.onclick = e => {
-    const mini = e.target.closest('.mini'); if(!mini) return;
-    S.plannerPick = S.plannerPick === mini.dataset.d ? null : mini.dataset.d;
-    renderPlanner();
-  };
-  const auto = $('#pl-auto'); if(auto) auto.onclick = () => { d.line = autoSketchLine(sortedDeckCards(d)); S.plannerPick = null; touchMeta(d); renderPlanner(); };
-  const clr  = $('#pl-clear'); if(clr) clr.onclick = () => { d.line = emptyLine(); S.plannerPick = null; touchMeta(d); renderPlanner(); };
+  const auto = $('#pl-auto'); if(auto) auto.onclick = () => { d.line = autoSketchLine(sortedDeckCards(d)); touchMeta(d); renderPlanner(); };
+  const clr  = $('#pl-clear'); if(clr) clr.onclick = () => { d.line = emptyLine(); touchMeta(d); renderPlanner(); };
+
+  if(S.plannerTurn) refreshPlPicker();   // keep an open picker in sync after a re-render
+}
+
+/* ---- R6-C: the card picker bottom sheet (thumb-anchored, no scroll to the card) ---- */
+function openPlPicker(t){
+  const d = activeDeck(); if(!d || !d.cards.length) return;
+  S.plannerTurn = t;
+  refreshPlPicker();
+  const pk = $('#pl-picker');
+  if(pk){ pk.classList.add('on'); pk.setAttribute('aria-hidden','false'); }
+}
+function closePlPicker(silent){
+  const pk = $('#pl-picker');
+  if(pk){ pk.classList.remove('on'); pk.setAttribute('aria-hidden','true'); }
+  const was = S.plannerTurn; S.plannerTurn = null;
+  if(!silent && was) renderPlanner();
+}
+function refreshPlPicker(){
+  const t = S.plannerTurn; if(!t) return;
+  const d = activeDeck(); if(!d || !d.cards.length){ closePlPicker(true); return; }
+  const line = currentLine(d);
+  const spent = line[t-1].reduce((s,id) => s + ((getCard(id) || makeStub(id)).c || 0), 0);
+  const title = $('#pl-picker-title'); if(title) title.textContent = 'Turn ' + t;
+  const en = $('#pl-picker-energy');
+  if(en){ en.textContent = spent + '/' + t + '⚡'; en.classList.toggle('over', spent > t); }
+  const grid = $('#pl-pick-grid'); if(!grid) return;
+  grid.innerHTML = sortedDeckCards(d).map(c => {
+    let h = miniHtml(c);
+    const tn = turnOfId(line, c.d);
+    if(tn === t) h = h.replace('class="mini', 'class="mini on');
+    else if(tn) h = h.replace('class="mini', 'class="mini elsewhere')
+                     .replace('</div></div>', '</div><span class="pl-tag">T' + tn + '</span></div>');
+    return h;
+  }).join('');
 }
 
 /* ============ RENDER: DECK ============ */
@@ -2134,7 +2288,10 @@ function miniHtml(c){
     '<div class="mname">'+esc(c.n)+'</div></div>';
 }
 function renderDeck(){
-  const d = ensureDeck();
+  const d = activeDeck();
+  if(!d){ renderDeckEmpty(); return; }
+  const de = $('#deck-empty'); if(de) de.hidden = true;
+  const vd = $('#view-deck'); if(vd) vd.classList.remove('no-deck');
   const nameEl = $('#deckname');
   if(document.activeElement !== nameEl) nameEl.value = d.name;
   const notesEl = $('#decknotes');
@@ -2170,8 +2327,15 @@ function renderDeck(){
       {innerHTML:'Not in your collection: <b>'+esc(unowned.map(c=>c.n).join(', '))+'</b>'}));
   }
 
+  // D.1: spotlight the finisher(s) — max-cost card(s), tie broken by highest power, up to 2
+  const keyset = new Set();
+  if(cards.length){
+    const ranked = cards.slice().sort((a,b) => (b.c - a.c) || ((b.p||0) - (a.p||0)));
+    const topCost = ranked[0].c;
+    ranked.filter(c => c.c === topCost).slice(0,2).forEach(c => keyset.add(c.d));
+  }
   const dl = $('#decklist');
-  let html = cards.map(miniHtml).join('');
+  let html = cards.map(c => { const h = miniHtml(c); return keyset.has(c.d) ? h.replace('class="mini', 'class="mini keycard') : h; }).join('');
   for(let i=cards.length; i<12; i++) html += '<div class="mini empty">+</div>';
   dl.innerHTML = html;
   dl.onclick = e => {
@@ -2234,19 +2398,45 @@ function renderDeck(){
     gh.classList.toggle('good', balanced && cards.length > 0);
   }
 }
+/* R6: no-active-deck showcase. Keeps #decktabs/.dpane in the DOM (hidden) so structural
+   tests still see them; the CSS rule #view-deck.no-deck > :not(#deck-empty){display:none} hides the rest. */
+function renderDeckEmpty(){
+  const de = $('#deck-empty'); if(de) de.hidden = false;
+  const vd = $('#view-deck'); if(vd) vd.classList.add('no-deck');
+  closePlPicker(true);
+}
+/* R6-C: card-picker sheet — wired once (persistent overlay). Tap toggles/moves a card for the open turn. */
+if($('#pl-pick-grid')) $('#pl-pick-grid').onclick = e => {
+  const m = e.target.closest('.mini'); if(!m) return;
+  const t = S.plannerTurn; if(!t) return;
+  const d = activeDeck(); if(!d) return;
+  const id = m.dataset.d;
+  const line = currentLine(d);
+  const cur = turnOfId(line, id);
+  if(cur === t){ line[t-1] = line[t-1].filter(x => x !== id); }          // already here -> toggle off
+  else { if(cur) line[cur-1] = line[cur-1].filter(x => x !== id); line[t-1].push(id); }  // move / add
+  d.line = line; touchMeta(d);
+  renderPlanner();   // re-renders slot rows AND the open picker (energy + grid) in one pass
+};
+if($('#pl-pick-done')) $('#pl-pick-done').onclick = () => closePlPicker();
+if($('#pl-picker')) $('#pl-picker').addEventListener('click', e => { if(e.target.id === 'pl-picker') closePlPicker(); });
+if($('#de-build')) $('#de-build').onclick = () => setTab('cards');
+if($('#de-saved')) $('#de-saved').onclick = () => setTab('saved');
 $('#deckname').addEventListener('input', e => {
-  const d = ensureDeck(); d.name = e.target.value; touch(d); renderDeckbar(); renderSaved();
+  const d = ensureDraft(); d.name = e.target.value; touch(d); renderDeckbar(); renderSaved();
 });
 $('#decknotes').addEventListener('input', e => {
-  const d = ensureDeck(); d.notes = e.target.value; touch(d);
+  const d = ensureDraft(); d.notes = e.target.value; touch(d);
 });
+$('#btn-editcards').onclick = () => setTab('cards');
 $('#btn-cleardeck').onclick = () => {
-  const d = ensureDeck();
-  if(!d.cards.length) return;
-  if(confirm('Remove all cards from "'+d.name+'"?')){ d.cards=[]; touch(d); renderAll(); }
+  const d = activeDeck();
+  if(!d || !d.cards.length) return;
+  if(confirm('Remove all cards from "'+(d.name||'New deck')+'"?')){ d.cards=[]; touch(d); renderAll(); }
 };
 $('#btn-dupe').onclick = () => {
-  const d = ensureDeck();
+  const d = activeDeck();
+  if(!d) return;
   const copy = { id:uid(), name:d.name+' v2', cards:d.cards.slice(), updated:Date.now() };
   snapshotDeck(copy); S.decks.unshift(copy); S.activeId = copy.id; persistDecks(); renderAll(); toast('Duplicated \u2192 now editing '+copy.name);
 };
@@ -2255,6 +2445,7 @@ $('#btn-dupe').onclick = () => {
 function setDeckTab(t){
   const panes = document.querySelectorAll('#view-deck .dpane');
   if(![...panes].some(p => p.dataset.pane === t)) t = 'overview';
+  if(t !== 'planner' && S.plannerTurn) closePlPicker(true);   // don't leave the card sheet floating over another pane
   S.deckTab = t;
   S.prefs.deckTab = t; sSet(K.prefs, S.prefs); scheduleSync();
   document.querySelectorAll('#decktabs [data-dtab]').forEach(b => {
@@ -2271,16 +2462,42 @@ if($('#decktabs')) $('#decktabs').addEventListener('click', e => {
 /* R5: verdict segment — tap sets, re-tap clears; a verdict is meta (touchMeta), it does NOT un-"done" the deck. */
 if($('#verdictrow')) $('#verdictrow').addEventListener('click', e => {
   const b = e.target.closest('[data-verdict]'); if(!b) return;
-  const d = ensureDeck();
+  const d = activeDeck(); if(!d) return;
   d.verdict = d.verdict === b.dataset.verdict ? null : b.dataset.verdict;
   touchMeta(d); renderVerdict(); renderSaved();
 });
 
 /* ============ RENDER: DECK ZONE (build screen) ============ */
+/* R6: blank-bench build header — no active deck. 12 empty slots, dashes, Done hidden. */
+function renderDeckbarEmpty(){
+  const bm = $('#bh-mode'); if(bm) bm.textContent = '';
+  $('#bh-name').textContent = 'New deck';
+  $('#bh-count').textContent = '0/12';
+  const sv = $('#bh-save'); if(sv){ sv.textContent = ''; sv.className = 'savestate'; }
+  $('#bh-done').style.display = 'none';
+  const open = S.zoneOpen !== false;
+  $('#deckzone').classList.toggle('closed', !open);
+  $('#bh-collapse').classList.toggle('flip', !open);
+  const dz = $('#dz');
+  let html = ''; for(let i=0; i<12; i++) html += '<div class="mini empty">+</div>';
+  dz.innerHTML = html;
+  dz.onclick = e => { const m = e.target.closest('.mini'); if(!m || m.classList.contains('empty')) return; toggleCard(m.dataset.d); };
+  $('#ins-curve').innerHTML = [0,0,0,0,0,0,0].map(() => '<i class="z" style="height:3px"></i>').join('');
+  $('#ins-avg').textContent = '–';
+  $('#ins-pow').textContent = '0';
+  const ia = $('#ins-arch'); if(ia) ia.textContent = '';
+  const is = $('#ins-syn'); if(is){ is.textContent = ''; is.classList.remove('warn','ok'); }
+  const hn = $('#hd-name'); if(hn) hn.textContent = 'New deck';
+  const hc = $('#hd-count'); if(hc) hc.textContent = '0/12';
+  syncStickyTop();
+}
 function renderDeckbar(){ // kept name; now renders the pinned zone + header
-  const d = ensureDeck();
-  $('#bh-name').textContent = d.name;
+  const d = activeDeck();
+  if(!d){ renderDeckbarEmpty(); return; }
+  const bm = $('#bh-mode'); if(bm) bm.textContent = isDraft(d) ? '' : 'Editing';   // R6 review: names the mode, pairs with the showcase "Viewing"
+  $('#bh-name').textContent = d.name || 'New deck';
   $('#bh-count').textContent = d.cards.length + '/12';
+  $('#bh-done').style.display = d.cards.length ? '' : 'none';   // R6: Done is meaningless on an empty bench
   const open = S.zoneOpen !== false; // default open (2x6); chevron tucks it (session-only, not persisted)
   $('#deckzone').classList.toggle('closed', !open);
   $('#bh-collapse').classList.toggle('flip', !open);
@@ -2328,8 +2545,10 @@ if(typeof window !== 'undefined') window.addEventListener('resize', syncStickyTo
 /* R5: "Done" — mark the current deck finished, save, and jump to Saved so you can pick the next one.
    Any later card/name/clear edit routes through touch() and clears done -> back into "editing". */
 function finishDeck(){
-  const d = ensureDeck();
+  const d = activeDeck();
+  if(!d || !d.cards.length) return;                        // R6: Done is meaningless on a blank/empty bench
   d.done = true; d.updated = Date.now(); snapshotDeck(d);   // re-baseline: the deck as you finished it
+  S.activeId = null;                                        // R6: file the deck; the bench goes BLANK
   persistDecks(); renderAll();
   setTab('saved'); toast('Saved ✓');
 }
@@ -2337,14 +2556,16 @@ $('#bh-done').onclick = finishDeck;
 $('#bh-collapse').onclick = () => { const open = S.zoneOpen !== false; S.zoneOpen = !open; renderDeckbar(); };
 $('#bh-name').onclick = () => setTab('deck');
 $('#bh-menu').onclick = () => {
+  const ad = activeDeck();
+  const canDone = !!ad && ad.cards.length > 0;   // R6: hide Done when the bench is blank/empty
   openModal(
-    '<h2>'+esc(ensureDeck().name)+'</h2>'+
-    '<div class="mrow"><button class="abtn primary" id="dm-done">&#10003; Mark done &amp; save</button></div>'+
+    '<h2>'+esc((ad && ad.name) || 'New deck')+'</h2>'+
+    (canDone ? '<div class="mrow"><button class="abtn primary" id="dm-done">&#10003; Mark done &amp; save</button></div>' : '')+
     '<div class="mrow"><button class="abtn primary" id="dm-copy">Copy deck code</button><button class="abtn" id="dm-import">Import code</button></div>'+
     '<div class="mrow"><button class="abtn" id="dm-notes">Notes &amp; stats</button><button class="abtn" id="dm-new">New deck</button></div>'+
     '<div class="mrow"><button class="abtn subtle" id="dm-dupe">Duplicate</button><button class="abtn danger" id="dm-clear">Clear cards</button></div>'
   );
-  $('#dm-done').onclick = () => { closeModal(); finishDeck(); };
+  if(canDone) $('#dm-done').onclick = () => { closeModal(); finishDeck(); };
   $('#dm-copy').onclick = () => { closeModal(); doCopyCode(); };
   $('#dm-import').onclick = () => { closeModal(); openImport(); };
   $('#dm-notes').onclick = () => { closeModal(); setTab('deck'); };
@@ -2356,29 +2577,34 @@ $('#bh-menu').onclick = () => {
 /* ============ RENDER: SAVED ============ */
 function renderSaved(){
   const wrap = $('#savedlist'); wrap.innerHTML='';
-  if(!S.decks.length){ wrap.appendChild(el('div','warnbox','No decks yet')); return; }
+  const real = S.decks.filter(d => !isDraft(d));   // R6: transient drafts never appear on the shelf
+  if(!real.length){ wrap.appendChild(el('div','warnbox','No saved decks yet \u2014 build one and it lands here.')); return; }
   const V = { good:'\ud83d\udc4d', meh:'\ud83d\ude10', bad:'\ud83d\udc4e' };
-  S.decks.forEach(d => {
+  real.forEach(d => {
     const row = el('div','saverow'); if(d.id===S.activeId) row.classList.add('active');
     const main = el('div','sv-main');
-    const nameEl = el('div','sv-name', d.name || 'Untitled');
+    const nameEl = el('div','sv-name', d.name || 'New deck');
     if(d.verdict) nameEl.appendChild(el('span','sv-verdict', V[d.verdict]));   // R5: self-rating badge
     if(deckHasChanges(d)) nameEl.appendChild(el('span','sv-dot'));             // R5-G: cards changed since built
     main.appendChild(nameEl);
     const arch = d.cards.length ? classifyArchetype(sortedDeckCards(d)) : [];
-    const life = d.done ? '\u2713 done' : d.id===S.activeId ? 'editing' : 'draft';   // R5: lifecycle word
+    const life = d.done ? '\u2713 done' : d.id===S.activeId ? 'editing' : 'saved';   // R6: lifecycle word
     main.appendChild(el('div','sv-meta', d.cards.length + '/12 \u00b7 updated ' + new Date(d.updated).toLocaleDateString() + (arch.length ? ' \u00b7 ' + arch.join('/') : '') + ' \u00b7 ' + life));
+    // R6: tapping the row body opens the read-only showcase (Overview) \u2014 viewing, NOT editing (done unchanged)
+    main.style.cursor = 'pointer';
+    main.onclick = () => { S.activeId = d.id; persistDecks(); renderAll(); setDeckTab('overview'); setTab('deck'); };
     row.appendChild(main);
-    const loadB = el('button','sv-btn load', d.id===S.activeId ? 'Editing' : 'Edit');
-    loadB.onclick = () => { S.activeId = d.id; d.done = false; persistDecks(); renderAll(); setTab('deck'); };   // R5: reopening re-enters editing
+    // R6: compact pencil = quick-edit straight to the Build workbench (first real edit clears done via touch())
+    const editB = el('button','sv-btn edit','\u270e'); editB.setAttribute('aria-label','Edit cards'); editB.title = 'Edit cards';
+    editB.onclick = () => { S.activeId = d.id; renderAll(); setTab('cards'); };
     const delB = el('button','sv-btn','\u2715');
     delB.onclick = () => {
-      if(!confirm('Delete "'+d.name+'"? This can\u2019t be undone.')) return;
+      if(!confirm('Delete "'+(d.name||'New deck')+'"? This can\u2019t be undone.')) return;
       S.decks = S.decks.filter(x => x.id !== d.id);
-      if(S.activeId === d.id) S.activeId = S.decks[0] ? S.decks[0].id : null;
+      if(S.activeId === d.id) S.activeId = null;   // R6: deleting the active deck clears the bench (blank)
       persistDecks(); renderAll();
     };
-    row.appendChild(loadB); row.appendChild(delB);
+    row.appendChild(editB); row.appendChild(delB);
     wrap.appendChild(row);
   });
 }
@@ -2446,7 +2672,7 @@ document.querySelectorAll('#savedseg button').forEach(b => b.onclick = () => {
 });
 if($('#cr-add-btn')) $('#cr-add-btn').onclick = openAddCreator;
 $('#btn-newdeck').onclick = () => {
-  const d = { id:uid(), name:'New Deck', cards:[], updated:Date.now() };
+  const d = { id:uid(), name:'', cards:[], updated:Date.now() };   // R6: blank draft (hidden from Saved/sync until its first card)
   snapshotDeck(d); S.decks.unshift(d); S.activeId = d.id; persistDecks(); renderAll(); setTab('cards'); toast('New deck started');
 };
 
@@ -2473,7 +2699,8 @@ async function copyText(text){
   }
 }
 async function doCopyCode(){
-  const d = ensureDeck();
+  const d = activeDeck();
+  if(!d){ toast('Nothing on the bench'); return; }
   if(!d.cards.length){ toast('Deck is empty'); return; }
   if(d.cards.length < 12 && !confirm('Deck has '+d.cards.length+'/12 cards. Snap needs 12 to import. Copy anyway?')) return;
   const code = exportCode(d);
@@ -2755,16 +2982,19 @@ function renderPresets(){
   });
 }
 function deckAsText(){
-  const d = ensureDeck();
+  const d = activeDeck();
+  if(!d) return '(no deck on the bench)';
   if(!d.cards.length) return '(deck is currently empty)';
   return sortedDeckCards(d).map(c =>
     c.c+'-cost '+c.p+'-power '+c.n+(c.stub ? ' (card text unknown locally)' : (c.a ? ': '+c.a : ': no ability'))
   ).join('\n');
 }
 $('#btn-ask').onclick = async () => {
-  const q = $('#aiq').value.trim() || PRESETS[0];
   const out = $('#aiout');
   const btn = $('#btn-ask');
+  const d = activeDeck();
+  if(!d){ out.className=''; out.style.display='block'; out.textContent='Put a deck on the bench first — build one or open a saved deck.'; btn.disabled=false; btn.textContent='Ask about current deck'; return; }
+  const q = $('#aiq').value.trim() || PRESETS[0];
   out.className=''; out.style.display='block'; out.textContent='Thinking about your 12 slots...';
   btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Coaching...';
   let ownedBlock = '';
@@ -2776,7 +3006,7 @@ $('#btn-ask').onclick = async () => {
   const prompt =
     'You are a sharp, honest Marvel Snap deck-building coach.\n' +
     'Card data below comes from an up-to-date database and may be newer than your training; when they conflict, trust the text below.\n\n' +
-    'Current deck ("'+(activeDeck().name||'Deck')+'"):\n' + deckAsText() + '\n' +
+    'Current deck ("'+(d.name||'Deck')+'"):\n' + deckAsText() + '\n' +
     ownedBlock + creatorMetaBlock + '\n\n' +
     'Question: ' + q + '\n\n' +
     'Answer in plain text (no markdown syntax), under 220 words. Be specific: name exact cards for cuts and adds, reference costs, and explain the game plan reasoning briefly.';
@@ -2808,7 +3038,7 @@ $('#btn-ask').onclick = async () => {
       const old = document.getElementById('ai-save'); if(old) old.remove();
       const saveB = el('button','abtn','Save to deck notes'); saveB.id='ai-save';
       saveB.onclick = () => {
-        const dd = ensureDeck();
+        const dd = activeDeck(); if(!dd) return;
         dd.notes = (dd.notes ? dd.notes + '\n\n' : '') + '\u2014 Coach ('+new Date().toLocaleDateString()+'):\n' + text;
         touch(dd); renderDeck(); saveB.textContent = '\u2713 Saved to notes'; saveB.disabled = true;
       };
@@ -2827,6 +3057,7 @@ $('#btn-ask').onclick = async () => {
 function setTab(t){
   S.tab = t;
   closeFlyout();
+  if(t !== 'deck' && S.plannerTurn) closePlPicker(true);   // leaving the Deck tab dismisses the card picker
   document.body.classList.toggle('on-cards', t === 'cards'); // floating tool cluster only on Build
   document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'view-'+t));
@@ -2899,6 +3130,9 @@ async function boot(){
   if(decksSaved && Array.isArray(decksSaved.decks)){
     S.decks = decksSaved.decks; S.activeId = decksSaved.activeId;
   }
+  // R6 review: remember whether THIS device's bench was deliberately blank (post-Done) before the
+  // sync merge below — mergeState's activeId fallback would otherwise resurrect a filed deck.
+  const benchWasBlank = S.activeId == null;
   // R5-G: seed change-flag baselines silently so pre-round-5 decks never false-flag.
   let _seeded = false;
   S.decks.forEach(d => { if(!d.snap){ snapshotDeck(d); _seeded = true; } });
@@ -2925,7 +3159,12 @@ async function boot(){
     }catch(e){ S.syncState='offline'; }
     finally{ if(_bootTimer) clearTimeout(_bootTimer); }
   }
-  ensureDeck();
+  // R6: leave the bench BLANK on boot; prune any stale non-active empty drafts so storage never accumulates them.
+  S.decks = S.decks.filter(d => !isDraft(d) || d.id === S.activeId);
+  if(S.activeId && !activeDeck()) S.activeId = null;
+  // R6 review: a blank bench stays blank across reloads — undo any activeId the merge resurrected.
+  // (The deck itself is untouched; it still sits in Saved.) Persist so a second reload agrees.
+  if(benchWasBlank && S.activeId != null){ S.activeId = null; persistDecks(); }
   renderFilterPanel();
   setDeckTab(S.prefs.deckTab || 'overview');
   updateFilterBadge(); renderPresets(); renderAll(); setTab('cards');
