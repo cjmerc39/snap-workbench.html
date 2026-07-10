@@ -1258,5 +1258,42 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   assert(errors.length===0, 'R7-D/E: no runtime errors during the token + nudge suite'+(errors.length?' -> '+errors.join(' | '):''));
 
+  // ============ R9: meta stats ledger, coach synergy read, Plan B branching ============
+  // stats loader: valid shape ingests; coach-shaped garbage is rejected
+  const FAKE_STATS = { updated:'2026-07-10', windowDays:30, deckCount:60,
+    cards:{ Hulk:31, AntMan:14, Wong:22 }, pairs:{ 'AntMan|Hulk':9 } };
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+JSON.stringify(FAKE_STATS)+')}); window.__s1=await loadCreatorStats(); window.fetch=of; })()');
+  assert(w.eval('window.__s1')===true && w.eval('S.creatorStats.deckCount')===60, 'R9: loadCreatorStats ingests the ledger');
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>({text:"nope"})}); window.__s2=await loadCreatorStats(); window.fetch=of; })()');
+  assert(w.eval('window.__s2')===false && w.eval('S.creatorStats.deckCount')===60, 'R9: malformed stats file is rejected, prior stats kept');
+  // pair evidence prefers the deep ledger
+  const statDeck = [{n:'Hulk',d:'Hulk',c:6,p:12,a:'',s:'1'},{n:'Ant-Man',d:'AntMan',c:1,p:1,a:'Ongoing: x',s:'1'}];
+  const pev9 = w.eval('creatorPairEvidence('+JSON.stringify(statDeck)+')');
+  assert(pev9.length===1 && pev9[0].n===9, 'R9: pair evidence reads the 30-day ledger (AntMan+Hulk seen 9x)');
+  // meta check renders play-rate chips incl. a spice marker
+  const spiceDeck = statDeck.concat([{n:'Homebrew Guy',d:'HomebrewGuy1',c:3,p:4,a:'',s:'5'}]);
+  w.eval('renderSynergy('+JSON.stringify(spiceDeck)+')'); await sleep(10);
+  assert(d.querySelectorAll('#synergy .mc-chip').length===3, 'R9: meta check renders one play-rate chip per deck card');
+  assert(d.querySelector('#synergy .mc-chip.spice')!==null, 'R9: off-meta picks get the spice treatment');
+  // coach synergy read: button -> mocked relay -> cached on deck -> rendered
+  assert(w.eval('!!activeDeck()'), 'R9 precondition: a deck is on the bench');
+  assert(d.querySelector('#syn-ai')!==null, 'R9: coach synergy button renders when relay configured');
+  await w.eval('coachSynergy()'); await sleep(80);
+  assert(w.eval('(activeDeck().synAI||{}).text')==='mock coach reply', 'R9: coach synergy result caches on the deck');
+  assert(d.querySelector('#synergy .syn-ai-out')!==null && /mock coach reply/.test(d.querySelector('#synergy .syn-ai-out').textContent), 'R9: coach read renders in the pane');
+  // Plan B branching: two lines, branch set, read-view pill switches lines
+  w.eval('(function(){ const dd=activeDeck(); materializeLines(dd); if(dd.lines.length<2) dd.lines.push({id:"lnB",name:"Plan B",turns:[[],[],[],[],[],[]],adj:[0,0,0,0,0,0]}); dd.activeLineId=dd.lines[0].id; mutateActiveLine(dd, function(lo){ if(!lo.turns.some(function(t){return t.length;})) lo.turns[0]=[dd.cards[0]]; lo.branch={ifNot:dd.cards[0], byTurn:3, toLineId:dd.lines[1].id}; }); renderLinePlan(); })()'); await sleep(20);
+  const bpill = d.querySelector('#lineplan .lp-branch');
+  assert(bpill!==null && /Plan B: no .+ by T3/.test(bpill.textContent), 'R9: read view shows the Plan B pill');
+  const preLid = w.eval('activeDeck().activeLineId');
+  bpill.click(); await sleep(20);
+  assert(w.eval('activeDeck().activeLineId')!==preLid, 'R9: tapping the Plan B pill switches to the fallback line');
+  // confidence tiers carry a color class
+  w.eval('(function(){ const dd=activeDeck(); const A=getLines(dd).find(l=>l.id==="'+preLid+'")||getLines(dd)[0]; dd.activeLineId=A.id; if(!A.turns.some(t=>t.length)) A.turns[0]=[dd.cards[0]]; touch(dd); renderLinePlan(); })()'); await sleep(20);
+  const rc = d.querySelector('#lineplan .lp-rconf');
+  assert(rc!==null && /good|mid|low/.test(rc.className), 'R9: read-view confidence is tiered (' + (rc?rc.className:'none') + ')');
+
+  assert(errors.length===0, 'R9: no runtime errors during the meta/coach/branch suite'+(errors.length?' -> '+errors.join(' | '):''));
+
   console.log('\nDONE. errors:', errors.length?errors:'none');
 })();

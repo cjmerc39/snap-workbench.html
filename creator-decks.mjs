@@ -213,6 +213,32 @@ async function main(){
   }
   fs.writeFileSync(OUT, JSON.stringify({ updated: today, decks: merged }, null, 2));
   console.log(`wrote ${merged.length} creator decks to ${OUT}`);
+
+  // ---- R9: rolling 30-day stats ledger (separate file so the 14-day display window stays tight) ----
+  // Ledger keeps every decodable harvested deck for STATS_DAYS, then emits per-card play counts and
+  // pair counts (pairs seen >= 2 only, to keep the file small). Additive contract; app degrades gracefully.
+  const STATS_DAYS = 30, SOUT = `creator-stats.json`;
+  let ledger = [];
+  try{ ledger = (JSON.parse(fs.readFileSync(SOUT, `utf8`)).ledger) || []; }catch(e){ /* first run */ }
+  const lmap = new Map();
+  for(const x of fresh.filter(x => x.ids && x.ids.length).concat(ledger)){
+    if(!x || !x.published || (nowMs - Date.parse(x.published)) >= STATS_DAYS * DAY) continue;
+    const k = dedupKey(x);
+    if(k && !lmap.has(k)) lmap.set(k, { creator: x.creator, published: x.published, ids: x.ids });
+  }
+  const led = [...lmap.values()];
+  const cardN = {}, pairN = {};
+  for(const dk of led){
+    const ids = [...new Set(dk.ids)];
+    ids.forEach(id => { cardN[id] = (cardN[id] || 0) + 1; });
+    for(let i=0;i<ids.length;i++) for(let j=i+1;j<ids.length;j++){
+      const key = [ids[i], ids[j]].sort().join(`|`);
+      pairN[key] = (pairN[key] || 0) + 1;
+    }
+  }
+  for(const k in pairN) if(pairN[k] < 2) delete pairN[k];
+  fs.writeFileSync(SOUT, JSON.stringify({ updated: today, windowDays: STATS_DAYS, deckCount: led.length, ledger: led, cards: cardN, pairs: pairN }, null, 1));
+  console.log(`wrote stats ledger: ${led.length} decks / ${Object.keys(cardN).length} cards / ${Object.keys(pairN).length} pairs (>=2) to ${SOUT}`);
 }
 
 main();

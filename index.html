@@ -824,6 +824,41 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   #modal{background:var(--card);}
 }
 
+/* ============ R9: play-line design pass + meta check + coach read ============ */
+.lp-card{background:linear-gradient(165deg, rgba(150,116,255,.10), rgba(20,12,36,.55) 45%); border-radius:var(--r-lg,16px);
+  padding:14px 12px 12px; box-shadow:inset 0 0 0 1px rgba(170,140,255,.16), 0 10px 26px -18px rgba(0,0,0,.9);}
+.lp-head{display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0 2px 10px;}
+.lp-name{font-family:var(--head); font-weight:800; font-size:13px; letter-spacing:.6px; text-transform:uppercase;}
+.lp-conf{font-size:11px; font-weight:800; padding:3px 9px; border-radius:999px;}
+.lp-conf.good,.lp-rconf.good{color:#0b1f17; background:var(--ok);}
+.lp-conf.mid,.lp-rconf.mid{color:#2a1509; background:var(--warn);}
+.lp-conf.low,.lp-rconf.low{color:#fff; background:#c0392b;}
+.lp-row{display:flex; align-items:center; gap:10px; padding:8px 6px 8px 0; position:relative; margin-left:14px;
+  border-bottom:1px solid rgba(255,255,255,.04);}
+.lp-row:last-of-type{border-bottom:none;}
+.lp-row::before{content:''; position:absolute; left:-14px; top:0; bottom:0; width:2px;
+  background:linear-gradient(180deg, rgba(170,140,255,.35), rgba(170,140,255,.08));}
+.lp-t{font-family:var(--head); font-weight:800; font-size:12px; color:var(--iris,#b794ff); min-width:24px;}
+.lp-chips .mini{width:44px;}
+.lp-energy{font-size:11px; font-weight:800; padding:2px 8px; border-radius:999px; background:rgba(122,162,255,.15); color:#9db8ff; white-space:nowrap;}
+.lp-energy.over{background:rgba(220,80,60,.25); color:#ff9c8a;}
+.lp-rconf{font-size:10px; font-weight:800; padding:2px 7px; border-radius:999px; margin-left:auto; white-space:nowrap;}
+.lp-branch{display:block; width:100%; margin-top:10px; padding:9px 12px; border:none; border-radius:12px; text-align:left;
+  font-size:12px; font-weight:700; color:var(--iris,#b794ff); background:rgba(150,116,255,.12);
+  box-shadow:inset 0 0 0 1px rgba(170,140,255,.25);}
+.pl-branch{display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin:8px 2px 10px; padding:8px 10px;
+  background:var(--glass-2); border-radius:10px; box-shadow:inset 0 0 0 1px var(--hair);}
+.pl-branch.info{opacity:.6;}
+.pl-branch-lab{font-family:var(--head); font-weight:800; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--iris,#b794ff);}
+.pl-branch-txt{font-size:11.5px; color:var(--dim);}
+.pl-bsel{background:var(--panel); color:var(--text,#eee); border:1px solid var(--line); border-radius:8px;
+  font-size:12px; padding:4px 6px; max-width:38%;}
+.mc-strip{display:flex; flex-wrap:wrap; gap:5px; margin:2px 0 8px;}
+.mc-chip{font-size:10.5px; font-weight:600; color:var(--dim); background:rgba(255,255,255,.05); border-radius:7px; padding:3px 7px; white-space:nowrap;}
+.mc-chip b{color:var(--gold); font-weight:800; margin-left:2px;}
+.mc-chip.spice{color:var(--faint); box-shadow:inset 0 0 0 1px rgba(255,255,255,.09); background:transparent;}
+.syn-ai-out{font-size:12.5px; line-height:1.55; color:var(--text,#eee); background:var(--glass-2); border-radius:12px;
+  padding:12px; margin-bottom:8px; box-shadow:inset 0 0 0 1px rgba(170,140,255,.18); white-space:pre-wrap;}
 </style>
 </head>
 <body>
@@ -2160,16 +2195,31 @@ function deckInteractions(cards){
 }
 /* --- R8: empirical evidence — pairs from this deck seen together in creator decks --- */
 function creatorPairEvidence(cards){
+  const ids = cards.map(c => c.d), rows = [];
+  const st = S.creatorStats;
+  if(st && st.deckCount >= 5){                       // R9: prefer the 30-day ledger (much deeper pool)
+    for(let i=0;i<ids.length;i++) for(let j=i+1;j<ids.length;j++){
+      const n = st.pairs[[ids[i], ids[j]].sort().join('|')] || 0;
+      if(n >= 2) rows.push({ a: ids[i], b: ids[j], n });
+    }
+    return rows.sort((x,y) => y.n - x.n).slice(0, 4);
+  }
   const pool = (S.creatorDecks||[]).concat(S.addedCreatorDecks||[]).filter(x => x && x.ids && x.ids.length);
   if(pool.length < 3) return [];
   const sets = pool.map(x => new Set(x.ids));
-  const ids = cards.map(c => c.d), rows = [];
   for(let i=0;i<ids.length;i++) for(let j=i+1;j<ids.length;j++){
     let n = 0;
-    for(const st of sets) if(st.has(ids[i]) && st.has(ids[j])) n++;
+    for(const s2 of sets) if(s2.has(ids[i]) && s2.has(ids[j])) n++;
     if(n >= 2) rows.push({ a: ids[i], b: ids[j], n });
   }
   return rows.sort((x,y) => y.n - x.n).slice(0, 4);
+}
+/* R9: per-card play rates vs the 30-day creator field */
+function metaCheckRows(cards){
+  const st = S.creatorStats;
+  if(!st || !st.deckCount) return null;
+  const rated = cards.map(c => ({ c, n: st.cards[c.d] || 0 })).sort((a,b) => b.n - a.n);
+  return { total: st.deckCount, inField: rated.filter(r => r.n > 0).length, rated };
 }
 
 /* --- C4: goldfish draw simulator --- */
@@ -2245,7 +2295,53 @@ function renderSynergy(cards){
     html += '<div class="syn-row info"><span class="syn-text">Light touches: ' +
       light.map(s => esc(s.label) + ' (' + (s.enablers + s.payoffs) + ' card' + ((s.enablers+s.payoffs)===1?'':'s') + ')').join(' · ') +
       '</span></div>';
+  // R9: Meta check — your card choices vs the 30-day creator field
+  const mc = metaCheckRows(cards);
+  if(mc){
+    const spice = mc.rated.filter(r => r.n === 0);
+    html += '<div class="syn-sec">Meta check · ' + mc.total + ' creator decks / 30 days</div>' +
+      '<div class="syn-row"><span class="syn-text">' + mc.inField + ' of your ' + cards.length + ' cards appear in the field</span></div>' +
+      '<div class="mc-strip">' + mc.rated.map(r =>
+        '<span class="mc-chip' + (r.n===0 ? ' spice' : '') + '">' + esc(r.c.n) + ' <b>' + (r.n || '·') + '</b></span>').join('') + '</div>' +
+      (spice.length ? '<div class="odds-hint">' + spice.length + ' off-meta pick' + (spice.length===1?'':'s') + ' — spice is legal.</div>' : '');
+  }
+  // R9: coach-powered synergy read (cached on the deck; costs pennies per run)
+  const dAI = activeDeck();
+  if(dAI && COACH_URL){
+    html += '<div class="syn-sec">Coach’s read</div>';
+    if(dAI.synAI && dAI.synAI.text){
+      html += '<div class="syn-ai-out" id="syn-ai-out">' + esc(dAI.synAI.text) + '</div>' +
+        '<div class="mrow"><button class="abtn subtle" id="syn-ai" type="button">Re-analyze (' + esc(dAI.synAI.at||'') + ')</button></div>';
+    } else {
+      html += '<div id="syn-ai-out" class="odds-hint" style="display:none"></div>' +
+        '<div class="mrow"><button class="abtn" id="syn-ai" type="button">✦ Ask the coach about these synergies</button></div>';
+    }
+  }
   wrap.innerHTML = html || '<div class="odds-hint">No package signal — this deck plays it straight, and that’s fine.</div>';
+  const aiBtn = $('#syn-ai'); if(aiBtn) aiBtn.onclick = coachSynergy;
+}
+async function coachSynergy(){
+  const d = activeDeck(); if(!d || !COACH_URL) return;
+  const btn = $('#syn-ai'), out = $('#syn-ai-out');
+  if(btn){ btn.disabled = true; btn.textContent = 'Analyzing…'; }
+  const prompt =
+    'You are a Marvel Snap synergy analyst. Card data below is from an up-to-date database; trust it over training data.\n\n' +
+    'Deck ("' + (d.name||'Deck') + '"):\n' + deckAsText() + '\n\n' +
+    'Analyze ONLY synergy: (1) the strongest engines in this deck, naming the exact cards and why they chain; ' +
+    '(2) tensions or anti-synergies between cards; (3) the single swap that would tighten the deck most. ' +
+    'Plain text, no markdown, under 180 words, no fluff.';
+  try{
+    const r = await fetch(COACH_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ prompt }) });
+    const j = await r.json();
+    if(j && j.error) throw new Error(j.error);
+    d.synAI = { text: (j && j.text) || '', at: new Date().toISOString().slice(0,10) };
+    touchMeta(d);   // meta edit: caching a coach read must not un-complete a done deck
+    renderSynergy(sortedDeckCards(d));
+  }catch(e){
+    if(out){ out.style.display = 'block'; out.textContent = 'Coach error: ' + (e && e.message ? e.message : 'network') + ' — try again.'; }
+    if(btn){ btn.disabled = false;
+      btn.textContent = (d.synAI && d.synAI.text) ? ('Re-analyze (' + (d.synAI.at||'') + ')') : '✦ Ask the coach about these synergies'; }
+  }
 }
 
 /* --- R5: deck verdict (self-rating, meta-edit — never clears "done") --- */
@@ -2487,7 +2583,11 @@ function normAdj(a){ const A = Array.isArray(a) ? a : []; const out = [0,0,0,0,0
   for(let i=0;i<6;i++){ let v = Math.round(+A[i] || 0); if(v < -2) v = -2; if(v > 3) v = 3; out[i] = v; } return out; }
 function newLineObj(name, turns){ return { id:uid(), name:String(name||''), turns:normLine(turns), adj:[0,0,0,0,0,0] }; }
 function normLineObj(o){ o = (o && typeof o === 'object') ? o : {};
-  return { id:o.id || uid(), name:String(o.name || ''), turns:normLine(o.turns), adj:normAdj(o.adj) }; }
+  const L = { id:o.id || uid(), name:String(o.name || ''), turns:normLine(o.turns), adj:normAdj(o.adj) };
+  const b = o.branch;   // R9: Plan B condition rides normalization {ifNot, byTurn, toLineId}
+  if(b && typeof b === 'object' && typeof b.ifNot === 'string' && b.ifNot && b.toLineId)
+    L.branch = { ifNot: b.ifNot, byTurn: Math.min(6, Math.max(1, +b.byTurn || 3)), toLineId: String(b.toLineId) };
+  return L; }
 function sameLine(a, b){ a = normLine(a); b = normLine(b);
   for(let i=0;i<6;i++){ if(a[i].length !== b[i].length) return false;
     for(let j=0;j<a[i].length;j++) if(a[i][j] !== b[i][j]) return false; } return true; }
@@ -2574,6 +2674,21 @@ function renderPlanner(){
       ? '<input class="pl-line-name-input" data-plname maxlength="40" value="' + esc(l.name || '') + '">'
       : '<button class="pl-line-chip' + (l.id === active.id ? ' on' : '') + '" data-lid="' + esc(l.id) + '" type="button">' + esc(l.name || 'Line') + '</button>'
   ).join('');
+  // R9: Plan B — link a fallback line to a draw condition ("if no Wong by T3 → Plan B")
+  const others = lines.filter(l => l.id !== active.id);
+  const br = active.branch || {};
+  const branchHtml = others.length
+    ? '<div class="pl-branch"><span class="pl-branch-lab">Plan B</span><span class="pl-branch-txt">if no</span>' +
+      '<select class="pl-bsel" data-plbcard><option value="">card…</option>' +
+        sortedDeckCards(d).map(c => '<option value="' + esc(c.d) + '"' + (br.ifNot===c.d?' selected':'') + '>' + esc(c.n) + '</option>').join('') + '</select>' +
+      '<span class="pl-branch-txt">by</span>' +
+      '<select class="pl-bsel" data-plbturn>' + [1,2,3,4,5,6].map(t => '<option value="' + t + '"' + ((br.byTurn||3)===t?' selected':'') + '>T' + t + '</option>').join('') + '</select>' +
+      '<span class="pl-branch-txt">→</span>' +
+      '<select class="pl-bsel" data-plbline><option value="">line…</option>' +
+        others.map(l => '<option value="' + esc(l.id) + '"' + (br.toLineId===l.id?' selected':'') + '>' + esc(l.name||'Line') + '</option>').join('') + '</select>' +
+      (br.ifNot ? '<button class="pl-line-tool" data-plbclear type="button" aria-label="Clear Plan B">×</button>' : '') +
+    '</div>'
+    : '<div class="pl-branch info"><span class="pl-branch-lab">Plan B</span><span class="pl-branch-txt">Duplicate this line first, then link the fallback here.</span></div>';
   const managerHtml =
     '<div class="pl-lines">' + chipsHtml +
       '<button class="pl-line-add" data-pladd type="button" aria-label="Add play line">&#65291;</button></div>' +
@@ -2581,7 +2696,7 @@ function renderPlanner(){
       '<button class="pl-line-tool" data-plrename type="button">Rename</button>' +
       '<button class="pl-line-tool" data-pldupe type="button">Duplicate</button>' +
       '<button class="pl-line-tool" data-pldel type="button"' + (lines.length <= 1 ? ' disabled' : '') + '>Delete</button>' +
-    '</div>';
+    '</div>' + branchHtml;
 
   box.innerHTML =
     managerHtml +
@@ -2589,6 +2704,20 @@ function renderPlanner(){
     hint + flagsHtml +
     '<div class="pl-actions"><button class="abtn primary" id="pl-auto">Auto-sketch</button><button class="abtn danger" id="pl-clear">Clear line</button></div>';
 
+  const bWrap = box.querySelector('.pl-branch:not(.info)');
+  if(bWrap){
+    const setBranch = () => {
+      const c = bWrap.querySelector('[data-plbcard]').value;
+      const t = +bWrap.querySelector('[data-plbturn]').value;
+      const l = bWrap.querySelector('[data-plbline]').value;
+      // getLines() hands out normalized copies — mutateActiveLine is the one real mutation point
+      mutateActiveLine(d, lo => { if(c && t && l) lo.branch = { ifNot: c, byTurn: t, toLineId: l }; else delete lo.branch; });
+      renderLinePlan(); renderPlanner();
+    };
+    bWrap.querySelectorAll('select').forEach(s => s.onchange = setBranch);
+    const bc = bWrap.querySelector('[data-plbclear]');
+    if(bc) bc.onclick = () => { mutateActiveLine(d, lo => { delete lo.branch; }); renderLinePlan(); renderPlanner(); };
+  }
   box.querySelectorAll('.pl-slot').forEach(slot => {
     slot.onclick = e => {
       const t = +slot.dataset.t;
@@ -2878,19 +3007,33 @@ function renderLinePlan(){
     const adjV = normAdj(active.adj)[t-1];
     const nudgeNote = adjV !== 0 ? ' <span class="lp-nudge-note" title="Manual energy nudge">' + (adjV>0?'+'+adjV:String(adjV)) + '⚡</span>'
       : (rampAuto(line, t, d) > 0 ? ' <span class="lp-nudge-note" title="+1 Energy from a ramp card the prior turn">ramp</span>' : '');
+    const tier = conf >= 70 ? 'good' : conf >= 40 ? 'mid' : 'low';   // R9: confidence reads as color, not just math
     rows.push('<div class="lp-row"><span class="lp-t">T' + t + '</span>' +
       '<div class="lp-chips">' + cards.map(miniHtml).join('') + '</div>' +
       '<span class="lp-energy' + (over?' over':'') + '">' + spent + '/' + b + '⚡</span>' + nudgeNote +
-      '<span class="lp-rconf">~' + conf + '% by T' + t + '</span></div>');
+      '<span class="lp-rconf ' + tier + '">~' + conf + '%</span></div>');
   }
-  const confChip = minConf === null ? '' : '<span class="lp-conf" title="Weakest-turn draw confidence for this line">' + minConf + '% line</span>';
+  const mTier = minConf === null ? '' : (minConf >= 70 ? 'good' : minConf >= 40 ? 'mid' : 'low');
+  const confChip = minConf === null ? '' : '<span class="lp-conf ' + mTier + '" title="Weakest-turn draw confidence for this line">' + minConf + '% line</span>';
+  // R9: Plan B pill — jumps the read view to the fallback line
+  let branchPill = '';
+  const br = active.branch;
+  if(br && br.ifNot && br.toLineId){
+    const tgt = lines.find(l => l.id === br.toLineId);
+    const bc = getCard(br.ifNot);
+    if(tgt && bc && d.cards.indexOf(br.ifNot) >= 0)
+      branchPill = '<button class="lp-branch" data-blid="' + esc(tgt.id) + '" type="button">Plan B: no ' + esc(bc.n) + ' by T' + br.byTurn + ' → ' + esc(tgt.name || 'Line') + ' ▸</button>';
+  }
   box.innerHTML = '<div class="lp-card">' + segHtml +
     '<div class="lp-head"><span class="lp-name">' + esc(active.name || 'Line') + '</span>' + confChip + '</div>' +
     (rows.length ? rows.join('') : '<div class="odds-hint">This line is empty — switch or plan it in Play line.</div>') +
+    branchPill +
     '</div>';
   box.querySelectorAll('.lp-seg button').forEach(b => {
     b.onclick = () => { const id = b.dataset.lid; if(id === d.activeLineId) return; setActiveLine(d, id); };
   });
+  const bp = box.querySelector('.lp-branch');
+  if(bp) bp.onclick = () => setActiveLine(d, bp.dataset.blid);
   box.querySelectorAll('.lp-chips .mini').forEach(m => {   // chips are read-only; a tap peeks the card sheet
     m.onclick = () => openCardSheet(m.dataset.d);
   });
@@ -3647,6 +3790,18 @@ async function loadCreatorDecks(){
     return true;
   }catch(e){ return false; }
 }
+/* R9: rolling 30-day meta stats (creator-stats.json) — deeper pool than the 14-day display decks */
+async function loadCreatorStats(){
+  try{
+    const r = await fetch('./creator-stats.json', {cache:'no-store'});
+    if(!r.ok) return false;
+    const j = await r.json();
+    if(!j || typeof j.cards !== 'object' || typeof j.pairs !== 'object') return false;
+    S.creatorStats = { deckCount: +j.deckCount || 0, windowDays: +j.windowDays || 30,
+      cards: j.cards || {}, pairs: j.pairs || {} };
+    return true;
+  }catch(e){ return false; }
+}
 async function boot(){
   const gotSite = await loadSiteData();
   if(!gotSite){
@@ -3657,6 +3812,7 @@ async function boot(){
   }
   indexDb();
   await loadCreatorDecks();   // independent + non-fatal; graceful absence -> Saved > Creator stays empty
+  await loadCreatorStats();   // R9: independent + non-fatal; synergy Meta check hides when absent
   const decksSaved = await sGet(K.decks);
   if(decksSaved && Array.isArray(decksSaved.decks)){
     S.decks = decksSaved.decks; S.activeId = decksSaved.activeId;
