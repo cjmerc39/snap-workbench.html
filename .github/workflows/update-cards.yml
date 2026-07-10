@@ -12,8 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: node update-cards.mjs
+      - run: node creator-decks.mjs
       - run: |
           git config user.name card-bot
           git config user.email actions@users.noreply.github.com
-          git add cards.json
-          git diff --cached --quiet || (git commit -m update-cards && git push)
+          git add cards.json creator-decks.json
+          git diff --cached --quiet || (git commit -m update-data && git push)

@@ -129,11 +129,18 @@ h1 .h-snap{color:var(--gold);}
 .tinfo{position:absolute; left:0; right:0; bottom:0; z-index:2; padding:22px 10px 9px;
   background:linear-gradient(transparent, rgba(13,10,23,.55) 22%, rgba(13,10,23,.92) 60%); backdrop-filter:blur(3px);}
 .tname{font-size:12.5px; font-weight:700; line-height:1.2; display:flex; align-items:center; gap:5px; text-shadow:0 1px 3px rgba(0,0,0,.6);}
-.ownpip{width:7px; height:7px; border-radius:50%; background:var(--ok); display:none; flex:0 0 auto;}
+/* nameless art: the name renders ONLY on art-less fallback tiles; art tiles expose it via title/aria-label */
+.tile:not(.noart) .tname{display:none;}
+.tile:not(.noart) .cname-scrim{display:none;}
+.mini:not(.noart) .mname{display:none;}
+/* owned pip: standalone corner dot on the tile root, survives name removal */
+.ownpip{position:absolute; bottom:7px; left:7px; z-index:4; width:8px; height:8px;
+  border-radius:50%; background:var(--ok); display:none;
+  box-shadow:0 0 0 2px rgba(11,7,20,.85);}
 .tile.owned .ownpip{display:block;}
 .tab{font-size:10.5px; color:var(--dim); line-height:1.35; margin-top:3px; min-height:29px;
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
-.tab .flav{font-style:italic; color:var(--faint);}
+.flav{font-style:italic; color:var(--faint);}   /* flavor/aside text everywhere (tiles, import preview note) */
 .tfoot{display:flex; justify-content:space-between; align-items:center; margin-top:5px;}
 .serpill{font-size:9.5px; font-weight:800; color:var(--dim); border:1px solid var(--line2); border-radius:5px; padding:1px 6px; letter-spacing:.5px; background:rgba(0,0,0,.28);}
 .ib{background:rgba(20,9,31,.72); border:1px solid var(--line2); color:var(--iris-soft); border-radius:8px; min-width:34px; height:30px; font-size:12px; font-weight:700;}
@@ -275,6 +282,19 @@ h1 .h-snap{color:var(--gold);}
 .saverow .sv-meta{font-size:11.5px; color:var(--faint); margin-top:2px;}
 .sv-btn{background:var(--panel); border:1px solid var(--line); color:var(--dim); border-radius:9px; padding:8px 11px; font-size:13px; font-weight:700;}
 .sv-btn.load{color:var(--gold); border-color:var(--gold);}
+/* creator decks (Saved > Creator segment) + import-preview card strip */
+#saved-mine[hidden], #saved-creator[hidden]{display:none;}
+.crow{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px; margin-bottom:10px;}
+.cr-head{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 8px; margin-bottom:8px;}
+.cr-creator{font-weight:800; font-size:13.5px; color:var(--gold);}
+.cr-video{flex:1; min-width:120px; font-size:12.5px; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.cr-date{font-size:11px; color:var(--faint);}
+.cr-strip, .dz-preview{display:grid; grid-template-columns:repeat(6,1fr); gap:5px; margin-bottom:10px;}
+.cr-strip .mini, .dz-preview .mini{width:auto; aspect-ratio:33/44; border-radius:7px;}
+.cr-strip .mini .ovl, .dz-preview .mini .ovl{width:14px; height:14px; font-size:8.5px; border-width:1.5px;}
+.cr-acts{display:flex; flex-wrap:wrap; gap:8px;}
+.cr-acts .abtn{flex:1; text-align:center; text-decoration:none; min-width:120px;}
+.cr-stale{font-size:11px; color:var(--faint); text-align:center; margin-top:2px;}
 
 /* ---------- AI ---------- */
 .presets{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;}
@@ -337,8 +357,6 @@ h1 .h-snap{color:var(--gold);}
 .tile.cmp .tinfo{display:none;}
 .tile.cmp .cname-scrim{position:absolute; bottom:0; left:0; right:0; padding:16px 5px 5px; font-size:10.5px; font-weight:700;
   text-align:center; background:linear-gradient(transparent, rgba(13,10,23,.92) 62%); line-height:1.15; z-index:2; text-shadow:0 1px 2px rgba(0,0,0,.6);}
-.tile.cmp .cname-scrim .ownpip{display:none; width:6px; height:6px; margin-right:3px; vertical-align:1px;}
-.tile.cmp.owned .cname-scrim .ownpip{display:inline-block;}
 .tile.cmp .tick{top:5px; right:5px; bottom:auto; width:20px; height:20px; font-size:12px;}
 .tile.cmp .ovl.tp{top:auto; bottom:32px; right:5px;}
 .tile.cmp .ovl.tc{top:5px; left:5px;}
@@ -420,14 +438,12 @@ h1 .h-snap{color:var(--gold);}
   padding:8px; margin-bottom:2px; overflow:hidden; transition:max-height var(--dur-2) var(--ease-inout);}
 #deckzone.closed{padding:0; margin-bottom:0; box-shadow:none; background:none;}
 #deckzone.closed #dz, #deckzone.closed #insight{display:none;}
-/* single horizontal scroll strip of 12 mini thumbs (was a 2x6 grid) */
-#dz{display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; margin-bottom:6px;
-  scrollbar-width:none; overscroll-behavior-x:contain; scroll-snap-type:x proximity;}
-#dz::-webkit-scrollbar{display:none;}
-#dz .mini{flex:0 0 42px; width:42px; border-radius:8px; scroll-snap-align:start;}
-#dz .mini .mname{font-size:7.5px; padding:10px 2px 3px;}
+/* deck: 2x6 grid of 12 mini slots, always visible (open by default) */
+#dz{display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin-bottom:6px;}
+#dz .mini{width:auto; aspect-ratio:33/44; border-radius:8px;}
 #dz .mini .ovl{width:15px; height:15px; font-size:9px; border-width:1.5px;}
-#dz .mini.empty{font-size:15px; flex:0 0 42px; width:42px;}
+#dz .mini.empty{width:auto; aspect-ratio:33/44; font-size:15px;}
+@media (max-width:360px){ #dz{gap:4px;} }
 #insight{display:flex; align-items:center; gap:12px;}
 #ins-curve{display:flex; align-items:flex-end; gap:3px; height:20px; flex:1;}
 #ins-curve i{flex:1; border-radius:2px 2px 0 0; background:linear-gradient(180deg,#8fd4ff,var(--cost)); min-height:2px;}
@@ -475,16 +491,41 @@ body.on-cards #toolbar{display:flex;}
 /* ---------- v5: build layout ---------- */
 #gridcol{min-width:0;}
 
-/* ---------- bottom-sheet: search / filter / sort ---------- */
-body.sheet-open{overflow:hidden;}
-#flyscrim{position:fixed; inset:0; z-index:59; background:rgba(6,3,16,.55);
-  backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
-  opacity:0; visibility:hidden; pointer-events:none;
-  transition:opacity var(--dur-2) var(--ease-out), visibility 0s linear var(--dur-2);}
-#flyscrim.on{opacity:1; visibility:visible; pointer-events:auto; transition:opacity var(--dur-2) var(--ease-out);}
+/* ---------- seamless search / filter / sort (non-blocking, no scrim) ---------- */
+body.sheet-open{overflow:hidden;}   /* engaged ONLY by the import/settings modal now */
+/* slim search bar — docked above the tab bar, live-filters with the grid visible */
+#searchbar{display:none; position:fixed; left:12px; right:12px; z-index:39;
+  bottom:calc(58px + env(safe-area-inset-bottom) + 14px);
+  align-items:center; gap:8px; padding:8px 12px; border-radius:var(--r-pill);
+  background:var(--glass-2); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  box-shadow:inset 0 0 0 1px var(--hair), var(--sh-2);
+  opacity:0; transform:translateY(8px); pointer-events:none;
+  transition:opacity var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out);}
+body.on-cards #searchbar.on{display:flex; opacity:1; transform:none; pointer-events:auto;}
+#searchbar #q{flex:1; background:none; border:none; color:var(--text); font-size:15px; min-width:0;}
+#searchbar #q:focus{outline:none;}
+#searchbar .sb-ic{width:18px; height:18px; stroke:var(--faint); fill:none; stroke-width:1.9; flex:0 0 auto;}
+#sb-x{background:none; border:none; color:var(--faint); font-size:20px; line-height:1; flex:0 0 auto;}
+@media (min-width:900px){ #searchbar{left:auto; right:14px; width:360px;} }
+/* one-tap Clear — bottom-left, opposite the toolbar; shown only when a search/filter is active */
+#btn-clearall{display:none; position:fixed; left:14px; z-index:39;
+  bottom:calc(58px + env(safe-area-inset-bottom) + 14px);
+  gap:6px; padding:0 14px; height:44px; border:none; border-radius:var(--r-pill);
+  background:var(--glass-2); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  box-shadow:inset 0 0 0 1px var(--hair), var(--sh-2);
+  color:var(--iris-soft); font-weight:800; font-size:13px;}
+body.on-cards #btn-clearall.on{display:inline-flex; align-items:center;}
+#clr-n{background:var(--iris); color:var(--iris-ink); border-radius:999px; min-width:16px; height:16px;
+  line-height:16px; font-size:10px; padding:0 3px; margin-left:2px;}
+#clr-n:empty{display:none;}
+/* while the search bar is open it owns the bottom band: tuck the clear pill + toolbar
+   so nothing collides with it (the bar has its own ×; an empty × closes the bar) */
+body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #toolbar{display:none;}
+/* filter / sort panel — partial-height, non-blocking, no scrim, no scroll-lock */
 #flyout{position:fixed; left:0; right:0; bottom:0; z-index:60;
-  max-height:76vh; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
-  border-radius:var(--r-sheet) var(--r-sheet) 0 0; padding:8px 16px calc(16px + env(safe-area-inset-bottom));
+  max-height:56vh; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
+  border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  padding:8px 16px calc(16px + env(safe-area-inset-bottom));
   background:var(--glass-2); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
   box-shadow:inset 0 0 0 1px var(--hair), var(--sh-3);
   opacity:0; visibility:hidden; pointer-events:none; transform:translateY(100%);
@@ -494,13 +535,13 @@ body.sheet-open{overflow:hidden;}
 .sheet-grab{width:36px; height:4px; border-radius:999px; background:rgba(255,255,255,.22); margin:2px auto 8px; flex:0 0 auto;}
 #fly-head{display:flex; align-items:center; justify-content:space-between; gap:8px;
   position:sticky; top:0; z-index:2; padding:2px 2px 8px; margin-bottom:4px;
-  background:linear-gradient(180deg, rgba(17,12,26,.94) 66%, transparent);}
+  background:linear-gradient(180deg, rgba(23,17,34,.55), transparent);}
 #fly-head .fly-title{font-family:var(--head); font-weight:800; letter-spacing:.2px; font-size:13px; text-transform:uppercase; color:var(--text);}
 #fly-close{background:var(--glass-2); border:none; box-shadow:inset 0 0 0 1px var(--hair); color:var(--dim);
   border-radius:var(--r-pill); width:32px; height:32px; font-size:19px; line-height:1; font-weight:400;
   transition:transform var(--dur-1) var(--ease-out);}
 #fly-close:active{transform:scale(.9);}
-#flyout #q{margin-bottom:12px;}
+#cardlist{padding-bottom:120px;}   /* clearance so floating clusters never cover the last row */
 
 /* ---------- v5: filter panel ---------- */
 #filterpanel{margin-bottom:0;}
@@ -513,7 +554,8 @@ body.sheet-open{overflow:hidden;}
 #fw-owned .chipn{float:right; color:var(--faint);}
 .owntoggle.on .chipn{color:#0a1f16;}
 
-.fwidget{display:block; background:var(--card); border:1px solid var(--line); border-radius:var(--r-md); margin-bottom:8px; overflow:hidden;}
+.fwidget{display:block; background:var(--glass); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-radius:var(--r-md); margin-bottom:8px; overflow:hidden;}
+.fwidget.open{box-shadow:inset 0 0 0 1px rgba(169,132,255,.25);}
 .fw-head{display:flex; align-items:center; gap:8px; width:100%; background:none; border:none; color:var(--text);
   padding:11px 13px; font-size:13.5px; font-weight:700; letter-spacing:.2px; text-align:left;
   transition:filter var(--dur-1) var(--ease-out);}
@@ -540,7 +582,6 @@ body.sheet-open{overflow:hidden;}
 @media (min-width:900px){
   main{max-width:1440px; margin-inline:auto;}
   /* desktop: anchored glass panel bottom-right, above the floating cluster */
-  #flyscrim{display:none;}
   #flyout{left:auto; right:14px; bottom:82px; width:360px; max-width:360px;
     max-height:min(70vh, calc(100dvh - 120px)); border-radius:var(--r-lg);
     transform:translateY(12px) scale(.98);}
@@ -569,13 +610,13 @@ body.sheet-open{overflow:hidden;}
   .tile:hover{transform:none !important;}
   .tile:active{transform:none !important;}
   .view.on, .dpane.on{animation:none !important;}
-  #flyout, #flyscrim{transition:opacity 1ms, visibility 0s !important;}
+  #flyout, #searchbar{transition:opacity 1ms, visibility 0s !important;}
 }
 
 /* ---------- fallback: solid fills where backdrop-filter is unsupported (test env / old browsers) ---------- */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   header, #tabbar, #buildtop, #toolbar, .gear, #collhead{background:var(--panel);}
-  #flyout{background:var(--panel);}
+  #flyout, #searchbar, #btn-clearall{background:var(--panel);}
   #modal{background:var(--card);}
 }
 
@@ -624,14 +665,12 @@ body.sheet-open{overflow:hidden;}
       </div>
       <div id="cardlist" class="tilegrid"></div>
     </div>
-    <div id="flyscrim"></div>
-    <div id="flyout" role="dialog" aria-label="Search, filter and sort" aria-modal="true">
+    <div id="flyout" role="dialog" aria-label="Filter and sort" aria-modal="false">
       <div class="sheet-grab"></div>
       <div id="fly-head">
         <span class="fly-title">Filter &amp; sort</span>
         <button id="fly-close" aria-label="Close filters">&times;</button>
       </div>
-      <input id="q" type="search" placeholder="Search name or ability" autocomplete="off">
       <aside id="filterpanel" aria-label="Filters and sort"></aside>
     </div>
   </section>
@@ -692,10 +731,17 @@ body.sheet-open{overflow:hidden;}
 
   <!-- SAVED -->
   <section class="view" id="view-saved">
-    <button class="abtn primary" id="btn-newdeck" style="width:100%">+ New deck</button>
-    <button class="abtn" id="btn-compare" style="width:100%;margin-top:8px">Compare two decks</button>
-    <div class="section-label">Saved decks</div>
-    <div id="savedlist"></div>
+    <div class="segment" id="savedseg"><button data-seg="mine" class="on">My decks</button><button data-seg="creator">Creator decks</button></div>
+    <div id="saved-mine">
+      <button class="abtn primary" id="btn-newdeck" style="width:100%">+ New deck</button>
+      <button class="abtn" id="btn-compare" style="width:100%;margin-top:8px">Compare two decks</button>
+      <div class="section-label">Saved decks</div>
+      <div id="savedlist"></div>
+    </div>
+    <div id="saved-creator" hidden>
+      <div class="section-label">Creator decks</div>
+      <div id="creatorlist"></div>
+    </div>
   </section>
 
   <!-- AI -->
@@ -725,8 +771,14 @@ body.sheet-open{overflow:hidden;}
   </section>
 </main>
 
+<div id="searchbar" aria-hidden="true">
+  <svg class="sb-ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+  <input id="q" type="search" placeholder="Search name or ability" autocomplete="off">
+  <button id="sb-x" aria-label="Clear search">&times;</button>
+</div>
+<button id="btn-clearall" aria-hidden="true">&times; Clear <span id="clr-n"></span></button>
 <div id="toolbar" aria-label="Search, sort, filter">
-  <button id="btn-search" aria-label="Search cards" aria-controls="flyout"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
+  <button id="btn-search" aria-label="Search cards" aria-controls="searchbar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
   <button id="btn-sort" aria-label="Sort" aria-controls="flyout" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M8 4v16"/><path d="M4 8l4-4 4 4"/><path d="M16 20V4"/><path d="M12 16l4 4 4-4"/></svg></button>
   <button id="btn-filter" aria-label="Filter" aria-controls="flyout" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M3 5h18l-7 8v5l-4 2v-7z"/></svg><span id="fcount"></span></button>
 </div>
@@ -750,10 +802,10 @@ const DB_BASE_LABEL = 'snapshot mid-2025';
 const ART_ROOT = 'https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/';
 // Self-hosted one-click refresh: deploy the companion Cloudflare Worker (snap-workbench-worker.js),
 // paste its URL here, and Settings grows a "Refresh card list" button. Leave empty inside Claude.
-const REFRESH_URL = '';
+const REFRESH_URL = 'https://snap-workbench.cj13mercado.workers.dev/cards';
 // Self-hosted AI coach: same worker, /coach route (it holds your Anthropic API key as a secret).
 // e.g. 'https://your-worker.workers.dev/coach'. Leave empty inside Claude (direct API works there).
-const COACH_URL = '';
+const COACH_URL = 'https://snap-workbench.cj13mercado.workers.dev/coach';
 
 /* ============ STATE ============ */
 const S = {
@@ -772,8 +824,10 @@ const S = {
   storageOK: (typeof window !== 'undefined' && !!window.storage),
   combo: { a:'', b:'' },   // WP2 combo-odds card selection (session only)
   sim: null,               // WP2 goldfish draw snapshot { order:[ids], shown:n }
+  creatorDecks: [],        // R4 harvested creator decks (from creator-decks.json)
+  creatorDecksLabel: '',   // R4 "updated" date from creator-decks.json
 };
-const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb', prefs:'snapwb-prefs' };
+const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb', prefs:'snapwb-prefs', creators:'snapwb-creators' };
 
 /* ============ UTIL ============ */
 const $ = s => document.querySelector(s);
@@ -862,7 +916,16 @@ function persistColl(){ sSet(K.coll, { owned:[...S.owned] }); }
 /* ============ DB ============ */
 function indexDb(){
   S.byId = {};
-  for(const c of S.db) S.byId[c.d] = c;
+  S.short = {};       // compressed token (vowel-stripped + hex length) -> CardDefId; null = collision (skip)
+  S.shortSkel = {};   // vowel-stripped skeleton only (no length suffix) -> CardDefId; null = collision; powers the fuzzy fallback
+  const skel = d => d.replace(/[aeiouyAEIOUY]/g,'');
+  for(const c of S.db){
+    S.byId[c.d] = c;
+    const k = skel(c.d) + c.d.length.toString(16).toUpperCase();
+    S.short[k] = (k in S.short) ? null : c.d;
+    const sk = skel(c.d);
+    S.shortSkel[sk] = (sk in S.shortSkel) ? null : c.d;
+  }
 }
 function getCard(defid){
   return S.byId[defid] || S.stubs[defid] || null;
@@ -973,6 +1036,43 @@ function parseCode(text){
     const r = tryDecode(cand);
     if(r) return { name: r.obj.Name || r.obj.name || '', ids: r.ids.slice(0,12) };
   }
+
+  /* ---- untapped decoders (additive; run ONLY after every JSON strategy failed).
+         Distinctive shapes + strict-majority guards mean no legacy input can reach here and win. */
+  const resolveShort = tok => {
+    if(S.short[tok]) return S.short[tok];               // exact compressed token
+    const sk = tok.replace(/[0-9A-Fa-f]+$/,'');         // fuzzy: drop trailing hex-length run, match skeleton
+    if(sk && S.shortSkel[sk]) return S.shortSkel[sk];
+    return null;
+  };
+  // (a) compressed comma-list of skeleton tokens (base64 of it, or raw). >=4 tokens, strict majority known.
+  const parseShortList = str => {
+    if(typeof str !== 'string' || !/^[A-Za-z0-9]+(?:,[A-Za-z0-9]+)+$/.test(str)) return null;
+    const toks = str.split(',');
+    const res = toks.map(resolveShort);
+    const nRes = res.filter(Boolean).length;
+    if(!(toks.length >= 4 && nRes*2 > toks.length)) return null;    // strict majority resolve to real cards
+    const ids = toks.map((t,i) => res[i] || t);                    // unknown token degrades to a raw stub id
+    return { name:'', ids: ids.slice(0,12) };
+  };
+  // (b) untapped.gg deck URL slug: cardIds joined by '-', then '_DeckName', with (possibly malformed) UTM tail.
+  const parseUntappedSlug = str => {
+    if(typeof str !== 'string' || !str) return null;
+    const m = str.match(/\/decks\/([^\s"'<>]+)/i);
+    let slug = m ? m[1] : str;
+    slug = slug.replace(/[?&]utm_[a-z_]+=[^&\s]*/gi,'').replace(/\?.*$/,'');
+    const u = slug.indexOf('_');
+    const name = u >= 0 ? safeDec(slug.slice(u+1)) : '';
+    const cardPart = u >= 0 ? slug.slice(0,u) : slug;
+    const ids = cardPart.split('-').filter(Boolean);
+    if(ids.length < 6) return null;                                // needs to look like a real deck
+    if(!(ids.filter(id => S.byId[id]).length*2 > ids.length)) return null;  // strict majority are real CardDefIds
+    return { name, ids: ids.slice(0,12) };
+  };
+  const b64tryDecode = c => { try{ let t=c.replace(/-/g,'+').replace(/_/g,'/').replace(/=+$/,''); while(t.length%4)t+='='; return b64d(t); }catch(e){ return ''; } };
+  for(const c of cands){ const r = parseShortList(b64tryDecode(c)) || parseShortList(c); if(r) return r; }
+  for(const c of cands.concat([s, decoded])){ const r = parseUntappedSlug(c); if(r) return r; }
+
   return { err:'Couldn\u2019t find a deck code in that. Paste the code Snap copied, or a share link.' };
 }
 
@@ -984,6 +1084,26 @@ function activeFilterCount(){
 function updateFilterBadge(){
   const n = activeFilterCount();
   $('#fcount').textContent = n ? n : '';
+}
+/* ---- one-tap global reset: search text + every filter facet ---- */
+function hasAnyActive(){ return !!S.filters.q.trim() || activeFilterCount() > 0; }
+function updateClearBtn(){
+  const btn = $('#btn-clearall'); if(!btn) return;
+  const on = hasAnyActive();
+  btn.classList.toggle('on', on);
+  const nFac = activeFilterCount(), nQ = S.filters.q.trim() ? 1 : 0, n = nFac + nQ;
+  const cn = $('#clr-n'); if(cn) cn.textContent = n ? n : '';
+  const parts = [];
+  if(nQ) parts.push('search');
+  if(nFac) parts.push(nFac + ' filter' + (nFac>1 ? 's' : ''));
+  btn.setAttribute('aria-label', 'Clear ' + (parts.join(' and ') || 'all'));
+  btn.setAttribute('aria-hidden', on ? 'false' : 'true');
+}
+function clearAllFilters(){
+  S.filters.cost.clear(); S.filters.mech.clear(); S.filters.series.clear(); S.filters.power.clear();
+  S.filters.owned = false; S.filters.q = '';
+  const q = $('#q'); if(q) q.value = '';
+  afterFilterChange();
 }
 /* ---- filter panel: always-in-DOM expandable widgets (no modal) ---- */
 function powBucketKey(p){ return p<=0 ? '<=0' : p<=3 ? '1-3' : p<=6 ? '4-6' : p<=9 ? '7-9' : '10+'; }
@@ -1083,7 +1203,7 @@ function toggleFacet(name){
   S.prefs.facetOpen[name] = open;
   sSet(K.prefs, S.prefs);
 }
-function afterFilterChange(){ renderCards(); updateFilterBadge(); renderActiveChips(); }
+function afterFilterChange(){ renderCards(); updateFilterBadge(); renderActiveChips(); updateClearBtn(); }
 function removeFilter(facet, v){
   if(facet==='owned'){ S.filters.owned = false; return; }
   const set = S.filters[facet];
@@ -1095,7 +1215,7 @@ $('#filterpanel').addEventListener('click', e => {
   const sortBtn = e.target.closest('[data-sort]');
   if(sortBtn){ S.sort = sortBtn.dataset.sort; renderCards(); return; }
   if(e.target.closest('#fw-owned')){ S.filters.owned = !S.filters.owned; afterFilterChange(); return; }
-  if(e.target.closest('#fp-clear')){ S.filters.cost.clear(); S.filters.mech.clear(); S.filters.series.clear(); S.filters.power.clear(); S.filters.owned=false; afterFilterChange(); return; }
+  if(e.target.closest('#fp-clear')){ clearAllFilters(); return; }
   const fpChip = e.target.closest('.fp-chip');
   if(fpChip){ removeFilter(fpChip.dataset.facet, fpChip.dataset.v); afterFilterChange(); return; }
   const chip = e.target.closest('.fw-body .chip');
@@ -1107,16 +1227,22 @@ $('#filterpanel').addEventListener('click', e => {
 });
 /* ---- flyout: sticky rail opens the relocated filter/sort panel ---- */
 function flyoutOpen(){ const f=$('#flyout'); return !!f && f.classList.contains('open'); }
-/* lock the page behind any open bottom sheet (flyout or modal) so momentum stays inside it */
+/* lock the page ONLY behind the import/settings modal — the search bar and filter/sort
+   panel are non-blocking (no scrim, no scroll-lock), so the grid stays live under the thumb */
 function syncScrollLock(){
   const mw = $('#modalwrap');
-  const on = flyoutOpen() || (mw && mw.classList.contains('on'));
+  const on = (mw && mw.classList.contains('on'));
   document.body.classList.toggle('sheet-open', !!on);
+}
+function setSearchbar(on){
+  const sb = $('#searchbar'); if(!sb) return;
+  sb.classList.toggle('on', on);
+  sb.setAttribute('aria-hidden', on ? 'false' : 'true');
 }
 function openFlyout(expandSort){
   const f = $('#flyout'); if(!f) return;
+  setSearchbar(false);                 // search + filter must not overlap
   f.classList.add('open');
-  const sc = $('#flyscrim'); if(sc) sc.classList.add('on');
   const bf=$('#btn-filter'), bs=$('#btn-sort');
   if(bf) bf.setAttribute('aria-expanded','true');
   if(bs) bs.setAttribute('aria-expanded','true');
@@ -1129,14 +1255,13 @@ function openFlyout(expandSort){
 function closeFlyout(){
   const f = $('#flyout'); if(!f) return;
   f.classList.remove('open');
-  const sc = $('#flyscrim'); if(sc) sc.classList.remove('on');
   const bf=$('#btn-filter'), bs=$('#btn-sort');
   if(bf) bf.setAttribute('aria-expanded','false');
   if(bs) bs.setAttribute('aria-expanded','false');
   syncScrollLock();
 }
 const SORTS = [
-  { k:'cost',  label:'Energy', fn:(a,b)=>(a.c-b.c)||(b.p-a.p)||a.n.localeCompare(b.n) },
+  { k:'cost',  label:'Energy', fn:(a,b)=>(a.c-b.c)||(a.p-b.p)||a.n.localeCompare(b.n) },
   { k:'power', label:'Power',  fn:(a,b)=>(b.p-a.p)||(a.c-b.c)||a.n.localeCompare(b.n) },
   { k:'name',  label:'Name',   fn:(a,b)=>a.n.localeCompare(b.n) },
 ];
@@ -1144,12 +1269,23 @@ S.sort = 'cost'; // DEFAULT = Energy (cost asc -> power DESC -> name A-Z)
 $('#btn-filter').onclick = () => { flyoutOpen() ? closeFlyout() : openFlyout(false); };
 $('#btn-sort').onclick   = () => { openFlyout(true); };
 if($('#btn-search')) $('#btn-search').onclick = () => {
-  openFlyout(false);
-  const focusQ = () => { const q = $('#q'); if(q) q.focus(); };
-  if(typeof requestAnimationFrame === 'function') requestAnimationFrame(focusQ); else focusQ();
+  const sb = $('#searchbar'); if(!sb) return;
+  closeFlyout();                        // search + filter must not overlap
+  const nowOpen = !sb.classList.contains('on');
+  setSearchbar(nowOpen);
+  if(nowOpen){
+    const focusQ = () => { const q = $('#q'); if(q) q.focus(); };
+    if(typeof requestAnimationFrame === 'function') requestAnimationFrame(focusQ); else focusQ();
+  }
 };
+if($('#sb-x')) $('#sb-x').onclick = () => {
+  const q = $('#q');
+  if(q && !q.value){ setSearchbar(false); return; }  // nothing to clear -> close the bar (the toolbar is tucked while searching)
+  if(q){ q.value = ''; q.focus(); }
+  S.filters.q = ''; renderCards(); updateClearBtn();
+};
+if($('#btn-clearall')) $('#btn-clearall').onclick = clearAllFilters;
 if($('#fly-close')) $('#fly-close').onclick = closeFlyout;
-if($('#flyscrim'))  $('#flyscrim').onclick  = closeFlyout;
 // click-away (desktop anchored popover has no scrim) + Escape close the flyout
 document.addEventListener('click', e => {
   if(!flyoutOpen()) return;
@@ -1160,6 +1296,8 @@ document.addEventListener('click', e => {
 document.addEventListener('keydown', e => {
   if(e.key !== 'Escape') return;
   if(flyoutOpen()){ closeFlyout(); return; }
+  const sb = $('#searchbar');
+  if(sb && sb.classList.contains('on')){ setSearchbar(false); return; }
   if($('#modalwrap').classList.contains('on')) closeModal();
 });
 function filteredCards(){
@@ -1181,14 +1319,15 @@ function tileHtml(c){
     ? '<img src="'+esc(url)+'" alt="" loading="lazy" decoding="async" onload="window._artOK=(window._artOK||0)+1" onerror="this.closest(\'.tile\').classList.add(\'noart\')">'
     : '';
   const ab = c.a ? esc(c.a) : (c.f ? '<span class="flav">&ldquo;'+esc(c.f)+'&rdquo;</span> <span class="flav">(no ability)</span>' : '<span class="flav">No ability</span>');
-  return '<div class="tile'+(inDeck(c.d)?' indeck':'')+(S.owned.has(c.d)?' owned':'')+(url?'':' noart')+'" data-d="'+esc(c.d)+'">'+
+  return '<div class="tile'+(inDeck(c.d)?' indeck':'')+(S.owned.has(c.d)?' owned':'')+(url?'':' noart')+'" data-d="'+esc(c.d)+'" title="'+esc(c.n)+'" aria-label="'+esc(c.n)+'">'+
+    '<span class="ownpip"></span>'+
     '<div class="tart" style="'+tileGrad(c)+'">'+img+
       '<span class="tinit">'+esc(initials(c))+'</span>'+
       '<span class="ovl tc">'+c.c+'</span><span class="ovl tp">'+c.p+'</span>'+
       '<span class="tick">&#10003;</span>'+
     '</div>'+
     '<div class="tinfo">'+
-      '<div class="tname"><span class="ownpip"></span>'+esc(c.n)+'</div>'+
+      '<div class="tname">'+esc(c.n)+'</div>'+
       '<div class="tab">'+ab+'</div>'+
       '<div class="tfoot"><span class="serpill">'+esc(c.s)+'</span><button class="ib">i</button></div>'+
     '</div></div>';
@@ -1198,13 +1337,14 @@ function tileHtmlCompact(c){
   const img = url
     ? '<img src="'+esc(url)+'" alt="" loading="lazy" decoding="async" onload="window._artOK=(window._artOK||0)+1" onerror="this.closest(\'.tile\').classList.add(\'noart\')">'
     : '';
-  return '<div class="tile cmp'+(inDeck(c.d)?' indeck':'')+(S.owned.has(c.d)?' owned':'')+(url?'':' noart')+'" data-d="'+esc(c.d)+'">'+
+  return '<div class="tile cmp'+(inDeck(c.d)?' indeck':'')+(S.owned.has(c.d)?' owned':'')+(url?'':' noart')+'" data-d="'+esc(c.d)+'" title="'+esc(c.n)+'" aria-label="'+esc(c.n)+'">'+
+    '<span class="ownpip"></span>'+
     '<div class="tart" style="'+tileGrad(c)+'">'+img+
       '<span class="tinit">'+esc(initials(c))+'</span>'+
       '<span class="ovl tc">'+c.c+'</span><span class="ovl tp">'+c.p+'</span>'+
       '<span class="tick">&#10003;</span>'+
     '</div>'+
-    '<div class="cname-scrim"><span class="ownpip"></span>'+esc(c.n)+'</div>'+
+    '<div class="cname-scrim">'+esc(c.n)+'</div>'+
     '<button class="cib">i</button>'+
   '</div>';
 }
@@ -1218,6 +1358,7 @@ function renderCards(){
   document.querySelectorAll('#densityseg button').forEach(b =>
     b.classList.toggle('on', (b.dataset.den === 'det') === !cmp));
   updateFacetCounts();
+  updateClearBtn();
 }
 document.querySelectorAll('#densityseg button').forEach(b => b.onclick = () => {
   S.prefs.density = b.dataset.den;
@@ -1312,7 +1453,7 @@ function renderCollection(){
   COLL_SERIES.forEach(k => {
     const g = groups[k]; if(!g.length) return;
     const own = g.filter(c => S.owned.has(c.d)).length;
-    const cards = g.slice().sort((a,b) => (a.c-b.c) || (b.p-a.p) || a.n.localeCompare(b.n));
+    const cards = g.slice().sort((a,b) => (a.c-b.c) || (a.p-b.p) || a.n.localeCompare(b.n));
     html += '<div class="coll-section" data-series="'+esc(k)+'">'+esc(collLabel(k))+
       ' <span class="cs-n">'+own+'/'+g.length+'</span></div>';
     html += '<div class="tilegrid cmp coll-grid">'+ cards.map(tileHtmlCompact).join('') +'</div>';
@@ -1582,7 +1723,7 @@ function miniHtml(c){
   const img = url
     ? '<img src="'+esc(url)+'" alt="" loading="lazy" decoding="async" onerror="this.closest(\'.mini\')&&this.closest(\'.mini\').classList.add(\'noart\')">'
     : '';
-  return '<div class="mini'+(url?'':' noart')+(c.stub?' stubby':'')+'" data-d="'+esc(c.d)+'" style="'+tileGrad(c)+'">'+
+  return '<div class="mini'+(url?'':' noart')+(c.stub?' stubby':'')+'" data-d="'+esc(c.d)+'" title="'+esc(c.n)+'" aria-label="'+esc(c.n)+'" style="'+tileGrad(c)+'">'+
     img+'<span class="minit">'+esc(initials(c))+'</span>'+
     '<span class="ovl tc">'+c.c+'</span><span class="ovl tp">'+c.p+'</span>'+
     '<div class="mname">'+esc(c.n)+'</div></div>';
@@ -1699,7 +1840,7 @@ function renderDeckbar(){ // kept name; now renders the pinned zone + header
   const d = ensureDeck();
   $('#bh-name').textContent = d.name;
   $('#bh-count').textContent = d.cards.length + '/12';
-  const open = S.zoneOpen === true; // default collapsed: grid-first, chrome stays under ~150px
+  const open = S.zoneOpen !== false; // default open (2x6); chevron tucks it (session-only, not persisted)
   $('#deckzone').classList.toggle('closed', !open);
   $('#bh-collapse').classList.toggle('flip', !open);
 
@@ -1743,7 +1884,7 @@ function syncStickyTop(){
   }catch(e){}
 }
 if(typeof window !== 'undefined') window.addEventListener('resize', syncStickyTop);
-$('#bh-collapse').onclick = () => { S.zoneOpen = S.zoneOpen !== true; renderDeckbar(); };
+$('#bh-collapse').onclick = () => { const open = S.zoneOpen !== false; S.zoneOpen = !open; renderDeckbar(); };
 $('#bh-name').onclick = () => setTab('deck');
 $('#bh-menu').onclick = () => {
   openModal(
@@ -1784,6 +1925,56 @@ function renderSaved(){
     wrap.appendChild(row);
   });
 }
+/* R4: Creator-decks segment of the Saved tab (harvested daily; see creator-decks.mjs). */
+function renderCreatorDecks(){
+  const wrap = $('#creatorlist'); if(!wrap) return;
+  wrap.innerHTML='';
+  if(!S.creatorDecks.length){
+    wrap.appendChild(el('div','warnbox','No creator decks yet — these refresh daily from Alexander Coccia, Coougarrr and Unfitparrot.'));
+    return;
+  }
+  const linkBtn = (href, label) => { const a=document.createElement('a'); a.className='abtn'; a.href=href; a.target='_blank'; a.rel='noopener noreferrer'; a.textContent=label; return a; };
+  S.creatorDecks.forEach(cd => {
+    const row = el('div','crow');
+    const head = el('div','cr-head');
+    head.appendChild(el('span','cr-creator', cd.creator));
+    if(cd.video) head.appendChild(el('span','cr-video', cd.video));
+    if(cd.published) head.appendChild(el('span','cr-date', cd.published));
+    row.appendChild(head);
+    if(cd.ids.length){
+      const strip = el('div','cr-strip');
+      strip.innerHTML = cd.ids.map(id => miniHtml(getCard(id) || makeStub(id))).join('');
+      row.appendChild(strip);
+    }
+    const acts = el('div','cr-acts');
+    if(cd.ids.length){
+      const saveB = el('button','abtn primary','Save a copy');
+      saveB.onclick = () => {
+        const unknown = cd.ids.filter(id => !S.byId[id]); unknown.forEach(makeStub);
+        const dk = { id:uid(), name: cd.name || (cd.creator + ' deck'), cards: cd.ids.slice(0,12), updated: Date.now() };
+        S.decks.unshift(dk); S.activeId = dk.id; persistDecks(); renderAll(); setTab('deck');
+        toast('Saved “' + dk.name + '”');
+      };
+      acts.appendChild(saveB);
+    } else if(cd.untapped){
+      acts.appendChild(linkBtn(cd.untapped, 'View on untapped'));
+    }
+    if(cd.url) acts.appendChild(linkBtn(cd.url, 'Watch'));
+    row.appendChild(acts);
+    wrap.appendChild(row);
+  });
+  if(S.creatorDecksLabel){
+    const age = (Date.now() - Date.parse(S.creatorDecksLabel)) / 86400000;
+    if(!isNaN(age) && age > 14) wrap.appendChild(el('div','cr-stale','updated ' + S.creatorDecksLabel));
+  }
+}
+document.querySelectorAll('#savedseg button').forEach(b => b.onclick = () => {
+  const seg = b.dataset.seg;
+  document.querySelectorAll('#savedseg button').forEach(x => x.classList.toggle('on', x === b));
+  $('#saved-mine').hidden = seg !== 'mine';
+  $('#saved-creator').hidden = seg !== 'creator';
+  if(seg === 'creator') renderCreatorDecks();
+});
 $('#btn-newdeck').onclick = () => {
   const d = { id:uid(), name:'New Deck', cards:[], updated:Date.now() };
   S.decks.unshift(d); S.activeId = d.id; persistDecks(); renderAll(); setTab('cards'); toast('New deck started');
@@ -1825,23 +2016,56 @@ async function doCopyCode(){
     '<div class="mrow"><button class="abtn primary" onclick="document.getElementById(\'modalwrap\').classList.remove(\'on\')">Done</button></div>'
   );
 }
-function openImport(){
-  openModal(
-    '<h2>Import deck code</h2>'+
-    '<textarea id="importbox" placeholder="Paste a deck code from Snap (or from a friend)"></textarea>'+
-    '<div id="importmsg"></div>'+
-    '<div class="mrow"><button class="abtn" id="m-cancel">Cancel</button><button class="abtn primary" id="m-doimport">Import</button></div>'
-  );
+/* Clipboard-first: on the button gesture, try to read the clipboard; if it yields a
+   deck, preview -> confirm; otherwise fall back to the paste box. Every failure mode
+   (empty / denied / unsupported / jsdom / iframe) drops straight to the box. */
+async function openImport(){
+  openModal('<h2>Import deck</h2><div id="import-body"></div>');
+  let text=''; try{ text = await navigator.clipboard.readText(); }catch(e){}
+  const r = text ? parseCode(text) : {err:1};
+  if(!r.err) showImportPreview(r);
+  else showImportBox(text ? 'No deck code on the clipboard — paste one below.' : '');
+}
+function saveImportedDeck(r){
+  const unknown = r.ids.filter(id => !S.byId[id]);
+  unknown.forEach(makeStub);
+  const d = { id:uid(), name: r.name || 'Imported Deck', cards: r.ids, updated: Date.now() };
+  S.decks.unshift(d); S.activeId = d.id; persistDecks();
+  closeModal(); renderAll(); setTab('deck');
+  toast('Imported ' + r.ids.length + ' cards' + (unknown.length ? ' (' + unknown.length + ' unknown)' : ''));
+}
+function showImportPreview(r){
+  const body = $('#import-body'); if(!body) return;
+  const unknown = r.ids.filter(id => !S.byId[id]);
+  const strip = r.ids.map(id => miniHtml(getCard(id) || makeStub(id))).join('');
+  body.innerHTML =
+    '<div class="mnote"><b>'+esc(r.name||'Imported Deck')+'</b> · '+r.ids.length+' cards'+(unknown.length?' <span class="flav">('+unknown.length+' unknown)</span>':'')+'</div>'+
+    '<div id="importpreview" class="dz-preview">'+strip+'</div>'+
+    '<div class="mrow"><button class="abtn primary" id="imp-confirm">Add to my decks</button></div>'+
+    '<div class="mrow"><button class="abtn" id="imp-manual">Paste a different code</button><button class="abtn" id="imp-cancel">Cancel</button></div>';
+  $('#imp-confirm').onclick = () => saveImportedDeck(r);
+  $('#imp-manual').onclick = () => showImportBox('');
+  $('#imp-cancel').onclick = closeModal;
+}
+function showImportBox(msg){
+  const body = $('#import-body'); if(!body) return;
+  body.innerHTML =
+    '<textarea id="importbox" placeholder="Paste a deck code from Snap, an untapped.gg link, or a friend’s code"></textarea>'+
+    '<div id="importmsg">'+(msg?'<div class="mbad">'+esc(msg)+'</div>':'')+'</div>'+
+    '<div class="mrow"><button class="abtn" id="m-clip">Paste from clipboard</button></div>'+
+    '<div class="mrow"><button class="abtn" id="m-cancel">Cancel</button><button class="abtn primary" id="m-doimport">Import</button></div>';
+  const fail = m => { $('#importmsg').innerHTML = '<div class="mbad">'+esc(m)+'</div>'; };
   $('#m-cancel').onclick = closeModal;
   $('#m-doimport').onclick = () => {
     const r = parseCode($('#importbox').value);
-    if(r.err){ $('#importmsg').innerHTML = '<div class="mbad">'+esc(r.err)+'</div>'; return; }
-    const unknown = r.ids.filter(id => !S.byId[id]);
-    unknown.forEach(makeStub);
-    const d = { id:uid(), name: r.name || 'Imported Deck', cards: r.ids, updated: Date.now() };
-    S.decks.unshift(d); S.activeId = d.id; persistDecks();
-    closeModal(); renderAll(); setTab('deck');
-    toast('Imported ' + r.ids.length + ' cards' + (unknown.length ? ' (' + unknown.length + ' unknown)' : ''));
+    if(r.err){ fail(typeof r.err==='string' ? r.err : 'Couldn’t find a deck code in that. Paste the code Snap copied, or a share link.'); return; }
+    showImportPreview(r);
+  };
+  $('#m-clip').onclick = async () => {
+    let text=''; try{ text = await navigator.clipboard.readText(); }catch(e){}
+    const r = text ? parseCode(text) : {err:1};
+    if(r.err){ fail(text ? 'No deck code on the clipboard — paste one below.' : 'Couldn’t read the clipboard here — paste below instead.'); return; }
+    showImportPreview(r);
   };
 }
 $('#btn-copycode').onclick = doCopyCode;
@@ -2079,11 +2303,13 @@ document.querySelectorAll('#tabbar button').forEach(b => b.onclick = () => setTa
 let _qT;
 $('#q').addEventListener('input', e => {
   clearTimeout(_qT);
-  _qT = setTimeout(() => { S.filters.q = e.target.value; renderCards(); }, 120);
+  _qT = setTimeout(() => { S.filters.q = e.target.value; renderCards(); updateClearBtn(); }, 120);
 });
 
 function renderAll(){
   renderCards(); renderDeck(); renderDeckbar(); renderSaved();
+  const sc = $('#saved-creator');
+  if(sc && !sc.hidden) renderCreatorDecks();       // creator rows are heavy (30×12 minis) — render only while that segment is visible; the segment switch renders it otherwise
   if(S.tab === 'collection') renderCollection();   // keep the Collection grid in sync while it's the visible tab (detail sheet <-> grid)
 }
 async function loadSiteData(){
@@ -2105,6 +2331,24 @@ async function loadSiteData(){
     return true;
   }catch(e){ return false; }
 }
+/* R4: harvested creator decks (creator-decks.json, generated daily by creator-decks.mjs).
+   Mirrors loadSiteData: same-origin fetch, tolerant of absence (Saved > Creator stays empty). */
+async function loadCreatorDecks(){
+  try{
+    const r = await fetch('./creator-decks.json', {cache:'no-store'});
+    if(!r.ok) return false;
+    const j = await r.json();
+    const arr = Array.isArray(j) ? j : j.decks;
+    if(!Array.isArray(arr)) return false;
+    S.creatorDecks = arr.filter(x => x && x.creator && x.video).map(x => ({
+      creator:String(x.creator), video:String(x.video), url:String(x.url||''),
+      published:String(x.published||''), name:String(x.name||''),
+      ids:Array.isArray(x.ids)?x.ids.filter(Boolean):[],
+      untapped:x.untapped?String(x.untapped):'' }));
+    S.creatorDecksLabel = (j && j.updated) ? String(j.updated) : '';
+    return true;
+  }catch(e){ return false; }
+}
 async function boot(){
   const gotSite = await loadSiteData();
   if(!gotSite){
@@ -2114,6 +2358,7 @@ async function boot(){
     }
   }
   indexDb();
+  await loadCreatorDecks();   // independent + non-fatal; graceful absence -> Saved > Creator stays empty
   const decksSaved = await sGet(K.decks);
   if(decksSaved && Array.isArray(decksSaved.decks)){
     S.decks = decksSaved.decks; S.activeId = decksSaved.activeId;

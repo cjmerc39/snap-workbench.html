@@ -5,7 +5,9 @@ const errors = [];
 const dom = new JSDOM(html, {
   runScripts: 'dangerously', url: 'https://example.com/',
   beforeParse(w){ w.TextEncoder=TextEncoder; w.TextDecoder=TextDecoder; w.confirm=()=>true; w.scrollTo=()=>{};
-    w.fetch = async () => ({ json: async () => ({ content:[{type:'text',text:'mock coach reply'}] }) }); },
+    w.fetch = async () => ({ json: async () => ({ content:[{type:'text',text:'mock coach reply'}], text:'mock coach reply' }) });
+    Object.defineProperty(w.navigator,'clipboard',{configurable:true,
+      value:{ readText:async()=>w.__clip||'', writeText:async()=>true }}); },
 });
 dom.window.addEventListener('error', e => errors.push(e.message));
 const w = dom.window, d = w.document;
@@ -17,20 +19,20 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(errors.length===0, 'no runtime errors on boot'+(errors.length?' -> '+errors.join(' | '):''));
   assert(d.querySelectorAll('#cardlist .tile').length===357, 'renders 357 tiles');
 
-  // --- round-2 restyle: sorting (Energy default: cost asc -> power desc -> name) ---
+  // --- round-2 restyle: sorting (Energy default: cost asc -> power asc -> name) ---
   assert(w.eval('SORTS.length')===3, 'SORTS has exactly 3 entries');
   assert(w.eval('SORTS.map(s=>s.k).join()')==='cost,power,name', 'SORTS keys are [cost,power,name]');
   assert(w.eval('SORTS.every(s=>s.k!=="series")'), 'series removed from SORTS (stays a filter facet only)');
   assert(w.eval('SORTS[0].fn({c:1},{c:2})')<0, 'Energy fn: lower cost sorts first');
-  assert(w.eval('SORTS[0].fn({c:2,p:3,n:"B"},{c:2,p:9,n:"A"})')>0, 'Energy fn: equal cost -> higher power first (power desc)');
+  assert(w.eval('SORTS[0].fn({c:2,p:3,n:"B"},{c:2,p:9,n:"A"})')<0, 'Energy fn: equal cost -> lower power first (power asc)');
   assert(w.eval('SORTS[0].fn({c:2,p:5,n:"B"},{c:2,p:5,n:"A"})')>0, 'Energy fn: equal cost+power -> name ascending');
   assert(/Energy/.test(d.querySelector('#fw-sort [data-sort="cost"]').textContent), 'cost sort chip is labelled "Energy"');
   const bootOrder = w.eval('(function(){var t=[].slice.call(document.querySelectorAll("#cardlist .tile")).map(function(e){return e.dataset.d;});'+
     'var cost=function(id){return getCard(id).c;},pow=function(id){return getCard(id).p;};var mono=true,tie=false;'+
-    'for(var i=1;i<t.length;i++){if(cost(t[i-1])>cost(t[i]))mono=false;if(cost(t[i-1])===cost(t[i])&&pow(t[i-1])>=pow(t[i]))tie=true;}'+
+    'for(var i=1;i<t.length;i++){if(cost(t[i-1])>cost(t[i]))mono=false;if(cost(t[i-1])===cost(t[i])&&pow(t[i-1])>pow(t[i]))tie=true;}'+
     'return {mono:mono,firstLE:cost(t[0])<=cost(t[t.length-1]),tie:tie};})()');
   assert(bootOrder.mono && bootOrder.firstLE, 'boot grid renders in Energy order (cost non-decreasing)');
-  assert(bootOrder.tie, 'Energy sort breaks equal-cost ties by power descending');
+  assert(!bootOrder.tie, 'Energy sort breaks equal-cost ties by power ascending (no descending pair)');
 
   // art URL synthesis
   const u1 = w.eval('artUrl(S.byId["AbsorbingMan"])');
@@ -96,7 +98,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.querySelector('#m-clip')!==null, 'clipboard update button present');
   w.eval('closeModal()');
   w.eval('document.getElementById("btn-settings").onclick()'); await sleep(20);
-  assert(d.querySelector('#m-refresh')===null, 'one-click refresh hidden when REFRESH_URL empty');
+  assert(d.querySelector('#m-refresh')!==null, 'one-click refresh shown when REFRESH_URL configured');
   w.eval('closeModal()');
   const addedN = await w.eval('applyDb(S.db.concat([{n:"Fake New",d:"FakeNew1",c:2,p:3,a:"On Reveal: test.",s:"5"}]))');
   assert(addedN===1 && w.eval('S.byId["FakeNew1"].n')==='Fake New', 'applyDb merges and indexes new cards');
@@ -128,11 +130,12 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(filled===cnt1, 'zone shows '+cnt1+' filled + '+(12-cnt1)+' empty');
   if(filled){ d.querySelector('#dz .mini:not(.empty)').click(); await sleep(30);
     assert(w.eval('activeDeck().cards.length')===cnt1-1, 'tapping a zone card removes it'); }
-  assert(d.querySelector('#deckzone').classList.contains('closed'), 'zone starts collapsed (grid-first default)');
+  assert(!d.querySelector('#deckzone').classList.contains('closed'), 'deck zone open by default (2x6 grid-first)');
+  assert(/#dz\{[^}]*grid-template-columns:repeat\(6,/.test(html), 'deck zone is a 6-column grid (2 rows for 12)');
   d.querySelector('#bh-collapse').click(); await sleep(20);
-  assert(!d.querySelector('#deckzone').classList.contains('closed'), 'collapse button opens the tray');
+  assert(d.querySelector('#deckzone').classList.contains('closed'), 'first collapse click tucks the zone away');
   d.querySelector('#bh-collapse').click(); await sleep(20);
-  assert(d.querySelector('#deckzone').classList.contains('closed'), 'zone collapses again');
+  assert(!d.querySelector('#deckzone').classList.contains('closed'), 'second collapse click re-opens the zone');
   // in-deck collection tiles gray out (class present in compact mode)
   const someInDeck = w.eval('activeDeck().cards[0]');
   if(someInDeck) assert(d.querySelector('#cardlist .tile[data-d="'+someInDeck+'"]').classList.contains('indeck'), 'in-deck collection tile carries gray state');
@@ -223,19 +226,60 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(w.eval('/(^| )noart( |")/.test(tileHtmlCompact(makeStub("ZzTest2026")))'), 'stub tile is flagged .noart so its gems display');
   assert(d.querySelector('#cardlist .tile:not(.noart) .ovl') !== null, 'art tiles retain gem markup in the DOM (CSS-hidden, not removed)');
 
-  // --- WP1: bottom sheet behaviour (search focus, scroll-lock, scrim + Escape dismiss) ---
+  // --- WP1 round-4: nameless art tiles (name only on .noart fallback; a11y via title/aria-label) ---
+  assert(/\.tile:not\(\.noart\) \.tname\{display:none/.test(html), 'art tiles hide the detail name');
+  assert(/\.tile:not\(\.noart\) \.cname-scrim\{display:none/.test(html), 'art tiles hide the grid name scrim');
+  assert(/\.mini:not\(\.noart\) \.mname\{display:none/.test(html), 'art minis hide the name label');
+  const artTile = d.querySelector('#cardlist .tile:not(.noart)');
+  assert(artTile && (artTile.getAttribute('aria-label')||'').length>0, 'art tile exposes its name via aria-label');
+  assert(artTile && (artTile.getAttribute('title')||'').length>0, 'art tile exposes its name via title (hover)');
+  assert(d.querySelector('#cardlist .tile > .ownpip')!==null, 'owned pip is a standalone direct child of the tile root');
+  assert(/\.tile\.owned \.ownpip\{display:block/.test(html), 'owned pip shows on owned tiles');
+  assert(w.eval('/cname-scrim/.test(tileHtmlCompact(makeStub("ZzTest2026")))'), 'noart stub keeps its visible name scrim');
+  assert(w.eval('/(^| )noart( |")/.test(tileHtmlCompact(makeStub("ZzTest2026")))'), 'stub tile is flagged .noart so its name shows');
+
+  // --- WP1 round-4: seamless search bar + non-blocking filter panel (no scrim, no scroll-lock) ---
   w.eval('setTab("cards")'); await sleep(10);
   const sheet = d.querySelector('#flyout');
+  const searchbar = d.querySelector('#searchbar');
+  assert(searchbar!==null && d.querySelector('#searchbar #q')!==null, 'slim #searchbar holds the relocated search input');
+  assert(d.querySelector('#flyscrim')===null, 'the blocking scrim element is gone');
   d.querySelector('#btn-search').click(); await sleep(30);
-  assert(sheet.classList.contains('open'), '#btn-search opens the sheet');
+  assert(searchbar.classList.contains('on'), '#btn-search opens the slim search bar');
   assert(d.activeElement && d.activeElement.id === 'q', '#btn-search focuses the search field');
-  assert(d.body.classList.contains('sheet-open'), 'opening the sheet locks page scroll (body.sheet-open)');
-  d.querySelector('#flyscrim').click(); await sleep(20);
-  assert(!sheet.classList.contains('open') && !d.body.classList.contains('sheet-open'), 'scrim tap closes the sheet and releases scroll-lock');
+  assert(!d.body.classList.contains('sheet-open'), 'the search bar does NOT lock page scroll');
+  // live search narrows the visible grid while the bar stays open and nothing is locked
+  const _preSearch = d.querySelectorAll('#cardlist .tile').length;
+  const _qEl = d.querySelector('#q'); _qEl.value='hulk';
+  _qEl.dispatchEvent(new w.Event('input',{bubbles:true})); await sleep(160);
+  assert(d.querySelectorAll('#cardlist .tile').length < _preSearch, 'typing live-filters the visible grid');
+  assert(searchbar.classList.contains('on') && !d.body.classList.contains('sheet-open'), 'grid filters live with the bar open and no scroll-lock');
+  // one-tap Clear pill: appears when active, zeroes BOTH search text and filter facets
+  d.querySelector('#fw-cost .chip[data-v="1"]').click(); await sleep(30);
+  const clearBtn = d.querySelector('#btn-clearall');
+  assert(clearBtn.classList.contains('on'), 'clear-all pill shows when a search/filter is active');
+  clearBtn.click(); await sleep(30);
+  assert(w.eval('S.filters.q')==='' && w.eval('S.filters.cost.size')===0, 'one tap clears search text and every filter facet');
+  assert(!clearBtn.classList.contains('on'), 'clear-all pill hides once nothing is active');
+  assert(d.querySelector('#q').value==='', 'clearing also empties the search input');
+  // finalize: the open bar owns the bottom band — clear pill + toolbar tuck away, x doubles as close
+  assert(/#searchbar\.on ~ #btn-clearall, body\.on-cards #searchbar\.on ~ #toolbar\{display:none/.test(html), 'open search bar tucks the clear pill and toolbar (no bottom-band collision)');
+  _qEl.value='hulk'; _qEl.dispatchEvent(new w.Event('input',{bubbles:true})); await sleep(160);
+  d.querySelector('#sb-x').click(); await sleep(20);
+  assert(d.querySelector('#q').value==='' && searchbar.classList.contains('on'), 'search x with text clears the query but keeps the bar open');
+  d.querySelector('#sb-x').click(); await sleep(20);
+  assert(!searchbar.classList.contains('on'), 'search x with an empty query closes the bar (mobile escape while the toolbar is tucked)');
+  d.querySelector('#btn-search').click(); await sleep(30);
+  // filter/sort panel: opens non-blocking, closes the still-open search bar, live-updates
+  assert(searchbar.classList.contains('on'), 'search bar is still open before filtering');
   d.querySelector('#btn-filter').click(); await sleep(20);
-  assert(sheet.classList.contains('open') && d.body.classList.contains('sheet-open'), 'filter reopens the sheet + relocks');
+  assert(sheet.classList.contains('open') && !searchbar.classList.contains('on'), 'opening filter closes the search bar (never overlap)');
+  assert(!d.body.classList.contains('sheet-open'), 'the filter panel does NOT lock page scroll');
+  d.querySelector('#fw-cost .chip[data-v="2"]').click(); await sleep(20);
+  assert(w.eval('S.filters.cost.size')===1 && sheet.classList.contains('open'), 'facet click live-updates while the panel stays open');
   d.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true})); await sleep(20);
-  assert(!sheet.classList.contains('open'), 'Escape closes the sheet');
+  assert(!sheet.classList.contains('open'), 'Escape closes the filter panel');
+  w.eval('clearAllFilters()'); await sleep(20);
   // toolbar is Build-only chrome
   assert(html.includes('body.on-cards #toolbar'), 'floating cluster is gated to the Build tab (body.on-cards)');
 
@@ -357,7 +401,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const toolbar = d.querySelector('#toolbar');
   assert(toolbar && toolbar.querySelector('#btn-search') && toolbar.querySelector('#btn-sort') && toolbar.querySelector('#btn-filter'),
     'floating #toolbar cluster holds search / sort / filter');
-  assert(d.querySelector('#flyout #q') !== null, 'search input relocated into the bottom sheet');
+  assert(d.querySelector('#searchbar #q') !== null && d.querySelector('#flyout #q') === null, 'search input relocated into the slim #searchbar (out of the sheet)');
   assert(d.querySelector('#flyout #filterpanel') !== null, 'filter panel stays inside the bottom sheet');
 
   // --- v5 responsive / sticky offset ---
@@ -473,6 +517,82 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   // regression: every legacy-accepted input still parses
   assert(!w.eval('parseCode('+JSON.stringify(realCode)+')').err, 'import regression: plain base64 still parses');
   assert(!w.eval('parseCode('+JSON.stringify(realCode.replace(/=+$/,''))+')').err, 'import regression: unpadded still parses');
+
+  // ============ WP2 round-4: untapped decoders + clipboard import + creator decks ============
+  // reset to the REAL shipped card set so S.short / S.byId reflect it (prior tests swapped in fake site cards)
+  w.eval('S.db = DB_BASE.slice(); indexDb();'); await sleep(10);
+
+  // --- D: owner's exact untapped compressed payload (canonical regression) ---
+  const PAYLOAD='TmNobHNTY3J0Y2hGLFNwZHJNbkJybmROd0QxNCxDbDQsTXJsbjYsTXJ2bEI5LFByd2xyNyxCc2hwNixWbnM1LFdiU2xuZzgsVGhDbGxjdHJDLFdyd2xmQk5naHRGLFNzcXRjaDk=';
+  const rp = w.eval('parseCode('+JSON.stringify(PAYLOAD)+')');
+  assert(!rp.err && rp.ids.length===12, 'owner untapped compressed payload -> 12 cards');
+  assert(rp.ids[0]==='NicholasScratch' && rp.ids[11]==='Sasquatch', 'compressed tokens map in order');
+  assert(rp.ids.filter(id=>w.eval('!!S.byId["'+id+'"]')).length>=8, 'clear majority resolve to real cards (rest stub)');
+  // compressed decoder needs a strict majority-known list; a mostly-garbage comma list is rejected
+  assert(w.eval('parseCode("zzz,qqq,vvv,xxx,jjj,kkk").err'), 'compressed decoder rejects a non-majority comma list');
+
+  // --- D: untapped URL slug (DB-known ids) ---
+  const SLUGIDS=['Hulk','AntMan','Wong','Odin','Ironheart','MisterFantastic','Klaw','Cyclops','Sentinel','Hawkeye','Nightcrawler','Angela'];
+  const su='https://snap.untapped.gg/en/decks/'+SLUGIDS.join('-')+'_MyDeck?utm_medium=affiliate&utm_campaign=alexcoccia';
+  const rs=w.eval('parseCode('+JSON.stringify(su)+')');
+  assert(!rs.err && rs.ids.length===12 && rs.ids[0]==='Hulk' && rs.name==='MyDeck', 'untapped slug decodes 12 ids + name');
+  const sm='https://snap.untapped.gg/en/decks/'+SLUGIDS.join('-')+'_Sub-Mariner&utm_campaign=x';
+  const rm=w.eval('parseCode('+JSON.stringify(sm)+')');
+  assert(!rm.err && rm.ids.length===12 && rm.name==='Sub-Mariner', 'slug: malformed utm + hyphen name');
+
+  // --- D: clipboard-first import (preview -> confirm) ---
+  const _decksBefore = w.eval('S.decks.length');
+  w.eval('window.__clip='+JSON.stringify(PAYLOAD));
+  await w.eval('openImport()'); await sleep(40);
+  assert(d.querySelector('#importpreview')!==null, 'clipboard deck -> preview appears (no paste needed)');
+  assert(d.querySelectorAll('#importpreview .mini').length===12, 'preview shows all 12 cards as minis');
+  d.querySelector('#imp-confirm').click(); await sleep(30);
+  assert(w.eval('S.decks.length')===_decksBefore+1, 'confirm adds the imported deck to S.decks');
+  assert(!d.querySelector('#modalwrap').classList.contains('on'), 'confirm closes the import modal');
+  // --- D: empty clipboard falls back to the paste box ---
+  w.eval("window.__clip=''");
+  await w.eval('openImport()'); await sleep(40);
+  assert(d.querySelector('#importbox')!==null, 'empty clipboard -> paste box fallback');
+  assert(d.querySelector('#importpreview')===null, 'no preview when clipboard is empty');
+  assert(d.querySelector('#m-clip')!==null, 'fallback box offers a Paste-from-clipboard button');
+  w.eval('closeModal()'); w.eval("window.__clip=''");
+
+  // --- E: creator-decks loader (mirror loadSiteData mock pattern) ---
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+
+    JSON.stringify({updated:'2026-07-09',decks:[{creator:'X',video:'V',url:'u',published:'2026-07-01',name:'N',ids:SLUGIDS}]})+
+    ')}); window.__cl=await loadCreatorDecks(); window.fetch=of; })()');
+  assert(w.eval('window.__cl')===true && w.eval('S.creatorDecks.length')===1, 'loadCreatorDecks ingests creator-decks.json');
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>({whatever:1})}); window.__clb=await loadCreatorDecks(); window.fetch=of; })()');
+  assert(w.eval('window.__clb')===false, 'malformed creator-decks.json is safely ignored');
+
+  // --- E: creator segment renders + Save-a-copy + link-out for undecodable ---
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+
+    JSON.stringify({updated:'2026-07-09',decks:[
+      {creator:'Alexander Coccia',video:'Big Deck Video',url:'https://youtu.be/abc',published:'2026-07-08',name:'Test Deck',ids:SLUGIDS},
+      {creator:'Coougarrr',video:'Link Only',url:'https://youtu.be/def',published:'2026-07-05',name:'',ids:[],untapped:'https://snap.untapped.gg/en/decks/Hulk-AntMan_X'}
+    ]})+
+    ')}); await loadCreatorDecks(); window.fetch=of; })()');
+  w.eval('setTab("saved")'); await sleep(20);
+  assert(d.querySelector('#creatorlist').children.length===0, 'hidden creator list stays unrendered until the segment is opened (lazy)');
+  d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(30);
+  assert(d.querySelectorAll('#creatorlist .crow').length===2, 'creator segment renders one row per harvested deck');
+  const _decksB2 = w.eval('S.decks.length');
+  d.querySelector('#creatorlist .crow .abtn.primary').click(); await sleep(30);
+  assert(w.eval('S.decks.length')===_decksB2+1, 'Save a copy adds the creator deck to S.decks');
+  w.eval('setTab("saved")'); await sleep(10);
+  d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(20);
+  const _crows = d.querySelectorAll('#creatorlist .crow');
+  assert(_crows[1].querySelector('.abtn.primary')===null, 'undecodable creator deck (ids:[]) has no Save button');
+  assert(_crows[1].querySelector('a[href*="untapped.gg"]')!==null, 'undecodable creator deck shows an untapped link-out');
+
+  // --- E: the REAL shipped creator-decks.json parses + renders in-app ---
+  const _realCD = JSON.parse(fs.readFileSync('creator-decks.json','utf8'));
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+JSON.stringify(_realCD)+')}); window.__realcd=await loadCreatorDecks(); window.fetch=of; })()');
+  assert(w.eval('window.__realcd')===true && w.eval('S.creatorDecks.length')>0, 'shipped creator-decks.json parses + loads ('+w.eval('S.creatorDecks.length')+' decks)');
+  w.eval('setTab("saved")'); await sleep(10);
+  d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(30);
+  assert(d.querySelectorAll('#creatorlist .crow').length===w.eval('S.creatorDecks.length'), 'every shipped creator deck renders a .crow row');
+  d.querySelector('#savedseg [data-seg="mine"]').click(); await sleep(10);
 
   // restore an ordinary tab for the remaining suite
   w.eval('setTab("cards")'); await sleep(10);
