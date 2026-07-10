@@ -186,7 +186,13 @@ async function resolveChannelId(input) {
   catch (e) { return null; }
   if (!page.ok) return null;
   const html = await page.text();
-  const c = html.match(/"(?:channelId|externalId)":"(UC[0-9A-Za-z_-]{22})"/) || html.match(/channel\/(UC[0-9A-Za-z_-]{22})/);
+  // Prefer the canonical/externalId (the page's OWN channel) — the first raw "channelId" in the
+  // page JSON can belong to a featured/related channel (e.g. @RegisKillbin lists his game-dev
+  // channel first, which mis-resolved the handle to the wrong channel entirely).
+  const c = html.match(/rel="canonical" href="https:\/\/www\.youtube\.com\/channel\/(UC[0-9A-Za-z_-]{22})"/)
+    || html.match(/"externalId":"(UC[0-9A-Za-z_-]{22})"/)
+    || html.match(/"channelId":"(UC[0-9A-Za-z_-]{22})"/)
+    || html.match(/channel\/(UC[0-9A-Za-z_-]{22})/);
   return c ? c[1] : null;
 }
 
