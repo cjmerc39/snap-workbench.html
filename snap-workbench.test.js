@@ -559,6 +559,24 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   // compressed decoder needs a strict majority-known list; a mostly-garbage comma list is rejected
   assert(w.eval('parseCode("zzz,qqq,vvv,xxx,jjj,kkk").err'), 'compressed decoder rejects a non-majority comma list');
 
+  // --- R7 owner fix: two-row build header (full deck name on its own row, controls below) ---
+  assert(d.querySelector('#bhead #bh-title #bh-name')!==null && d.querySelector('#bh-title #bh-count')===null,
+    'build header row 1 holds the name only (count moved out)');
+  assert(d.querySelector('#bh-row2 #bh-count')!==null && d.querySelector('#bh-row2 #bh-done')!==null,
+    'build header row 2 holds count + Done controls');
+
+  // --- vowel-initial words (owner-reported stubs): untapped keeps word-initial capitals in its skeletons ---
+  assert(w.eval('S.short["Armr5"]')==='Armor', 'skeleton keeps capital vowels: Armr5 -> Armor');
+  assert(w.eval('S.short["AntMn6"]')==='AntMan', 'skeleton keeps capital vowels: AntMn6 -> AntMan');
+  assert(w.eval('S.short["RcktAndGrtE"]')==='RocketAndGroot', 'skeleton keeps capital vowels: RcktAndGrtE -> RocketAndGroot');
+  w.eval('applyDb(S.db.concat(['+
+    '{n:"Mother Askani",d:"MotherAskani",c:3,p:5,a:"t",s:"5"},'+
+    '{n:"The Fallen One",d:"FallenOne",c:5,p:9,a:"t",s:"5"},'+
+    '{n:"Star-Lord, Master of the Sun",d:"StarlordMasterOfTheSun",c:4,p:6,a:"t",s:"5"}]))'); await sleep(10);
+  const vowelIds = w.eval('["MthrAsknC","FllnOn9","StrlrdMstrOfThSn16"].map(t=>S.short[t]||"MISS").join()');
+  assert(vowelIds==='MotherAskani,FallenOne,StarlordMasterOfTheSun', 'vowel-initial compressed tokens all resolve ('+vowelIds+')');
+  w.eval('S.db = DB_BASE.slice(); indexDb();'); await sleep(10);
+
   // --- D: untapped URL slug (DB-known ids) ---
   const SLUGIDS=['Hulk','AntMan','Wong','Odin','Ironheart','MisterFantastic','Klaw','Cyclops','Sentinel','Hawkeye','Nightcrawler','Angela'];
   const su='https://snap.untapped.gg/en/decks/'+SLUGIDS.join('-')+'_MyDeck?utm_medium=affiliate&utm_campaign=alexcoccia';
@@ -746,6 +764,97 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(w.eval('(activeDeck().line[1]||[]).indexOf('+JSON.stringify(_c3id)+')>=0 && (activeDeck().line[0]||[]).indexOf('+JSON.stringify(_c3id)+')<0'),
     'F: re-assigning a placed card MOVES it to the new turn (stays in exactly one turn)');
   d.querySelector('#pl-pick-done').click(); await sleep(20);
+
+  // ============ ROUND 7 WP1: multi-line model (A) + composer manager (B) + read view (C) ============
+  // --- A1: round-6 d.line migrates lazily to one "Main line" in lines[] ---
+  const _mig = w.eval('(function(){ var dd={id:"r7mig",cards:["Hulk","AntMan"],line:[["Hulk"],[],[],[],[],[]],updated:Date.now()}; var L=getLines(dd); return {len:L.length, has:L[0].turns[0].indexOf("Hulk")>=0, name:L[0].name, adj:Array.isArray(L[0].adj)&&L[0].adj.length===6, untouched:dd.lines===undefined}; })()');
+  assert(_mig.len===1 && _mig.has && _mig.name==='Main line' && _mig.adj, 'R7-A1: round-6 d.line migrates to one "Main line" in lines[] (adj seeded)');
+  assert(_mig.untouched, 'R7-A1: getLines is a pure read — it never eagerly rewrites d.lines');
+
+  // --- A2/A5: the plr6 deck was just edited through the composer -> materialized + mirror invariant ---
+  assert(w.eval('Array.isArray(activeDeck().lines) && activeDeck().lines.length>=1'), 'R7-A2: an edited deck materializes a real lines[] array');
+  assert(w.eval('activeDeck().line === activeDeck().lines[0].turns'), 'R7-A5: d.line is the SAME reference as lines[0].turns (round7->round6 mirror)');
+  assert(w.eval('JSON.stringify(activeDeck().line)===JSON.stringify(activeDeck().lines[0].turns)'), 'R7-A2: d.line deep-equals lines[0].turns after an edit');
+
+  // --- A4: a round-6 edit (differing d.line) reconciles into lines[0] while Plan B is preserved ---
+  const _rec = w.eval('(function(){ var dd={ id:"r7rec", cards:["Hulk","AntMan","Wong"], line:[["Hulk"],[],[],[],[],[]], lines:[{id:"L0",name:"Main line",turns:[[],[],[],[],[],[]],adj:[0,0,0,0,0,0]},{id:"L1",name:"Line 2",turns:[["AntMan"],[],[],[],[],[]],adj:[0,0,0,0,0,0]}], updated:Date.now() }; var L=getLines(dd); return { adopted:L[0].turns[0].indexOf("Hulk")>=0, primaryId:L[0].id==="L0", keptB:L.length===2 && L[1].turns[0].indexOf("AntMan")>=0 }; })()');
+  assert(_rec.adopted && _rec.primaryId && _rec.keptB, 'R7-A4: a round-6 d.line edit reconciles into lines[0] (id kept) while Plan B survives');
+  const _recEq = w.eval('(function(){ var dd={id:"r7req",cards:["Hulk"],line:[["Hulk"],[],[],[],[],[]],lines:[{id:"K",name:"Main line",turns:[["Hulk"],[],[],[],[],[]],adj:[0,0,0,0,0,0]}],updated:1}; return getLines(dd)[0].id; })()');
+  assert(_recEq==='K', 'R7-A4: when d.line already equals lines[0], the stored lines[] stays authoritative');
+
+  // --- B: composer line manager (switch / add / rename / duplicate / delete) ---
+  w.eval('S.activeId="plr6"; setTab("deck"); setDeckTab("planner"); renderDeck();'); await sleep(20);
+  const _lb = w.eval('getLines(activeDeck()).length');
+  d.querySelector('#planner [data-pladd]').click(); await sleep(20);
+  assert(w.eval('activeDeck().lines.length')===_lb+1, 'R7-B: the + button adds a play line');
+  assert(w.eval('(function(){ var n=activeDeck().lines.map(function(l){return l.name;}); return n.length===new Set(n).size; })()'), 'R7-B: added lines get a unique auto-name');
+  assert(w.eval('activeDeck().activeLineId===activeDeck().lines[activeDeck().lines.length-1].id'), 'R7-B: a newly added line becomes active');
+  d.querySelector('#planner .pl-line-chip').click(); await sleep(20);   // tap the first chip
+  assert(w.eval('activeDeck().activeLineId===activeDeck().lines[0].id'), 'R7-B: tapping a line chip switches the active line');
+  const _db = w.eval('activeDeck().lines.length');
+  d.querySelector('#planner [data-pldupe]').click(); await sleep(20);
+  assert(w.eval('activeDeck().lines.length')===_db+1, 'R7-B: Duplicate adds a copy of the active line');
+  assert(w.eval('(function(){ var ls=activeDeck().lines; var copy=ls.find(function(l){return l.id===activeDeck().activeLineId;}); var src=ls[0]; copy.turns[0].push("ZZDEEP"); var leaked=src.turns[0].indexOf("ZZDEEP")>=0; copy.turns[0].pop(); return !leaked; })()'), 'R7-B: Duplicate deep-clones turns (mutating the clone never touches the source)');
+  d.querySelector('#planner [data-plrename]').click(); await sleep(20);
+  const _nameInput = d.querySelector('#planner [data-plname]');
+  assert(_nameInput!==null, 'R7-B: Rename swaps the active chip for an inline input');
+  _nameInput.value = 'My Combo'; _nameInput.dispatchEvent(new w.Event('blur')); await sleep(500);
+  assert(w.eval('activeLine(activeDeck()).name')==='My Combo', 'R7-B: Rename commits the new name');
+  const _lp = w.eval('(JSON.parse(localStorage.getItem("snapwb-decks")).decks.find(function(x){return x.id==="plr6";})||{}).lines');
+  assert(Array.isArray(_lp) && _lp.some(function(l){return l.name==='My Combo';}), 'R7-B: the renamed line persists to storage');
+  const _delB = w.eval('activeDeck().lines.length');
+  d.querySelector('#planner [data-pldel]').click(); await sleep(20);   // w.confirm is stubbed true
+  assert(w.eval('activeDeck().lines.length')===_delB-1, 'R7-B: Delete removes the active line');
+  w.eval('(function(){ var dd=activeDeck(); materializeLines(dd); dd.lines=[dd.lines[0]]; dd.activeLineId=dd.lines[0].id; dd.line=dd.lines[0].turns; })(); renderDeck();'); await sleep(20);
+  assert(d.querySelectorAll('#planner .pl-slot[data-t]').length===6, 'R7-B: the six turn slots are untouched by the manager bar');
+  assert(d.querySelector('#planner [data-pldel]').disabled===true, 'R7-B: Delete is disabled when only one line remains');
+
+  // --- C: line-plan read view (#lineplan above #decktabs) ---
+  w.eval('(function(){ S.decks.unshift({id:"r7read",name:"R7 Read",cards:["Hulk","AntMan","Wong","Odin"],line:[["AntMan"],["Wong"],[],["Hulk"],[],[]],updated:Date.now()}); S.activeId="r7read"; })(); setTab("deck"); renderDeck();'); await sleep(20);
+  assert(d.querySelector('#lineplan')!==null && d.querySelector('#view-deck > #lineplan')!==null, 'R7-C: #lineplan lives in the DOM as a direct child of #view-deck');
+  const _nonEmpty = w.eval('currentLine(activeDeck()).filter(function(t){return t.length;}).length');
+  assert(d.querySelectorAll('#lineplan .lp-row').length===_nonEmpty && _nonEmpty===3, 'R7-C: one .lp-row per non-empty turn (3 here)');
+  assert(d.querySelectorAll('#lineplan .lp-chips .mini').length>0, 'R7-C: read-view turn chips render as .mini');
+  assert(/⚡/.test(d.querySelector('#lineplan .lp-row .lp-energy').textContent), 'R7-C: each row shows per-turn energy (spent/budget⚡)');
+  assert(d.querySelector('#lineplan .lp-conf')!==null && /%/.test(d.querySelector('#lineplan .lp-conf').textContent), 'R7-C: the line shows a bottleneck confidence chip');
+  w.eval('(function(){ var dd=activeDeck(); materializeLines(dd); dd.lines.push(newLineObj("Aggro",[["Odin"],[],[],[],[],[]])); persistDecks(); })(); renderDeck();'); await sleep(20);
+  assert(d.querySelectorAll('#lineplan .lp-seg button').length===w.eval('getLines(activeDeck()).length') && w.eval('getLines(activeDeck()).length')>=2, 'R7-C: the switcher shows one button per line (>=2 lines)');
+  // no-plan invite
+  w.eval('(function(){ S.decks.unshift({id:"r7noplan",name:"R7 NoPlan",cards:["Hulk","AntMan"],updated:Date.now()}); S.activeId="r7noplan"; })(); renderDeck();'); await sleep(20);
+  assert(d.querySelector('#lineplan .lp-empty')!==null && d.querySelector('#lineplan #lp-plan-btn')!==null, 'R7-C: a deck with no plan shows the .lp-empty invite + Plan-it button');
+  d.querySelector('#lineplan #lp-plan-btn').click(); await sleep(20);
+  assert(w.eval('S.deckTab')==='planner', 'R7-C: Plan-it jumps to the planner sub-tab');
+  // blank bench hides the read view
+  w.eval('S.activeId=null; setTab("deck"); renderDeck();'); await sleep(20);
+  assert(d.querySelector('#view-deck').classList.contains('no-deck') && d.querySelector('#lineplan').innerHTML==='', 'R7-C: a blank bench clears the read view (and .no-deck hides it)');
+  assert(/#view-deck\.no-deck > :not\(#deck-empty\)\{display:none/.test(html), 'R7-C: the .no-deck CSS rule hides #lineplan (a direct child)');
+
+  // --- C7: read-view switcher changes the active line + re-renders ---
+  w.eval('S.activeId="r7read"; setTab("deck"); renderDeck();'); await sleep(20);
+  const _segBtns = [...d.querySelectorAll('#lineplan .lp-seg button')];
+  assert(_segBtns.length>=2, 'R7-C7: the read-view switcher is present with >=2 buttons');
+  const _wasActive = w.eval('activeDeck().activeLineId');
+  const _other = _segBtns.find(b => b.dataset.lid !== _wasActive);
+  _other.click(); await sleep(20);
+  assert(w.eval('activeDeck().activeLineId')===_other.dataset.lid && w.eval('activeDeck().activeLineId')!==_wasActive, 'R7-C7: tapping a switcher button changes the active line');
+  assert(d.querySelector('#lineplan .lp-name').textContent===w.eval('activeLine(activeDeck()).name'), 'R7-C7: the read view re-renders to the newly active line');
+
+  // --- C8: deckAsText appends the GAME PLAN block only when a plan exists ---
+  w.eval('S.activeId="r7read";');
+  assert(/GAME PLAN/.test(w.eval('deckAsText()')), 'R7-C8: deckAsText includes a GAME PLAN block when a plan exists');
+  assert(/T\d:/.test(w.eval('deckAsText()')) && /—/.test(w.eval('deckAsText()')), 'R7-C8: the GAME PLAN lists named lines with per-turn rows');
+  w.eval('S.activeId="r7noplan";');
+  assert(!/GAME PLAN/.test(w.eval('deckAsText()')) && /Hulk/.test(w.eval('deckAsText()')), 'R7-C8: deckAsText has no GAME PLAN when there is no plan (but still lists cards)');
+
+  // --- C9: regression — six slots + picker force-close on leaving the planner sub-tab ---
+  w.eval('S.activeId="r7read"; setTab("deck"); setDeckTab("planner"); renderDeck();'); await sleep(20);
+  assert(d.querySelectorAll('#planner .pl-slot[data-t]').length===6, 'R7-C9: composer still renders six turn slots');
+  d.querySelector('#planner .pl-slot[data-t="1"]').click(); await sleep(20);
+  assert(d.querySelector('#pl-picker').classList.contains('on'), 'R7-C9: the picker opens on the planner tab');
+  w.eval('setDeckTab("overview")'); await sleep(20);
+  assert(!d.querySelector('#pl-picker').classList.contains('on') && w.eval('S.plannerTurn')===null, 'R7-C9: leaving the planner sub-tab force-closes the picker');
+  // cleanup R7 fixtures + restore a normal active deck for the remaining round-5/6 suite
+  w.eval('S.decks = S.decks.filter(function(x){return ["r7read","r7noplan"].indexOf(x.id)<0;}); S.activeId="plr6"; setTab("deck"); renderDeck();'); await sleep(20);
 
   // --- G: card-change flags (snapshot / diff / dot / banner / dismiss) ---
   w.eval('(function(){ const ids=S.db.slice(0,3).map(c=>c.d); S.decks.unshift({id:"gflag",name:"G Flag",cards:ids,updated:Date.now()}); S.activeId="gflag"; snapshotDeck(activeDeck()); })()');
@@ -1011,6 +1120,112 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.querySelector('#bh-name').textContent==='New deck' && d.querySelector('#bh-mode').textContent==='',
     'R6 fix: post-reload blank bench header reads "New deck" with no eyebrow');
   w.eval('S.syncToken=""; localStorage.removeItem("snapwb-synctoken");');
+
+  // ============ ROUND 7 WP2: tokens (D) + energy nudge (E) ============
+  // reset to the real embedded DB + seed tokens so producers/costs resolve (earlier tests left S.db mutated)
+  w.eval('S.db=DB_BASE.slice(); indexDb(); applyTokenData();'); await sleep(10);
+
+  // --- 11: getCard resolves token ids to a def with token:true ---
+  assert(w.eval('Object.keys(S.tokens).length')>=15, 'R7-D11: TOKEN_SEED populates S.tokens (>=15 tokens)');
+  assert(w.eval('!!getCard("Squirrel") && getCard("Squirrel").token===true && getCard("Squirrel").n==="Squirrel"'),
+    'R7-D11: getCard(tokenId) returns a def with token===true (real name/cost/power/art)');
+  assert(w.eval('getCard("Demon").c===1 && getCard("Demon").p===6'), 'R7-D11: token def carries curated cost/power');
+
+  // --- 12: tokens are OFFERED in the picker only after their producer sits on an earlier turn ---
+  w.eval('(function(){ S.decks.unshift({id:"r7tok",name:"Tok",cards:["SquirrelGirl","Hulk","AntMan","Wong"],updated:Date.now()}); S.activeId="r7tok"; mutateActiveLine(activeDeck(), function(lo){ lo.turns=[[],["SquirrelGirl"],[],[],[],[]]; }); })(); setTab("deck"); setDeckTab("planner"); renderDeck();'); await sleep(20);
+  w.eval('openPlPicker(1)'); await sleep(20);
+  assert(d.querySelectorAll('#pl-picker .pl-pick .mini.token').length===0, 'R7-D12: no tokens offered on T1 (producer sits on T2, not before)');
+  w.eval('openPlPicker(2)'); await sleep(20);
+  assert(d.querySelectorAll('#pl-picker .pl-pick .mini.token').length===0, 'R7-D12: no tokens offered on T2 (producer is ON T2, not strictly earlier)');
+  assert(d.querySelectorAll('#pl-picker .pl-pick .mini').length===w.eval('activeDeck().cards.length'),
+    'R7-D12: with no earlier producer the picker grid is exactly the deck (WP1 count invariant holds)');
+  w.eval('openPlPicker(3)'); await sleep(20);
+  const _tokTiles = [...d.querySelectorAll('#pl-picker .pl-pick .mini.token')];
+  assert(_tokTiles.length===1 && _tokTiles[0].dataset.d==="Squirrel", 'R7-D12: T3 offers exactly the Squirrel token (SquirrelGirl -> Squirrel, on an earlier turn)');
+  assert(d.querySelector('#pl-picker .pl-tok-head')!==null, 'R7-D12: offered tokens sit under a grouped "Tokens & summons" header');
+
+  // --- 13: assigning a token counts energy but never touches the 12 ---
+  d.querySelector('#pl-picker .pl-pick .mini.token[data-d="Squirrel"]').click(); await sleep(20);
+  assert(w.eval('activeLine(activeDeck()).turns[2].indexOf("Squirrel")>=0'), 'R7-D13: tapping a token assigns it to that turn of the active line');
+  assert(w.eval('currentLine(activeDeck())[2].reduce(function(s,id){return s+(getCard(id)||makeStub(id)).c;},0)')===1,
+    'R7-D13: the token cost (Squirrel = 1) counts toward the turn energy');
+  assert(w.eval('activeDeck().cards.length===4 && activeDeck().cards.indexOf("Squirrel")<0'),
+    'R7-D13: the token is NOT added to the 12 (deck cards unchanged)');
+  assert(d.querySelector('#st-count').textContent==='4/12', 'R7-D13: the deck count still reads 4/12 (tokens never touch #st-count)');
+
+  // --- review fix 1/3: neither the card sheet nor toggleCard can smuggle a token into the 12 ---
+  w.eval('toggleCard("Squirrel")'); await sleep(20);
+  assert(w.eval('activeDeck().cards.length===4 && activeDeck().cards.indexOf("Squirrel")<0'),
+    'R7-fix1: toggleCard refuses to ADD a token to the 12 (deck + export code stay clean)');
+  w.eval('setDeckTab("planner"); renderDeck(); openCardSheet("Squirrel")'); await sleep(20);
+  assert(d.querySelector('#sh-add')===null && d.querySelector('#sh-own')===null,
+    'R7-fix1: the token card sheet offers no Add-to-deck / Mark-owned actions');
+  const _tokSheetTxt = d.querySelector('#modal').textContent;
+  assert(!/Series/.test(_tokSheetTxt) && /Token/.test(_tokSheetTxt),
+    'R7-fix3: the token sheet shows a Token note instead of "Series undefined"');
+  w.eval('closeModal(); openCardSheet("Hulk")'); await sleep(20);
+  assert(d.querySelector('#sh-add')!==null && /Series/.test(d.querySelector('#modal').textContent),
+    'R7-fix1: a REAL card sheet still offers Add/Owned + its Series line');
+  w.eval('closeModal()'); await sleep(10);
+
+  // --- 14: a token orphans automatically when its producer moves later / leaves the deck ---
+  w.eval('mutateActiveLine(activeDeck(), function(lo){ lo.turns=[[],[],["Squirrel"],["SquirrelGirl"],[],[]]; })'); await sleep(10);
+  assert(w.eval('currentLine(activeDeck())[2].indexOf("Squirrel")<0'), 'R7-D14: moving the producer to a LATER turn orphans the token (pruned from currentLine)');
+  w.eval('mutateActiveLine(activeDeck(), function(lo){ lo.turns=[[],["SquirrelGirl"],["Squirrel"],[],[],[]]; })'); await sleep(10);
+  assert(w.eval('currentLine(activeDeck())[2].indexOf("Squirrel")>=0'), 'R7-D14: with the producer back on an earlier turn the token is valid again');
+  w.eval('(function(){ var dd=activeDeck(); dd.cards=["Hulk","AntMan","Wong","Odin"]; snapshotDeck(dd); })()'); await sleep(10);
+  assert(w.eval('currentLine(activeDeck())[2].indexOf("Squirrel")<0'), 'R7-D14: removing the producer from the 12 also orphans its token');
+
+  // --- 15: read-view token treatment + deckAsText marker ---
+  w.eval('(function(){ S.decks.unshift({id:"r7tokread",name:"TokRead",cards:["SquirrelGirl","Hulk","AntMan","Wong"],updated:Date.now()}); S.activeId="r7tokread"; mutateActiveLine(activeDeck(), function(lo){ lo.turns=[[],["SquirrelGirl"],["Squirrel"],[],[],[]]; }); })(); setTab("deck"); renderDeck();'); await sleep(20);
+  assert(d.querySelector('#lineplan .lp-chips .mini.token')!==null, 'R7-D15: the read view renders a created token as a distinct .token chip');
+  assert(/\(token\)/.test(w.eval('deckAsText()')), 'R7-D15: deckAsText marks tokens with (token)');
+  assert(/Squirrel Girl/.test(w.eval('deckAsText()')) && /GAME PLAN/.test(w.eval('deckAsText()')), 'R7-D15: the GAME PLAN block still lists the producer + turns');
+
+  // --- 16: energy nudge math (explicit adj + auto ramp; explicit overrides ramp) ---
+  assert(w.eval('lineFlags([[],[],["Wong"],[],[],[]],[0,0,0,0,0,0],activeDeck()).some(function(f){return f.type==="energy"&&f.turn===3;})'),
+    'R7-E16: a 4-cost card on T3 with no nudge flags an energy overspend (spent 4 > budget 3)');
+  assert(!w.eval('lineFlags([[],[],["Wong"],[],[],[]],[0,0,1,0,0,0],activeDeck()).some(function(f){return f.type==="energy"&&f.turn===3;})'),
+    'R7-E16: adj[2]=+1 raises T3 budget to 4 -> no energy flag');
+  assert(w.eval('budget({turns:[[],["Psylocke"],[],[],[],[]],adj:[0,0,0,0,0,0]},3,activeDeck())')===4,
+    'R7-E16: a ramp card (Psylocke) on T2 auto-raises T3 budget to 4 with zero taps');
+  assert(w.eval('budget({turns:[[],["Psylocke"],[],[],[],[]],adj:[0,0,2,0,0,0]},3,activeDeck())')===5,
+    'R7-E16: an explicit adj[2] overrides the auto ramp value');
+  assert(w.eval('budget({turns:[[],[],[],[],[],[]],adj:[0,0,0,0,0,0]},3,activeDeck())')===3, 'R7-E16: no ramp + no nudge -> budget is just t');
+  assert(w.eval('budget({turns:[[],["Sunspot"],[],[],[],[]],adj:[0,0,0,0,0,0]},3,activeDeck())')===3,
+    'R7-fix2: Sunspot ("Gain +1 Power for each unspent Energy") is NOT ramp — budget stays t');
+  assert(w.eval('budget({turns:[[],["X23"],[],[],[],[]],adj:[0,0,0,0,0,0]},3,activeDeck())')===4,
+    'R7-fix2: a real +1-Energy ramper (X-23) still auto-raises the next turn budget');
+
+  // --- 17: nudge UI in the picker head adjusts adj[t-1], updates the budget, and persists ---
+  w.eval('(function(){ S.decks.unshift({id:"r7nudge",name:"Nudge",cards:["Hulk","AntMan","Wong","Odin"],updated:Date.now()}); S.activeId="r7nudge"; })(); setTab("deck"); setDeckTab("planner"); renderDeck(); openPlPicker(3);'); await sleep(20);
+  const _plus = d.querySelector('#pl-nudge [data-nudge="1"]');
+  assert(_plus!==null && d.querySelector('#pl-nudge [data-nudge="-1"]')!==null, 'R7-E17: the picker head shows a −/＋ nudge control');
+  _plus.click(); await sleep(20);
+  assert(w.eval('normAdj(activeLine(activeDeck()).adj)[2]')===1, 'R7-E17: tapping ＋ sets activeLine.adj[t-1] to +1');
+  assert(/\/4⚡/.test(d.querySelector('#pl-picker-energy').textContent), 'R7-E17: the picker budget updates to reflect the nudge (0/4⚡)');
+  await sleep(500);
+  const _nAdj = w.eval('(function(){ var dk=JSON.parse(localStorage.getItem("snapwb-decks")).decks.find(function(x){return x.id==="r7nudge";}); var ln=(dk.lines||[]).find(function(l){return l.id===dk.activeLineId;})||(dk.lines||[])[0]; return ln?normAdj(ln.adj)[2]:null; })()');
+  assert(_nAdj===1, 'R7-E17: the nudge persists to snapwb-decks storage');
+
+  // --- 10: cards.json additive tokens/links parsing + seed fallback (kept LAST — it mutates S.db/S.tokens) ---
+  const _mkCards = n => Array.from({length:n},(_,i)=>({n:'Site '+i,d:'Site'+i,c:i%7,p:i%13,a:'On Reveal: s'+i,s:'4'}));
+  const _tokJson = { updated:'2026-07-10', cards:_mkCards(80), tokens:[{n:'ZTok',d:'ZTok',c:2,p:3},{n:'ZTok2',d:'ZTok2',c:1,p:1}], links:{ ZProd:['ZTok'] } };
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+JSON.stringify(_tokJson)+')}); window.__t1=await loadSiteData(); window.fetch=of; })()');
+  assert(w.eval('window.__t1')===true && w.eval('S.db.length')===80, 'R7-D10: a cards.json with a tokens key still loads the cards');
+  assert(w.eval('!!S.tokens["ZTok"] && S.tokens["ZTok"].token===true'), 'R7-D10: the tokens key populates S.tokens');
+  assert(w.eval('Array.isArray(S.tokenLinks["ZProd"]) && S.tokenLinks["ZProd"][0]==="ZTok"'), 'R7-D10: the links key populates S.tokenLinks');
+  const _noTokJson = { updated:'2026-07-10', cards:_mkCards(80) };
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+JSON.stringify(_noTokJson)+')}); window.__t2=await loadSiteData(); window.fetch=of; })()');
+  assert(w.eval('window.__t2')===true && w.eval('!!S.tokens["Squirrel"] && Object.keys(S.tokens).length>=15'),
+    'R7-D10: a tokenless cards.json falls back to the non-empty TOKEN_SEED');
+  const _badTokJson = { updated:'2026-07-10', cards:_mkCards(80), tokens:'notanarray', links:42 };
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+JSON.stringify(_badTokJson)+')}); window.__t3=await loadSiteData(); window.fetch=of; })()');
+  assert(w.eval('window.__t3')===true && w.eval('!!S.tokens["Squirrel"]'), 'R7-D10: malformed tokens fall back to seed while cards still load');
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>({whatever:1})}); window.__t4=await loadSiteData(); window.fetch=of; })()');
+  assert(w.eval('window.__t4')===false, 'R7-D10: garbage cards.json still returns false (token intake is post-pass, non-fatal)');
+
+  assert(errors.length===0, 'R7-D/E: no runtime errors during the token + nudge suite'+(errors.length?' -> '+errors.join(' | '):''));
 
   console.log('\nDONE. errors:', errors.length?errors:'none');
 })();

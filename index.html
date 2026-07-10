@@ -359,6 +359,59 @@ h1 .h-snap{color:var(--gold);}
   text-align:center; font-size:11px; font-weight:800; color:var(--iris-ink); background:var(--gold); border-radius:999px; z-index:2;}
 .pl-pick .mini .pl-tag{position:absolute; top:3px; left:3px; font-size:9px; font-weight:800; color:var(--text);
   background:rgba(0,0,0,.6); border-radius:5px; padding:1px 4px; z-index:2;}
+/* R7-D/E: created-token tiles + the picker-head energy nudge control */
+.pl-tok-head{grid-column:1/-1; margin-top:8px; padding:7px 2px 3px; font-size:11px; font-weight:800; letter-spacing:.3px;
+  text-transform:uppercase; color:var(--iris-soft); border-top:1px solid var(--hair);}
+.mini.token{box-shadow:inset 0 0 0 1px var(--iris-soft);}
+.tok-badge{position:absolute; top:3px; right:3px; z-index:2; width:15px; height:15px; line-height:15px; text-align:center;
+  font-size:10px; font-weight:800; color:var(--iris-ink); background:var(--iris-soft); border-radius:5px;}
+.pl-pick .mini.token.on::after{right:auto; left:3px;}   /* selected token: shift the check off the token badge */
+.pl-nudge{display:flex; align-items:center; gap:4px;}
+.pl-nudge-b{width:26px; height:26px; border-radius:8px; border:none; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair);
+  color:var(--text); font-size:15px; font-weight:800; line-height:1; cursor:pointer; padding:0;}
+.pl-nudge-b:active{transform:scale(.92);}
+.pl-nudge-v{min-width:14px; text-align:center; font-size:11px; font-weight:800; color:var(--gold); white-space:nowrap;}
+.pl-nudge-v.zero{min-width:0;}
+.pl-ramp{font-size:9px; font-weight:800; color:var(--iris-soft); text-transform:uppercase; letter-spacing:.3px;}
+/* R7-B: multi-line manager bar (composer) — ≤2 compact rows above the six slots, no scroll */
+.pl-lines{display:flex; align-items:center; gap:6px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+  padding-bottom:2px; margin-bottom:6px; scrollbar-width:none;}
+.pl-lines::-webkit-scrollbar{display:none;}
+.pl-line-chip{flex:0 0 auto; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); color:var(--dim);
+  border:none; border-radius:var(--r-pill); padding:6px 12px; min-height:32px; font-size:12px; font-weight:700;
+  white-space:nowrap; cursor:pointer;}
+.pl-line-chip.on{background:var(--gold); color:var(--iris-ink); box-shadow:none;}
+.pl-line-add{flex:0 0 auto; background:none; border:1px dashed var(--line2); color:var(--faint);
+  border-radius:999px; width:32px; height:32px; font-size:16px; font-weight:800; line-height:1; cursor:pointer;}
+.pl-line-name-input{flex:0 0 auto; min-width:120px; background:var(--glass-2); color:var(--text);
+  border:1px solid var(--gold); border-radius:var(--r-pill); padding:5px 12px; min-height:32px; font-size:12px; font-weight:700;}
+.pl-line-tools{display:flex; gap:14px; margin-bottom:10px; padding:0 2px;}
+.pl-line-tool{background:none; border:none; color:var(--faint); font-size:12px; font-weight:700; padding:2px 0; cursor:pointer;}
+.pl-line-tool:disabled{opacity:.4; cursor:default;}
+.pl-line-tool:not(:disabled):active{color:var(--text);}
+/* R7-C: line-plan read view — art-forward, per-turn energy + confidence, above the sub-tabs */
+#lineplan:empty{display:none;}
+.lp-empty{display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:var(--r-md); padding:12px 14px; margin:10px 0;}
+.lp-empty-txt{flex:1; min-width:160px; font-size:13px; font-weight:600; color:var(--dim);}
+.lp-empty .abtn{width:auto; padding:8px 16px; min-height:40px;}
+.lp-card{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:var(--r-md); padding:12px 14px; margin:10px 0;}
+.lp-seg{margin-bottom:10px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;}
+.lp-seg::-webkit-scrollbar{display:none;}
+.lp-seg button{white-space:nowrap;}
+.lp-head{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+.lp-name{font-family:var(--head); font-weight:800; font-size:16px; color:var(--text); letter-spacing:.2px;}
+.lp-conf{margin-left:auto; font-size:11px; font-weight:800; color:var(--dim);
+  background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:var(--r-pill); padding:3px 9px;}
+.lp-row{display:flex; align-items:center; gap:9px; padding:6px 0; border-top:1px solid var(--hair);}
+.lp-row:first-of-type{border-top:none;}
+.lp-t{flex:0 0 26px; font-family:var(--head); font-weight:800; font-size:13px; color:var(--text);}
+.lp-chips{flex:1; min-width:0; display:flex; flex-wrap:wrap; gap:4px;}
+.lp-chips .mini{width:30px; flex:0 0 30px; cursor:pointer;}
+.lp-energy{flex:0 0 auto; font-size:11px; font-weight:800; color:var(--faint);}
+.lp-energy.over{color:var(--warn);}
+.lp-rconf{flex:0 0 auto; font-size:10px; font-weight:700; color:var(--dim);}
+.lp-nudge-note{flex:0 0 auto; font-size:9px; font-weight:800; color:var(--iris-soft); text-transform:uppercase; letter-spacing:.3px;}
 /* G: what-changed banner + H: per-deck meta note */
 #deckchanges:empty{display:none;}
 #deckchanges .warnbox{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-left:3px solid var(--warn); color:var(--text);}
@@ -548,14 +601,18 @@ h1 .h-snap{color:var(--gold);}
   background:rgba(11,7,20,.82); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
   margin:-14px -14px 0; padding:8px 14px 8px;
   box-shadow:inset 0 -1px 0 var(--hair), 0 14px 16px -14px rgba(0,0,0,.7);}
-#bhead{display:flex; align-items:center; justify-content:space-between; margin:2px 2px 8px;}
-#bh-title{display:flex; align-items:baseline; gap:8px; min-width:0;}
+/* R7 owner fix: two-row header — the full deck name owns row 1, controls live on row 2 */
+#bhead{margin:2px 2px 8px;}
+#bh-title{display:block; min-width:0;}
 /* R6 review: "Editing" eyebrow pairs with the showcase's "Viewing" (.dh-eyebrow) — blank/draft bench hides it */
-#bh-mode{font-family:var(--head); font-weight:800; letter-spacing:1px; font-size:10px; text-transform:uppercase; color:var(--faint); white-space:nowrap;}
+#bh-mode{display:block; font-family:var(--head); font-weight:800; letter-spacing:1px; font-size:10px; text-transform:uppercase; color:var(--faint); margin-bottom:1px;}
 #bh-mode:empty{display:none;}
-#bh-name{font-size:15px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+#bh-name{display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden;
+  font-size:17px; line-height:1.2; font-weight:800; overflow-wrap:anywhere;}
+#bh-row2{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:6px;}
+#bh-meta{display:flex; align-items:center; gap:8px; min-width:0;}
 #bh-count{font-family:var(--head); font-weight:800; font-size:14px; color:var(--gold); letter-spacing:.2px;}
-#bh-btns{display:flex; gap:6px;}
+#bh-btns{display:flex; gap:6px; flex-shrink:0;}
 .hbtn{background:var(--panel); border:1px solid var(--line); color:var(--dim); border-radius:10px;
   min-width:36px; height:32px; font-size:15px; font-weight:800;}
 #bh-collapse{transition:transform var(--dur-2) var(--ease-inout);}
@@ -775,11 +832,14 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   <section class="view on" id="view-cards">
     <div id="buildtop">
     <div id="bhead">
-      <div id="bh-title"><span id="bh-mode"></span><b id="bh-name"></b><span id="bh-count"></span><span class="savestate saved" id="bh-save"></span></div>
-      <div id="bh-btns">
-        <button class="hbtn done" id="bh-done">&#10003; Done</button>
-        <button class="hbtn" id="bh-collapse">&#9650;</button>
-        <button class="hbtn" id="bh-menu">&#8943;</button>
+      <div id="bh-title"><span id="bh-mode"></span><b id="bh-name"></b></div>
+      <div id="bh-row2">
+        <div id="bh-meta"><span id="bh-count"></span><span class="savestate saved" id="bh-save"></span></div>
+        <div id="bh-btns">
+          <button class="hbtn done" id="bh-done">&#10003; Done</button>
+          <button class="hbtn" id="bh-collapse">&#9650;</button>
+          <button class="hbtn" id="bh-menu">&#8943;</button>
+        </div>
       </div>
     </div>
     <div id="deckzone">
@@ -862,6 +922,8 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       <button class="abtn subtle" id="btn-dupe">Duplicate</button>
       <button class="abtn danger" id="btn-cleardeck">Clear</button>
     </div>
+    <!-- R7-C: line-plan read view (prominent, above the sub-tabs; hidden on a blank bench via .no-deck) -->
+    <div id="lineplan"></div>
     <div id="decktabs" role="tablist" aria-label="Deck tools">
       <button data-dtab="overview" class="on" role="tab" aria-selected="true">Overview</button>
       <button data-dtab="synergy" role="tab" aria-selected="false">Synergy</button>
@@ -977,6 +1039,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
     <div class="pl-pick-head">
       <span class="pl-pick-title" id="pl-picker-title">Turn 1</span>
       <span class="pl-energy" id="pl-picker-energy">0/1&#9889;</span>
+      <span class="pl-nudge" id="pl-nudge"></span>
       <button class="pl-pick-done" id="pl-pick-done" type="button">Done</button>
     </div>
     <div class="pl-pick" id="pl-pick-grid"></div>
@@ -1001,8 +1064,76 @@ const COACH_URL = 'https://snap-workbench.cj13mercado.workers.dev/coach';
 const SYNC_URL = 'https://snap-workbench.cj13mercado.workers.dev/sync';
 const YT_URL   = 'https://snap-workbench.cj13mercado.workers.dev/yt';
 
+/* ============ R7-D: TOKENS / SUMMONS ============ */
+/* Curated fallback for the embedded snapshot — mirrors update-cards.mjs TOKENS/LINKS. cards.json's
+   additive {tokens,links} keys override this at boot (applyTokenData); absent/garbage -> this seed.
+   Tokens are NEVER in a deck's 12 (never in d.cards) — they only surface in the play-line planner once
+   their producer sits on an earlier turn. Same {n,d,c,p,i?} shape as cards; token:true is added on build. */
+const TOKEN_SEED = { tokens: [
+{n:"Squirrel",d:"Squirrel",c:1,p:1,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/squirrel.webp"},
+{n:"Mjolnir",d:"Mjolnir",c:0,p:0,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/mjolnir.webp"},
+{n:"Demon",d:"Demon",c:1,p:6,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/demon.webp"},
+{n:"Sinister Clone",d:"SinisterClone",c:2,p:2,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/sinister-clone.webp"},
+{n:"Rock",d:"Rock",c:1,p:0,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/rock.webp"},
+{n:"Tiger",d:"TigerSpirit",c:5,p:10,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/tiger-spirit.webp"},
+{n:"DoomBot",d:"DoomBot",c:6,p:5,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/doombot.webp"},
+{n:"Drone",d:"Drone",c:1,p:2,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/drone.webp"},
+{n:"Illusion",d:"MysterioIllusion",c:2,p:0,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/illusion!.webp"},
+{n:"The Void",d:"TheVoid",c:4,p:-9,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/the-void.webp"},
+{n:"Broodling",d:"Broodling",c:3,p:2,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/broodling.webp"},
+{n:"Ultron Mind Stone",d:"UltronMindStone",c:2,p:2,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/ultron-mind-stone.webp"},
+{n:"Ultron Power Stone",d:"UltronPowerStone",c:2,p:1,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/ultron-power-stone.webp"},
+{n:"Ultron Reality Stone",d:"UltronRealityStone",c:2,p:1,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/ultron-reality-stone.webp"},
+{n:"Ultron Soul Stone",d:"UltronSoulStone",c:2,p:3,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/ultron-soul-stone.webp"},
+{n:"Ultron Space Stone",d:"UltronSpaceStone",c:2,p:6,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/ultron-space-stone.webp"},
+{n:"Ultron Time Stone",d:"UltronTimeStone",c:2,p:4,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/ultron-time-stone.webp"},
+{n:"Power Stone",d:"PowerStone",c:1,p:3,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/power-stone.webp"},
+{n:"Mind Stone",d:"MindStone",c:1,p:1,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/mind-stone.webp"},
+{n:"Reality Stone",d:"RealityStone",c:1,p:2,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/reality-stone.webp"},
+{n:"Soul Stone",d:"SoulStone",c:1,p:1,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/soul-stone.webp"},
+{n:"Space Stone",d:"SpaceStone",c:1,p:3,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/space-stone.webp"},
+{n:"Time Stone",d:"TimeStone",c:1,p:1,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/time-stone.webp"},
+{n:"Basic Arrow",d:"BasicArrow",c:1,p:1,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/basic-arrow.webp"},
+{n:"Acid Arrow",d:"AcidArrow",c:1,p:-2,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/acid-arrow.webp"},
+{n:"Grapple Arrow",d:"GrappleArrow",c:1,p:3,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/grapple-arrow.webp"},
+{n:"Pym Arrow",d:"PymParticleArrow",c:1,p:1,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/pymparticle-arrow.webp"},
+{n:"Yaka Arrow",d:"YakaArrow",c:0,p:0,i:"https://marvelsnapzone.com/wp-content/themes/blocksy-child/assets/media/cards/yakaarrow.webp"}
+], links: {
+SquirrelGirl:["Squirrel"], Thor:["Mjolnir"], ShadowlandsDaredevil:["Demon"], Hood:["Demon"], MrSinister:["SinisterClone"], Rhino:["Rock"], Debrii:["Rock"], MoleMan:["Rock"], Sandstorm:["Rock"], WhiteTiger:["TigerSpirit"], DrDoom:["DoomBot"], Ultron:["Drone"], Mysterio:["MysterioIllusion"], Sentry:["TheVoid"], Brood:["Broodling"], KateBishop:["BasicArrow","AcidArrow","GrappleArrow","PymParticleArrow","YakaArrow"], InfinityUltron:["UltronMindStone","UltronPowerStone","UltronRealityStone","UltronSoulStone","UltronSpaceStone","UltronTimeStone"], Thanos:["PowerStone","MindStone","RealityStone","SoulStone","SpaceStone","TimeStone"]
+} };
+/* build id->def map (token:true) from a tokens[] array; sanitize a links object to {producerId:[tokenId,…]} */
+function buildTokenMap(arr){
+  const m = {};
+  (Array.isArray(arr) ? arr : []).forEach(t => {
+    if(!t || !t.d || !t.n) return;
+    const k = { n:String(t.n), d:String(t.d), c:+t.c||0, p:+t.p||0, a:t.a||'', token:true };
+    if(t.i && /^https?:\/\//.test(t.i)) k.i = String(t.i);
+    m[t.d] = k;
+  });
+  return m;
+}
+function sanitizeLinks(links){
+  const out = {};
+  if(links && typeof links === 'object' && !Array.isArray(links)){
+    for(const k in links){ if(Array.isArray(links[k])){ const a = links[k].filter(x => typeof x === 'string' && x); if(a.length) out[k] = a; } }
+  }
+  return out;
+}
+/* intake from cards.json (or the seed). Non-fatal + tolerant: bad/empty tokens -> seed fallback. */
+function applyTokenData(tokens, links){
+  if(Array.isArray(tokens) && tokens.length){
+    S.tokens = buildTokenMap(tokens);
+    S.tokenLinks = sanitizeLinks(links);
+  } else {
+    S.tokens = buildTokenMap(TOKEN_SEED.tokens);
+    S.tokenLinks = sanitizeLinks(TOKEN_SEED.links);
+  }
+}
+
 /* ============ STATE ============ */
 const S = {
+  tokens: buildTokenMap(TOKEN_SEED.tokens),       // R7-D: id -> token def (token:true). Seeded now; cards.json overrides at boot.
+  tokenLinks: sanitizeLinks(TOKEN_SEED.links),    // R7-D: producer id -> [token id]
   db: DB_BASE.slice(),
   dbLabel: DB_BASE_LABEL,
   byId: {},
@@ -1204,7 +1335,7 @@ function indexDb(){
   S.byId = {};
   S.short = {};       // compressed token (vowel-stripped + hex length) -> CardDefId; null = collision (skip)
   S.shortSkel = {};   // vowel-stripped skeleton only (no length suffix) -> CardDefId; null = collision; powers the fuzzy fallback
-  const skel = d => d.replace(/[aeiouyAEIOUY]/g,'');
+  const skel = d => d.replace(/[aeiouy]/g,'');   // lowercase only: untapped keeps word-initial capitals (Armor->Armr, MotherAskani->MthrAskn)
   for(const c of S.db){
     S.byId[c.d] = c;
     const k = skel(c.d) + c.d.length.toString(16).toUpperCase();
@@ -1214,7 +1345,7 @@ function indexDb(){
   }
 }
 function getCard(defid){
-  return S.byId[defid] || S.stubs[defid] || null;
+  return S.byId[defid] || S.tokens[defid] || S.stubs[defid] || null;   // R7-D: token ids resolve to real name/cost/power/art
 }
 function makeStub(defid){
   if(!S.stubs[defid]) S.stubs[defid] = {
@@ -1282,6 +1413,9 @@ function toggleCard(defid){
   const i = d.cards.indexOf(defid);
   if(i >= 0){ d.cards.splice(i,1); }
   else {
+    /* R7 review fix: tokens are created in play — never one of the 12. Block ADD only
+       (removal above still works, so a deck corrupted before this guard can be healed). */
+    if(S.tokens[defid] && !S.byId[defid]){ toast('Tokens are created in play — they can’t join the 12'); return; }
     if(d.cards.length >= 12){ toast('Deck is full (12 cards)'); return; }
     d.cards.push(defid);
   }
@@ -1759,6 +1893,9 @@ $('#cardlist').addEventListener('click', e => {
 function openCardSheet(defid){
   const c = getCard(defid) || makeStub(defid);
   const url = artUrl(c);
+  /* R7 review fix: a token sheet is read-only — no Series (tokens have none), no
+     Mark-owned, and no Add-to-deck (which would corrupt the 12 / the export code). */
+  const isTok = !!c.token;
   const inD = inDeck(defid);
   const own = S.owned.has(defid);
   openModal(
@@ -1773,14 +1910,17 @@ function openCardSheet(defid){
     '</div>'+
     '<div class="sheetab">'+(c.a ? esc(c.a) : 'No ability.')+'</div>'+
     (c.f ? '<div class="sheetflav">&ldquo;'+esc(c.f)+'&rdquo;</div>' : '')+
-    '<div class="mnote">Series '+esc(c.s)+(c.stub ? ' &middot; <span style="color:var(--warn)">not in local database (imported)</span>' : '')+'</div>'+
-    '<div class="mrow">'+
-      '<button class="abtn'+(own?'':' subtle')+'" id="sh-own">'+(own?'&#10003; Owned':'Mark owned')+'</button>'+
-      '<button class="abtn '+(inD?'danger':'primary')+'" id="sh-add">'+(inD?'Remove from deck':'Add to deck')+'</button>'+
-    '</div>'
+    (isTok
+      ? '<div class="mnote">&#11046; Token &mdash; created in play by another card. It can sit on a play line, but never counts as one of your 12.</div>'
+      : '<div class="mnote">Series '+esc(c.s)+(c.stub ? ' &middot; <span style="color:var(--warn)">not in local database (imported)</span>' : '')+'</div>'+
+        '<div class="mrow">'+
+          '<button class="abtn'+(own?'':' subtle')+'" id="sh-own">'+(own?'&#10003; Owned':'Mark owned')+'</button>'+
+          '<button class="abtn '+(inD?'danger':'primary')+'" id="sh-add">'+(inD?'Remove from deck':'Add to deck')+'</button>'+
+        '</div>')
   );
-  $('#sh-add').onclick = () => { closeModal(); toggleCard(defid); };
-  $('#sh-own').onclick = () => {
+  const shAdd = $('#sh-add'), shOwn = $('#sh-own');
+  if(shAdd) shAdd.onclick = () => { closeModal(); toggleCard(defid); };
+  if(shOwn) shOwn.onclick = () => {
     own ? S.owned.delete(defid) : S.owned.add(defid);
     buzz();
     persistColl(); renderAll(); openCardSheet(defid);
@@ -2164,26 +2304,133 @@ function autoSketchLine(cards){
   }
   return line;
 }
-function lineFlags(line){
+/* R7-E: per-turn energy nudge. budget(t) = t + effAdj, where effAdj is an explicit line.adj[t-1]
+   (manual +/−, clamped [-2,3]) or, when that's 0, an auto ramp bump from a ramp card the prior turn.
+   Nudge only relaxes/tightens VALIDATION — autoSketchLine still budgets to t. */
+const RAMP = { Psylocke:1, Electro:1 };   // id -> extra Energy NEXT turn (seed; the regex below catches the rest)
+/* Review fix: no loose "gain.*energy" alternative — it false-positived on Sunspot
+   ("Gain +1 Power for each unspent Energy"). All real rampers in the current DB
+   (X-23, Jennifer Kale, Peni Parker, Psylocke, Hope Summers, Kraglin, Superior
+   Spider-Man, Star-Lord, Master of the Sun) still match the remaining alternatives. */
+const RAMP_RX = /\+?\s*1\s*energy|extra energy|energy next turn/i;
+function rampAuto(turns, t, d){
+  if(t < 2) return 0;
+  let e = 0;
+  (turns[t-2] || []).forEach(id => {
+    if(RAMP[id]){ e = Math.max(e, RAMP[id]); return; }
+    const c = getCard(id);
+    if(c && c.a && RAMP_RX.test(c.a)) e = Math.max(e, 1);
+  });
+  return e;
+}
+function turnBudget(turns, adj, t, d){
+  const a = normAdj(adj);
+  const eff = a[t-1] !== 0 ? a[t-1] : rampAuto(turns, t, d);
+  return t + eff;
+}
+function budget(lineObj, t, d){ lineObj = lineObj || {}; return turnBudget(lineObj.turns || [], lineObj.adj, t, d); }
+/* tokens are CREATED, not drawn — they never count toward the "cards seen by Tn" draw math (only energy). */
+function drawCount(ids){ let n = 0; for(const id of (ids || [])) if(!S.tokens[id]) n++; return n; }
+function lineFlags(line, adj, d){
   const out = []; let cum = 0;
   for(let t=1; t<=6; t++){
     const ids = line[t-1] || [];
     const cards = ids.map(id => getCard(id) || makeStub(id));
     const spent = cards.reduce((s,c) => s + (c.c||0), 0);
-    cum += ids.length;
-    if(spent > t)          out.push({ turn:t, type:'energy', msg:'T' + t + ' spends ' + spent + ' energy (only ' + t + ' available)' });
+    const b = turnBudget(line, adj, t, d);
+    cum += drawCount(ids);
+    if(spent > b)          out.push({ turn:t, type:'energy', msg:'T' + t + ' spends ' + spent + ' energy (only ' + b + ' available)' });
     if(cum > DRAWN[t])     out.push({ turn:t, type:'draw',   msg:'T' + t + ': line plays ' + cum + ' cards but you’ve drawn ~' + DRAWN[t] });
   }
   return out;
 }
-/* live line, pruned to the active deck — the single source both the slots and picker read */
+/* R7-D: a token stays in a line only while a producer that creates it sits on a STRICTLY earlier turn AND is
+   still one of the 12. Moving the producer later / removing it / dropping it from the deck auto-orphans the token. */
+function isValidToken(id, turns, d){
+  if(!S.tokens[id]) return false;
+  const inDeck = new Set((d && d.cards) || []);
+  const tTok = turnOfId(turns, id); if(!tTok) return false;
+  for(const pid in S.tokenLinks){
+    if(!inDeck.has(pid)) continue;
+    if((S.tokenLinks[pid] || []).indexOf(id) < 0) continue;
+    const tp = turnOfId(turns, pid);
+    if(tp && tp < tTok) return true;
+  }
+  return false;
+}
+/* live line, pruned to the active deck — the single source both the slots and picker read.
+   R7: reads the ACTIVE line's turns (multi-line); keeps real cards in the 12 + valid created tokens, same shape. */
 function currentLine(d){
-  const line = normLine(d.line);
-  const inDeck = new Set(d.cards);
-  for(let i=0; i<6; i++) line[i] = line[i].filter(id => inDeck.has(id));   // drop ids that left the deck
+  const raw = normLine(activeLine(d).turns);
+  const inDeck = new Set(d.cards || []);
+  const line = emptyLine();
+  for(let i=0; i<6; i++) line[i] = raw[i].filter(id => inDeck.has(id) || isValidToken(id, raw, d));
   return line;
 }
-function turnOfId(line, id){ for(let i=0;i<6;i++) if(line[i].indexOf(id) >= 0) return i+1; return 0; }
+function turnOfId(line, id){ for(let i=0;i<6;i++) if((line[i]||[]).indexOf(id) >= 0) return i+1; return 0; }
+/* R7-D: tokens to OFFER for open turn t = union of tokens from every producer (in the 12) sitting on a
+   strictly earlier turn. Offering only after the producer's turn enforces token-turn > producer-turn for free. */
+function tokensForTurn(turns, t, d){
+  const inDeck = new Set((d && d.cards) || []);
+  const ids = [], seen = new Set();
+  for(let k=1; k<t; k++){
+    (turns[k-1] || []).forEach(pid => {
+      if(!inDeck.has(pid)) return;
+      (S.tokenLinks[pid] || []).forEach(tid => { if(S.tokens[tid] && !seen.has(tid)){ seen.add(tid); ids.push(tid); } });
+    });
+  }
+  return ids;
+}
+
+/* ===== R7-A: MULTI-LINE MODEL =====================================================================
+   d.lines = [ { id, name, turns:[[ids]×6], adj:[0×6] }, … ]   (adj = per-turn energy nudge, WP2)
+   d.activeLineId = which line the composer / read-view show
+   d.line = lines[0].turns  — a live MIRROR of the PRIMARY line, kept so round-6 devices (which only
+   know d.line) can still read + edit the primary line across sync with zero data loss. All helpers
+   below are pure/tolerant (the normLine philosophy); nothing is rewritten on disk until the first edit
+   (materializeLines), exactly like normLine tolerates an absent d.line today. */
+function normAdj(a){ const A = Array.isArray(a) ? a : []; const out = [0,0,0,0,0,0];
+  for(let i=0;i<6;i++){ let v = Math.round(+A[i] || 0); if(v < -2) v = -2; if(v > 3) v = 3; out[i] = v; } return out; }
+function newLineObj(name, turns){ return { id:uid(), name:String(name||''), turns:normLine(turns), adj:[0,0,0,0,0,0] }; }
+function normLineObj(o){ o = (o && typeof o === 'object') ? o : {};
+  return { id:o.id || uid(), name:String(o.name || ''), turns:normLine(o.turns), adj:normAdj(o.adj) }; }
+function sameLine(a, b){ a = normLine(a); b = normLine(b);
+  for(let i=0;i<6;i++){ if(a[i].length !== b[i].length) return false;
+    for(let j=0;j<a[i].length;j++) if(a[i][j] !== b[i][j]) return false; } return true; }
+/* MIGRATION + SYNC RECONCILE (pure read — never mutates d). Builds the lines[] a deck logically has. */
+function getLines(d){
+  let L;
+  if(d && Array.isArray(d.lines) && d.lines.length){
+    L = d.lines.map(normLineObj);
+    // reconcile a round-6 edit: if the old d.line mirror diverged from lines[0], the other device edited
+    // the primary line out from under us -> adopt d.line for lines[0], keep Plan B/C (which r6 can't see).
+    if(d.line != null && !sameLine(d.line, L[0].turns)) L[0].turns = normLine(d.line);
+  } else {
+    L = [ newLineObj('Main line', normLine(d && d.line)) ];   // round-6 d.line present, or fully absent -> one empty line
+  }
+  return L;
+}
+function activeLine(d){ const L = getLines(d); return L.find(l => l.id === (d && d.activeLineId)) || L[0]; }
+function hasPlan(d){ if(!d) return false; const inDeck = new Set(d.cards || []);
+  return getLines(d).some(l => l.turns.some(t => t.some(id => inDeck.has(id)))); }
+/* the ONE mutation point: persist the logical lines[] onto d, keep activeLineId valid, re-mirror primary */
+function materializeLines(d){
+  d.lines = getLines(d);
+  if(!d.activeLineId || !d.lines.some(l => l.id === d.activeLineId)) d.activeLineId = d.lines[0].id;
+  d.line = d.lines[0].turns;
+  return d.lines;
+}
+function mutateActiveLine(d, fn){
+  const A = materializeLines(d);
+  const lo = A.find(l => l.id === d.activeLineId) || A[0];
+  fn(lo);
+  lo.turns = normLine(lo.turns);
+  d.line = A[0].turns;   // re-mirror primary for round-6 back-compat
+  touchMeta(d);
+}
+function nextLineName(d){ const names = new Set(getLines(d).map(l => l.name));
+  let n = 2; while(names.has('Line ' + n)) n++; return 'Line ' + n; }
+function setActiveLine(d, id){ materializeLines(d); d.activeLineId = id; touchMeta(d); renderPlanner(); renderLinePlan(); }
 
 function renderPlanner(){
   const box = $('#planner'); if(!box) return;
@@ -2191,14 +2438,17 @@ function renderPlanner(){
   if(!d){ box.innerHTML = ''; closePlPicker(true); return; }
   if(!d.cards.length){ box.innerHTML = '<div class="odds-hint">Add cards to the deck first.</div>'; closePlPicker(true); return; }
   const line = currentLine(d);
+  const active = activeLine(d);
   const assigned = new Set(); line.forEach(sl => sl.forEach(id => assigned.add(id)));
 
   let cum = 0; const slotHtml = [];
   for(let t=1; t<=6; t++){
-    const ids = line[t-1]; cum += ids.length;
+    const ids = line[t-1]; cum += drawCount(ids);
     const cards = ids.map(id => getCard(id) || makeStub(id));
     const spent = cards.reduce((s,c) => s + (c.c||0), 0);
-    const over = spent > t;
+    const b = turnBudget(line, active.adj, t, d);   // R7-E: energy nudge (explicit adj or auto ramp)
+    const over = spent > b;
+    const rampTag = (normAdj(active.adj)[t-1] === 0 && rampAuto(line, t, d) > 0) ? ' <span class="pl-ramp" title="+1 Energy from a ramp card the prior turn">ramp</span>' : '';
     const overDraw = cum > DRAWN[t];
     const conf = Math.round(pAll(cum, t) * 100);
     const low = cum > 0 && pAll(cum, t) < 0.35;
@@ -2209,19 +2459,38 @@ function renderPlanner(){
       '<div class="pl-slot' + (cards.length?'':' vacant') + '" data-t="' + t + '">' +
         '<div class="pl-rail">' +
           '<span class="pl-t">T' + t + '</span>' +
-          '<span class="pl-energy' + (over?' over':'') + '">' + spent + '/' + t + '⚡</span>' +
+          '<span class="pl-energy' + (over?' over':'') + '">' + spent + '/' + b + '⚡</span>' + rampTag +
           (cum ? '<span class="pl-conf' + (low?' low':'') + '">~' + conf + '% by T' + t +
             (overDraw ? ' <span class="pl-drawwarn" title="More cards than you’ll have drawn by T' + t + '">⚠</span>' : '') + '</span>' : '') +
         '</div>' +
         '<div class="pl-mini-row">' + minis + '</div>' +
       '</div>');
   }
-  const flags = lineFlags(line);
+  const flags = lineFlags(line, active.adj, d);
   const flagsHtml = flags.length
     ? '<div class="pl-flags">' + flags.map(f => '<div class="warnbox">' + esc(f.msg) + '</div>').join('') + '</div>'
     : (assigned.size ? '<div class="pl-flags"><div class="odds-hint">Line looks legal — energy and draw both check out.</div></div>' : '');
   const hint = assigned.size ? '' : '<div class="odds-hint">Tap a turn to add cards — or Auto-sketch a first draft.</div>';
+
+  // R7-B: multi-line manager bar (≤2 compact rows above the six slots — DOES NOT touch the .pl-slot DOM)
+  const lines = getLines(d);
+  const renaming = S.plannerRenaming && S.plannerRenaming === active.id;
+  const chipsHtml = lines.map(l =>
+    (renaming && l.id === active.id)
+      ? '<input class="pl-line-name-input" data-plname maxlength="40" value="' + esc(l.name || '') + '">'
+      : '<button class="pl-line-chip' + (l.id === active.id ? ' on' : '') + '" data-lid="' + esc(l.id) + '" type="button">' + esc(l.name || 'Line') + '</button>'
+  ).join('');
+  const managerHtml =
+    '<div class="pl-lines">' + chipsHtml +
+      '<button class="pl-line-add" data-pladd type="button" aria-label="Add play line">&#65291;</button></div>' +
+    '<div class="pl-line-tools">' +
+      '<button class="pl-line-tool" data-plrename type="button">Rename</button>' +
+      '<button class="pl-line-tool" data-pldupe type="button">Duplicate</button>' +
+      '<button class="pl-line-tool" data-pldel type="button"' + (lines.length <= 1 ? ' disabled' : '') + '>Delete</button>' +
+    '</div>';
+
   box.innerHTML =
+    managerHtml +
     '<div class="pl-slots">' + slotHtml.join('') + '</div>' +
     hint + flagsHtml +
     '<div class="pl-actions"><button class="abtn primary" id="pl-auto">Auto-sketch</button><button class="abtn danger" id="pl-clear">Clear line</button></div>';
@@ -2230,15 +2499,69 @@ function renderPlanner(){
     slot.onclick = e => {
       const t = +slot.dataset.t;
       const mini = e.target.closest('.pl-mini-row .mini');
-      if(mini){   // tap an assigned mini -> unassign it from this turn
-        const L = currentLine(d); L[t-1] = L[t-1].filter(x => x !== mini.dataset.d);
-        d.line = L; touchMeta(d); renderPlanner(); return;
+      if(mini){   // tap an assigned mini -> unassign it from this turn (of the active line)
+        const id = mini.dataset.d;
+        const L = currentLine(d); L[t-1] = L[t-1].filter(x => x !== id);
+        mutateActiveLine(d, lo => { lo.turns = L; }); renderPlanner(); renderLinePlan(); return;
       }
       openPlPicker(t);   // tap empty area / the + -> open the card picker for this turn
     };
   });
-  const auto = $('#pl-auto'); if(auto) auto.onclick = () => { d.line = autoSketchLine(sortedDeckCards(d)); touchMeta(d); renderPlanner(); };
-  const clr  = $('#pl-clear'); if(clr) clr.onclick = () => { d.line = emptyLine(); touchMeta(d); renderPlanner(); };
+  const auto = $('#pl-auto'); if(auto) auto.onclick = () => { const L = autoSketchLine(sortedDeckCards(d)); mutateActiveLine(d, lo => { lo.turns = L; }); renderPlanner(); renderLinePlan(); };
+  const clr  = $('#pl-clear'); if(clr) clr.onclick = () => { mutateActiveLine(d, lo => { lo.turns = emptyLine(); }); renderPlanner(); renderLinePlan(); };
+
+  // R7-B: manager wiring — switch / add / rename / duplicate / delete (all meta edits: never clear done)
+  box.querySelectorAll('.pl-line-chip').forEach(chip => {
+    chip.onclick = () => { const id = chip.dataset.lid; if(id === d.activeLineId) return; setActiveLine(d, id); };
+  });
+  const addBtn = box.querySelector('[data-pladd]');
+  if(addBtn) addBtn.onclick = () => {
+    materializeLines(d);
+    const nl = newLineObj(nextLineName(d));
+    d.lines.push(nl); d.activeLineId = nl.id; d.line = d.lines[0].turns; touchMeta(d);
+    renderPlanner(); renderLinePlan();
+  };
+  const dupBtn = box.querySelector('[data-pldupe]');
+  if(dupBtn) dupBtn.onclick = () => {
+    materializeLines(d);
+    const src = d.lines.find(l => l.id === d.activeLineId) || d.lines[0];
+    const copy = newLineObj((src.name || 'Line') + ' copy', src.turns.map(t => t.slice()));   // deep-clone turns
+    copy.adj = normAdj(src.adj);
+    d.lines.splice(d.lines.indexOf(src) + 1, 0, copy);
+    d.activeLineId = copy.id; d.line = d.lines[0].turns; touchMeta(d);
+    renderPlanner(); renderLinePlan();
+  };
+  const renBtn = box.querySelector('[data-plrename]');
+  if(renBtn) renBtn.onclick = () => { materializeLines(d); S.plannerRenaming = d.activeLineId; renderPlanner(); };
+  const delBtn = box.querySelector('[data-pldel]');
+  if(delBtn) delBtn.onclick = () => {
+    materializeLines(d);
+    if(d.lines.length <= 1) return;
+    const idx = Math.max(0, d.lines.findIndex(l => l.id === d.activeLineId));
+    if(!confirm('Delete play line "' + (d.lines[idx].name || 'Line') + '"?')) return;
+    d.lines.splice(idx, 1);
+    d.activeLineId = d.lines[Math.min(idx, d.lines.length - 1)].id;
+    d.line = d.lines[0].turns;   // re-mirror primary (may have re-pointed after deleting lines[0])
+    touchMeta(d);
+    renderPlanner(); renderLinePlan();
+  };
+  const nameInput = box.querySelector('[data-plname]');
+  if(nameInput){
+    nameInput.focus(); nameInput.select();
+    let done = false;
+    const commit = () => {
+      if(done) return; done = true;
+      const v = String(nameInput.value || '').slice(0, 40);
+      S.plannerRenaming = null;
+      if(v.trim()) mutateActiveLine(d, lo => { lo.name = v; });   // empty reverts to the prior name
+      renderPlanner(); renderLinePlan();
+    };
+    nameInput.onkeydown = e => {
+      if(e.key === 'Enter'){ e.preventDefault(); commit(); }
+      else if(e.key === 'Escape'){ done = true; S.plannerRenaming = null; renderPlanner(); }
+    };
+    nameInput.onblur = commit;
+  }
 
   if(S.plannerTurn) refreshPlPicker();   // keep an open picker in sync after a re-render
 }
@@ -2261,19 +2584,44 @@ function refreshPlPicker(){
   const t = S.plannerTurn; if(!t) return;
   const d = activeDeck(); if(!d || !d.cards.length){ closePlPicker(true); return; }
   const line = currentLine(d);
+  const active = activeLine(d);
   const spent = line[t-1].reduce((s,id) => s + ((getCard(id) || makeStub(id)).c || 0), 0);
+  const b = turnBudget(line, active.adj, t, d);
   const title = $('#pl-picker-title'); if(title) title.textContent = 'Turn ' + t;
   const en = $('#pl-picker-energy');
-  if(en){ en.textContent = spent + '/' + t + '⚡'; en.classList.toggle('over', spent > t); }
+  if(en){ en.textContent = spent + '/' + b + '⚡'; en.classList.toggle('over', spent > b); }
+  // R7-E: energy nudge control (− / value / ＋) in the picker head — writes activeLine.adj[t-1]
+  const nu = $('#pl-nudge');
+  if(nu){
+    const cur = normAdj(active.adj)[t-1];
+    const ramp = rampAuto(line, t, d);
+    const label = cur !== 0 ? (cur > 0 ? '+' + cur : String(cur)) : (ramp > 0 ? '+' + ramp + ' ramp' : '');
+    nu.innerHTML =
+      '<button class="pl-nudge-b" data-nudge="-1" type="button" aria-label="Less energy this turn">&#8722;</button>' +
+      '<span class="pl-nudge-v' + (label ? '' : ' zero') + '">' + esc(label) + '</span>' +
+      '<button class="pl-nudge-b" data-nudge="1" type="button" aria-label="More energy this turn">&#65291;</button>';
+    nu.querySelectorAll('[data-nudge]').forEach(bt => {
+      bt.onclick = () => {
+        const delta = +bt.dataset.nudge;
+        mutateActiveLine(d, lo => { const a = normAdj(lo.adj); let v = a[t-1] + delta; if(v < -2) v = -2; if(v > 3) v = 3; a[t-1] = v; lo.adj = a; });
+        renderPlanner(); renderLinePlan();
+      };
+    });
+  }
   const grid = $('#pl-pick-grid'); if(!grid) return;
-  grid.innerHTML = sortedDeckCards(d).map(c => {
-    let h = miniHtml(c);
-    const tn = turnOfId(line, c.d);
-    if(tn === t) h = h.replace('class="mini', 'class="mini on');
-    else if(tn) h = h.replace('class="mini', 'class="mini elsewhere')
-                     .replace('</div></div>', '</div><span class="pl-tag">T' + tn + '</span></div>');
+  const mark = (h, id) => {
+    const tn = turnOfId(line, id);
+    if(tn === t) return h.replace('class="mini', 'class="mini on');
+    if(tn) return h.replace('class="mini', 'class="mini elsewhere').replace('</div></div>', '</div><span class="pl-tag">T' + tn + '</span></div>');
     return h;
-  }).join('');
+  };
+  let html = sortedDeckCards(d).map(c => mark(miniHtml(c), c.d)).join('');
+  const toks = tokensForTurn(line, t, d);   // offered only after a producer's earlier turn
+  if(toks.length){
+    html += '<div class="pl-tok-head">Tokens &amp; summons</div>' +
+      toks.map(tid => mark(miniHtml(getCard(tid) || makeStub(tid)), tid)).join('');
+  }
+  grid.innerHTML = html;
 }
 
 /* ============ RENDER: DECK ============ */
@@ -2282,8 +2630,9 @@ function miniHtml(c){
   const img = url
     ? '<img src="'+esc(url)+'" alt="" loading="lazy" decoding="async" onerror="this.closest(\'.mini\')&&this.closest(\'.mini\').classList.add(\'noart\')">'
     : '';
-  return '<div class="mini'+(url?'':' noart')+(c.stub?' stubby':'')+'" data-d="'+esc(c.d)+'" title="'+esc(c.n)+'" aria-label="'+esc(c.n)+'" style="'+tileGrad(c)+'">'+
+  return '<div class="mini'+(url?'':' noart')+(c.stub?' stubby':'')+(c.token?' token':'')+'" data-d="'+esc(c.d)+'" title="'+esc(c.n)+(c.token?' (created token)':'')+'" aria-label="'+esc(c.n)+'" style="'+tileGrad(c)+'">'+
     img+'<span class="minit">'+esc(initials(c))+'</span>'+
+    (c.token?'<span class="tok-badge" aria-hidden="true">⬦</span>':'')+
     '<span class="ovl tc">'+c.c+'</span><span class="ovl tp">'+c.p+'</span>'+
     '<div class="mname">'+esc(c.n)+'</div></div>';
 }
@@ -2352,6 +2701,7 @@ function renderDeck(){
   renderDrawOdds(d);
   renderSim();
   renderPlanner();
+  renderLinePlan();
   renderVerdict();
 
   // R5-G: "what changed" banner — cards whose cost/power/ability moved since this deck was built
@@ -2398,11 +2748,65 @@ function renderDeck(){
     gh.classList.toggle('good', balanced && cards.length > 0);
   }
 }
+
+/* ===== R7-C: LINE-PLAN READ VIEW — the game-plan equivalent of the showcase hero. Lives above
+   #decktabs so it's seen without entering a sub-tab; kept in the DOM always (hidden on a blank bench
+   by the #view-deck.no-deck rule). Read-only mirror of the composer's active line. ===== */
+function renderLinePlan(){
+  const box = $('#lineplan'); if(!box) return;
+  const d = activeDeck();
+  if(!d || !d.cards.length){ box.innerHTML = ''; return; }
+  if(!hasPlan(d)){
+    box.innerHTML = '<div class="lp-empty"><span class="lp-empty-txt">No play line yet — map your optimal game.</span>' +
+      '<button class="abtn subtle" id="lp-plan-btn" type="button">Plan it</button></div>';
+    const btn = $('#lp-plan-btn'); if(btn) btn.onclick = () => setDeckTab('planner');
+    return;
+  }
+  const lines = getLines(d);
+  const active = activeLine(d);
+  const line = currentLine(d);   // active line, pruned to the deck
+  const segHtml = lines.length >= 2
+    ? '<div class="lp-seg segment">' + lines.map(l =>
+        '<button data-lid="' + esc(l.id) + '"' + (l.id === active.id ? ' class="on"' : '') + ' type="button">' + esc(l.name || 'Line') + '</button>'
+      ).join('') + '</div>'
+    : '';
+  let cum = 0, minConf = null;
+  const rows = [];
+  for(let t=1; t<=6; t++){
+    const ids = line[t-1]; cum += drawCount(ids);   // tokens don't count toward cards-drawn
+    if(!ids.length) continue;   // only turns that actually play a card (compact)
+    const cards = ids.map(id => getCard(id) || makeStub(id));
+    const spent = cards.reduce((s,c) => s + (c.c||0), 0);
+    const b = turnBudget(line, active.adj, t, d);   // R7-E: ramp/nudge-adjusted budget
+    const over = spent > b;
+    const conf = Math.round(pAll(cum, t) * 100);
+    if(minConf === null || conf < minConf) minConf = conf;
+    const adjV = normAdj(active.adj)[t-1];
+    const nudgeNote = adjV !== 0 ? ' <span class="lp-nudge-note" title="Manual energy nudge">' + (adjV>0?'+'+adjV:String(adjV)) + '⚡</span>'
+      : (rampAuto(line, t, d) > 0 ? ' <span class="lp-nudge-note" title="+1 Energy from a ramp card the prior turn">ramp</span>' : '');
+    rows.push('<div class="lp-row"><span class="lp-t">T' + t + '</span>' +
+      '<div class="lp-chips">' + cards.map(miniHtml).join('') + '</div>' +
+      '<span class="lp-energy' + (over?' over':'') + '">' + spent + '/' + b + '⚡</span>' + nudgeNote +
+      '<span class="lp-rconf">~' + conf + '% by T' + t + '</span></div>');
+  }
+  const confChip = minConf === null ? '' : '<span class="lp-conf" title="Weakest-turn draw confidence for this line">' + minConf + '% line</span>';
+  box.innerHTML = '<div class="lp-card">' + segHtml +
+    '<div class="lp-head"><span class="lp-name">' + esc(active.name || 'Line') + '</span>' + confChip + '</div>' +
+    (rows.length ? rows.join('') : '<div class="odds-hint">This line is empty — switch or plan it in Play line.</div>') +
+    '</div>';
+  box.querySelectorAll('.lp-seg button').forEach(b => {
+    b.onclick = () => { const id = b.dataset.lid; if(id === d.activeLineId) return; setActiveLine(d, id); };
+  });
+  box.querySelectorAll('.lp-chips .mini').forEach(m => {   // chips are read-only; a tap peeks the card sheet
+    m.onclick = () => openCardSheet(m.dataset.d);
+  });
+}
 /* R6: no-active-deck showcase. Keeps #decktabs/.dpane in the DOM (hidden) so structural
    tests still see them; the CSS rule #view-deck.no-deck > :not(#deck-empty){display:none} hides the rest. */
 function renderDeckEmpty(){
   const de = $('#deck-empty'); if(de) de.hidden = false;
   const vd = $('#view-deck'); if(vd) vd.classList.add('no-deck');
+  const lp = $('#lineplan'); if(lp) lp.innerHTML = '';   // blank the read-view (also hidden by .no-deck CSS)
   closePlPicker(true);
 }
 /* R6-C: card-picker sheet — wired once (persistent overlay). Tap toggles/moves a card for the open turn. */
@@ -2415,8 +2819,9 @@ if($('#pl-pick-grid')) $('#pl-pick-grid').onclick = e => {
   const cur = turnOfId(line, id);
   if(cur === t){ line[t-1] = line[t-1].filter(x => x !== id); }          // already here -> toggle off
   else { if(cur) line[cur-1] = line[cur-1].filter(x => x !== id); line[t-1].push(id); }  // move / add
-  d.line = line; touchMeta(d);
+  mutateActiveLine(d, lo => { lo.turns = line; });   // write the active line + re-mirror the primary
   renderPlanner();   // re-renders slot rows AND the open picker (energy + grid) in one pass
+  renderLinePlan();
 };
 if($('#pl-pick-done')) $('#pl-pick-done').onclick = () => closePlPicker();
 if($('#pl-picker')) $('#pl-picker').addEventListener('click', e => { if(e.target.id === 'pl-picker') closePlPicker(); });
@@ -2987,7 +3392,30 @@ function deckAsText(){
   if(!d.cards.length) return '(deck is currently empty)';
   return sortedDeckCards(d).map(c =>
     c.c+'-cost '+c.p+'-power '+c.n+(c.stub ? ' (card text unknown locally)' : (c.a ? ': '+c.a : ': no ability'))
-  ).join('\n');
+  ).join('\n') + gamePlanText(d);
+}
+/* R7-C: append the planned game-plan (all non-empty lines) so shared/coach text carries the play line. */
+function gamePlanText(d){
+  if(!hasPlan(d)) return '';
+  const inDeck = new Set(d.cards || []);
+  let s = '\n\nGAME PLAN';
+  getLines(d).forEach(l => {
+    const raw = normLine(l.turns);
+    const turns = raw.map(t => t.filter(id => inDeck.has(id) || isValidToken(id, raw, d)));   // keep the 12 + valid tokens
+    if(!turns.some(t => t.length)) return;   // skip fully-empty lines
+    let cum = 0, minConf = null;
+    for(let t=1; t<=6; t++){ cum += drawCount(turns[t-1]);
+      if(turns[t-1].length){ const c = Math.round(pAll(cum, t) * 100); if(minConf === null || c < minConf) minConf = c; } }
+    s += '\n— ' + (l.name || 'Line') + (minConf === null ? '' : ' (bottleneck ~' + minConf + '%)');
+    for(let t=1; t<=6; t++){
+      const ids = turns[t-1]; if(!ids.length) continue;
+      const names = ids.map(id => (getCard(id) || makeStub(id)).n + (S.tokens[id] ? ' (token)' : ''));
+      const adjV = normAdj(l.adj)[t-1];
+      const note = adjV !== 0 ? '  (' + (adjV>0?'+'+adjV:String(adjV)) + ' energy)' : (rampAuto(turns, t, d) > 0 ? '  (ramp +1)' : '');
+      s += '\n  T' + t + ': ' + names.join(', ') + note;
+    }
+  });
+  return s;
 }
 $('#btn-ask').onclick = async () => {
   const out = $('#aiout');
@@ -3010,8 +3438,7 @@ $('#btn-ask').onclick = async () => {
     ownedBlock + creatorMetaBlock + '\n\n' +
     'Question: ' + q + '\n\n' +
     'Answer in plain text (no markdown syntax), under 220 words. Be specific: name exact cards for cuts and adds, reference costs, and explain the game plan reasoning briefly.';
-  try{
-    let text = '';
+  const askOnce = async () => {
     if(COACH_URL){
       const resp = await fetch(COACH_URL, {
         method:'POST',
@@ -3020,18 +3447,27 @@ $('#btn-ask').onclick = async () => {
       });
       const data = await resp.json();
       if(data && data.error) throw new Error(data.error);
-      text = (data && data.text) || '';
-    } else {
-      const resp = await fetch('https://api.anthropic.com/v1/messages', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, messages:[{role:'user', content:prompt}] })
-      });
-      const data = await resp.json();
-      if(!data || !Array.isArray(data.content)){
-        throw new Error(data && data.error ? data.error.message : 'unexpected response shape');
-      }
-      text = data.content.filter(b => b.type==='text').map(b => b.text).join('\n').trim();
+      return (data && data.text) || '';
+    }
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, messages:[{role:'user', content:prompt}] })
+    });
+    const data = await resp.json();
+    if(!data || !Array.isArray(data.content)){
+      throw new Error(data && data.error ? data.error.message : 'unexpected response shape');
+    }
+    return data.content.filter(b => b.type==='text').map(b => b.text).join('\n').trim();
+  };
+  try{
+    let text = '';
+    try{ text = await askOnce(); }
+    catch(e1){
+      // R7 owner fix: one automatic retry \u2014 transient phone-side network drops were reading as "coach is broken"
+      out.textContent = 'Connection hiccup \u2014 retrying...';
+      await new Promise(r => setTimeout(r, 1200));
+      text = await askOnce();
     }
     out.textContent = text || 'No response text came back \u2014 try again.';
     if(text){
@@ -3095,6 +3531,7 @@ async function loadSiteData(){
     S.db = cards;
     S.dbLabel = 'auto-updated' + (j.updated ? ' ' + j.updated : '');
     S.siteData = true;
+    applyTokenData(j.tokens, j.links);   // R7-D: additive token intake — non-fatal; missing/garbage -> TOKEN_SEED
     return true;
   }catch(e){ return false; }
 }

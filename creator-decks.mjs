@@ -31,7 +31,7 @@ function loadCards(){
   const cards = Array.isArray(j) ? j : (j.cards || []);
   const KNOWN = new Set(cards.map(c => c.d));
   const SHORT = {}, SKEL = {};                       // null value = collision (skip)
-  const skel = d => d.replace(/[aeiouyAEIOUY]/g, ``);
+  const skel = d => d.replace(/[aeiouy]/g, ``);   // lowercase only: untapped keeps word-initial capitals (Armor->Armr, MotherAskani->MthrAskn)
   for(const c of cards){
     const k = skel(c.d) + c.d.length.toString(16).toUpperCase();
     SHORT[k] = (k in SHORT) ? null : c.d;
