@@ -21,6 +21,7 @@
   --hair:rgba(255,255,255,.08);
   /* glass surface language — the new primary separation device */
   --glass:rgba(255,255,255,.045); --glass-2:rgba(255,255,255,.075);
+  --frost:rgba(21,16,31,.94);   /* R5: near-solid, panel-tinted floating surfaces; blur kept as a hint */
   --blur:saturate(1.5) blur(22px);
   --text:#f4f1fb; --dim:#b3a9d4; --faint:#8d81b6; /* AA-tuned on the dark field */
   --iris:#a984ff; --iris-soft:#c9b6ff; --iris-ink:#14091f;
@@ -219,23 +220,33 @@ h1 .h-snap{color:var(--gold);}
 #curvehealth:empty{display:none;}
 .curve-hint{font-size:11.5px; color:var(--dim); background:var(--panel); border:1px solid var(--line);
   border-radius:999px; padding:5px 10px;}
+/* R5: deck verdict (3-state self-rating) */
+#verdictrow{display:flex; align-items:center; gap:10px; margin:2px 2px 12px;}
+.vr-label{font-size:12px; color:var(--dim); font-weight:600;}
+.vr-seg{display:flex; gap:4px; margin-left:auto;}
+.vr-seg button{width:44px; height:36px; font-size:18px; background:none; border:none; border-radius:var(--r-pill); opacity:.4;
+  transition:opacity var(--dur-1) var(--ease-out), background var(--dur-1) var(--ease-out);}
+.vr-seg button.on{opacity:1; background:var(--raise); box-shadow:inset 0 0 0 1px var(--line2);}
 /* synergy */
 #synergy{display:grid; gap:8px; margin-bottom:4px;}
-.synbox{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 12px; border-left-width:3px;}
-.synbox.syn-ok{border-left-color:var(--ok);}
-.synbox.syn-warn{border-left-color:var(--warn);}
-.syn-head{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+.synbox{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-left:3px solid transparent;
+  border-radius:var(--r-md); padding:10px 12px;}
+.synbox.syn-ok{border-left-color:var(--ok);} .synbox.syn-warn{border-left-color:var(--warn);}
+.syn-head{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
 .syn-head b{font-size:13.5px;}
+.syn-counts{display:flex; gap:6px; margin-left:auto;}
+.syn-count{font-size:10.5px; font-weight:800; padding:3px 8px; border-radius:999px; background:var(--raise); box-shadow:inset 0 0 0 1px var(--hair);}
+.syn-count.enabler{color:var(--cost);} .syn-count.payoff{color:var(--pow);} .syn-count.zero{opacity:.4;}
+.syn-chips{display:flex; flex-wrap:wrap; gap:4px; margin-top:7px;}
+.syn-chips span{font-size:10.5px; color:var(--dim); background:var(--panel); box-shadow:inset 0 0 0 1px var(--hair); border-radius:999px; padding:2px 8px;}
 .syn-badge{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; padding:3px 8px; border-radius:999px;}
 .syn-ok .syn-badge{color:#0b1f17; background:var(--ok);}
 .syn-warn .syn-badge{color:#2a1509; background:var(--warn);}
-.syn-msg{font-size:12.5px; color:var(--text); margin-top:5px;}
-.syn-hint{font-size:11.5px; color:var(--faint); margin-top:3px;}
+.syn-hint{font-size:11px; color:var(--faint); margin-top:6px;}
 /* draw & combo odds */
 .odds-sub{font-size:11.5px; color:var(--dim); margin:2px 0 6px;}
 .odds-grid{display:flex; align-items:flex-end; gap:6px; background:var(--panel); border:1px solid var(--line);
   border-radius:12px; padding:10px 10px 6px; margin-bottom:12px;}
-.odds-grid.single{margin-bottom:14px;}
 .oc{flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; min-width:0;}
 .obars{display:flex; align-items:flex-end; gap:2px; height:36px;}
 .obars i{width:7px; border-radius:2px 2px 0 0; display:block;}
@@ -253,12 +264,44 @@ h1 .h-snap{color:var(--gold);}
 .odds-legend .lg{width:10px; height:10px; border-radius:2px; display:inline-block;}
 .odds-legend .lg.ob{background:var(--cost);} .odds-legend .lg.oe{background:var(--pow); margin-left:8px;}
 .odds-hint{font-size:12px; color:var(--faint); padding:4px 2px;}
+/* D: draw-goal group picker */
+.odds-quick{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;}
+.odds-quick .chip{font-size:11px;}
+.odds-pick{display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px;}
+.chip.odd-card{font-size:11px; padding:6px 10px;}
+.chip.odd-card.on{background:var(--gold); box-shadow:var(--glow-iris); color:var(--iris-ink);}
+#odds-out .odds-sub{margin-top:10px;}
 /* goldfish sim */
 #simwrap #btn-testdraw{width:100%;}
 #simpanel{margin-top:10px;}
 #simpanel:empty{margin-top:0;}
 .sim-lab{font-size:11.5px; color:var(--dim); font-weight:700; margin-bottom:6px;}
 .sim-grid{grid-template-columns:repeat(6,1fr); margin-bottom:10px;}
+/* F: play-line planner */
+.pl-slot{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:var(--r-md); padding:8px; margin-bottom:8px;}
+.pl-head{display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:800; color:var(--faint); margin-bottom:6px;}
+.pl-head.over{color:var(--warn);}
+.pl-conf{font-weight:700;}
+.pl-conf.low{color:var(--warn);}
+.pl-mini-row{display:grid; grid-template-columns:repeat(6,1fr); gap:5px; min-height:18px;}
+.pl-mini-row .pl-empty{grid-column:1 / -1; font-size:11px; color:var(--faint); padding:4px 2px;}
+.pl-sub{font-family:var(--head); font-weight:800; letter-spacing:.4px; font-size:11px; color:var(--faint); text-transform:uppercase; margin:12px 2px 6px;}
+.pl-pool{display:grid; grid-template-columns:repeat(6,1fr); gap:5px; margin:6px 0 4px;}
+.pl-pool .mini.picked{outline:2px solid var(--iris); outline-offset:1px;}
+.pl-pool-empty{font-size:11.5px; color:var(--faint); padding:4px 2px;}
+.pl-flags{margin-top:8px;}
+.pl-flags .warnbox{margin-bottom:6px;}
+.pl-flags .warnbox:last-child{margin-bottom:0;}
+.pl-actions{display:flex; gap:8px; margin-top:10px;}
+.pl-actions .abtn{flex:1;}
+/* G: what-changed banner + H: per-deck meta note */
+#deckchanges:empty{display:none;}
+#deckchanges .warnbox{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-left:3px solid var(--warn); color:var(--text);}
+#deckchanges .ch-list{color:var(--dim); font-size:12px; margin-top:5px;}
+#deckchanges .abtn.subtle{margin-top:8px; width:auto; display:inline-block; padding:6px 12px; font-size:12px;}
+#deckmeta{font-size:11.5px; color:var(--iris-soft); background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair);
+  border-radius:var(--r-md); padding:8px 11px; margin-bottom:12px;}
+#deckmeta:empty{display:none;}
 /* insight tags (build screen) */
 #insight{flex-wrap:wrap;}
 .ins-tag{font-size:10.5px; font-weight:700; color:var(--faint); white-space:nowrap;}
@@ -280,6 +323,8 @@ h1 .h-snap{color:var(--gold);}
 .saverow .sv-main{flex:1; min-width:0;}
 .saverow .sv-name{font-weight:700; font-size:14px;}
 .saverow .sv-meta{font-size:11.5px; color:var(--faint); margin-top:2px;}
+.sv-verdict{font-size:15px; margin-left:6px;}
+.sv-dot{width:8px; height:8px; border-radius:50%; background:var(--warn); box-shadow:0 0 0 2px rgba(11,7,20,.85); margin-left:6px; display:inline-block;}
 .sv-btn{background:var(--panel); border:1px solid var(--line); color:var(--dim); border-radius:9px; padding:8px 11px; font-size:13px; font-weight:700;}
 .sv-btn.load{color:var(--gold); border-color:var(--gold);}
 /* creator decks (Saved > Creator segment) + import-preview card strip */
@@ -294,6 +339,9 @@ h1 .h-snap{color:var(--gold);}
 .cr-strip .mini .ovl, .dz-preview .mini .ovl{width:14px; height:14px; font-size:8.5px; border-width:1.5px;}
 .cr-acts{display:flex; flex-wrap:wrap; gap:8px;}
 .cr-acts .abtn{flex:1; text-align:center; text-decoration:none; min-width:120px;}
+.cr-add{margin-bottom:10px;}
+.cr-add .abtn{width:100%;}
+.cr-added{font-size:10px; font-weight:800; color:var(--iris-ink); background:var(--gold); border-radius:999px; padding:2px 7px;}
 .cr-stale{font-size:11px; color:var(--faint); text-align:center; margin-top:2px;}
 
 /* ---------- AI ---------- */
@@ -330,6 +378,11 @@ h1 .h-snap{color:var(--gold);}
   width:100%; background:var(--bg0); border:1px solid var(--line); color:var(--text);
   border-radius:10px; padding:10px; min-height:96px; font-family:var(--mono); font-size:12px; resize:vertical;
 }
+.minput{
+  flex:1; width:100%; min-height:44px; background:var(--bg0); border:1px solid var(--line); color:var(--text);
+  border-radius:10px; padding:0 12px; font-size:16px;
+}
+.minput:focus{outline:none; border-color:var(--iris);}
 .mrow{display:flex; gap:8px; margin-top:12px;}
 .mrow .abtn{flex:1;}
 .mnote{font-size:12px; color:var(--dim); line-height:1.45; margin-top:10px;}
@@ -384,11 +437,17 @@ h1 .h-snap{color:var(--gold);}
 }
 
 /* ---------- collection tab ---------- */
-#collhead{position:sticky; top:49px; z-index:22; margin:-14px -14px 12px; padding:12px 14px 10px;
-  background:var(--glass); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
-  box-shadow:inset 0 -1px 0 var(--hair), 0 14px 16px -14px rgba(0,0,0,.7);}
-.coll-hero{display:flex; align-items:baseline; gap:8px; margin-bottom:10px;}
-.coll-hero b{font-family:var(--disp); font-size:34px; line-height:.9; color:var(--iris); letter-spacing:1px;}
+/* R5: collection header no longer sticky — scrolls with content, collapses to a one-line count */
+#collhead{position:static; margin:0 0 12px; padding:0; background:none; box-shadow:none;}
+.coll-toggle{display:flex; align-items:center; gap:8px; width:100%; min-height:44px; padding:10px 12px;
+  background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-radius:var(--r-md); color:var(--text);}
+.coll-toggle .coll-hero{flex:1; display:flex; align-items:baseline; gap:8px; margin:0;}
+.coll-chev{color:var(--faint); font-size:12px; transition:transform var(--dur-2) var(--ease-inout);}
+#collhead:not(.closed) .coll-chev{transform:rotate(180deg);}
+#collhead-body{max-height:600px; overflow:hidden; transition:max-height var(--dur-2) var(--ease-inout); margin-top:10px;}
+#collhead.closed #collhead-body{max-height:0; margin-top:0;}
+.coll-hero{display:flex; align-items:baseline; gap:8px;}
+.coll-hero b{font-family:var(--disp); font-size:24px; line-height:.9; color:var(--iris); letter-spacing:.5px;}
 .coll-hero span{font-size:13px; color:var(--dim); font-weight:600;}
 #coll-total{color:var(--dim);}
 #coll-bars{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;}
@@ -433,6 +492,12 @@ h1 .h-snap{color:var(--gold);}
   min-width:36px; height:32px; font-size:15px; font-weight:800;}
 #bh-collapse{transition:transform var(--dur-2) var(--ease-inout);}
 #bh-collapse.flip{transform:rotate(180deg);}
+/* R5: prominent Done button + auto-save state indicator */
+.hbtn.done{background:linear-gradient(160deg,#b794ff,#8f6bff); color:var(--iris-ink); border:none; padding:0 12px; font-size:13px; font-weight:800;}
+.savestate{font-size:10.5px; font-weight:700; color:var(--faint);}
+.savestate.saving{color:var(--faint);}
+.savestate.saved{color:var(--ok);}
+.savestate:empty{display:none;}
 #deckzone{border:none; box-shadow:inset 0 0 0 1px var(--hair); border-radius:var(--r-md);
   background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(0,0,0,.14));
   padding:8px; margin-bottom:2px; overflow:hidden; transition:max-height var(--dur-2) var(--ease-inout);}
@@ -454,7 +519,7 @@ h1 .h-snap{color:var(--gold);}
 #toolbar{display:none; position:fixed; right:14px; z-index:38;
   bottom:calc(58px + env(safe-area-inset-bottom) + 14px);
   gap:8px; padding:6px; border-radius:var(--r-pill);
-  background:var(--glass-2); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  background:var(--frost); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
   box-shadow:inset 0 0 0 1px var(--hair), var(--sh-2);}
 body.on-cards #toolbar{display:flex;}
 #toolbar button{position:relative; width:44px; height:44px; border:none; border-radius:var(--r-pill);
@@ -497,7 +562,7 @@ body.sheet-open{overflow:hidden;}   /* engaged ONLY by the import/settings modal
 #searchbar{display:none; position:fixed; left:12px; right:12px; z-index:39;
   bottom:calc(58px + env(safe-area-inset-bottom) + 14px);
   align-items:center; gap:8px; padding:8px 12px; border-radius:var(--r-pill);
-  background:var(--glass-2); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  background:var(--frost); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
   box-shadow:inset 0 0 0 1px var(--hair), var(--sh-2);
   opacity:0; transform:translateY(8px); pointer-events:none;
   transition:opacity var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out);}
@@ -511,7 +576,7 @@ body.on-cards #searchbar.on{display:flex; opacity:1; transform:none; pointer-eve
 #btn-clearall{display:none; position:fixed; left:14px; z-index:39;
   bottom:calc(58px + env(safe-area-inset-bottom) + 14px);
   gap:6px; padding:0 14px; height:44px; border:none; border-radius:var(--r-pill);
-  background:var(--glass-2); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  background:var(--frost); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
   box-shadow:inset 0 0 0 1px var(--hair), var(--sh-2);
   color:var(--iris-soft); font-weight:800; font-size:13px;}
 body.on-cards #btn-clearall.on{display:inline-flex; align-items:center;}
@@ -526,7 +591,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   max-height:56vh; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
   border-radius:var(--r-sheet) var(--r-sheet) 0 0;
   padding:8px 16px calc(16px + env(safe-area-inset-bottom));
-  background:var(--glass-2); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  background:var(--frost); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
   box-shadow:inset 0 0 0 1px var(--hair), var(--sh-3);
   opacity:0; visibility:hidden; pointer-events:none; transform:translateY(100%);
   transition:transform var(--dur-3) var(--ease-spring), opacity var(--dur-3) var(--ease-out), visibility 0s linear var(--dur-3);}
@@ -535,7 +600,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .sheet-grab{width:36px; height:4px; border-radius:999px; background:rgba(255,255,255,.22); margin:2px auto 8px; flex:0 0 auto;}
 #fly-head{display:flex; align-items:center; justify-content:space-between; gap:8px;
   position:sticky; top:0; z-index:2; padding:2px 2px 8px; margin-bottom:4px;
-  background:linear-gradient(180deg, rgba(23,17,34,.55), transparent);}
+  background:linear-gradient(180deg, rgba(21,16,31,.9), rgba(21,16,31,0));}
 #fly-head .fly-title{font-family:var(--head); font-weight:800; letter-spacing:.2px; font-size:13px; text-transform:uppercase; color:var(--text);}
 #fly-close{background:var(--glass-2); border:none; box-shadow:inset 0 0 0 1px var(--hair); color:var(--dim);
   border-radius:var(--r-pill); width:32px; height:32px; font-size:19px; line-height:1; font-weight:400;
@@ -554,7 +619,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 #fw-owned .chipn{float:right; color:var(--faint);}
 .owntoggle.on .chipn{color:#0a1f16;}
 
-.fwidget{display:block; background:var(--glass); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-radius:var(--r-md); margin-bottom:8px; overflow:hidden;}
+.fwidget{display:block; background:var(--raise); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-radius:var(--r-md); margin-bottom:8px; overflow:hidden;}
 .fwidget.open{box-shadow:inset 0 0 0 1px rgba(169,132,255,.25);}
 .fw-head{display:flex; align-items:center; gap:8px; width:100%; background:none; border:none; color:var(--text);
   padding:11px 13px; font-size:13.5px; font-weight:700; letter-spacing:.2px; text-align:left;
@@ -637,8 +702,9 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   <section class="view on" id="view-cards">
     <div id="buildtop">
     <div id="bhead">
-      <div id="bh-title"><b id="bh-name"></b><span id="bh-count"></span></div>
+      <div id="bh-title"><b id="bh-name"></b><span id="bh-count"></span><span class="savestate saved" id="bh-save"></span></div>
       <div id="bh-btns">
+        <button class="hbtn done" id="bh-done">&#10003; Done</button>
         <button class="hbtn" id="bh-collapse">&#9650;</button>
         <button class="hbtn" id="bh-menu">&#8943;</button>
       </div>
@@ -680,6 +746,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
     <div class="deckname-row">
       <input id="deckname" placeholder="Deck name">
       <span id="archetag"></span>
+      <span class="savestate saved" id="dn-save"></span>
     </div>
     <div id="deckglance" class="glancerow">
       <div class="glance-chip"><b id="st-count">0/12</b><span>cards</span></div>
@@ -687,6 +754,13 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       <div class="glance-chip"><b id="st-pow">0</b><span>total pwr</span></div>
       <div class="glance-chip"><b id="gl-syn">&ndash;</b><span>synergy</span></div>
       <div class="glance-chip"><b id="gl-health">&ndash;</b><span>curve</span></div>
+    </div>
+    <div id="verdictrow"><span class="vr-label">How&rsquo;s it play?</span>
+      <div class="vr-seg">
+        <button data-verdict="good" title="Good" aria-label="Good">&#128077;</button>
+        <button data-verdict="meh" title="Meh" aria-label="Meh">&#128528;</button>
+        <button data-verdict="bad" title="Bad" aria-label="Bad">&#128078;</button>
+      </div>
     </div>
     <div id="decklist" class="minigrid"></div>
     <div class="deckactions">
@@ -700,12 +774,15 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       <button data-dtab="synergy" role="tab" aria-selected="false">Synergy</button>
       <button data-dtab="odds" role="tab" aria-selected="false">Odds</button>
       <button data-dtab="test" role="tab" aria-selected="false">Test hand</button>
+      <button data-dtab="planner" role="tab" aria-selected="false">Play line</button>
       <button data-dtab="notes" role="tab" aria-selected="false">Notes</button>
     </div>
     <div class="dpane on" data-pane="overview" role="tabpanel" aria-label="Overview">
+      <div id="deckchanges"></div>
       <div class="dpane-label">Energy curve</div>
       <div id="curve"></div>
       <div id="curvehealth"></div>
+      <div id="deckmeta"></div>
       <div id="deckwarn"></div>
     </div>
     <div class="dpane" data-pane="synergy" role="tabpanel" aria-label="Synergy">
@@ -722,6 +799,10 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
         <button class="abtn" id="btn-testdraw">Deal opening hand</button>
         <div id="simpanel"></div>
       </div>
+    </div>
+    <div class="dpane" data-pane="planner" role="tabpanel" aria-label="Play line">
+      <div class="dpane-label">Optimal game — tap a card, tap a turn</div>
+      <div id="planner"></div>
     </div>
     <div class="dpane" data-pane="notes" role="tabpanel" aria-label="Notes">
       <div class="dpane-label">Game plan &amp; notes</div>
@@ -740,6 +821,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
     </div>
     <div id="saved-creator" hidden>
       <div class="section-label">Creator decks</div>
+      <div class="cr-add"><button class="abtn primary" id="cr-add-btn">+ Add creator</button></div>
       <div id="creatorlist"></div>
     </div>
   </section>
@@ -759,12 +841,17 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 
   <!-- COLLECTION -->
   <section class="view" id="view-collection">
-    <div id="collhead">
-      <div class="coll-hero"><b id="coll-count">0</b><span>/ <span id="coll-total"></span> cards owned</span></div>
-      <div id="coll-bars"></div>
-      <div id="coll-bulk">
-        <button class="abtn primary" id="coll-all">Mark all owned</button>
-        <button class="abtn danger" id="coll-clear">Clear all</button>
+    <div id="collhead" class="closed">
+      <button id="coll-toggle" class="coll-toggle" aria-expanded="false" aria-controls="collhead-body">
+        <span class="coll-hero"><b id="coll-count">0</b><span>/ <span id="coll-total"></span> cards owned</span></span>
+        <span class="coll-chev">&#9662;</span>
+      </button>
+      <div id="collhead-body">
+        <div id="coll-bars"></div>
+        <div id="coll-bulk">
+          <button class="abtn primary" id="coll-all">Mark all owned</button>
+          <button class="abtn danger" id="coll-clear">Clear all</button>
+        </div>
       </div>
     </div>
     <div id="colllist"></div>
@@ -806,6 +893,10 @@ const REFRESH_URL = 'https://snap-workbench.cj13mercado.workers.dev/cards';
 // Self-hosted AI coach: same worker, /coach route (it holds your Anthropic API key as a secret).
 // e.g. 'https://your-worker.workers.dev/coach'. Leave empty inside Claude (direct API works there).
 const COACH_URL = 'https://snap-workbench.cj13mercado.workers.dev/coach';
+// R5-I/J: same worker, /sync (KV-backed cross-device state, bearer-token gated) and
+// /yt (strict YouTube RSS proxy for in-app Add-creator). Leave empty to disable both.
+const SYNC_URL = 'https://snap-workbench.cj13mercado.workers.dev/sync';
+const YT_URL   = 'https://snap-workbench.cj13mercado.workers.dev/yt';
 
 /* ============ STATE ============ */
 const S = {
@@ -820,14 +911,20 @@ const S = {
   tab: 'cards',
   deckTab: 'overview',     // WP2 deck-tools sub-tab
   trayOpen: false,
-  prefs: { density:'cmp', deckTab:'overview', facetOpen:{ sort:false, cost:true, series:false, mech:false, power:false } },
+  prefs: { density:'cmp', deckTab:'overview', collOpen:false, facetOpen:{ sort:false, cost:true, series:false, mech:false, power:false } },
   storageOK: (typeof window !== 'undefined' && !!window.storage),
-  combo: { a:'', b:'' },   // WP2 combo-odds card selection (session only)
+  oddsGroup: new Set(),    // R5-D draw-goal group (session only; pruned to the active deck)
+  plannerPick: null,       // R5-F play-line: card id awaiting a turn slot (session only)
   sim: null,               // WP2 goldfish draw snapshot { order:[ids], shown:n }
   creatorDecks: [],        // R4 harvested creator decks (from creator-decks.json)
   creatorDecksLabel: '',   // R4 "updated" date from creator-decks.json
+  addedCreators: [],       // R5-J in-app added channels [{id:'UC…', name, handle}]
+  addedCreatorDecks: [],   // R5-J decks harvested from those channels (creatorDecks row shape + added:true, chId)
+  syncToken: '',           // R5-I cross-device bearer token (device-local; never in a URL/log)
+  syncState: 'idle',       // 'idle' | 'ok' | 'offline' | 'error'
+  syncLast: 0,             // last successful sync (ms)
 };
-const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb', prefs:'snapwb-prefs', creators:'snapwb-creators' };
+const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb', prefs:'snapwb-prefs', creators:'snapwb-creators', synctoken:'snapwb-synctoken' };
 
 /* ============ UTIL ============ */
 const $ = s => document.querySelector(s);
@@ -902,16 +999,99 @@ async function sPut(key, str){
   if(HAS_LOCAL_STORE){ localStorage.setItem(key, str); return; }
 }
 const _saveTimers = {};
-function sSet(key, obj){
+function sSet(key, obj, done){
   if(!S.storageOK) return;
   clearTimeout(_saveTimers[key]);
   _saveTimers[key] = setTimeout(async () => {
-    try{ await sPut(key, JSON.stringify(obj)); }
+    try{ await sPut(key, JSON.stringify(obj)); if(done) done(); }
     catch(e){ console.error('save failed', key, e); }
   }, 400);
 }
-function persistDecks(){ sSet(K.decks, { decks:S.decks, activeId:S.activeId }); }
-function persistColl(){ sSet(K.coll, { owned:[...S.owned] }); }
+/* R5: reflect the debounced deck-save in every .savestate chip (Saving… -> Saved ✓). */
+function showSaveState(s){
+  document.querySelectorAll('.savestate').forEach(e => {
+    e.textContent = s === 'saving' ? 'Saving…' : 'Saved ✓';
+    e.className = 'savestate ' + s;
+  });
+}
+function persistDecks(){ if(S.storageOK) showSaveState('saving'); sSet(K.decks, { decks:S.decks, activeId:S.activeId }, () => showSaveState('saved')); scheduleSync(); }
+function persistColl(){ sSet(K.coll, { owned:[...S.owned] }); scheduleSync(); }
+/* R5-J: in-app added creators + their harvested decks ride in K.creators (previously unused). */
+function persistCreators(){ sSet(K.creators, { channels:S.addedCreators, decks:S.addedCreatorDecks }); scheduleSync(); }
+
+/* ============ R5-I: CROSS-DEVICE SYNC (KV via the relay) ============
+   Every path is guarded by (S.syncToken && SYNC_URL) + try/catch, so with no token
+   or no network (e.g. inside Claude/jsdom) the app behaves exactly as before. */
+function buildStateBlob(){
+  return { v:1, updatedAt:Date.now(),
+    decks:S.decks, activeId:S.activeId,
+    owned:[...S.owned],
+    creators:S.addedCreators||[],
+    creatorDecksCache:S.addedCreatorDecks||[],
+    prefs:S.prefs };
+}
+// Pure + testable. Newest-wins per deck, union owned/creators, never drop a local deck.
+function mergeState(local, remote){
+  if(!remote) return local;
+  const byId={}; (local.decks||[]).forEach(d => byId[d.id]=d);
+  (remote.decks||[]).forEach(rd => { const ld=byId[rd.id];
+    if(!ld || (rd.updated||0) > (ld.updated||0)) byId[rd.id]=rd; });   // remote newer wins; local-only kept
+  const decks=Object.values(byId).sort((a,b) => (b.updated||0)-(a.updated||0));
+  const owned=new Set([...(local.owned||[]), ...(remote.owned||[])]);   // union
+  const crById={}; [...(local.creators||[]), ...(remote.creators||[])].forEach(c => { if(c && c.id) crById[c.id]=c; });
+  const prefs = (remote.updatedAt||0) > (local.updatedAt||0)
+      ? Object.assign({}, local.prefs, remote.prefs) : Object.assign({}, remote.prefs, local.prefs);
+  const activeId = decks.some(d => d.id===local.activeId) ? local.activeId : (remote.activeId || (decks[0] && decks[0].id) || null);
+  return { decks, activeId, owned:[...owned], creators:Object.values(crById),
+           creatorDecksCache: remote.creatorDecksCache || local.creatorDecksCache || [], prefs };
+}
+function applyStateBlob(b){
+  S.decks=b.decks||[]; S.activeId=b.activeId; S.owned=new Set(b.owned||[]);
+  if(b.creators) S.addedCreators=b.creators;
+  if(b.creatorDecksCache) S.addedCreatorDecks=b.creatorDecksCache;
+  if(b.prefs) S.prefs=Object.assign(S.prefs, b.prefs);
+  persistDecks(); persistColl(); persistCreators(); sSet(K.prefs, S.prefs);
+}
+let _syncT;
+function scheduleSync(){ if(!S.syncToken || !SYNC_URL) return; clearTimeout(_syncT); _syncT=setTimeout(syncPush, 2000); }
+async function syncPush(){
+  if(!S.syncToken || !SYNC_URL) return;
+  try{
+    const r = await fetch(SYNC_URL, { method:'PUT',
+      headers:{ 'content-type':'application/json', 'authorization':'Bearer '+S.syncToken },
+      body: JSON.stringify(buildStateBlob()) });
+    S.syncState = r.ok ? 'ok' : 'error'; if(r.ok) S.syncLast=Date.now();
+  }catch(e){ S.syncState='offline'; }
+  updateSyncStatus();
+}
+async function syncPull(){
+  if(!S.syncToken || !SYNC_URL) return false;
+  try{
+    const r = await fetch(SYNC_URL, { headers:{ 'authorization':'Bearer '+S.syncToken } });
+    if(r.ok){
+      const remote = await r.json();
+      applyStateBlob(mergeState(buildStateBlob(), remote));
+      S.syncState='ok'; S.syncLast=Date.now();
+      if(typeof renderAll === 'function') renderAll();
+      updateSyncStatus();
+      return true;
+    }
+    S.syncState = 'error';   // 401 (bad token) or any non-OK response
+  }catch(e){ S.syncState='offline'; }
+  updateSyncStatus();
+  return false;
+}
+function updateSyncStatus(){
+  const box = document.getElementById('sync-status'); if(!box) return;
+  let txt = 'Not configured';
+  if(S.syncToken){
+    if(S.syncState==='ok') txt = 'Synced ✓' + (S.syncLast ? ' ' + new Date(S.syncLast).toLocaleTimeString() : '');
+    else if(S.syncState==='offline') txt = 'Offline — will retry';
+    else if(S.syncState==='error') txt = 'Sync error — check the token';
+    else txt = 'Token saved — not synced yet';
+  }
+  box.textContent = txt;
+}
 
 /* ============ DB ============ */
 function indexDb(){
@@ -955,11 +1135,34 @@ function activeDeck(){ return S.decks.find(d => d.id === S.activeId) || null; }
 function ensureDeck(){
   if(!activeDeck()){
     const d = { id:uid(), name:'New Deck', cards:[], updated:Date.now() };
-    S.decks.unshift(d); S.activeId = d.id; persistDecks();
+    snapshotDeck(d); S.decks.unshift(d); S.activeId = d.id; persistDecks();
   }
   return activeDeck();
 }
-function touch(d){ d.updated = Date.now(); persistDecks(); }
+/* R5-G: card-change flags. A tiny per-deck snapshot (cost/power + a 32-bit ability hash)
+   is captured on every build edit and create path. When the card DB later changes (patch,
+   refresh), deckChanges() diffs the live cards vs the snapshot so a deck can flag "these
+   cards were updated since you built this." Ability text is hashed to stay sync-friendly. */
+function hashStr(s){ let h=0; s=String(s||''); for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0; return h; }
+function snapshotDeck(d){ d.snap = {}; (d.cards||[]).forEach(id => { const c=S.byId[id]; if(c) d.snap[id]={ c:c.c, p:c.p, ah:hashStr(c.a) }; }); }
+function deckChanges(d){
+  if(!d || !d.snap) return [];
+  const out = [];
+  (d.cards||[]).forEach(id => {
+    const c = S.byId[id], s = d.snap[id];
+    if(!c || !s) return;                      // stubs / cards absent from the snapshot never false-flag
+    const cost = c.c !== s.c, pow = c.p !== s.p, ab = hashStr(c.a) !== s.ah;
+    if(cost || pow || ab) out.push({ id, name:c.n, was:{ c:s.c, p:s.p }, now:{ c:c.c, p:c.p }, cost, pow, ab });
+  });
+  return out;
+}
+function deckHasChanges(d){ return deckChanges(d).length > 0; }
+
+/* R5: touch() is the BUILD-EDIT funnel — any card/name/clear change re-enters "editing" (clears done)
+   and (WP2) re-snapshots the deck. touchMeta() is the META-EDIT funnel (verdict/line/dismiss):
+   it bumps updated + persists but must NOT clear done — a verdict is not a build change. */
+function touch(d){ d.updated = Date.now(); d.done = false; if(typeof snapshotDeck === 'function') snapshotDeck(d); persistDecks(); }
+function touchMeta(d){ d.updated = Date.now(); persistDecks(); }
 function inDeck(defid){ const d=activeDeck(); return !!d && d.cards.includes(defid); }
 function toggleCard(defid){
   const d = ensureDeck();
@@ -1076,6 +1279,73 @@ function parseCode(text){
   return { err:'Couldn\u2019t find a deck code in that. Paste the code Snap copied, or a share link.' };
 }
 
+/* R5-J: XML entity unescaper (mirrors creator-decks.mjs `unesc`; &amp; last so &amp;utm_ -> &utm_). */
+function unescXml(s){
+  return String(s || '')
+    .replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"')
+    .replace(/&#39;/g,"'").replace(/&apos;/g,"'").replace(/&amp;/g,'&');
+}
+/* R5-J: pull every deck out of a video description, reusing parseCode's decoders
+   (mirrors creator-decks.mjs extractDecks: untapped /decks/ slugs + standalone base64 codes). */
+function extractDecksFromDesc(desc){
+  const out=[], seen=new Set();
+  (String(desc||'').match(/https?:\/\/snap\.untapped\.gg\/[a-z]{2}\/decks\/[^\s"'<>]+/gi) || []).forEach(u => {
+    if(seen.has(u)) return; seen.add(u);
+    const r = parseCode(u);
+    if(!r.err) out.push({ name:r.name||'', ids:r.ids, untapped:u });
+    else out.push({ name:'', ids:[], untapped:u });               // undecodable slug -> link-out only
+  });
+  (String(desc||'').match(/^[A-Za-z0-9+/]{16,}={0,2}$/gm) || []).forEach(code => {
+    const r = parseCode(code);
+    if(!r.err && r.ids.length) out.push({ name:r.name||'', ids:r.ids });
+  });
+  return out;
+}
+/* R5-J: fetch a YouTube channel's last-2-weeks decks via the relay's /yt proxy. */
+async function addCreator(url){
+  if(!YT_URL) return toast('Add-creator needs the relay');
+  let xml;
+  try{
+    const r = await fetch(YT_URL + '?url=' + encodeURIComponent(url));
+    if(!r.ok){ const j = await r.json().catch(() => ({})); throw new Error(j.error || 'bad channel'); }
+    xml = await r.text();
+  }catch(e){ toast('Couldn\u2019t add: ' + (e && e.message ? e.message : 'not a YouTube channel')); return; }
+  const chName = (xml.match(/<author>[\s\S]*?<name>([^<]+)<\/name>/) || [])[1] || 'Creator';
+  const uc = (xml.match(/<yt:channelId>([^<]+)<\/yt:channelId>/) || xml.match(/channel_id=(UC[\w-]{22})/) || [])[1];
+  const entries = xml.split('<entry>').slice(1);
+  const now = Date.now(); const decks = [];
+  for(const e of entries){
+    const published = ((e.match(/<published>([^<]+)</) || [])[1] || '').slice(0,10);
+    if(published && (now - Date.parse(published)) >= 14*86400000) continue;   // 14-day window
+    const title = unescXml((e.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || '');
+    const vurl = unescXml((e.match(/<link[^>]*rel="alternate"[^>]*href="([^"]+)"/) || [])[1] || '');
+    const desc = unescXml((e.match(/<media:description[^>]*>([\s\S]*?)<\/media:description>/) || [])[1] || '');
+    extractDecksFromDesc(desc).forEach(dk => decks.push({
+      creator:chName, video:title, url:vurl, published,
+      name:dk.name||'', ids:dk.ids||[], untapped:dk.untapped||'', added:true, chId:uc }));
+  }
+  if(!decks.length){ toast('No deck codes found in recent videos'); return; }
+  S.addedCreators = S.addedCreators.filter(c => c.id !== uc).concat([{ id:uc, name:chName, handle:url }]);
+  S.addedCreatorDecks = S.addedCreatorDecks.filter(d => d.chId !== uc).concat(decks);
+  persistCreators(); closeModal(); renderCreatorDecks();
+  toast('Added ' + chName + ' (' + decks.length + ' deck' + (decks.length>1?'s':'') + ')');
+}
+function openAddCreator(){
+  openModal(
+    '<h2>Add a creator</h2>'+
+    '<div class="mnote">Paste a YouTube channel link or @handle. We read their last two weeks of videos and pull any Marvel Snap deck codes from the descriptions.</div>'+
+    '<div class="mrow"><input id="cr-url" class="minput" type="text" placeholder="youtube.com/@handle or channel link" autocomplete="off" autocapitalize="off" spellcheck="false"></div>'+
+    '<div class="mrow"><button class="abtn primary" id="cr-fetch">Fetch decks</button><button class="abtn" id="cr-cancel">Cancel</button></div>'
+  );
+  $('#cr-cancel').onclick = closeModal;
+  $('#cr-fetch').onclick = () => {
+    const btn = $('#cr-fetch'); const url = ($('#cr-url').value || '').trim();
+    if(!url){ toast('Paste a channel link first'); return; }
+    btn.disabled = true; btn.textContent = 'Fetching\u2026';
+    addCreator(url).finally(() => { const b=$('#cr-fetch'); if(b){ b.disabled=false; b.textContent='Fetch decks'; } });
+  };
+}
+
 /* ============ RENDER: CARD GRID ============ */
 function activeFilterCount(){
   const f = S.filters;
@@ -1120,7 +1390,7 @@ function renderFilterPanel(){
       '<button class="fw-head"><span class="fw-title">'+esc(title)+'</span><span class="fw-badge"></span><span class="fw-chev">▾</span></button>'+
       '<div class="fw-body" id="fw-'+key+'"><div class="chiprow'+(rowCls?' '+rowCls:'')+'">'+chipsHtml+'</div></div>'+
     '</section>';
-  const costItems = [0,1,2,3,4,5,6].map(n=>({value:String(n), label:n===6?'6+':String(n)}));
+  const costItems = [1,2,3,4,5,6].map(n=>({value:String(n), label:n===6?'6+':(n===1?'1-':String(n))}));
   const serItems  = ['1','2','3','4','5','Base'].map(v=>({value:v,label:v==='Base'?'Base':'S'+v}));
   const mechItems = ['On Reveal','Ongoing','Discard','Destroy','Move','Activate','Vanilla'].map(v=>({value:v,label:v}));
   const powItems  = [{value:'<=0',label:'≤0'},{value:'1-3',label:'1–3'},{value:'4-6',label:'4–6'},{value:'7-9',label:'7–9'},{value:'10+',label:'10+'}];
@@ -1140,7 +1410,7 @@ function facetCounts(){
   const f = S.filters, q = f.q.trim().toLowerCase();
   const pass = (c, skip) => {
     if(skip!=='q' && q && !(c.n.toLowerCase().includes(q) || (c.a||'').toLowerCase().includes(q))) return false;
-    if(skip!=='cost' && f.cost.size){ const b=String(Math.min(c.c,6)); if(!f.cost.has(b)) return false; }
+    if(skip!=='cost' && f.cost.size){ const b=String(Math.min(Math.max(c.c,1),6)); if(!f.cost.has(b)) return false; }
     if(skip!=='series' && f.series.size && !f.series.has(c.s)) return false;
     if(skip!=='mech' && f.mech.size){ const ms=mech(c); if(![...f.mech].every(m=>ms.includes(m))) return false; }
     if(skip!=='power' && f.power.size && !f.power.has(powBucketKey(c.p))) return false;
@@ -1148,12 +1418,12 @@ function facetCounts(){
     return true;
   };
   const out = { cost:{}, series:{}, mech:{}, power:{}, owned:0 };
-  ['0','1','2','3','4','5','6'].forEach(v=>out.cost[v]=0);
+  ['1','2','3','4','5','6'].forEach(v=>out.cost[v]=0);
   ['1','2','3','4','5','Base'].forEach(v=>out.series[v]=0);
   ['On Reveal','Ongoing','Discard','Destroy','Move','Activate','Vanilla'].forEach(v=>out.mech[v]=0);
   ['<=0','1-3','4-6','7-9','10+'].forEach(v=>out.power[v]=0);
   for(const c of S.db){
-    if(pass(c,'cost')){ const b=String(Math.min(c.c,6)); if(out.cost[b]!=null) out.cost[b]++; }
+    if(pass(c,'cost')){ const b=String(Math.min(Math.max(c.c,1),6)); if(out.cost[b]!=null) out.cost[b]++; }
     if(pass(c,'series')){ if(out.series[c.s]!=null) out.series[c.s]++; }
     if(pass(c,'mech')){ mech(c).forEach(m=>{ if(out.mech[m]!=null) out.mech[m]++; }); }
     if(pass(c,'power')){ out.power[powBucketKey(c.p)]++; }
@@ -1183,7 +1453,7 @@ function updateFacetCounts(){
 function renderActiveChips(){
   const wrap = $('#fp-active'); if(!wrap) return;
   const f = S.filters, chips = [];
-  const costLbl = v => v==='6' ? '6+' : v;
+  const costLbl = v => v==='6' ? '6+' : (v==='1' ? '1-' : v);
   const powLbl  = v => v==='<=0' ? '≤0' : v;
   [...f.cost].forEach(v => chips.push({facet:'cost', v, label:'Cost '+costLbl(v)}));
   [...f.series].forEach(v => chips.push({facet:'series', v, label: v==='Base'?'Base':'Series '+v}));
@@ -1201,7 +1471,7 @@ function toggleFacet(name){
   w.classList.toggle('open', open);
   S.prefs.facetOpen = S.prefs.facetOpen || {};
   S.prefs.facetOpen[name] = open;
-  sSet(K.prefs, S.prefs);
+  sSet(K.prefs, S.prefs); scheduleSync();
 }
 function afterFilterChange(){ renderCards(); updateFilterBadge(); renderActiveChips(); updateClearBtn(); }
 function removeFilter(facet, v){
@@ -1305,7 +1575,7 @@ function filteredCards(){
   const sorter = (SORTS.find(s => s.k === S.sort) || SORTS[0]).fn;
   return S.db.filter(c => {
     if(q && !(c.n.toLowerCase().includes(q) || (c.a||'').toLowerCase().includes(q))) return false;
-    if(f.cost.size){ const b = String(Math.min(c.c,6)); if(!f.cost.has(b)) return false; }
+    if(f.cost.size){ const b = String(Math.min(Math.max(c.c,1),6)); if(!f.cost.has(b)) return false; }
     if(f.series.size && !f.series.has(c.s)) return false;
     if(f.mech.size){ const ms = mech(c); if(![...f.mech].every(m => ms.includes(m))) return false; }
     if(f.power.size && !f.power.has(powBucketKey(c.p))) return false;
@@ -1362,7 +1632,7 @@ function renderCards(){
 }
 document.querySelectorAll('#densityseg button').forEach(b => b.onclick = () => {
   S.prefs.density = b.dataset.den;
-  sSet(K.prefs, S.prefs);
+  sSet(K.prefs, S.prefs); scheduleSync();
   renderCards();
 });
 $('#cardlist').addEventListener('click', e => {
@@ -1431,9 +1701,17 @@ function collBarsHtml(groups){
   }).join('');
 }
 /* light meta refresh (header + bars + section counts) — used after an in-place tile flip */
+/* R5: reflect the persisted collapse state on the collection header (collapsed by default). */
+function applyCollOpen(){
+  const h = $('#collhead'); if(!h) return;
+  const open = !!(S.prefs && S.prefs.collOpen);
+  h.classList.toggle('closed', !open);
+  const t = $('#coll-toggle'); if(t) t.setAttribute('aria-expanded', String(open));
+}
 function syncCollMeta(){
   const list = $('#colllist'); if(!list) return;
   const groups = collGroups();
+  applyCollOpen();
   $('#coll-count').textContent = S.owned.size;
   $('#coll-total').textContent = S.db.length;
   $('#coll-bars').innerHTML = collBarsHtml(groups);
@@ -1446,6 +1724,7 @@ function syncCollMeta(){
 function renderCollection(){
   const list = $('#colllist'); if(!list) return;   // guard: only when the tab exists in the DOM
   const groups = collGroups();
+  applyCollOpen();
   $('#coll-count').textContent = S.owned.size;
   $('#coll-total').textContent = S.db.length;
   $('#coll-bars').innerHTML = collBarsHtml(groups);
@@ -1471,6 +1750,11 @@ if($('#colllist')) $('#colllist').addEventListener('click', e => {
   t.classList.toggle('owned', !own);          // flip this tile in place, then refresh meta
   syncCollMeta();
 });
+if($('#coll-toggle')) $('#coll-toggle').onclick = () => {
+  S.prefs.collOpen = !S.prefs.collOpen; sSet(K.prefs, S.prefs); scheduleSync();
+  $('#collhead').classList.toggle('closed', !S.prefs.collOpen);
+  $('#coll-toggle').setAttribute('aria-expanded', String(S.prefs.collOpen));
+};
 if($('#coll-bars')) $('#coll-bars').addEventListener('click', e => {
   const b = e.target.closest('.cb-mini'); if(!b) return;
   const k = b.dataset.series, own = b.dataset.act === 'own';
@@ -1492,6 +1776,12 @@ const DRAWN = [3,4,5,6,7,8,9];
 function pSingle(t){ return DRAWN[t] / 12; }
 function pBoth(t){ return DRAWN[t] * (DRAWN[t]-1) / 132; }              /* 132 = 12*11 */
 function pEither(t){ return 1 - (12-DRAWN[t]) * (11-DRAWN[t]) / 132; }
+/* R5-D: general hypergeometric helpers over the 12-card deck. k = size of a draw goal.
+   pAtLeastOne(k,t) = odds ≥1 of the k group is in hand by turn t; pAll(k,t) = odds all k are.
+   Identities: pAtLeastOne(1,t)===pSingle(t); pAll(2,5)≈pBoth(5); pAtLeastOne(2,5)≈pEither(5). */
+function nCk(n,k){ if(k<0||k>n) return 0; k=Math.min(k,n-k); let r=1; for(let i=0;i<k;i++) r=r*(n-i)/(i+1); return r; }
+function pAtLeastOne(k,t){ const s=DRAWN[t]; return k<=0 ? 0 : 1 - nCk(12-k,s)/nCk(12,s); }
+function pAll(k,t){ const s=DRAWN[t]; return (k<=0||s<k) ? 0 : nCk(12-k,s-k)/nCk(12,s); }
 
 /* --- C5: curve health --- */
 function curveHealth(cards){
@@ -1550,7 +1840,9 @@ function deckSynergies(cards){
     let status = 'active';
     if(enablers && !payoffs) status = 'missing-payoff';
     else if(!enablers && payoffs) status = 'missing-enabler';
-    return { key:rule.key, label:rule.label, enablers, payoffs, status, hint:rule.hint };
+    const enablerNames = cards.filter(rule.isEnabler).map(c => c.n);
+    const payoffNames  = cards.filter(rule.isPayoff).map(c => c.n);
+    return { key:rule.key, label:rule.label, enablers, payoffs, status, hint:rule.hint, enablerNames, payoffNames };
   }).filter(Boolean);
 }
 
@@ -1593,61 +1885,82 @@ function renderSynergy(cards){
   wrap.innerHTML = syns.map(s => {
     const ok = s.status === 'active';
     const en = s.enablers, py = s.payoffs;
-    const msg = ok ? (en + ' enabler' + (en>1?'s':'') + ' + ' + py + ' payoff' + (py>1?'s':''))
-      : s.status === 'missing-enabler' ? (py + ' payoff' + (py>1?'s':'') + ' but no reliable enabler')
-      : (en + ' enabler' + (en>1?'s':'') + ' but no payoff');
+    const names = (s.enablerNames||[]).concat(s.payoffNames||[]);
+    const uniq = [...new Set(names)];
+    const chips = uniq.map(n => '<span>' + esc(n) + '</span>').join('');
     return '<div class="synbox ' + (ok?'syn-ok':'syn-warn') + '">' +
-        '<div class="syn-head"><b>' + esc(s.label) + '</b><span class="syn-badge">' + (ok?'active':'imbalanced') + '</span></div>' +
-        '<div class="syn-msg">' + esc(msg) + '</div>' +
-        '<div class="syn-hint">' + esc(s.hint) + '</div>' +
+        '<div class="syn-head"><b>' + esc(s.label) + '</b>' +
+          '<span class="syn-counts">' +
+            '<span class="syn-count enabler' + (en?'':' zero') + '">▸ ' + en + ' enabler' + (en===1?'':'s') + '</span>' +
+            '<span class="syn-count payoff' + (py?'':' zero') + '">◂ ' + py + ' payoff' + (py===1?'':'s') + '</span>' +
+          '</span>' +
+          '<span class="syn-badge">' + (ok?'active':'imbalanced') + '</span></div>' +
+        (chips ? '<div class="syn-chips">' + chips + '</div>' : '') +
+        (ok ? '' : '<div class="syn-hint">' + esc(s.hint) + '</div>') +
       '</div>';
   }).join('');
 }
 
-/* --- render: C1 draw & combo odds --- */
+/* --- R5: deck verdict (self-rating, meta-edit — never clears "done") --- */
+function renderVerdict(){
+  const d = activeDeck(); if(!d) return;
+  document.querySelectorAll('#verdictrow [data-verdict]').forEach(b =>
+    b.classList.toggle('on', d.verdict === b.dataset.verdict));
+}
+
+/* --- render: D draw-goal group odds (replaces the deck-independent single-card table) ---
+   Pick an arbitrary GROUP of the deck's 12; see odds of holding ≥1 / all-of-N by each turn.
+   Quick-picks derive synergy packages (enablers/payoffs) + 5+ finishers from the deck. */
+function oddsPresets(cards){
+  const out = [];
+  SYNERGY_RULES.forEach(rule => {
+    const en = cards.filter(rule.isEnabler);
+    const py = cards.filter(rule.isPayoff);
+    if(en.length) out.push({ label: rule.label + ' enablers (' + en.length + ')', ids: en.map(c => c.d) });
+    if(py.length) out.push({ label: rule.label + ' payoffs (' + py.length + ')',  ids: py.map(c => c.d) });
+  });
+  const fin = cards.filter(c => c.c >= 5);
+  out.push({ label: '5+ finishers (' + fin.length + ')', ids: fin.map(c => c.d) });
+  return out;
+}
 function renderDrawOdds(d){
   const wrap = $('#drawodds'); if(!wrap) return;
   const cards = sortedDeckCards(d);
-  const labels = ['Op','T1','T2','T3','T4','T5','T6'];
-  const single = [0,1,2,3,4,5,6].map(t => Math.round(pSingle(t)*100));
-  const sbars = single.map((pct,i) =>
-    '<div class="oc"><div class="obars"><i class="ob" style="height:' + Math.max(3, Math.round(pct/100*34)) + 'px"></i></div>' +
-    '<span class="opct">' + pct + '%</span><label>' + labels[i] + '</label></div>').join('');
-  const opts = ['<option value="">– pick –</option>']
-    .concat(cards.map(c => '<option value="' + esc(c.d) + '">' + esc(c.n) + '</option>')).join('');
+  const inDeck = new Set(cards.map(c => c.d));
+  [...S.oddsGroup].forEach(id => { if(!inDeck.has(id)) S.oddsGroup.delete(id); });   // prune when the deck changed
+  const presets = oddsPresets(cards);
+  const quick = presets.map((p,i) => '<button class="chip odd-preset" data-preset="' + i + '">' + esc(p.label) + '</button>').join('');
+  const pick = cards.map(c => '<button class="chip odd-card' + (S.oddsGroup.has(c.d) ? ' on' : '') + '" data-d="' + esc(c.d) + '">' + esc(c.n) + '</button>').join('');
   wrap.innerHTML =
-    '<div class="odds-sub">Any single card — odds you’ve drawn it by turn</div>' +
-    '<div class="odds-grid single">' + sbars + '</div>' +
-    '<div class="odds-sub">Combo — odds of drawing two specific cards</div>' +
-    '<div class="comborow"><select id="combo-a">' + opts + '</select><span class="combo-amp">+</span><select id="combo-b">' + opts + '</select></div>' +
-    '<div id="combo-out"></div>' +
-    '<div class="odds-hint">In a 12-card singleton deck, any two distinct cards share these same odds — the picks just label the pair.</div>';
-  const a = $('#combo-a'), b = $('#combo-b');
-  if(a && S.combo.a) a.value = S.combo.a;
-  if(b && S.combo.b) b.value = S.combo.b;
-  if(a && a.value !== S.combo.a) S.combo.a = a.value;   // selection may have left the deck
-  if(b && b.value !== S.combo.b) S.combo.b = b.value;
-  if(a) a.onchange = () => { S.combo.a = a.value; updateComboOut(); };
-  if(b) b.onchange = () => { S.combo.b = b.value; updateComboOut(); };
-  updateComboOut();
+    '<div class="odds-sub">Pick cards to analyse a draw goal</div>' +
+    (quick ? '<div class="odds-quick">' + quick + '</div>' : '') +
+    '<div class="odds-pick">' + (pick || '<div class="odds-hint">Add cards to the deck first.</div>') + '</div>' +
+    '<div id="odds-out"></div>';
+  wrap.onclick = e => {
+    const pre = e.target.closest('.odd-preset');
+    if(pre){ const p = presets[+pre.dataset.preset]; if(p) S.oddsGroup = new Set(p.ids); renderDrawOdds(d); return; }
+    const cc = e.target.closest('.odd-card');
+    if(cc){ const id = cc.dataset.d; if(S.oddsGroup.has(id)) S.oddsGroup.delete(id); else S.oddsGroup.add(id);
+      cc.classList.toggle('on', S.oddsGroup.has(id)); updateOddsOut(); return; }
+  };
+  updateOddsOut();
 }
-function updateComboOut(){
-  const out = $('#combo-out'); if(!out) return;
-  const a = S.combo.a, b = S.combo.b;
-  if(!a || !b || a === b){ out.innerHTML = '<div class="odds-hint">Pick two different cards to see combo odds.</div>'; return; }
-  const ca = getCard(a) || makeStub(a), cb = getCard(b) || makeStub(b);
+function updateOddsOut(){
+  const out = $('#odds-out'); if(!out) return;
+  const k = S.oddsGroup.size;
+  if(k === 0){ out.innerHTML = '<div class="odds-hint">Tap cards below to build a draw goal (e.g. your two combo pieces, or all your discard enablers).</div>'; return; }
   const labels = ['Op','T1','T2','T3','T4','T5','T6'];
-  const both   = [0,1,2,3,4,5,6].map(t => Math.round(pBoth(t)*100));
-  const either = [0,1,2,3,4,5,6].map(t => Math.round(pEither(t)*100));
-  const grid = labels.map((lb,i) =>
-    '<div class="oc"><div class="obars">' +
-      '<i class="ob" style="height:' + Math.max(3, Math.round(both[i]/100*34)) + 'px"></i>' +
-      '<i class="oe" style="height:' + Math.max(3, Math.round(either[i]/100*34)) + 'px"></i>' +
-    '</div><label>' + lb + '</label></div>').join('');
+  const bars = (fn, cls) => '<div class="odds-grid">' + [0,1,2,3,4,5,6].map(t => {
+    const pct = Math.round(fn(k,t)*100);
+    return '<div class="oc"><div class="obars"><i class="' + cls + '" style="height:' + Math.max(3, Math.round(pct/100*34)) + 'px"></i></div>' +
+      '<span class="opct">' + pct + '%</span><label>' + labels[t] + '</label></div>';
+  }).join('') + '</div>';
   out.innerHTML =
-    '<div class="combo-head">~' + both[5] + '% to draw <b>both</b> ' + esc(ca.n) + ' + ' + esc(cb.n) + ' by T5 &middot; ~' + either[5] + '% <b>either</b></div>' +
-    '<div class="odds-grid">' + grid + '</div>' +
-    '<div class="odds-legend"><span class="lg ob"></span>both <span class="lg oe"></span>either</div>';
+    '<div class="combo-head">~' + Math.round(pAtLeastOne(k,5)*100) + '% to have <b>&ge;1</b> of ' + k + ' by T5 &middot; ~' + Math.round(pAll(k,5)*100) + '% to have <b>all ' + k + '</b> by T6</div>' +
+    '<div class="odds-sub">Odds you hold at least one by turn</div>' + bars(pAtLeastOne,'ob') +
+    '<div class="odds-sub">Odds you hold all ' + k + ' by turn</div>' + bars(pAll,'oe') +
+    '<div class="odds-legend"><span class="lg ob"></span>at least one <span class="lg oe"></span>all</div>' +
+    (k === 1 ? '<div class="odds-hint">With one card these are identical to any single card’s odds.</div>' : '');
 }
 
 /* --- render: C4 sim --- */
@@ -1717,6 +2030,98 @@ function renderCompare(a, b){
 }
 if($('#btn-compare')) $('#btn-compare').onclick = openCompare;
 
+/* ============ F: PLAY-LINE PLANNER ============ */
+/* d.line = [ [ids T1], …, [ids T6] ] (index 0 = T1). Tap a pool card -> S.plannerPick;
+   tap a turn slot -> the pick lands there; tap an assigned mini -> it returns to the pool.
+   Energy: budget(t)=t, no carryover. Draw: by the end of turn t you've seen ~DRAWN[t] cards (3+t). */
+function emptyLine(){ return [[],[],[],[],[],[]]; }
+function normLine(line){ const L = Array.isArray(line) ? line : []; const out = emptyLine(); for(let i=0;i<6;i++) out[i] = Array.isArray(L[i]) ? L[i].slice() : []; return out; }
+function autoSketchLine(cards){
+  const line = emptyLine();
+  const pool = cards.slice().sort((a,b) => b.c - a.c);   // high cost first — curve/tempo out
+  for(let t=1; t<=6; t++){
+    let budget = t;
+    for(let i=0; i<pool.length;){
+      if(pool[i].c > 0 && pool[i].c <= budget){ line[t-1].push(pool[i].d); budget -= pool[i].c; pool.splice(i,1); }
+      else i++;
+    }
+  }
+  return line;
+}
+function lineFlags(line){
+  const out = []; let cum = 0;
+  for(let t=1; t<=6; t++){
+    const ids = line[t-1] || [];
+    const cards = ids.map(id => getCard(id) || makeStub(id));
+    const spent = cards.reduce((s,c) => s + (c.c||0), 0);
+    cum += ids.length;
+    if(spent > t)          out.push({ turn:t, type:'energy', msg:'T' + t + ' spends ' + spent + ' energy (only ' + t + ' available)' });
+    if(cum > DRAWN[t])     out.push({ turn:t, type:'draw',   msg:'T' + t + ': line plays ' + cum + ' cards but you’ve drawn ~' + DRAWN[t] });
+  }
+  return out;
+}
+function renderPlanner(){
+  const box = $('#planner'); if(!box) return;
+  const d = activeDeck();
+  if(!d){ box.innerHTML = ''; return; }
+  if(!d.cards.length){ box.innerHTML = '<div class="odds-hint">Add cards to the deck first.</div>'; return; }
+  const line = normLine(d.line);
+  const inDeck = new Set(d.cards);
+  for(let i=0; i<6; i++) line[i] = line[i].filter(id => inDeck.has(id));   // drop ids that left the deck
+  const assigned = new Set(); line.forEach(sl => sl.forEach(id => assigned.add(id)));
+  if(S.plannerPick && (!inDeck.has(S.plannerPick) || assigned.has(S.plannerPick))) S.plannerPick = null;
+
+  let cum = 0; const slotHtml = [];
+  for(let t=1; t<=6; t++){
+    const ids = line[t-1]; cum += ids.length;
+    const cards = ids.map(id => getCard(id) || makeStub(id));
+    const spent = cards.reduce((s,c) => s + (c.c||0), 0);
+    const over = spent > t;
+    const conf = Math.round(pAll(cum, t) * 100);
+    const low = cum > 0 && pAll(cum, t) < 0.35;
+    const minis = cards.length ? cards.map(miniHtml).join('') : '<span class="pl-empty">tap here to place the picked card</span>';
+    slotHtml.push(
+      '<div class="pl-slot" data-t="' + t + '">' +
+        '<div class="pl-head' + (over?' over':'') + '"><span>T' + t + ' · ' + spent + '/' + t + '⚡</span>' +
+          (cum ? '<span class="pl-conf' + (low?' low':'') + '">~' + conf + '% by T' + t + '</span>' : '') +
+        '</div>' +
+        '<div class="pl-mini-row">' + minis + '</div>' +
+      '</div>');
+  }
+  const poolCards = sortedDeckCards(d).filter(c => !assigned.has(c.d));
+  const pool = poolCards.length
+    ? poolCards.map(c => { const h = miniHtml(c); return S.plannerPick === c.d ? h.replace('class="mini', 'class="mini picked') : h; }).join('')
+    : '<div class="pl-pool-empty">Every card is placed — tap an assigned card to send it back.</div>';
+  const flags = lineFlags(line);
+  const flagsHtml = flags.length
+    ? '<div class="pl-flags">' + flags.map(f => '<div class="warnbox">' + esc(f.msg) + '</div>').join('') + '</div>'
+    : (assigned.size ? '<div class="pl-flags"><div class="odds-hint">Line looks legal — energy and draw both check out.</div></div>' : '');
+  const hint = assigned.size ? '' : '<div class="odds-hint">Tap a card, then a turn — or Auto-sketch a first draft.</div>';
+  box.innerHTML =
+    slotHtml.join('') +
+    '<div class="pl-sub">Unplaced cards</div>' +
+    '<div class="pl-pool">' + pool + '</div>' +
+    hint + flagsHtml +
+    '<div class="pl-actions"><button class="abtn primary" id="pl-auto">Auto-sketch</button><button class="abtn danger" id="pl-clear">Clear line</button></div>';
+
+  box.querySelectorAll('.pl-slot').forEach(slot => {
+    slot.onclick = e => {
+      const t = +slot.dataset.t;
+      const mini = e.target.closest('.pl-mini-row .mini');
+      if(mini){ line[t-1] = line[t-1].filter(x => x !== mini.dataset.d); d.line = line; touchMeta(d); renderPlanner(); return; }
+      if(S.plannerPick){ line[t-1].push(S.plannerPick); S.plannerPick = null; d.line = line; touchMeta(d); renderPlanner(); }
+    };
+  });
+  const poolEl = box.querySelector('.pl-pool');
+  if(poolEl) poolEl.onclick = e => {
+    const mini = e.target.closest('.mini'); if(!mini) return;
+    S.plannerPick = S.plannerPick === mini.dataset.d ? null : mini.dataset.d;
+    renderPlanner();
+  };
+  const auto = $('#pl-auto'); if(auto) auto.onclick = () => { d.line = autoSketchLine(sortedDeckCards(d)); S.plannerPick = null; touchMeta(d); renderPlanner(); };
+  const clr  = $('#pl-clear'); if(clr) clr.onclick = () => { d.line = emptyLine(); S.plannerPick = null; touchMeta(d); renderPlanner(); };
+}
+
 /* ============ RENDER: DECK ============ */
 function miniHtml(c){
   const url = artUrl(c);
@@ -1782,6 +2187,35 @@ function renderDeck(){
   renderSynergy(cards);
   renderDrawOdds(d);
   renderSim();
+  renderPlanner();
+  renderVerdict();
+
+  // R5-G: "what changed" banner — cards whose cost/power/ability moved since this deck was built
+  const chBox = $('#deckchanges');
+  if(chBox){
+    const ch = deckChanges(d);
+    if(ch.length){
+      chBox.innerHTML = '<div class="warnbox"><b>Cards updated since you built this:</b>' +
+        '<div class="ch-list">' + ch.map(x => {
+          const parts = [];
+          if(x.pow) parts.push(x.was.p + '→' + x.now.p + ' power');
+          if(x.cost) parts.push(x.was.c + '→' + x.now.c + ' cost');
+          if(x.ab && !parts.length) parts.push('ability updated');
+          return esc(x.name) + ': ' + parts.join(', ');
+        }).join(' · ') + '</div>' +
+        '<button class="abtn subtle" id="ch-dismiss">Dismiss</button></div>';
+      const dis = $('#ch-dismiss');
+      if(dis) dis.onclick = () => { snapshotDeck(d); touchMeta(d); renderAll(); };   // re-baseline clears the diff (dot + banner vanish)
+    } else chBox.innerHTML = '';
+  }
+
+  // R5-H: per-deck meta note — overlap with this week's harvested creator decks
+  const dm = $('#deckmeta');
+  if(dm){
+    const mn = deckMetaNote(d);
+    dm.innerHTML = mn ? (mn.inMeta + ' of your ' + mn.total + ' cards appear in this week’s creator decks'
+      + (mn.closest ? ' · closest: ' + esc(mn.closest.creator) + (mn.closest.name ? ' – ' + esc(mn.closest.name) : '') + ' (' + mn.overlap + ' shared)' : '')) : '';
+  }
 
   // glance-chip summary (synergy status + curve health) — read from existing analytics
   const syns = deckSynergies(cards);
@@ -1814,7 +2248,7 @@ $('#btn-cleardeck').onclick = () => {
 $('#btn-dupe').onclick = () => {
   const d = ensureDeck();
   const copy = { id:uid(), name:d.name+' v2', cards:d.cards.slice(), updated:Date.now() };
-  S.decks.unshift(copy); S.activeId = copy.id; persistDecks(); renderAll(); toast('Duplicated \u2192 now editing '+copy.name);
+  snapshotDeck(copy); S.decks.unshift(copy); S.activeId = copy.id; persistDecks(); renderAll(); toast('Duplicated \u2192 now editing '+copy.name);
 };
 
 /* ---------- deck sub-tabs: every round-1 tool is 1 tap, no scroll ---------- */
@@ -1822,7 +2256,7 @@ function setDeckTab(t){
   const panes = document.querySelectorAll('#view-deck .dpane');
   if(![...panes].some(p => p.dataset.pane === t)) t = 'overview';
   S.deckTab = t;
-  S.prefs.deckTab = t; sSet(K.prefs, S.prefs);
+  S.prefs.deckTab = t; sSet(K.prefs, S.prefs); scheduleSync();
   document.querySelectorAll('#decktabs [data-dtab]').forEach(b => {
     const on = b.dataset.dtab === t;
     b.classList.toggle('on', on);
@@ -1833,6 +2267,13 @@ function setDeckTab(t){
 if($('#decktabs')) $('#decktabs').addEventListener('click', e => {
   const b = e.target.closest('[data-dtab]'); if(!b) return;
   setDeckTab(b.dataset.dtab);
+});
+/* R5: verdict segment — tap sets, re-tap clears; a verdict is meta (touchMeta), it does NOT un-"done" the deck. */
+if($('#verdictrow')) $('#verdictrow').addEventListener('click', e => {
+  const b = e.target.closest('[data-verdict]'); if(!b) return;
+  const d = ensureDeck();
+  d.verdict = d.verdict === b.dataset.verdict ? null : b.dataset.verdict;
+  touchMeta(d); renderVerdict(); renderSaved();
 });
 
 /* ============ RENDER: DECK ZONE (build screen) ============ */
@@ -1884,15 +2325,26 @@ function syncStickyTop(){
   }catch(e){}
 }
 if(typeof window !== 'undefined') window.addEventListener('resize', syncStickyTop);
+/* R5: "Done" — mark the current deck finished, save, and jump to Saved so you can pick the next one.
+   Any later card/name/clear edit routes through touch() and clears done -> back into "editing". */
+function finishDeck(){
+  const d = ensureDeck();
+  d.done = true; d.updated = Date.now(); snapshotDeck(d);   // re-baseline: the deck as you finished it
+  persistDecks(); renderAll();
+  setTab('saved'); toast('Saved ✓');
+}
+$('#bh-done').onclick = finishDeck;
 $('#bh-collapse').onclick = () => { const open = S.zoneOpen !== false; S.zoneOpen = !open; renderDeckbar(); };
 $('#bh-name').onclick = () => setTab('deck');
 $('#bh-menu').onclick = () => {
   openModal(
     '<h2>'+esc(ensureDeck().name)+'</h2>'+
+    '<div class="mrow"><button class="abtn primary" id="dm-done">&#10003; Mark done &amp; save</button></div>'+
     '<div class="mrow"><button class="abtn primary" id="dm-copy">Copy deck code</button><button class="abtn" id="dm-import">Import code</button></div>'+
     '<div class="mrow"><button class="abtn" id="dm-notes">Notes &amp; stats</button><button class="abtn" id="dm-new">New deck</button></div>'+
     '<div class="mrow"><button class="abtn subtle" id="dm-dupe">Duplicate</button><button class="abtn danger" id="dm-clear">Clear cards</button></div>'
   );
+  $('#dm-done').onclick = () => { closeModal(); finishDeck(); };
   $('#dm-copy').onclick = () => { closeModal(); doCopyCode(); };
   $('#dm-import').onclick = () => { closeModal(); openImport(); };
   $('#dm-notes').onclick = () => { closeModal(); setTab('deck'); };
@@ -1905,15 +2357,20 @@ $('#bh-menu').onclick = () => {
 function renderSaved(){
   const wrap = $('#savedlist'); wrap.innerHTML='';
   if(!S.decks.length){ wrap.appendChild(el('div','warnbox','No decks yet')); return; }
+  const V = { good:'\ud83d\udc4d', meh:'\ud83d\ude10', bad:'\ud83d\udc4e' };
   S.decks.forEach(d => {
     const row = el('div','saverow'); if(d.id===S.activeId) row.classList.add('active');
     const main = el('div','sv-main');
-    main.appendChild(el('div','sv-name', d.name || 'Untitled'));
+    const nameEl = el('div','sv-name', d.name || 'Untitled');
+    if(d.verdict) nameEl.appendChild(el('span','sv-verdict', V[d.verdict]));   // R5: self-rating badge
+    if(deckHasChanges(d)) nameEl.appendChild(el('span','sv-dot'));             // R5-G: cards changed since built
+    main.appendChild(nameEl);
     const arch = d.cards.length ? classifyArchetype(sortedDeckCards(d)) : [];
-    main.appendChild(el('div','sv-meta', d.cards.length + '/12 \u00b7 updated ' + new Date(d.updated).toLocaleDateString() + (arch.length ? ' \u00b7 ' + arch.join('/') : '')));
+    const life = d.done ? '\u2713 done' : d.id===S.activeId ? 'editing' : 'draft';   // R5: lifecycle word
+    main.appendChild(el('div','sv-meta', d.cards.length + '/12 \u00b7 updated ' + new Date(d.updated).toLocaleDateString() + (arch.length ? ' \u00b7 ' + arch.join('/') : '') + ' \u00b7 ' + life));
     row.appendChild(main);
     const loadB = el('button','sv-btn load', d.id===S.activeId ? 'Editing' : 'Edit');
-    loadB.onclick = () => { S.activeId = d.id; persistDecks(); renderAll(); setTab('deck'); };
+    loadB.onclick = () => { S.activeId = d.id; d.done = false; persistDecks(); renderAll(); setTab('deck'); };   // R5: reopening re-enters editing
     const delB = el('button','sv-btn','\u2715');
     delB.onclick = () => {
       if(!confirm('Delete "'+d.name+'"? This can\u2019t be undone.')) return;
@@ -1929,16 +2386,19 @@ function renderSaved(){
 function renderCreatorDecks(){
   const wrap = $('#creatorlist'); if(!wrap) return;
   wrap.innerHTML='';
-  if(!S.creatorDecks.length){
-    wrap.appendChild(el('div','warnbox','No creator decks yet — these refresh daily from Alexander Coccia, Coougarrr and Unfitparrot.'));
+  const all = S.creatorDecks.concat(S.addedCreatorDecks || []);   // R5-J: harvested + in-app added, tagged
+  if(!all.length){
+    wrap.appendChild(el('div','warnbox','No creator decks yet — these refresh daily from Alexander Coccia, Coougarrr and Unfitparrot. Or tap “+ Add creator” to pull any YouTube channel’s recent decks.'));
     return;
   }
+  const httpOk = u => /^https?:\/\//i.test(u);   // defense-in-depth: only http(s) hrefs ever become links
   const linkBtn = (href, label) => { const a=document.createElement('a'); a.className='abtn'; a.href=href; a.target='_blank'; a.rel='noopener noreferrer'; a.textContent=label; return a; };
-  S.creatorDecks.forEach(cd => {
+  all.forEach(cd => {
     const row = el('div','crow');
     const head = el('div','cr-head');
     head.appendChild(el('span','cr-creator', cd.creator));
     if(cd.video) head.appendChild(el('span','cr-video', cd.video));
+    if(cd.added) head.appendChild(el('span','cr-added','Added'));
     if(cd.published) head.appendChild(el('span','cr-date', cd.published));
     row.appendChild(head);
     if(cd.ids.length){
@@ -1952,14 +2412,23 @@ function renderCreatorDecks(){
       saveB.onclick = () => {
         const unknown = cd.ids.filter(id => !S.byId[id]); unknown.forEach(makeStub);
         const dk = { id:uid(), name: cd.name || (cd.creator + ' deck'), cards: cd.ids.slice(0,12), updated: Date.now() };
-        S.decks.unshift(dk); S.activeId = dk.id; persistDecks(); renderAll(); setTab('deck');
+        snapshotDeck(dk); S.decks.unshift(dk); S.activeId = dk.id; persistDecks(); renderAll(); setTab('deck');
         toast('Saved “' + dk.name + '”');
       };
       acts.appendChild(saveB);
-    } else if(cd.untapped){
+    } else if(cd.untapped && httpOk(cd.untapped)){
       acts.appendChild(linkBtn(cd.untapped, 'View on untapped'));
     }
-    if(cd.url) acts.appendChild(linkBtn(cd.url, 'Watch'));
+    if(cd.url && httpOk(cd.url)) acts.appendChild(linkBtn(cd.url, 'Watch'));
+    if(cd.added){                                                 // R5-J: remove the whole channel + its decks
+      const rm = el('button','abtn danger','Remove');
+      rm.onclick = () => {
+        S.addedCreators = S.addedCreators.filter(c => c.id !== cd.chId);
+        S.addedCreatorDecks = S.addedCreatorDecks.filter(d => d.chId !== cd.chId);
+        persistCreators(); renderCreatorDecks();
+      };
+      acts.appendChild(rm);
+    }
     row.appendChild(acts);
     wrap.appendChild(row);
   });
@@ -1975,9 +2444,10 @@ document.querySelectorAll('#savedseg button').forEach(b => b.onclick = () => {
   $('#saved-creator').hidden = seg !== 'creator';
   if(seg === 'creator') renderCreatorDecks();
 });
+if($('#cr-add-btn')) $('#cr-add-btn').onclick = openAddCreator;
 $('#btn-newdeck').onclick = () => {
   const d = { id:uid(), name:'New Deck', cards:[], updated:Date.now() };
-  S.decks.unshift(d); S.activeId = d.id; persistDecks(); renderAll(); setTab('cards'); toast('New deck started');
+  snapshotDeck(d); S.decks.unshift(d); S.activeId = d.id; persistDecks(); renderAll(); setTab('cards'); toast('New deck started');
 };
 
 /* ============ IMPORT / EXPORT / MODAL ============ */
@@ -2030,7 +2500,7 @@ function saveImportedDeck(r){
   const unknown = r.ids.filter(id => !S.byId[id]);
   unknown.forEach(makeStub);
   const d = { id:uid(), name: r.name || 'Imported Deck', cards: r.ids, updated: Date.now() };
-  S.decks.unshift(d); S.activeId = d.id; persistDecks();
+  snapshotDeck(d); S.decks.unshift(d); S.activeId = d.id; persistDecks();
   closeModal(); renderAll(); setTab('deck');
   toast('Imported ' + r.ids.length + ' cards' + (unknown.length ? ' (' + unknown.length + ' unknown)' : ''));
 }
@@ -2090,9 +2560,47 @@ $('#btn-settings').onclick = () => {
       '<button class="abtn" data-bulk="2">Own all S2</button>'+
       '<button class="abtn" data-bulk="3">Own all S3</button>'+
     '</div>'+
+    '<div class="section-label">Sync across devices</div>'+
+    '<div class="mnote">Paste the same token on every device to keep decks, verdicts, play-lines, collection and added creators in step. The token is stored only on this device and sent as a bearer credential — never placed in a link.</div>'+
+    '<div class="mrow"><input id="sync-token" class="minput" type="password" placeholder="Paste sync token" autocomplete="off" autocapitalize="off" spellcheck="false"></div>'+
+    '<div class="mrow"><button class="abtn primary" id="sync-save">Save token</button><button class="abtn" id="sync-forget">Forget</button></div>'+
+    '<div id="sync-status" class="mnote"></div>'+
+    '<div class="section-label">Backup</div>'+
+    '<div class="mnote">Export a full JSON snapshot you can Import on any device — works with no token at all.</div>'+
+    '<div class="mrow"><button class="abtn" id="data-export">Export all data</button><button class="abtn" id="data-import-btn">Import data file</button><input id="data-import" type="file" accept="application/json,.json" hidden></div>'+
     '<div class="mrow"><button class="abtn danger" id="m-clearcoll">Clear collection</button><button class="abtn" id="m-close">Done</button></div>'
   );
   $('#m-close').onclick = closeModal;
+  // R5-I: cross-device sync token
+  const stok = $('#sync-token'); if(stok) stok.value = S.syncToken || '';
+  updateSyncStatus();
+  $('#sync-save').onclick = () => {
+    const val = ($('#sync-token').value || '').trim();
+    S.syncToken = val; sPut(K.synctoken, JSON.stringify(val)); S.syncState = 'idle';
+    if(val){ updateSyncStatus(); toast('Sync token saved'); syncPull().then(syncPush); }
+    else { updateSyncStatus(); toast('Token cleared'); }
+  };
+  $('#sync-forget').onclick = () => {
+    S.syncToken = ''; sPut(K.synctoken, JSON.stringify('')); S.syncState = 'idle';
+    if($('#sync-token')) $('#sync-token').value = ''; updateSyncStatus(); toast('Sync token removed');
+  };
+  // R5-I: zero-infra export / import (import runs the same never-clobber merge)
+  $('#data-export').onclick = () => {
+    const blob = new Blob([JSON.stringify(buildStateBlob(), null, 2)], { type:'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'snap-workbench-backup-' + new Date().toISOString().slice(0,10) + '.json';
+    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+  $('#data-import-btn').onclick = () => $('#data-import').click();
+  $('#data-import').onchange = e => {
+    const f = e.target.files[0]; if(!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try{ const remote = JSON.parse(rd.result); applyStateBlob(mergeState(buildStateBlob(), remote)); renderAll(); toast('Data imported'); }
+      catch(err){ toast('Import failed: not a valid backup'); }
+    };
+    rd.readAsText(f);
+  };
   document.querySelectorAll('[data-bulk]').forEach(b => b.onclick = () => {
     const s = b.dataset.bulk;
     S.db.forEach(c => { if(c.s === s) S.owned.add(c.d); });
@@ -2202,6 +2710,33 @@ function parseDbPaste(text){
   return { cards: out };
 }
 
+/* ============ H: META CONTEXT (creator-deck overlap) ============ */
+/* Built from S.creatorDecks — already capped to a 14-day / 30-deck window by the harvester. */
+function creatorCardFreq(){ const m = {}; S.creatorDecks.forEach(cd => (cd.ids||[]).forEach(id => m[id] = (m[id]||0) + 1)); return m; }
+function deckMetaNote(d){
+  if(!d || !S.creatorDecks.length || !d.cards.length) return null;
+  const freq = creatorCardFreq();
+  const inMeta = d.cards.filter(id => freq[id]).length;
+  let best = null, bestN = 0;
+  S.creatorDecks.forEach(cd => {
+    if(!cd.ids || !cd.ids.length) return;
+    const set = new Set(cd.ids);
+    const n = d.cards.filter(id => set.has(id)).length;
+    if(n > bestN){ bestN = n; best = cd; }
+  });
+  return { inMeta, total:d.cards.length, closest:best, overlap:bestN };
+}
+function creatorMetaDigest(){
+  const withIds = S.creatorDecks.filter(cd => cd.ids && cd.ids.length);
+  if(!withIds.length) return '';
+  const arch = {};
+  withIds.forEach(cd => classifyArchetype(cd.ids.map(id => getCard(id) || makeStub(id))).forEach(a => arch[a] = (arch[a]||0) + 1));
+  const archTop = Object.entries(arch).sort((a,b) => b[1]-a[1]).slice(0,4).map(([a,n]) => a + ' ×' + n).join(', ');
+  const freq = creatorCardFreq();
+  const cardsTop = Object.entries(freq).sort((a,b) => b[1]-a[1]).slice(0,12).map(([id]) => (getCard(id) || {n:id}).n).join(', ');
+  return "\nThis week's creator meta (" + withIds.length + " decks):\nArchetypes: " + archTop + "\nMost-played cards: " + cardsTop;
+}
+
 /* ============ AI COACH ============ */
 const PRESETS = [
   'Critique this deck: weak slots and suggested swaps.',
@@ -2237,11 +2772,12 @@ $('#btn-ask').onclick = async () => {
     if(!S.owned.size){ ownedBlock = '\n(The user asked to restrict to owned cards but has not marked any as owned; note that and answer generally.)'; }
     else ownedBlock = '\nOnly suggest cards from this owned list:\n' + [...S.owned].map(id => (getCard(id)||{n:id}).n).join(', ');
   }
+  const creatorMetaBlock = creatorMetaDigest();
   const prompt =
     'You are a sharp, honest Marvel Snap deck-building coach.\n' +
     'Card data below comes from an up-to-date database and may be newer than your training; when they conflict, trust the text below.\n\n' +
     'Current deck ("'+(activeDeck().name||'Deck')+'"):\n' + deckAsText() + '\n' +
-    ownedBlock + '\n\n' +
+    ownedBlock + creatorMetaBlock + '\n\n' +
     'Question: ' + q + '\n\n' +
     'Answer in plain text (no markdown syntax), under 220 words. Be specific: name exact cards for cuts and adds, reference costs, and explain the game plan reasoning briefly.';
   try{
@@ -2363,11 +2899,32 @@ async function boot(){
   if(decksSaved && Array.isArray(decksSaved.decks)){
     S.decks = decksSaved.decks; S.activeId = decksSaved.activeId;
   }
+  // R5-G: seed change-flag baselines silently so pre-round-5 decks never false-flag.
+  let _seeded = false;
+  S.decks.forEach(d => { if(!d.snap){ snapshotDeck(d); _seeded = true; } });
+  if(_seeded) persistDecks();
   const coll = await sGet(K.coll);
   if(coll && Array.isArray(coll.owned)) S.owned = new Set(coll.owned);
   const prefs = await sGet(K.prefs);
-  if(prefs) S.prefs = Object.assign({ density:'cmp' }, prefs);
+  if(prefs) S.prefs = Object.assign({ density:'cmp', collOpen:false }, prefs);
   S.prefs.facetOpen = Object.assign({ sort:false, cost:true, series:false, mech:false, power:false }, S.prefs.facetOpen || {});
+  // R5-J: restore in-app added creators (rides in the previously-unused K.creators key)
+  const cr = await sGet(K.creators);
+  if(cr){ S.addedCreators = cr.channels || []; S.addedCreatorDecks = cr.decks || []; }
+  // R5-I: device-local sync token (never in a URL), then pull-and-merge remote once at boot.
+  // The pull is capped at 6s so a hung (not merely offline) relay can never stall first render.
+  S.syncToken = (await sGet(K.synctoken)) || '';
+  if(S.syncToken && SYNC_URL){
+    let _bootAbort = null, _bootTimer = null;
+    try{
+      const opts = { headers:{ 'authorization':'Bearer '+S.syncToken } };
+      if(typeof AbortController !== 'undefined'){ _bootAbort = new AbortController(); opts.signal = _bootAbort.signal; _bootTimer = setTimeout(() => _bootAbort.abort(), 6000); }
+      const r = await fetch(SYNC_URL, opts);
+      if(r.ok){ const remote = await r.json(); applyStateBlob(mergeState(buildStateBlob(), remote)); S.syncState='ok'; S.syncLast=Date.now(); scheduleSync(); }
+      else { S.syncState='error'; }
+    }catch(e){ S.syncState='offline'; }
+    finally{ if(_bootTimer) clearTimeout(_bootTimer); }
+  }
   ensureDeck();
   renderFilterPanel();
   setDeckTab(S.prefs.deckTab || 'overview');

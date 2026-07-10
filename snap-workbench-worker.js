@@ -11,6 +11,10 @@
  *
  * GET  /cards -> slim card list (fetched server-side, variants stripped, edge-cached 1h)
  * POST /coach -> { prompt } in, { text } out (your API key stays server-side)
+ * GET/PUT /sync -> tiny per-owner state store (KV). Needs a KV namespace bound as
+ *          SYNC_KV and a secret SYNC_TOKEN. Bearer-token auth; single fixed key.
+ * GET  /yt?url=... -> YouTube-only RSS proxy (handle/UC/channel-URL -> videos.xml),
+ *          edge-cached 1h. Hard-restricted to youtube.com; no other host is fetchable.
  */
 
 const UPSTREAM = 'https://marvelsnapzone.com/getinfo/?searchtype=cards&searchcardstype=true';
@@ -24,13 +28,15 @@ export default {
   async fetch(request, env, ctx) {
     const cors = {
       'access-control-allow-origin': env.ALLOWED_ORIGIN || '*',
-      'access-control-allow-methods': 'GET, POST, OPTIONS',
-      'access-control-allow-headers': 'content-type',
+      'access-control-allow-methods': 'GET, POST, PUT, OPTIONS',
+      'access-control-allow-headers': 'content-type, authorization',
     };
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
     const path = new URL(request.url).pathname;
 
     if (path === '/coach' && request.method === 'POST') return coach(request, env, cors);
+    if (path === '/sync') return sync(request, env, cors);
+    if (path === '/yt') return yt(request, env, ctx, cors);
     return cards(request, ctx, cors);
   },
 };
@@ -101,6 +107,87 @@ async function coach(request, env, cors) {
   if (!r.ok) return json({ error: (data && data.error && data.error.message) || 'api error' }, 502, cors);
   const text = (data.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('\n').trim();
   return json({ text }, 200, cors);
+}
+
+/* ---- /sync : per-owner state store on KV (bearer-token gated) ---------------- */
+// Constant-time-ish string compare so a wrong token can't be probed byte-by-byte.
+function tsEqual(a, b) {
+  a = String(a); b = String(b);
+  if (a.length !== b.length) return false;
+  let r = 0;
+  for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return r === 0;
+}
+async function sync(request, env, cors) {
+  if (!env.SYNC_TOKEN) return json({ error: 'SYNC_TOKEN secret not set' }, 500, cors);
+  if (!env.SYNC_KV) return json({ error: 'SYNC_KV namespace not bound' }, 500, cors);
+  const auth = request.headers.get('authorization') || '';
+  const m = /^Bearer\s+(.+)$/i.exec(auth);
+  if (!m || !tsEqual(m[1], env.SYNC_TOKEN)) return json({ error: 'unauthorized' }, 401, cors);
+  const KEY = 'state';               // single-owner app: one fixed blob, token is the only access control
+  if (request.method === 'GET') {
+    const v = await env.SYNC_KV.get(KEY);
+    return new Response(v || '{}', {
+      status: 200,
+      headers: { 'content-type': 'application/json; charset=utf-8', ...cors },
+    });
+  }
+  if (request.method === 'PUT') {
+    const body = await request.text();
+    if (body.length > 1048576) return json({ error: 'state too large (>1MB)' }, 413, cors);
+    try { JSON.parse(body); } catch (e) { return json({ error: 'body is not JSON' }, 400, cors); }
+    await env.SYNC_KV.put(KEY, body);
+    return json({ ok: true }, 200, cors);
+  }
+  return json({ error: 'method not allowed' }, 405, cors);
+}
+
+/* ---- /yt : strict YouTube-only RSS proxy (handle/UC/channel URL -> videos.xml) --- */
+async function yt(request, env, ctx, cors) {
+  const p = new URL(request.url).searchParams.get('url') || '';
+  const uc = await resolveChannelId(p);
+  if (!uc) return json({ error: 'not a resolvable YouTube channel URL/handle/UC id' }, 400, cors);
+  const feed = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + uc;
+  const cache = caches.default;
+  const cacheKey = new Request('https://yt.proxy/' + uc);   // own cache key, distinct from /cards
+  let hit = await cache.match(cacheKey);
+  if (!hit) {
+    let up;
+    try { up = await fetch(feed, { headers: { 'user-agent': 'snap-workbench (personal deck builder)' } }); }
+    catch (e) { return json({ error: 'feed unreachable' }, 502, cors); }
+    if (!up.ok) return json({ error: 'feed returned ' + up.status }, 502, cors);
+    const xml = await up.text();
+    hit = new Response(xml, {
+      headers: { 'content-type': 'application/xml; charset=utf-8', 'cache-control': 'public, max-age=3600' },
+    });
+    ctx.waitUntil(cache.put(cacheKey, hit.clone()));
+  }
+  const r = new Response(hit.body, hit);
+  Object.entries(cors).forEach(([k, v]) => r.headers.set(k, v));
+  return r;
+}
+// Resolve any accepted input to a UC channel id. ONLY ever fetches youtube.com.
+async function resolveChannelId(input) {
+  input = String(input || '').trim();
+  let m = input.match(/(UC[0-9A-Za-z_-]{22})/);              // direct UC id or /channel/UC...
+  if (m) return m[1];
+  let pageUrl = null;                                        // else resolve @handle / /c/ / /user/ via the channel page
+  if (/^@[\w.\-]+$/.test(input)) pageUrl = 'https://www.youtube.com/' + input;
+  else {
+    try {
+      const u = new URL(input);
+      if (!/(^|\.)youtube\.com$/.test(u.hostname)) return null;
+      if (/^\/(@[\w.\-]+|c\/[\w.\-]+|user\/[\w.\-]+)/.test(u.pathname)) pageUrl = 'https://www.youtube.com' + u.pathname;
+    } catch (e) { return null; }
+  }
+  if (!pageUrl) return null;
+  let page;
+  try { page = await fetch(pageUrl, { headers: { 'user-agent': 'Mozilla/5.0 snap-workbench' } }); }
+  catch (e) { return null; }
+  if (!page.ok) return null;
+  const html = await page.text();
+  const c = html.match(/"(?:channelId|externalId)":"(UC[0-9A-Za-z_-]{22})"/) || html.match(/channel\/(UC[0-9A-Za-z_-]{22})/);
+  return c ? c[1] : null;
 }
 
 function json(obj, status, headers) {

@@ -144,6 +144,11 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   d.querySelector('#fw-cost .chip[data-v="1"]').click(); await sleep(30);
   assert(d.querySelectorAll('#cardlist .tile').length < allN, 'cost filter narrows the grid');
   assert(d.querySelector('#fcount').textContent==='1', 'filter badge shows 1');
+  // cost buckets: no 0 chip, "1-" absorbs 0-cost cards, 7+ costs live under 6+
+  assert(d.querySelector('#fw-cost .chip[data-v="0"]')===null, 'no 0-cost chip (merged into 1-)');
+  assert(/1-/.test(d.querySelector('#fw-cost .chip[data-v="1"]').textContent), 'low cost chip labelled 1-');
+  const zeroShown = w.eval('(function(){var z=S.db.find(c=>c.c===0); if(!z) return true; return !!document.querySelector(\'#cardlist .tile[data-d="\'+z.d+\'"]\');})()');
+  assert(zeroShown, '0-cost card passes the 1- filter');
   d.querySelector('#fp-clear').click(); await sleep(20);
   assert(d.querySelector('#fcount').textContent==='', 'clear-all empties the filter badge');
   // sort widget (always in DOM): power sort descends
@@ -291,7 +296,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.querySelector('.dpane[data-pane="odds"]').classList.contains('on') && !d.querySelector('.dpane[data-pane="notes"]').classList.contains('on'),
     'clicking Odds sub-tab shows odds pane and hides notes pane');
   assert(w.eval('S.deckTab')==='odds', 'S.deckTab tracks the active sub-tab');
-  assert(d.querySelectorAll('#drawodds .odds-grid.single .oc').length===7, 'draw-odds singleton table still 7 turns after sub-tab switch');
+  assert(d.querySelector('#drawodds .odds-grid.single')===null, 'R5-D: the deck-independent single-card odds table is removed');
+  assert(d.querySelectorAll('#drawodds .odds-pick .odd-card').length===w.eval('activeDeck().cards.length'), 'R5-D: odds group-picker lists one chip per deck card');
   assert(d.querySelectorAll('#decklist .mini').length===12, 'deck minis (#decklist) still 12 after restructure');
   w.eval('setTab("cards")'); await sleep(10);
   assert(d.querySelectorAll('#dz .mini').length===12, 'build-zone minis (#dz) still 12 after restructure');
@@ -303,19 +309,41 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(w.eval('pSingle(6)') === 0.75, 'pSingle(6) === .75');
   assert(w.eval('pEither(5)') > 0.9, 'pEither(5) > .9');
 
+  // R5-D: general hypergeometric helpers (nCk / pAtLeastOne / pAll) + identities to the legacy fns
+  assert(w.eval('nCk(12,3)')===220, 'nCk(12,3)===220');
+  assert(w.eval('nCk(12,0)')===1 && w.eval('nCk(5,5)')===1 && w.eval('nCk(4,5)')===0, 'nCk edge cases (0/full/over)');
+  let idOK = true;
+  for(let t=0;t<=6;t++){ if(Math.abs(w.eval('pAtLeastOne(1,'+t+')') - w.eval('pSingle('+t+')')) > 1e-9) idOK = false; }
+  assert(idOK, 'pAtLeastOne(1,t) === pSingle(t) for t in 0..6 (identity)');
+  assert(Math.abs(w.eval('pAll(2,5)') - w.eval('pBoth(5)')) < 1e-9, 'pAll(2,5) ≈ pBoth(5)');
+  assert(Math.abs(w.eval('pAtLeastOne(2,5)') - w.eval('pEither(5)')) < 1e-9, 'pAtLeastOne(2,5) ≈ pEither(5)');
+  assert(w.eval('pAll(4,0)')===0, 'pAll(k,t) is 0 when fewer than k cards are seen (opening hand of 3 < 4)');
+
   // build a clean 12-card active deck for DOM-level analytics
   w.eval('(function(){ const ids=S.db.slice(0,12).map(c=>c.d); S.decks.unshift({id:"wp2",name:"WP2 Deck",cards:ids,updated:Date.now()}); S.activeId="wp2"; renderAll(); })()');
   await sleep(30);
   w.eval('setTab("deck")'); await sleep(20);
 
-  // C1: combo-out shows a percentage after picking two cards; singleton table has 7 turns
-  assert(d.querySelectorAll('#drawodds .odds-grid.single .oc').length===7, 'draw-odds singleton table shows 7 turns');
-  const twoIds = w.eval('activeDeck().cards.slice(0,2)');
-  const csa = d.querySelector('#combo-a'), csb = d.querySelector('#combo-b');
-  csa.value = twoIds[0]; csa.dispatchEvent(new w.Event('change',{bubbles:true}));
-  csb.value = twoIds[1]; csb.dispatchEvent(new w.Event('change',{bubbles:true}));
-  await sleep(20);
-  assert(d.querySelector('#combo-out').textContent.includes('%'), 'combo-out shows a percentage for two picked cards');
+  // R5-D: draw-goal group picker — pick two card chips, the output shows odds; single table gone
+  w.eval('S.oddsGroup.clear(); setDeckTab("odds")'); await sleep(20);
+  assert(d.querySelector('#drawodds .odds-grid.single')===null, 'R5-D: single odds table gone on the 12-card deck');
+  const oddCards = d.querySelectorAll('#drawodds .odds-pick .odd-card');
+  assert(oddCards.length===w.eval('activeDeck().cards.length'), 'R5-D: odd-card chips === deck size ('+oddCards.length+')');
+  oddCards[0].click(); await sleep(10); oddCards[1].click(); await sleep(20);
+  assert(w.eval('S.oddsGroup.size')===2, 'R5-D: tapping two card chips builds a 2-card draw goal');
+  assert(d.querySelector('#odds-out').textContent.includes('%'), 'R5-D: #odds-out shows a percentage for the group');
+  assert(d.querySelectorAll('#odds-out .odds-grid').length===2, 'R5-D: #odds-out renders two bar rows (≥1 / all)');
+  // presets: the "5+ finishers" chip is always emitted; clicking a non-empty preset replaces the group
+  const presetLabels = w.eval('oddsPresets(sortedDeckCards(activeDeck())).map(p=>p.label)');
+  assert(presetLabels.some(l=>/finishers/.test(l)), 'R5-D: a "5+ finishers" preset is always present');
+  const nonEmptyIdx = w.eval('oddsPresets(sortedDeckCards(activeDeck())).findIndex(p=>p.ids.length)');
+  if(nonEmptyIdx>=0){
+    d.querySelectorAll('#drawodds .odds-quick .odd-preset')[nonEmptyIdx].click(); await sleep(20);
+    assert(w.eval('S.oddsGroup.size')>0, 'R5-D: clicking a non-empty preset selects that synergy group');
+  } else assert(true, 'R5-D: no non-empty preset for this deck (skipped)');
+  // synthetic deck: enabler + 5-cost payoff -> destroy preset carries ids (deterministic)
+  assert(w.eval('oddsPresets([{n:"C",d:"Cx",c:2,p:2,a:"Destroy your other cards here."},{n:"K",d:"Kx",c:5,p:8,a:"When a card is destroyed, this gains +2 Power."}]).some(p=>p.ids.length>0)'),
+    'R5-D: oddsPresets emits non-empty enabler/payoff groups for a destroy package');
 
   // C3: archetype auto-tagging (all-Ongoing deck -> "Ongoing"); active-deck pill populated
   const ongoingDeck = Array.from({length:12},(_,i)=>({n:'Og'+i,d:'Og'+i,c:(i%6)+1,p:i%8,a:'Ongoing: +1 Power.',s:'3'}));
@@ -595,6 +623,243 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   d.querySelector('#savedseg [data-seg="mine"]').click(); await sleep(10);
 
   // restore an ordinary tab for the remaining suite
+  w.eval('setTab("cards")'); await sleep(10);
+
+  // ============ WP1 round-5: opacity, collection header, lifecycle, verdict, synergy ============
+  // A: --frost token + near-solid floating surfaces (was too-transparent --glass-2)
+  assert(/--frost:\s*rgba\(21,16,31,\.94\)/.test(html), 'A: --frost near-solid token defined');
+  assert(/#searchbar\{[^}]*background:var\(--frost\)/.test(html), 'A: #searchbar uses --frost');
+  assert(!/#searchbar\{[^}]*background:var\(--glass-2\)/.test(html), 'A: #searchbar no longer uses --glass-2');
+  assert(/#flyout\{[^}]*background:var\(--frost\)/.test(html), 'A: #flyout uses --frost');
+  assert(!/#flyout\{[^}]*background:var\(--glass-2\)/.test(html), 'A: #flyout no longer uses --glass-2');
+  assert(/#searchbar\.on ~ #btn-clearall, body\.on-cards #searchbar\.on ~ #toolbar\{display:none/.test(html), 'A: bottom-band tuck rule preserved verbatim');
+
+  // B: collection header no longer sticky; collapses to a one-line count; state persists (collapsed default)
+  assert(!/#collhead\{[^}]*position:sticky/.test(html), 'B: collection header no longer sticky');
+  w.eval('setTab("collection")'); await sleep(20);
+  assert(d.querySelector('#collhead').classList.contains('closed'), 'B: collection header collapsed by default (cards immediately visible)');
+  assert(d.querySelector('#coll-toggle')!==null, 'B: collapse toggle button present');
+  assert(parseInt(d.querySelector('#coll-count').textContent,10)===w.eval('S.owned.size'), 'B: coll-count still tracks S.owned.size');
+  assert(parseInt(d.querySelector('#coll-total').textContent,10)===w.eval('S.db.length'), 'B: coll-total still tracks S.db.length');
+  d.querySelector('#coll-toggle').click(); await sleep(20);
+  assert(!d.querySelector('#collhead').classList.contains('closed') && w.eval('S.prefs.collOpen')===true, 'B: toggle expands header + flips S.prefs.collOpen');
+  await sleep(600);
+  assert(w.eval('JSON.parse(localStorage.getItem("snapwb-prefs")||"{}").collOpen')===true, 'B: collOpen persists to storage');
+  d.querySelector('#coll-toggle').click(); await sleep(20);   // restore collapsed
+  w.eval('setTab("cards")'); await sleep(10);
+
+  // C: Done -> done+Saved tab; a build edit re-enters editing; auto-save indicator; verdict
+  w.eval('(function(){ const ids=S.db.slice(0,6).map(c=>c.d); S.decks.unshift({id:"wp1d",name:"WP1 Deck",cards:ids,updated:Date.now()}); S.activeId="wp1d"; renderAll(); })()');
+  await sleep(20);
+  w.eval('setTab("cards")'); await sleep(10);
+  d.querySelector('#bh-done').click(); await sleep(20);
+  assert(w.eval('activeDeck().done')===true, 'C: Done marks the active deck done');
+  assert(w.eval('S.tab')==='saved', 'C: Done jumps to the Saved tab');
+  w.eval('setTab("cards")'); await sleep(10);
+  d.querySelector('#dz .mini:not(.empty)').click(); await sleep(20);   // a build edit
+  assert(w.eval('activeDeck().done')===false, 'C: a build edit (card toggle) clears done -> back to editing');
+  await sleep(600);
+  assert(d.querySelector('#bh-save').textContent==='Saved ✓' && d.querySelector('#bh-save').classList.contains('saved'), 'C: auto-save indicator shows "Saved ✓" after the debounced write');
+  w.eval('setTab("deck")'); await sleep(20);
+  d.querySelector('#verdictrow [data-verdict="good"]').click(); await sleep(20);
+  assert(w.eval('activeDeck().verdict')==='good', 'C: tapping the 👍 face sets verdict=good');
+  assert(w.eval('activeDeck().done')===false, 'C: setting a verdict is a meta-edit (does NOT mark done)');
+  w.eval('setTab("saved")'); await sleep(20);
+  assert(d.querySelector('#savedlist .saverow .sv-verdict')!==null, 'C: verdict shows as a Saved-row badge');
+  w.eval('setTab("deck")'); await sleep(20);
+  d.querySelector('#verdictrow [data-verdict="good"]').click(); await sleep(20);
+  assert(w.eval('activeDeck().verdict')===null, 'C: re-tapping the active verdict clears it to null');
+
+  // E: synergy restyle — deckSynergies exposes names; scannable glass rows with count chips
+  const _synE = w.eval('deckSynergies('+JSON.stringify(dwe)+')').find(s=>s.key==='destroy');
+  assert(_synE && _synE.enablerNames.indexOf('Carnager')>=0, 'E: deckSynergies returns enablerNames (incl Carnager)');
+  assert(/\.synbox\{[^}]*var\(--glass-2\)/.test(html), 'E: .synbox restyled to glass (var(--glass-2), not var(--panel))');
+  w.eval('renderSynergy('+JSON.stringify(dwe)+')'); await sleep(10);
+  assert(d.querySelector('#synergy .synbox .syn-count.enabler')!==null, 'E: synergy renders scannable enabler/payoff count chips');
+
+  // ============ WP2 round-5: planner (F), change-flags (G), meta context (H) ============
+  // --- F: play-line planner ---
+  w.eval('setTab("deck")'); await sleep(20);
+  const _plAuto = w.eval('autoSketchLine(sortedDeckCards(activeDeck()))');
+  assert(Array.isArray(_plAuto) && _plAuto.length===6 && _plAuto.every(Array.isArray), 'F: autoSketchLine returns 6 turn arrays');
+  assert(w.eval('lineFlags(autoSketchLine(sortedDeckCards(activeDeck()))).filter(f=>f.type==="energy").length')===0, 'F: auto-sketch never overspends energy (curve-out)');
+  const _c3 = w.eval('(S.db.find(c=>c.c===3)||{}).d');
+  assert(_c3, 'F: a real 3-cost card exists in the DB for the energy-flag test');
+  const _feng = w.eval('lineFlags([['+JSON.stringify(_c3)+'],[],[],[],[],[]])');
+  assert(_feng.some(f=>f.type==='energy' && f.turn===1), 'F: a lone 3-cost card in T1 flags an energy overspend');
+  const _five = w.eval('activeDeck().cards.slice(0,5)');
+  const _fdraw = w.eval('lineFlags(['+JSON.stringify(_five)+',[],[],[],[],[]])');
+  assert(_five.length===5 && _fdraw.some(f=>f.type==='draw'), 'F: 5 cards played by T1 (only ~4 drawn) flags a draw problem');
+  const _four = w.eval('activeDeck().cards.slice(0,4)');
+  const _fbound = w.eval('lineFlags(['+JSON.stringify(_four)+',[],[],[],[],[]])');
+  assert(_four.length===4 && !_fbound.some(f=>f.type==='draw'), 'F: exactly-drawable line (4 cards by T1 = DRAWN[1]) has no draw flag (boundary)');
+  // DOM: tap a pool card, tap a turn -> the card is assigned + persists
+  w.eval('activeDeck().line=null; S.plannerPick=null; setDeckTab("planner"); renderDeck();'); await sleep(20);
+  const _poolMini = d.querySelector('#planner .pl-pool .mini');
+  assert(_poolMini!==null, 'F: planner pool renders the unplaced deck cards');
+  const _pickId = _poolMini.getAttribute('data-d');
+  _poolMini.click(); await sleep(20);
+  assert(w.eval('S.plannerPick')===_pickId, 'F: tapping a pool card selects it as the pending pick');
+  d.querySelector('#planner .pl-slot[data-t="6"]').click(); await sleep(20);
+  assert(w.eval('(activeDeck().line[5]||[]).indexOf('+JSON.stringify(_pickId)+')>=0'), 'F: tapping a turn slot assigns the pick to that turn');
+  assert(w.eval('S.plannerPick')===null, 'F: placing the pick clears it');
+  await sleep(600);
+  const _linePersist = w.eval('(JSON.parse(localStorage.getItem("snapwb-decks")).decks.find(x=>x.id==="wp1d")||{}).line');
+  assert(Array.isArray(_linePersist) && (_linePersist[5]||[]).indexOf(_pickId)>=0, 'F: the planned line persists to storage');
+  // tap the assigned mini -> back to pool
+  d.querySelector('#planner .pl-slot[data-t="6"] .pl-mini-row .mini').click(); await sleep(20);
+  assert(w.eval('(activeDeck().line[5]||[]).indexOf('+JSON.stringify(_pickId)+')<0'), 'F: tapping an assigned mini removes it back to the pool');
+  d.querySelector('#pl-auto').click(); await sleep(20);
+  assert(w.eval('activeDeck().line.reduce((n,s)=>n+s.length,0)')>0, 'F: Auto-sketch button fills the line');
+  d.querySelector('#pl-clear').click(); await sleep(20);
+  assert(w.eval('activeDeck().line.every(s=>s.length===0)'), 'F: Clear line empties every turn');
+
+  // --- G: card-change flags (snapshot / diff / dot / banner / dismiss) ---
+  w.eval('(function(){ const ids=S.db.slice(0,3).map(c=>c.d); S.decks.unshift({id:"gflag",name:"G Flag",cards:ids,updated:Date.now()}); S.activeId="gflag"; snapshotDeck(activeDeck()); })()');
+  await sleep(10);
+  assert(w.eval('deckChanges(activeDeck()).length')===0, 'G: a freshly snapshotted deck reports no changes');
+  const _bumpId = w.eval('S.decks.find(x=>x.id==="gflag").cards[0]');
+  await w.eval('applyDb(S.db.map(c=> c.d==='+JSON.stringify(_bumpId)+' ? Object.assign({},c,{p:c.p+3}) : c))');
+  await sleep(20);
+  const _ch = w.eval('deckChanges(S.decks.find(x=>x.id==="gflag"))');
+  assert(_ch.length===1 && _ch[0].now.p===_ch[0].was.p+3 && _ch[0].pow===true, 'G: deckChanges reports the mocked +3 power bump');
+  assert(w.eval('deckHasChanges(S.decks.find(x=>x.id==="gflag"))')===true, 'G: deckHasChanges true after the DB change');
+  w.eval('setTab("saved")'); await sleep(20);
+  assert(d.querySelector('#savedlist .saverow .sv-dot')!==null, 'G: the changed deck shows an unread dot on its Saved row');
+  w.eval('S.activeId="gflag"; setTab("deck")'); await sleep(20);
+  assert(/→/.test(d.querySelector('#deckchanges').textContent), 'G: the "what changed" banner shows the power arrow (→)');
+  d.querySelector('#ch-dismiss').click(); await sleep(20);
+  assert(w.eval('deckHasChanges(activeDeck())')===false, 'G: Dismiss re-snapshots so there are no more changes');
+  assert(d.querySelector('#deckchanges').textContent==='', 'G: the banner clears after dismiss');
+  const _snapStub = w.eval('(function(){ const dd={id:"gstub",name:"S",cards:["ZzNope2099"],updated:Date.now()}; makeStub("ZzNope2099"); snapshotDeck(dd); return deckChanges(dd).length; })()');
+  assert(_snapStub===0, 'G: stub cards (absent from the DB) never false-flag');
+
+  // --- H: meta context (per-deck note + coach digest) ---
+  w.eval('(function(){ S.decks.unshift({id:"hmeta",name:"H Meta",cards:["Hulk","AntMan","Wong","Odin"],updated:Date.now()}); S.activeId="hmeta"; })()');
+  w.eval('S.creatorDecks=[{creator:"Alpha",video:"v1",url:"",published:"2026-07-01",name:"",ids:["Hulk","AntMan"],untapped:""},{creator:"Beta",video:"v2",url:"",published:"2026-07-02",name:"Beta Deck",ids:["Hulk","AntMan","Wong"],untapped:""}]');
+  const _mn = w.eval('deckMetaNote(activeDeck())');
+  assert(_mn && _mn.inMeta===3 && _mn.total===4, 'H: deckMetaNote counts cards appearing in creator decks (3 of 4)');
+  assert(_mn.overlap===3 && _mn.closest && _mn.closest.creator==='Beta', 'H: closest = the higher-overlap creator deck (Beta, 3 shared)');
+  const _dig = w.eval('creatorMetaDigest()');
+  assert(_dig.length>0 && /Most-played cards/.test(_dig) && /×/.test(_dig), 'H: creatorMetaDigest non-empty with archetypes (×) + most-played cards');
+  w.eval('S.creatorDecks=[]');
+  assert(w.eval('deckMetaNote(activeDeck())')===null && w.eval('creatorMetaDigest()')==='', 'H: empty creator meta -> null note + empty digest');
+  w.eval('S.creatorDecks=[{creator:"Beta",video:"v2",url:"",published:"2026-07-02",name:"Beta Deck",ids:["Hulk","AntMan","Wong"],untapped:""}]; setTab("deck"); renderDeck();'); await sleep(20);
+  assert(/creator decks/.test(d.querySelector('#deckmeta').textContent), 'H: #deckmeta renders the overlap note when creator decks exist');
+  // coach prompt splices the digest in (capture the request body via a fetch swap)
+  await w.eval('(async()=>{ const of=window.fetch; let cap=null; window.fetch=async(u,o)=>{ cap=o; return { ok:true, json:async()=>({content:[{type:"text",text:"ok"}]}) }; }; setTab("ai"); document.getElementById("btn-ask").click(); await new Promise(r=>setTimeout(r,60)); window.__coachCap=cap; window.fetch=of; })()');
+  const _capBody = w.eval('window.__coachCap && window.__coachCap.body');
+  assert(_capBody && /creator meta/i.test(_capBody), 'H: coach prompt includes the creator-meta digest block');
+
+  // ============ WP3 round-5: cross-device sync (I) + in-app Add-creator (J) ============
+  // --- I: mergeState — newest-wins per deck, union owned/creators, never drop local ---
+  const _local = { v:1, updatedAt:1000,
+    decks:[{id:'A',updated:5,cards:['Hulk']},{id:'B',updated:5,cards:['AntMan']}],
+    activeId:'A', owned:['Hulk'], creators:[{id:'UC1',name:'One'}], prefs:{density:'cmp'} };
+  const _remote = { v:1, updatedAt:2000,
+    decks:[{id:'A',updated:9,cards:['Hulk','Wong']},{id:'C',updated:3,cards:['Odin']}],
+    activeId:'C', owned:['AntMan','Odin'], creators:[{id:'UC2',name:'Two'}], prefs:{density:'det'} };
+  const _m = w.eval('mergeState('+JSON.stringify(_local)+','+JSON.stringify(_remote)+')');
+  const _mA = _m.decks.find(x => x.id==='A');
+  assert(_mA && _mA.cards.length===2 && _mA.cards.indexOf('Wong')>=0, 'I: newer remote deck overrides same-id local');
+  assert(_m.decks.some(x => x.id==='B'), 'I: local-only deck survives merge (never dropped)');
+  assert(_m.decks.some(x => x.id==='C'), 'I: remote-only deck is added');
+  assert(_m.owned.length===3 && _m.owned.indexOf('Odin')>=0 && _m.owned.indexOf('Hulk')>=0, 'I: owned sets are unioned');
+  assert(_m.creators.length===2, 'I: creators unioned by id');
+  assert(_m.prefs.density==='det', 'I: newer updatedAt wins for prefs');
+  assert(_m.activeId==='A', 'I: activeId preserved when its deck survives');
+  const _m2 = w.eval('mergeState({decks:[{id:"A",updated:20,cards:["X"]}],owned:[],creators:[],prefs:{},updatedAt:5},{decks:[{id:"A",updated:9,cards:["Y"]}],owned:[],creators:[],prefs:{},updatedAt:1})');
+  assert(_m2.decks[0].cards[0]==='X', 'I: newer LOCAL deck is kept over an older remote same-id');
+  assert(w.eval('mergeState({decks:[{id:"Z",updated:1,cards:[]}],owned:["Hulk"],creators:[],prefs:{},updatedAt:1}, null).decks.length')===1, 'I: mergeState with null remote returns local unchanged');
+
+  // --- I: buildStateBlob shape + import round-trip via mergeState/applyStateBlob (no FileReader) ---
+  const _blob = w.eval('buildStateBlob()');
+  assert(_blob && Array.isArray(_blob.decks) && Array.isArray(_blob.owned) && _blob.prefs && typeof _blob.updatedAt==='number', 'I: buildStateBlob carries decks/owned/prefs/updatedAt');
+  const _before = w.eval('S.decks.length');
+  const _importBlob = { v:1, updatedAt:Date.now()+100000,
+    decks:[{id:'imp-1',name:'Imported',cards:['Hulk','AntMan'],updated:Date.now()+100000}],
+    activeId:'imp-1', owned:['ZzImport1'], creators:[], prefs:{} };
+  w.eval('applyStateBlob(mergeState(buildStateBlob(), '+JSON.stringify(_importBlob)+'))');
+  assert(w.eval('S.decks.some(x=>x.id==="imp-1")'), 'I: import merges a new deck (no clobber)');
+  assert(w.eval('S.decks.length')>=_before+1, 'I: import never drops existing local decks');
+  assert(w.eval('S.owned.has("ZzImport1")'), 'I: import unions owned cards');
+
+  // --- I: syncPush issues a PUT with the Bearer header; token never in the URL ---
+  await w.eval('(async()=>{ const of=window.fetch; window.__cap=null; window.fetch=async(u,o)=>{ window.__cap={u:String(u),o:o}; return {ok:true,status:200,json:async()=>({}),text:async()=>"{}"}; }; S.syncToken="tok-secret-123"; await syncPush(); window.fetch=of; })()');
+  const _cap = w.eval('window.__cap');
+  assert(_cap && _cap.o.method==='PUT', 'I: syncPush issues a PUT');
+  assert(_cap.o.headers.authorization==='Bearer tok-secret-123', 'I: syncPush sends the token as an Authorization: Bearer header');
+  assert(_cap.u===w.eval('SYNC_URL') && !/tok-secret-123/.test(_cap.u), 'I: syncPush targets SYNC_URL and never puts the token in the URL');
+  assert(Array.isArray(JSON.parse(_cap.o.body).decks), 'I: syncPush body is a full state blob');
+  assert(w.eval('S.syncState')==='ok', 'I: a successful push sets syncState=ok');
+
+  // --- I: syncPull is a GET with the Bearer header and merges the remote blob ---
+  const _pullRemote = { v:1, updatedAt:Date.now()+200000,
+    decks:[{id:'pull-1',name:'Pulled',cards:['Wong'],updated:Date.now()+200000}],
+    activeId:'pull-1', owned:['Wong'], creators:[], prefs:{} };
+  await w.eval('(async()=>{ const of=window.fetch; window.__pcap=null; window.fetch=async(u,o)=>{ window.__pcap={u:String(u),o:o||{}}; return {ok:true,status:200,json:async()=>('+JSON.stringify(_pullRemote)+'),text:async()=>""}; }; S.syncToken="tok-secret-123"; await syncPull(); window.fetch=of; })()');
+  const _pcap = w.eval('window.__pcap');
+  assert(_pcap && (!_pcap.o.method || _pcap.o.method==='GET'), 'I: syncPull uses GET');
+  assert(_pcap.o.headers.authorization==='Bearer tok-secret-123' && !/tok-secret-123/.test(_pcap.u), 'I: syncPull sends the Bearer header, never the token in the URL');
+  assert(w.eval('S.decks.some(x=>x.id==="pull-1")'), 'I: syncPull merges the remote blob into local decks');
+  w.eval('S.syncToken="";');   // restore unconfigured state so later persists/AI stay offline-clean
+
+  // --- I: token saved via Settings persists to K.synctoken and never leaks into a URL ---
+  w.eval('document.getElementById("btn-settings").onclick()'); await sleep(20);
+  assert(d.querySelector('#sync-token')!==null && d.querySelector('#sync-save')!==null, 'I: Settings exposes the sync token field + Save');
+  assert(d.querySelector('#data-export')!==null && d.querySelector('#data-import')!==null, 'I: Settings exposes Export/Import backup controls');
+  d.querySelector('#sync-token').value='ui-token-777';
+  await w.eval('(async()=>{ const of=window.fetch; window.__ucap=[]; window.fetch=async(u,o)=>{ window.__ucap.push(String(u)); return {ok:true,status:200,json:async()=>({}),text:async()=>"{}"}; }; document.getElementById("sync-save").onclick(); await new Promise(r=>setTimeout(r,120)); window.fetch=of; })()');
+  assert(w.eval('S.syncToken')==='ui-token-777', 'I: Save token updates S.syncToken');
+  assert(/ui-token-777/.test(w.localStorage.getItem('snapwb-synctoken')||''), 'I: saved token persists to K.synctoken in localStorage');
+  assert(!/ui-token-777/.test(w.eval('JSON.stringify(window.__ucap)')), 'I: token never appears in any relay URL string');
+  w.eval('closeModal(); S.syncToken="";');
+
+  // --- J: extractDecksFromDesc reuses parseCode to decode BOTH a base64 code and an untapped slug ---
+  const _dcode = Buffer.from(JSON.stringify({Name:'MockDeck',Cards:SLUGIDS.map(id=>({CardDefId:id}))})).toString('base64');
+  const _slugUrl = 'https://snap.untapped.gg/en/decks/'+SLUGIDS.join('-')+'_DualDeck';
+  const _desc = 'Line one\n'+_dcode+'\nWatch here '+_slugUrl+' thanks';
+  const _dd = w.eval('extractDecksFromDesc('+JSON.stringify(_desc)+')');
+  assert(_dd.length===2 && _dd.every(x=>x.ids.length===12), 'J: extractDecksFromDesc decodes both a base64 code and an untapped slug');
+
+  // --- J: addCreator harvests a mocked feed, tags decks, persists, renders + Remove ---
+  const _mockUC = 'UCmocktuber000000000001';
+  const _pubRecent = new Date(Date.now()-2*86400000).toISOString();
+  const MOCK_RSS = '<?xml version="1.0"?><feed xmlns:yt="http://www.youtube.com/xml/schemas/2015" xmlns:media="http://search.yahoo.com/mrss/">'+
+    '<yt:channelId>'+_mockUC+'</yt:channelId><title>MockTuber Channel</title>'+
+    '<author><name>MockTuber</name><uri>https://www.youtube.com/@mocktuber</uri></author>'+
+    '<entry><title>Best Deck Ever</title>'+
+    '<link rel="alternate" href="https://www.youtube.com/watch?v=mock123"/>'+
+    '<published>'+_pubRecent+'</published>'+
+    '<media:group><media:description>My deck code:\n'+_dcode+'\nGGs</media:description></media:group>'+
+    '</entry></feed>';
+  w.eval('S.addedCreators=[]; S.addedCreatorDecks=[];');
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u,o)=>({ok:true,status:200,text:async()=>('+JSON.stringify(MOCK_RSS)+'),json:async()=>({})}); await addCreator("https://youtube.com/@mocktuber"); window.fetch=of; })()');
+  assert(w.eval('S.addedCreatorDecks.length')===1, 'J: addCreator harvests one deck from the mocked feed');
+  assert(w.eval('S.addedCreatorDecks[0].added')===true && w.eval('S.addedCreatorDecks[0].ids.length')===12, 'J: added deck is tagged added:true and decodes 12 ids');
+  assert(w.eval('S.addedCreators.some(c=>c.id==="'+_mockUC+'")'), 'J: the channel UC id is recorded on S.addedCreators');
+  await sleep(500);
+  const _crPersist = w.eval('JSON.parse(localStorage.getItem("snapwb-creators")||"null")');
+  assert(_crPersist && _crPersist.decks && _crPersist.decks.length===1, 'J: added creators persist to K.creators');
+  w.eval('setTab("saved")'); await sleep(10);
+  d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(30);
+  assert(d.querySelector('#cr-add-btn')!==null, 'J: Creator segment shows the + Add creator button');
+  const _addedRow = [...d.querySelectorAll('#creatorlist .crow')].find(r => r.querySelector('.cr-added'));
+  assert(_addedRow, 'J: the added deck renders a row with an "Added" badge');
+  assert(_addedRow.querySelector('.abtn.danger')!==null, 'J: added rows carry a Remove button');
+  assert(_addedRow.querySelector('.abtn.primary')!==null, 'J: added decks still offer Save a copy');
+  d.querySelector('#cr-add-btn').click(); await sleep(20);
+  assert(d.querySelector('#cr-url')!==null && d.querySelector('#cr-fetch')!==null, 'J: Add-creator modal has a URL field + Fetch button');
+  w.eval('closeModal()');
+  _addedRow.querySelector('.abtn.danger').click(); await sleep(20);
+  assert(w.eval('S.addedCreatorDecks.length')===0 && w.eval('S.addedCreators.length')===0, 'J: Remove clears the channel and its decks');
+
+  // --- J: failure paths — bad URL (worker 400) and out-of-window videos add nothing ---
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u,o)=>({ok:false,status:400,json:async()=>({error:"not a resolvable YouTube channel URL/handle/UC id"}),text:async()=>""}); await addCreator("https://example.com/not-youtube"); window.fetch=of; })()');
+  assert(w.eval('S.addedCreatorDecks.length')===0 && w.eval('S.addedCreators.length')===0, 'J: a bad/non-YouTube URL (worker 400) adds nothing');
+  const OLD_RSS = MOCK_RSS.replace(_pubRecent, new Date(Date.now()-30*86400000).toISOString());
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u,o)=>({ok:true,status:200,text:async()=>('+JSON.stringify(OLD_RSS)+'),json:async()=>({})}); await addCreator("https://youtube.com/@mocktuber"); window.fetch=of; })()');
+  assert(w.eval('S.addedCreatorDecks.length')===0, 'J: videos older than the 14-day window add no decks');
   w.eval('setTab("cards")'); await sleep(10);
 
   // AI mocked
