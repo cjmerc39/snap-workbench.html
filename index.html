@@ -273,6 +273,15 @@ h1 .h-snap{color:var(--gold);}
 .syn-ok .syn-badge{color:#0b1f17; background:var(--ok);}
 .syn-warn .syn-badge{color:#2a1509; background:var(--warn);}
 .syn-hint{font-size:11px; color:var(--faint); margin-top:6px;}
+/* R8: synergy 2.0 — section labels, interaction rows, creator-pair evidence */
+.syn-sec{font-family:var(--head); font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--faint); margin:10px 2px 6px;}
+.syn-row{display:flex; align-items:center; justify-content:space-between; gap:8px; background:var(--glass-2);
+  border-radius:10px; padding:8px 10px; margin-bottom:6px; box-shadow:inset 0 0 0 1px var(--hair);}
+.syn-row.info{opacity:.75;}
+.syn-text{font-size:12.5px; font-weight:600; min-width:0;}
+.syn-chips-sm{display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end;}
+.syn-chips-sm span{font-size:10px; color:var(--dim); background:rgba(255,255,255,.05); border-radius:6px; padding:2px 6px; white-space:nowrap;}
+.syn-pair-n{font-size:10.5px; font-weight:800; color:var(--gold); white-space:nowrap;}
 /* draw & combo odds */
 .odds-sub{font-size:11.5px; color:var(--dim); margin:2px 0 6px;}
 .odds-grid{display:flex; align-items:flex-end; gap:6px; background:var(--panel); border:1px solid var(--line);
@@ -1550,13 +1559,18 @@ function extractDecksFromDesc(desc){
 }
 /* R5-J: fetch a YouTube channel's last-2-weeks decks via the relay's /yt proxy. */
 async function addCreator(url){
-  if(!YT_URL) return toast('Add-creator needs the relay');
+  // R8: failures land in the modal (#cr-msg) so they don't vanish like a toast; each failure mode gets its own words
+  const say = m => { const box = $('#cr-msg'); if(box){ box.textContent = m; box.style.display='block'; } else toast(m); };
+  if(!YT_URL) return say('Add-creator needs the relay configured.');
   let xml;
   try{
     const r = await fetch(YT_URL + '?url=' + encodeURIComponent(url));
     if(!r.ok){ const j = await r.json().catch(() => ({})); throw new Error(j.error || 'bad channel'); }
     xml = await r.text();
-  }catch(e){ toast('Couldn\u2019t add: ' + (e && e.message ? e.message : 'not a YouTube channel')); return; }
+  }catch(e){
+    say('Couldn\u2019t reach that channel \u2014 YouTube sometimes blocks for a while; worth retrying in a few minutes. (' + (e && e.message ? e.message : 'network error') + ')');
+    return;
+  }
   const chName = (xml.match(/<author>[\s\S]*?<name>([^<]+)<\/name>/) || [])[1] || 'Creator';
   const uc = (xml.match(/<yt:channelId>([^<]+)<\/yt:channelId>/) || xml.match(/channel_id=(UC[\w-]{22})/) || [])[1];
   const entries = xml.split('<entry>').slice(1);
@@ -1571,7 +1585,7 @@ async function addCreator(url){
       creator:chName, video:title, url:vurl, published,
       name:dk.name||'', ids:dk.ids||[], untapped:dk.untapped||'', added:true, chId:uc }));
   }
-  if(!decks.length){ toast('No deck codes found in recent videos'); return; }
+  if(!decks.length){ say('Found ' + chName + ' — but no Snap deck codes in their last two weeks of videos. (They may share decks another way, or post less often.)'); return; }
   S.addedCreators = S.addedCreators.filter(c => c.id !== uc).concat([{ id:uc, name:chName, handle:url }]);
   S.addedCreatorDecks = S.addedCreatorDecks.filter(d => d.chId !== uc).concat(decks);
   persistCreators(); closeModal(); renderCreatorDecks();
@@ -1582,12 +1596,14 @@ function openAddCreator(){
     '<h2>Add a creator</h2>'+
     '<div class="mnote">Paste a YouTube channel link or @handle. We read their last two weeks of videos and pull any Marvel Snap deck codes from the descriptions.</div>'+
     '<div class="mrow"><input id="cr-url" class="minput" type="text" placeholder="youtube.com/@handle or channel link" autocomplete="off" autocapitalize="off" spellcheck="false"></div>'+
+    '<div id="cr-msg" class="mnote" style="display:none; color:var(--warn);"></div>'+
     '<div class="mrow"><button class="abtn primary" id="cr-fetch">Fetch decks</button><button class="abtn" id="cr-cancel">Cancel</button></div>'
   );
   $('#cr-cancel').onclick = closeModal;
   $('#cr-fetch').onclick = () => {
     const btn = $('#cr-fetch'); const url = ($('#cr-url').value || '').trim();
     if(!url){ toast('Paste a channel link first'); return; }
+    const msg = $('#cr-msg'); if(msg){ msg.textContent=''; msg.style.display='none'; }
     btn.disabled = true; btn.textContent = 'Fetching\u2026';
     addCreator(url).finally(() => { const b=$('#cr-fetch'); if(b){ b.disabled=false; b.textContent='Fetch decks'; } });
   };
@@ -2091,12 +2107,69 @@ function deckSynergies(cards){
     const payoffs  = cards.filter(rule.isPayoff).length;
     if(!enablers && !payoffs) return null;
     let status = 'active';
-    if(enablers && !payoffs) status = 'missing-payoff';
-    else if(!enablers && payoffs) status = 'missing-enabler';
+    // R8 owner fix: a single incidental card is not a "gap" — warn only when the deck leans in (>=2 on the present side)
+    if(enablers && !payoffs) status = enablers >= 2 ? 'missing-payoff' : 'incidental';
+    else if(!enablers && payoffs) status = payoffs >= 2 ? 'missing-enabler' : 'incidental';
     const enablerNames = cards.filter(rule.isEnabler).map(c => c.n);
     const payoffNames  = cards.filter(rule.isPayoff).map(c => c.n);
     return { key:rule.key, label:rule.label, enablers, payoffs, status, hint:rule.hint, enablerNames, payoffNames };
   }).filter(Boolean);
+}
+
+/* --- R8: positive interactions — each row fires only when the deck holds BOTH halves --- */
+const INTERACTION_RULES = [
+  { key:'echo',    find:c => /on reveal[^.]{0,60}\b(again|twice)\b/i.test(c.a||'') || /activate[^.]{0,50}on reveal/i.test(c.a||''),
+    partners:(cards,f) => cards.filter(c => c !== f && /on reveal/i.test(c.a||'')),
+    min:3, text:(f,ps) => f.n + ' re-triggers your ' + ps.length + ' On Reveal cards' },
+  { key:'ongoing', find:c => /(your|other)[^.]{0,30}ongoing/i.test(c.a||''),
+    partners:(cards,f) => cards.filter(c => c !== f && /^\s*ongoing:/i.test(c.a||'')),
+    min:3, text:(f,ps) => f.n + ' scales with your ' + ps.length + ' Ongoing cards' },
+  { key:'vanilla', find:c => /no abilit/i.test(c.a||''),
+    partners:(cards,f) => cards.filter(c => c !== f && !(c.a||'').trim()),
+    min:3, text:(f,ps) => f.n + ' rewards your ' + ps.length + ' ability-free cards' },
+  { key:'ramp',    find:c => RAMP_RX.test(c.a||''),
+    partners:(cards,f) => cards.filter(c => c !== f && (c.c||0) >= 5),
+    min:2, text:(f,ps) => f.n + ' accelerates ' + ps.length + ' expensive plays' },
+  { key:'bigpow',  find:c => /(cop(y|ies)|equal (?:to|the))[^.]{0,40}power/i.test(c.a||''),
+    partners:(cards,f) => cards.filter(c => c !== f && (c.p||0) >= 8),
+    min:1, text:(f,ps) => f.n + ' feeds on big power (' + ps.slice(0,2).map(p=>p.n).join(', ') + ')' },
+];
+function deckInteractions(cards){
+  const rows = [], seenTxt = new Set();
+  const push = r => { if(!seenTxt.has(r.text)){ seenTxt.add(r.text); rows.push(r); } };
+  INTERACTION_RULES.forEach(rule => {
+    cards.filter(rule.find).forEach(f => {
+      const ps = rule.partners(cards, f);
+      if(ps.length >= rule.min) push({ text: rule.text(f, ps), chips: ps.slice(0,4).map(p => p.n) });
+    });
+  });
+  // cost-tribe buffers ("your 1-cost cards" à la Ka-Zar)
+  cards.forEach(f => {
+    const m = /your (\d)[- ]cost/i.exec(f.a||''); if(!m) return;
+    const ps = cards.filter(c => c !== f && c.c === +m[1]);
+    if(ps.length >= 3) push({ text: f.n + ' buffs your ' + ps.length + ' ' + m[1] + '-cost cards', chips: ps.slice(0,4).map(p => p.n) });
+  });
+  // token producers (round-7 links)
+  cards.forEach(f => {
+    (S.tokenLinks[f.d]||[]).forEach(tid => {
+      const t = S.tokens[tid];
+      if(t) push({ text: f.n + ' creates ' + t.n + (/s$/i.test(t.n)?'':'s') + ' in play', chips: [], info:true });
+    });
+  });
+  return rows.slice(0, 8);
+}
+/* --- R8: empirical evidence — pairs from this deck seen together in creator decks --- */
+function creatorPairEvidence(cards){
+  const pool = (S.creatorDecks||[]).concat(S.addedCreatorDecks||[]).filter(x => x && x.ids && x.ids.length);
+  if(pool.length < 3) return [];
+  const sets = pool.map(x => new Set(x.ids));
+  const ids = cards.map(c => c.d), rows = [];
+  for(let i=0;i<ids.length;i++) for(let j=i+1;j<ids.length;j++){
+    let n = 0;
+    for(const st of sets) if(st.has(ids[i]) && st.has(ids[j])) n++;
+    if(n >= 2) rows.push({ a: ids[i], b: ids[j], n });
+  }
+  return rows.sort((x,y) => y.n - x.n).slice(0, 4);
 }
 
 /* --- C4: goldfish draw simulator --- */
@@ -2130,12 +2203,28 @@ function renderCurveHealth(cards){
 /* --- render: C2 synergy --- */
 function renderSynergy(cards){
   const wrap = $('#synergy'); if(!wrap) return;
-  const syns = deckSynergies(cards);
-  if(!cards.length || !syns.length){
-    wrap.innerHTML = '<div class="odds-hint">No package signal yet — add enablers and payoffs to see synergy checks.</div>';
+  if(!cards.length){
+    wrap.innerHTML = '<div class="odds-hint">Add cards to see how they work together.</div>';
     return;
   }
-  wrap.innerHTML = syns.map(s => {
+  const inter = deckInteractions(cards);
+  const pairs = creatorPairEvidence(cards);
+  const syns = deckSynergies(cards);
+  const committed = syns.filter(s => s.status !== 'incidental');
+  const light = syns.filter(s => s.status === 'incidental');
+  let html = '';
+  if(inter.length || pairs.length){
+    html += '<div class="syn-sec">Working together</div>' +
+      inter.map(r =>
+        '<div class="syn-row' + (r.info ? ' info' : '') + '"><span class="syn-text">' + esc(r.text) + '</span>' +
+        (r.chips.length ? '<span class="syn-chips-sm">' + r.chips.map(n => '<span>' + esc(n) + '</span>').join('') + '</span>' : '') +
+        '</div>').join('') +
+      pairs.map(p =>
+        '<div class="syn-row"><span class="syn-text">' + esc((getCard(p.a)||{n:p.a}).n) + ' + ' + esc((getCard(p.b)||{n:p.b}).n) + '</span>' +
+        '<span class="syn-pair-n">' + p.n + ' creator decks</span></div>').join('');
+  }
+  if(committed.length) html += '<div class="syn-sec">Packages</div>';
+  html += committed.map(s => {
     const ok = s.status === 'active';
     const en = s.enablers, py = s.payoffs;
     const names = (s.enablerNames||[]).concat(s.payoffNames||[]);
@@ -2152,6 +2241,11 @@ function renderSynergy(cards){
         (ok ? '' : '<div class="syn-hint">' + esc(s.hint) + '</div>') +
       '</div>';
   }).join('');
+  if(light.length)
+    html += '<div class="syn-row info"><span class="syn-text">Light touches: ' +
+      light.map(s => esc(s.label) + ' (' + (s.enablers + s.payoffs) + ' card' + ((s.enablers+s.payoffs)===1?'':'s') + ')').join(' · ') +
+      '</span></div>';
+  wrap.innerHTML = html || '<div class="odds-hint">No package signal — this deck plays it straight, and that’s fine.</div>';
 }
 
 /* --- R5: deck verdict (self-rating, meta-edit — never clears "done") --- */
@@ -2733,7 +2827,7 @@ function renderDeck(){
 
   // glance-chip summary (synergy status + curve health) — read from existing analytics
   const syns = deckSynergies(cards);
-  const gaps = syns.filter(s => s.status !== 'active').length;
+  const gaps = syns.filter(s => /^missing/.test(s.status)).length;   // R8: incidental cards never count as gaps
   const gs = $('#gl-syn');
   if(gs){
     gs.textContent = !cards.length ? '–' : gaps ? ('⚠' + gaps) : (syns.length ? '✓' : '–');
@@ -2929,7 +3023,7 @@ function renderDeckbar(){ // kept name; now renders the pinned zone + header
   const is = $('#ins-syn');
   if(is){
     const syns = deckSynergies(cards);
-    const gaps = syns.filter(s => s.status !== 'active').length;
+    const gaps = syns.filter(s => /^missing/.test(s.status)).length;   // R8: incidental cards never count as gaps
     is.textContent = !cards.length ? '' : gaps ? ('\u26a0 ' + gaps + ' synergy gap' + (gaps>1?'s':'')) : syns.length ? '\u2713 synergies aligned' : '';
     is.classList.toggle('warn', !!gaps);
     is.classList.toggle('ok', !gaps && syns.length>0);

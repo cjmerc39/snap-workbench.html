@@ -357,10 +357,33 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const vanillaC = {n:'Vanilla', d:'Van1',     c:1,p:2,a:'',                                             s:'1'};
   const dpo = [payoffC].concat(Array.from({length:11},()=>vanillaC));
   const dr1 = w.eval('deckSynergies('+JSON.stringify(dpo)+')').find(s=>s.key==='destroy');
-  assert(dr1 && dr1.status==='missing-enabler', 'destroy payoff with no enabler -> missing-enabler');
+  assert(dr1 && dr1.status==='incidental', 'R8: a single destroy payoff is incidental, not a gap');
+  const payoffC2 = {n:'Deathish', d:'Deathish1', c:6,p:10,a:'Costs 1 less for each card destroyed this game.', s:'5'};
+  const dpo2 = [payoffC, payoffC2].concat(Array.from({length:10},()=>vanillaC));
+  const dr1b = w.eval('deckSynergies('+JSON.stringify(dpo2)+')').find(s=>s.key==='destroy');
+  assert(dr1b && dr1b.status==='missing-enabler', 'R8: two destroy payoffs with no enabler -> real gap');
   const dwe = [payoffC, enablerC].concat(Array.from({length:10},()=>vanillaC));
   const dr2 = w.eval('deckSynergies('+JSON.stringify(dwe)+')').find(s=>s.key==='destroy');
   assert(dr2 && dr2.status==='active', 'destroy payoff + enabler -> active');
+
+  // R8: positive interactions + creator-pair evidence
+  const echoC = {n:'Odinson', d:'Odinson1', c:6,p:8,a:'On Reveal: activate the On Reveal abilities of your other cards here again.', s:'4'};
+  const orC1 = {n:'Rev1',d:'Rev1',c:1,p:2,a:'On Reveal: gain +1 Power.',s:'1'};
+  const orC2 = {n:'Rev2',d:'Rev2',c:2,p:3,a:'On Reveal: draw a card.',s:'1'};
+  const orC3 = {n:'Rev3',d:'Rev3',c:3,p:4,a:'On Reveal: heal it.',s:'1'};
+  const echoDeck = [echoC,orC1,orC2,orC3].concat(Array.from({length:8},()=>vanillaC));
+  const inter = w.eval('deckInteractions('+JSON.stringify(echoDeck)+')');
+  assert(inter.some(r=>/re-triggers your 3 On Reveal cards/.test(r.text)), 'R8: echo interaction row fires with 3 partners');
+  w.eval('window.__cdBak = S.creatorDecks; S.creatorDecks = ['+
+    '{creator:"A",video:"v",ids:["Odinson1","Rev1","Hulk"]},'+
+    '{creator:"B",video:"v",ids:["Odinson1","Rev1","AntMan"]},'+
+    '{creator:"C",video:"v",ids:["Hulk","AntMan","Wong"]}]');
+  const pev = w.eval('creatorPairEvidence('+JSON.stringify(echoDeck)+')');
+  assert(pev.length===1 && pev[0].n===2, 'R8: creator-pair evidence finds the pair seen in 2 creator decks');
+  w.eval('renderSynergy('+JSON.stringify(echoDeck)+')'); await sleep(10);
+  assert(d.querySelector('#synergy .syn-sec')!==null && d.querySelector('#synergy .syn-row')!==null, 'R8: synergy pane renders Working-together section rows');
+  assert(d.querySelector('#synergy .syn-pair-n')!==null, 'R8: creator-pair evidence row renders with its count badge');
+  w.eval('S.creatorDecks = window.__cdBak;');
 
   // C4: goldfish draw simulator
   const simIds = w.eval('activeDeck().cards');
@@ -1002,6 +1025,14 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const OLD_RSS = MOCK_RSS.replace(_pubRecent, new Date(Date.now()-30*86400000).toISOString());
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u,o)=>({ok:true,status:200,text:async()=>('+JSON.stringify(OLD_RSS)+'),json:async()=>({})}); await addCreator("https://youtube.com/@mocktuber"); window.fetch=of; })()');
   assert(w.eval('S.addedCreatorDecks.length')===0, 'J: videos older than the 14-day window add no decks');
+  // R8: with the modal open, failures land in #cr-msg (visible, named channel) instead of a vanishing toast
+  w.eval('openAddCreator()'); await sleep(10);
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u,o)=>({ok:true,status:200,text:async()=>('+JSON.stringify(OLD_RSS)+'),json:async()=>({})}); await addCreator("https://youtube.com/@mocktuber"); window.fetch=of; })()');
+  const crMsg = d.querySelector('#cr-msg');
+  assert(crMsg && crMsg.style.display!=='none' && /Found .+no Snap deck codes/.test(crMsg.textContent), 'R8: no-codes failure names the channel in the modal ('+(crMsg?crMsg.textContent.slice(0,40):'')+')');
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u,o)=>({ok:false,status:502,json:async()=>({error:"feed returned 502"}),text:async()=>""}); await addCreator("https://youtube.com/@mocktuber"); window.fetch=of; })()');
+  assert(/Couldn’t reach|Couldn’t reach/.test(d.querySelector('#cr-msg').textContent), 'R8: unreachable-channel failure shows the retry-later message');
+  w.eval('closeModal()');
   w.eval('setTab("cards")'); await sleep(10);
 
   // ============ R6 WP1: draft lifecycle · blank bench · empty states · connective flow · sync safety ============
