@@ -2,6 +2,226 @@
   "updated": "2026-07-10",
   "decks": [
     {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
+      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
+      "published": "2026-07-10",
+      "name": "SNAP Deck",
+      "ids": [
+        "GalactusFirstSteps",
+        "Iceman",
+        "Isca",
+        "JeffTheBabyLandShark",
+        "MajesticWingbeat",
+        "Mercury",
+        "Mysterio",
+        "Nightcrawler",
+        "ProfessorX",
+        "RocketAndGroot",
+        "SpiderManBrandNewDay",
+        "TheThingFirstSteps"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/GalactusFirstSteps-Iceman-Isca-JeffTheBabyLandShark-MajesticWingbeat-Mercury-Mysterio-Nightcrawler-ProfessorX-RocketAndGroot-SpiderManBrandNewDay-TheThingFirstSteps_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
+      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
+      "published": "2026-07-10",
+      "name": "Move",
+      "ids": [
+        "Batroc",
+        "Cosmo",
+        "GalactusFirstSteps",
+        "HydraStomper",
+        "Kraven",
+        "MaryJane",
+        "Nightcrawler",
+        "ProfessorX",
+        "RocketAndGroot",
+        "SamWilson",
+        "Silk",
+        "SpiderManBrandNewDay"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Batroc-Cosmo-GalactusFirstSteps-HydraStomper-Kraven-MaryJane-Nightcrawler-ProfessorX-RocketAndGroot-SamWilson-Silk-SpiderManBrandNewDay_Move?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
+      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
+      "published": "2026-07-10",
+      "name": "Rocks",
+      "ids": [
+        "Askanison",
+        "Cosmo",
+        "Debrii",
+        "Killmonger",
+        "MasterMold",
+        "Maximus",
+        "NegasonicTeenageWarhead",
+        "Ronan",
+        "ScarletWitch",
+        "ShadowKing",
+        "Supergiant",
+        "WilsonFisk"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Askanison-Cosmo-Debrii-Killmonger-MasterMold-Maximus-NegasonicTeenageWarhead-Ronan-ScarletWitch-ShadowKing-Supergiant-WilsonFisk_Rocks?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
+      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
+      "published": "2026-07-10",
+      "name": "SNAP Deck",
+      "ids": [
+        "BuckyBarnes",
+        "Carnage",
+        "Death",
+        "Debrii",
+        "Dormammu",
+        "Killmonger",
+        "Muse",
+        "SquirrelGirl",
+        "UncleBen",
+        "Venom",
+        "WeaponXWolverine",
+        "X23"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/BuckyBarnes-Carnage-Death-Debrii-Dormammu-Killmonger-Muse-SquirrelGirl-UncleBen-Venom-WeaponXWolverine-X23_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
+      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
+      "published": "2026-07-10",
+      "name": "Aurora",
+      "ids": [
+        "Aurora",
+        "Cosmo",
+        "FanFei",
+        "HydraBob",
+        "Isca",
+        "LinLie",
+        "MadameWeb",
+        "MaryJane",
+        "SamWilson",
+        "SpiderHam",
+        "Venus",
+        "ZombieMisterFantastic"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Aurora-Cosmo-FanFei-HydraBob-Isca-LinLie-MadameWeb-MaryJane-SamWilson-SpiderHam-Venus-ZombieMisterFantastic_Aurora?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
+      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
+      "published": "2026-07-10",
+      "name": "Doom",
+      "ids": [
+        "CalibanHorseman",
+        "Chamber",
+        "CosmicGhostRider",
+        "Doom2099",
+        "DrDoom",
+        "DraxAvatarOfLife",
+        "GalactusFirstSteps",
+        "InvisibleWomanFirstSteps",
+        "IronLad",
+        "Isca",
+        "Moondragon",
+        "Sandman"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/CalibanHorseman-Chamber-CosmicGhostRider-Doom2099-DrDoom-DraxAvatarOfLife-GalactusFirstSteps-InvisibleWomanFirstSteps-IronLad-Isca-Moondragon-Sandman_Doom?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
+      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
+      "published": "2026-07-10",
+      "name": "Scream",
+      "ids": [
+        "Aero",
+        "Batroc",
+        "Kingpin",
+        "Kraven",
+        "Magneto",
+        "Polaris",
+        "Prowler",
+        "SamWilson",
+        "Scream",
+        "SpiderMan",
+        "SpiderManBrandNewDay",
+        "Stegron"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Aero-Batroc-Kingpin-Kraven-Magneto-Polaris-Prowler-SamWilson-Scream-SpiderMan-SpiderManBrandNewDay-Stegron_Scream?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
+      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
+      "published": "2026-07-10",
+      "name": "Galacti",
+      "ids": [
+        "AdamWarlock",
+        "AmericaChavez",
+        "JeffTheBabyDolphin",
+        "JubileeSilverSurfer",
+        "Magik",
+        "MajesticWingbeat",
+        "Maverick",
+        "NicoMinoru",
+        "Stick",
+        "SuperiorSpiderMan",
+        "Surge",
+        "ZombieGalacti"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AdamWarlock-AmericaChavez-JeffTheBabyDolphin-JubileeSilverSurfer-Magik-MajesticWingbeat-Maverick-NicoMinoru-Stick-SuperiorSpiderMan-Surge-ZombieGalacti_Galacti?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
+      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
+      "published": "2026-07-10",
+      "name": "Rocks",
+      "ids": [
+        "Askanison",
+        "Cosmo",
+        "Debrii",
+        "HydraBob",
+        "IronPatriot",
+        "NegasonicTeenageWarhead",
+        "Nightcrawler",
+        "Ozymandias",
+        "Rhino",
+        "ShadowKing",
+        "Supergiant",
+        "WilsonFisk"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Askanison-Cosmo-Debrii-HydraBob-IronPatriot-NegasonicTeenageWarhead-Nightcrawler-Ozymandias-Rhino-ShadowKing-Supergiant-WilsonFisk_Rocks?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
+      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
+      "published": "2026-07-10",
+      "name": "Aurora",
+      "ids": [
+        "Aurora",
+        "AwesomeAndy",
+        "Cosmo",
+        "HydraBob",
+        "Isca",
+        "Mercury",
+        "SamWilson",
+        "SpiderHam",
+        "Tarantula",
+        "TheThingFirstSteps",
+        "Venus",
+        "ZombieMisterFantastic"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Aurora-AwesomeAndy-Cosmo-HydraBob-Isca-Mercury-SamWilson-SpiderHam-Tarantula-TheThingFirstSteps-Venus-ZombieMisterFantastic_Aurora?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
       "creator": "Unfitparrot",
       "video": "Tarantula Skaar is the BIGGEST NUMBER deck around! Giveaway! - Marvel Snap Deck Highlight",
       "url": "https://www.youtube.com/watch?v=mXLBc-HYJqA",
@@ -50,28 +270,6 @@
       "video": "An HONEST REVIEW of TARANTULA | Marvel Snap",
       "url": "https://www.youtube.com/watch?v=z5uc7oDUDhM",
       "published": "2026-07-07",
-      "name": "Taranturora",
-      "ids": [
-        "Aurora",
-        "AwesomeAndy",
-        "Cosmo",
-        "HydraBob",
-        "Isca",
-        "Mercury",
-        "SamWilson",
-        "SpiderHam",
-        "Tarantula",
-        "TheThingFirstSteps",
-        "Venus",
-        "ZombieMisterFantastic"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Aurora-AwesomeAndy-Cosmo-HydraBob-Isca-Mercury-SamWilson-SpiderHam-Tarantula-TheThingFirstSteps-Venus-ZombieMisterFantastic_Taranturora?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of TARANTULA | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=z5uc7oDUDhM",
-      "published": "2026-07-07",
       "name": "Tarantusurf",
       "ids": [
         "Brood",
@@ -110,6 +308,90 @@
         "WeaponXWolverine"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/ArchangelHorseman-Carnage-Death-Debrii-Hood-Killmonger-MoiraX-Muse-SquirrelGirl-Tombstone-Venom-WeaponXWolverine_Muse%20Death"
+    },
+    {
+      "creator": "Coougarrr",
+      "video": "STOP Guessing. These 4 Decks Got Me to Infinite",
+      "url": "https://www.youtube.com/watch?v=00z2ZNXH9Jc",
+      "published": "2026-07-05",
+      "name": "",
+      "ids": [
+        "Surge",
+        "GrandMaster",
+        "Bullseye",
+        "Daken",
+        "MotherAskani",
+        "Quinjet",
+        "MoonGirl",
+        "MajesticWingbeat",
+        "Sasquatch",
+        "NicoMinoru",
+        "GambitHorseman",
+        "Frigga"
+      ]
+    },
+    {
+      "creator": "Coougarrr",
+      "video": "STOP Guessing. These 4 Decks Got Me to Infinite",
+      "url": "https://www.youtube.com/watch?v=00z2ZNXH9Jc",
+      "published": "2026-07-05",
+      "name": "",
+      "ids": [
+        "Shuri",
+        "Taskmaster",
+        "FallenOne",
+        "Magik",
+        "LunaSnow",
+        "StormHorseman",
+        "FinFangFoom",
+        "JimHammond",
+        "StarlordMasterOfTheSun",
+        "Juggernaut",
+        "SymbioteSpiderMan",
+        "ManSpider"
+      ]
+    },
+    {
+      "creator": "Coougarrr",
+      "video": "STOP Guessing. These 4 Decks Got Me to Infinite",
+      "url": "https://www.youtube.com/watch?v=00z2ZNXH9Jc",
+      "published": "2026-07-05",
+      "name": "",
+      "ids": [
+        "CaptainCarter",
+        "Brood",
+        "MotherAskani",
+        "Stick",
+        "Maverick",
+        "Agony",
+        "Prodigy",
+        "HopeSummers",
+        "GrandMaster",
+        "StormHorseman",
+        "SpiderManBrandNewDay",
+        "WolverineHorseman"
+      ]
+    },
+    {
+      "creator": "Coougarrr",
+      "video": "STOP Guessing. These 4 Decks Got Me to Infinite",
+      "url": "https://www.youtube.com/watch?v=00z2ZNXH9Jc",
+      "published": "2026-07-05",
+      "name": "",
+      "ids": [
+        "HydraStomper",
+        "Cosmo",
+        "Mercury",
+        "SamWilson",
+        "Kraven",
+        "Silk",
+        "Batroc",
+        "SpiderManBrandNewDay",
+        "Juggernaut",
+        "Isca",
+        "Nocturne",
+        "MadameWeb"
+      ]
     },
     {
       "creator": "Coougarrr",
@@ -370,288 +652,6 @@
         "WarMachine"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/ArnimZola-Blink-Chamber-DragonLord-Electro-FinFangFoom-GalactusFirstSteps-Giganto-Infinaut-Jubilee-Lockjaw-WarMachine_Ramp?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #191",
-      "url": "https://www.youtube.com/watch?v=ilhG_a1u3lM",
-      "published": "2026-07-03",
-      "name": "Move",
-      "ids": [
-        "Batroc",
-        "Cloak",
-        "Cosmo",
-        "Heimdall",
-        "HydraStomper",
-        "Juggernaut",
-        "Kraven",
-        "MaryJane",
-        "Mercury",
-        "SamWilson",
-        "Silk",
-        "SpiderManBrandNewDay"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Batroc-Cloak-Cosmo-Heimdall-HydraStomper-Juggernaut-Kraven-MaryJane-Mercury-SamWilson-Silk-SpiderManBrandNewDay_Move?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #191",
-      "url": "https://www.youtube.com/watch?v=ilhG_a1u3lM",
-      "published": "2026-07-03",
-      "name": "Move",
-      "ids": [
-        "AuntMay",
-        "Cannonball",
-        "JeffTheBabyDolphin",
-        "JeffTheBabyLandShark",
-        "Mercury",
-        "Nightcrawler",
-        "Nocturne",
-        "RocketAndGroot",
-        "SamWilson",
-        "SpiderManBrandNewDay",
-        "Venus",
-        "Vision"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AuntMay-Cannonball-JeffTheBabyDolphin-JeffTheBabyLandShark-Mercury-Nightcrawler-Nocturne-RocketAndGroot-SamWilson-SpiderManBrandNewDay-Venus-Vision_Move?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Coougarrr",
-      "video": "I Made Marvel Snap's #1 Combo Deck",
-      "url": "https://www.youtube.com/watch?v=FL5esYhszE0",
-      "published": "2026-07-02",
-      "name": "",
-      "ids": [
-        "Hulkbuster",
-        "PeniParker",
-        "ManSpider",
-        "FastballSpecial",
-        "LunaSnow",
-        "Wave",
-        "Magik",
-        "AdmntmInfsn12",
-        "AbsrbngMnC",
-        "ArnmZl9",
-        "Taskmaster",
-        "FinFangFoom"
-      ]
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of MARY JANE | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=K2X9zWK4S0E",
-      "published": "2026-07-01",
-      "name": "Brand New X",
-      "ids": [
-        "Batroc",
-        "Cosmo",
-        "GalactusFirstSteps",
-        "HydraStomper",
-        "Kraven",
-        "MaryJane",
-        "Nightcrawler",
-        "ProfessorX",
-        "RocketAndGroot",
-        "SamWilson",
-        "Silk",
-        "SpiderManBrandNewDay"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Batroc-Cosmo-GalactusFirstSteps-HydraStomper-Kraven-MaryJane-Nightcrawler-ProfessorX-RocketAndGroot-SamWilson-Silk-SpiderManBrandNewDay_Brand%20New%20X?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of MARY JANE | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=K2X9zWK4S0E",
-      "published": "2026-07-01",
-      "name": "Brand New Move",
-      "ids": [
-        "Arana",
-        "DoctorStrange",
-        "Heimdall",
-        "HumanTorch",
-        "MadameWeb",
-        "MaryJane",
-        "MultipleMan",
-        "PeniParker",
-        "SpiderManBrandNewDay",
-        "SpiderPunk",
-        "WebSling",
-        "Xorn"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Arana-DoctorStrange-Heimdall-HumanTorch-MadameWeb-MaryJane-MultipleMan-PeniParker-SpiderManBrandNewDay-SpiderPunk-WebSling-Xorn_Brand%20New%20Move?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of MARY JANE | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=K2X9zWK4S0E",
-      "published": "2026-07-01",
-      "name": "Move",
-      "ids": [
-        "AuntMay",
-        "Batroc",
-        "Cannonball",
-        "JeffTheBabyDolphin",
-        "Kraven",
-        "MaryJane",
-        "Mercury",
-        "Nocturne",
-        "SamWilson",
-        "SpiderManBrandNewDay",
-        "Venus",
-        "Vision"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AuntMay-Batroc-Cannonball-JeffTheBabyDolphin-Kraven-MaryJane-Mercury-Nocturne-SamWilson-SpiderManBrandNewDay-Venus-Vision_Move?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of MARY JANE | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=K2X9zWK4S0E",
-      "published": "2026-07-01",
-      "name": "Brand New May",
-      "ids": [
-        "AuntMay",
-        "Batroc",
-        "HydraStomper",
-        "JeffTheBabyDolphin",
-        "JeffTheBabyLandShark",
-        "Nightcrawler",
-        "Nocturne",
-        "RocketAndGroot",
-        "SamWilson",
-        "SpiderManBrandNewDay",
-        "SpiderPunk",
-        "Vision"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AuntMay-Batroc-HydraStomper-JeffTheBabyDolphin-JeffTheBabyLandShark-Nightcrawler-Nocturne-RocketAndGroot-SamWilson-SpiderManBrandNewDay-SpiderPunk-Vision_Brand%20New%20May&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of MARY JANE | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=K2X9zWK4S0E",
-      "published": "2026-07-01",
-      "name": "Brand New Surfer",
-      "ids": [
-        "AuntMay",
-        "Hercules",
-        "JeffTheBabyDolphin",
-        "MaryJane",
-        "Mercury",
-        "Nocturne",
-        "RocketAndGroot",
-        "SilverSurfer",
-        "SpiderManBrandNewDay",
-        "SpiderPunk",
-        "Topaz",
-        "Venus"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AuntMay-Hercules-JeffTheBabyDolphin-MaryJane-Mercury-Nocturne-RocketAndGroot-SilverSurfer-SpiderManBrandNewDay-SpiderPunk-Topaz-Venus_Brand%20New%20Surfer&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Unfitparrot",
-      "video": "ONE LANE WONDER! This upgraded 2023 deck is gonna TAKE OVER the meta! - Marvel Snap Deck Highlight",
-      "url": "https://www.youtube.com/watch?v=lxcQ79SrjnQ",
-      "published": "2026-07-01",
-      "name": "One Lane wonder",
-      "ids": [
-        "Angela",
-        "AuntMay",
-        "ElsaBloodstone",
-        "JeffTheBabyDolphin",
-        "JeffTheBabyLandShark",
-        "Kraven",
-        "Nightcrawler",
-        "Nocturne",
-        "ShangChi",
-        "SpiderManBrandNewDay",
-        "Vision",
-        "ZombieScarletWitch"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Angela-AuntMay-ElsaBloodstone-JeffTheBabyDolphin-JeffTheBabyLandShark-Kraven-Nightcrawler-Nocturne-ShangChi-SpiderManBrandNewDay-Vision-ZombieScarletWitch_One%20Lane%20wonder"
-    },
-    {
-      "creator": "Coougarrr",
-      "video": "You're Playing Daken Wrong | Marvel Snap Deck Mastery",
-      "url": "https://www.youtube.com/watch?v=0_3gAmsBWk4",
-      "published": "2026-06-29",
-      "name": "",
-      "ids": [
-        "Surge",
-        "GrandMaster",
-        "Bullseye",
-        "Killmonger",
-        "Daken",
-        "MthrAsknC",
-        "Quinjet",
-        "MoonGirl",
-        "HopeSummers",
-        "MajesticWingbeat",
-        "Sasquatch",
-        "NicoMinoru"
-      ]
-    },
-    {
-      "creator": "Coougarrr",
-      "video": "You're Playing Daken Wrong | Marvel Snap Deck Mastery",
-      "url": "https://www.youtube.com/watch?v=0_3gAmsBWk4",
-      "published": "2026-06-29",
-      "name": "",
-      "ids": [
-        "MthrAsknC",
-        "MoonGirl",
-        "Bullseye",
-        "Frigga",
-        "Gambit",
-        "Daken",
-        "GambitHorseman",
-        "Namorita",
-        "Surge",
-        "GrandMaster",
-        "Quinjet",
-        "NicoMinoru"
-      ]
-    },
-    {
-      "creator": "Coougarrr",
-      "video": "You're Playing Daken Wrong | Marvel Snap Deck Mastery",
-      "url": "https://www.youtube.com/watch?v=0_3gAmsBWk4",
-      "published": "2026-06-29",
-      "name": "",
-      "ids": [
-        "Modok",
-        "Bullseye",
-        "Frigga",
-        "Daken",
-        "Morbius",
-        "TheCollector",
-        "ColleenWing",
-        "GrandMaster",
-        "Swarm",
-        "Miek",
-        "Scorn",
-        "Blade"
-      ]
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #190",
-      "url": "https://www.youtube.com/watch?v=ERkDxB4Zi1U",
-      "published": "2026-06-27",
-      "name": "Discard",
-      "ids": [
-        "Apocalypse",
-        "Blade",
-        "CorvusGlaive",
-        "Dracula",
-        "Gambit",
-        "Khonshu",
-        "LadySif",
-        "Modok",
-        "Morbius",
-        "ProximaMidnight",
-        "Scorn",
-        "WeaponH"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Apocalypse-Blade-CorvusGlaive-Dracula-Gambit-Khonshu-LadySif-Modok-Morbius-ProximaMidnight-Scorn-WeaponH_Discard?utm_medium=affiliate&utm_campaign=alexcoccia"
     }
   ]
 }
