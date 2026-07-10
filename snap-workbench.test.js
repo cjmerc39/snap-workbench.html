@@ -128,9 +128,11 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(filled===cnt1, 'zone shows '+cnt1+' filled + '+(12-cnt1)+' empty');
   if(filled){ d.querySelector('#dz .mini:not(.empty)').click(); await sleep(30);
     assert(w.eval('activeDeck().cards.length')===cnt1-1, 'tapping a zone card removes it'); }
+  assert(d.querySelector('#deckzone').classList.contains('closed'), 'zone starts collapsed (grid-first default)');
   d.querySelector('#bh-collapse').click(); await sleep(20);
-  assert(d.querySelector('#deckzone').classList.contains('closed'), 'zone collapses');
+  assert(!d.querySelector('#deckzone').classList.contains('closed'), 'collapse button opens the tray');
   d.querySelector('#bh-collapse').click(); await sleep(20);
+  assert(d.querySelector('#deckzone').classList.contains('closed'), 'zone collapses again');
   // in-deck collection tiles gray out (class present in compact mode)
   const someInDeck = w.eval('activeDeck().cards[0]');
   if(someInDeck) assert(d.querySelector('#cardlist .tile[data-d="'+someInDeck+'"]').classList.contains('indeck'), 'in-deck collection tile carries gray state');
@@ -213,6 +215,29 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(fly.classList.contains('open') && d.querySelector('#filterpanel [data-facet="sort"]').classList.contains('open'), 'btn-sort opens the flyout and expands the sort facet');
   d.querySelector('#fly-close').click(); await sleep(20);
   assert(!fly.classList.contains('open'), 'fly-close (×) dismisses the flyout');
+
+  // --- WP1: de-gemmed tiles (gems ONLY on art-less fallback tiles) ---
+  assert(/\.tile\.noart \.ovl\{display:flex/.test(html), 'CSS shows gems only on art-less (.noart) tiles');
+  assert(!/\.tile \.ovl\{display:flex/.test(html), 'the always-on "gems over art" rule is gone');
+  assert(w.eval('/ovl tc/.test(tileHtmlCompact(makeStub("ZzTest2026")))'), 'stub (art-less) tile keeps cost/power gem markup');
+  assert(w.eval('/(^| )noart( |")/.test(tileHtmlCompact(makeStub("ZzTest2026")))'), 'stub tile is flagged .noart so its gems display');
+  assert(d.querySelector('#cardlist .tile:not(.noart) .ovl') !== null, 'art tiles retain gem markup in the DOM (CSS-hidden, not removed)');
+
+  // --- WP1: bottom sheet behaviour (search focus, scroll-lock, scrim + Escape dismiss) ---
+  w.eval('setTab("cards")'); await sleep(10);
+  const sheet = d.querySelector('#flyout');
+  d.querySelector('#btn-search').click(); await sleep(30);
+  assert(sheet.classList.contains('open'), '#btn-search opens the sheet');
+  assert(d.activeElement && d.activeElement.id === 'q', '#btn-search focuses the search field');
+  assert(d.body.classList.contains('sheet-open'), 'opening the sheet locks page scroll (body.sheet-open)');
+  d.querySelector('#flyscrim').click(); await sleep(20);
+  assert(!sheet.classList.contains('open') && !d.body.classList.contains('sheet-open'), 'scrim tap closes the sheet and releases scroll-lock');
+  d.querySelector('#btn-filter').click(); await sleep(20);
+  assert(sheet.classList.contains('open') && d.body.classList.contains('sheet-open'), 'filter reopens the sheet + relocks');
+  d.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape',bubbles:true})); await sleep(20);
+  assert(!sheet.classList.contains('open'), 'Escape closes the sheet');
+  // toolbar is Build-only chrome
+  assert(html.includes('body.on-cards #toolbar'), 'floating cluster is gated to the Build tab (body.on-cards)');
 
   // --- round-2 restyle: integrated deck sub-tabs ---
   w.eval('setTab("deck")'); await sleep(20);
@@ -325,14 +350,132 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(w.eval('window.__bad')===false, 'malformed cards.json is safely ignored');
 
 
-  // sticky build-top wraps zone + search
+  // WP1: slim sticky build-top now holds ONLY the deck tray; controls float / live in the sheet
   const bt = d.querySelector('#buildtop');
-  assert(bt && bt.querySelector('#dz') && bt.querySelector('#q') && bt.querySelector('#btn-filter'), 'sticky buildtop contains deck zone and search row');
+  assert(bt && bt.querySelector('#dz') && bt.querySelector('#bhead'), 'sticky buildtop holds the deck tray (dz + bhead)');
+  assert(!bt.querySelector('#q') && !bt.querySelector('#btn-filter'), 'search + filter controls no longer sit inside the buildtop');
+  const toolbar = d.querySelector('#toolbar');
+  assert(toolbar && toolbar.querySelector('#btn-search') && toolbar.querySelector('#btn-sort') && toolbar.querySelector('#btn-filter'),
+    'floating #toolbar cluster holds search / sort / filter');
+  assert(d.querySelector('#flyout #q') !== null, 'search input relocated into the bottom sheet');
+  assert(d.querySelector('#flyout #filterpanel') !== null, 'filter panel stays inside the bottom sheet');
 
   // --- v5 responsive / sticky offset ---
   assert(html.includes('@media (min-width:900px)'), 'desktop media query present');
   const stickTop = d.documentElement.style.getPropertyValue('--stick-top');
   assert(stickTop.endsWith('px'), 'sticky-offset var resolves to px ('+stickTop+')');
+
+  // ============ WP2 round-3: 5th tab, Collection, bulk owned, import torture ============
+  // --- 5-up tab bar + Collection view routing ---
+  assert(d.querySelectorAll('#tabbar button').length===5, 'tab bar now has exactly 5 tabs');
+  assert(d.querySelector('#tabbar [data-tab="collection"]')!==null, 'Collection (Cards) tab button present');
+  w.eval('setTab("collection")'); await sleep(20);
+  assert(d.querySelector('#view-collection').classList.contains('on'), 'collection view activates on setTab');
+  assert(!d.querySelector('#view-cards').classList.contains('on'), 'build view is hidden while on collection');
+  assert(!d.body.classList.contains('on-cards'), 'floating tool cluster is gated OFF on the collection tab');
+
+  // isolate owned state (earlier tests left stray non-db ids like Hulk in S.owned)
+  w.eval('S.owned.clear(); renderCollection();'); await sleep(10);
+
+  // --- collection header + grouped grid reflect S.owned / S.db ---
+  assert(parseInt(d.querySelector('#coll-count').textContent,10)===w.eval('S.owned.size'), 'coll-count = S.owned.size');
+  assert(parseInt(d.querySelector('#coll-total').textContent,10)===w.eval('S.db.length'), 'coll-total = S.db.length');
+  assert(d.querySelectorAll('#colllist .tile').length>0, 'collection grid lists cards');
+  assert(d.querySelectorAll('#colllist .coll-section').length>0, 'collection grid is grouped into series sections');
+  assert(d.querySelector('#colllist .tile .cib')!==null, 'collection tiles carry the info button');
+
+  // --- collection tap = toggle owned (NEVER the deck) ---
+  const _deckLen = w.eval('activeDeck() ? activeDeck().cards.length : -1');
+  const _ct = d.querySelector('#colllist .tile'); const _cid = _ct.dataset.d;
+  const _own0 = w.eval('S.owned.has('+JSON.stringify(_cid)+')');
+  _ct.click(); await sleep(20);
+  assert(w.eval('S.owned.has('+JSON.stringify(_cid)+')') === !_own0, 'tapping a collection tile toggles owned');
+  assert((w.eval('activeDeck() ? activeDeck().cards.length : -1'))===_deckLen, 'collection tap does NOT change the deck');
+  assert(d.querySelector('#colllist .tile[data-d="'+_cid+'"]').classList.contains('owned') === !_own0, '.owned class flips on the tile');
+
+  // --- returning to Build re-renders the grid so owned state is never stale (M2) ---
+  w.eval('setTab("cards")'); await sleep(20);
+  const _bt = d.querySelector('#cardlist .tile[data-d="'+_cid+'"]');
+  if(_bt) assert(_bt.classList.contains('owned') === !_own0, 'Build grid reflects Collection owned toggle after tab switch');
+  w.eval('setTab("collection")'); await sleep(20);
+
+  // --- collection info button opens the sheet without toggling owned ---
+  const _ownSize = w.eval('S.owned.size');
+  d.querySelector('#colllist .tile .cib').click(); await sleep(20);
+  assert(d.querySelector('#modalwrap').classList.contains('on'), 'collection info button opens the detail sheet');
+  assert(w.eval('S.owned.size')===_ownSize, 'collection info button does not toggle owned');
+  w.eval('closeModal()');
+
+  // --- bulk: mark all owned completes the collection ---
+  d.querySelector('#coll-all').click(); await sleep(20);
+  assert(w.eval('S.owned.size')===w.eval('S.db.length'), 'Mark all owned -> whole collection owned');
+  assert(parseInt(d.querySelector('#coll-count').textContent,10)===w.eval('S.db.length'), 'header updates to full collection');
+
+  // --- bulk: clear all (confirm mocked true) empties it ---
+  d.querySelector('#coll-clear').click(); await sleep(20);
+  assert(w.eval('S.owned.size')===0, 'Clear all empties the collection');
+
+  // --- detail sheet <-> collection grid stay in sync through renderAll ---
+  const _syncId = d.querySelector('#colllist .tile').dataset.d;
+  const _wasOwned = w.eval('S.owned.has('+JSON.stringify(_syncId)+')');
+  w.eval('openCardSheet('+JSON.stringify(_syncId)+')'); await sleep(20);
+  d.querySelector('#sh-own').click(); await sleep(20);
+  assert(w.eval('S.owned.has('+JSON.stringify(_syncId)+')') === !_wasOwned, 'sheet #sh-own toggle flips S.owned');
+  assert(d.querySelector('#colllist .tile[data-d="'+_syncId+'"]').classList.contains('owned') === !_wasOwned,
+    'collection grid reflects the #sh-own toggle after renderAll');
+  w.eval('closeModal()');
+
+  // --- per-series own/clear touches ONLY that series (synthetic multi-series db) ---
+  w.eval('(function(){ window.__dbSave=S.db; window.__ownSave=S.owned; '+
+    'S.db=[{n:"Ba",d:"XB",c:1,p:1,a:"",s:"Base"},{n:"S1a",d:"X1a",c:2,p:2,a:"",s:"1"},'+
+    '{n:"S1b",d:"X1b",c:3,p:3,a:"",s:"1"},{n:"S2a",d:"X2a",c:4,p:4,a:"",s:"2"}]; '+
+    'S.owned=new Set(); indexDb(); renderCollection(); })()');
+  await sleep(20);
+  d.querySelector('#coll-bars .cb-mini[data-series="1"][data-act="own"]').click(); await sleep(20);
+  assert(w.eval('S.owned.has("X1a") && S.owned.has("X1b")'), 'per-series Own all marks the whole series');
+  assert(w.eval('!S.owned.has("XB") && !S.owned.has("X2a")'), 'per-series Own all marks ONLY that series');
+  assert(w.eval('S.owned.size')===2, 'per-series own touched exactly the 2 series-1 cards');
+  d.querySelector('#coll-bars .cb-mini[data-series="1"][data-act="clear"]').click(); await sleep(20);
+  assert(w.eval('S.owned.size')===0, 'per-series Clear empties just that series');
+  w.eval('(function(){ S.db=window.__dbSave; S.owned=window.__ownSave; indexDb(); renderAll(); })()'); await sleep(20);
+
+  // --- import torture suite: gather-all-candidates, validate-each, first-valid wins ---
+  const mk = ids => Buffer.from(JSON.stringify({Name:'T',Cards:ids.map(id=>({CardDefId:id}))})).toString('base64');
+  const realCode = mk(['Hulk','AntMan','Wong']);
+  // 1) reddit-style multiline comment (greeting + short lines + code line + trailing prose)
+  const reddit = 'Been climbing with this all season, give it a shot:\nturn 1 nightcrawler\n'+realCode+'\nlmk what you think!';
+  let tr = w.eval('parseCode('+JSON.stringify(reddit)+')');
+  assert(!tr.err && tr.ids.length===3 && tr.ids[0]==='Hulk', 'import: reddit multiline comment');
+  // 2) two base64 strings — the LONGER one is a non-deck decoy; the real shorter one must win
+  const decoy = Buffer.from(JSON.stringify({note:'x'.repeat(160)})).toString('base64');
+  assert(decoy.length>realCode.length, 'decoy is genuinely longer than the real code');
+  tr = w.eval('parseCode('+JSON.stringify('first '+decoy+' then '+realCode)+')');
+  assert(!tr.err && tr.ids.length===3 && tr.ids[0]==='Hulk', 'import: longer decoy skipped, real shorter code wins');
+  // 3) full URL with extra query params surrounding deck=
+  const urlx = 'https://marvelsnap.com/decks?utm=reddit&deck='+encodeURIComponent(realCode)+'&ref=abc';
+  tr = w.eval('parseCode('+JSON.stringify(urlx)+')');
+  assert(!tr.err && tr.ids[0]==='Hulk' && tr.ids.length===3, 'import: URL with extra params around deck=');
+  // 4) markdown backtick-wrapped
+  tr = w.eval('parseCode('+JSON.stringify('`'+realCode+'`')+')');
+  assert(!tr.err && tr.ids.length===3, 'import: markdown backtick-wrapped code');
+  // 5) straight-quote wrapped
+  tr = w.eval('parseCode('+JSON.stringify('"'+realCode+'"')+')');
+  assert(!tr.err && tr.ids.length===3, 'import: quote-wrapped code');
+  // 6) emoji-wrapped
+  tr = w.eval('parseCode('+JSON.stringify('🔥'+realCode+'🎉')+')');
+  assert(!tr.err && tr.ids.length===3, 'import: emoji-wrapped code');
+  // 7) raw JSON object paste
+  tr = w.eval('parseCode('+JSON.stringify(JSON.stringify({Name:'J',Cards:[{CardDefId:'Hulk'}]}))+')');
+  assert(!tr.err && tr.ids[0]==='Hulk', 'import: raw JSON object paste');
+  // 8) pure prose -> friendly error, no ids
+  tr = w.eval('parseCode("just some words with no deck code at all here")');
+  assert(tr.err && !tr.ids, 'import: pure prose returns a friendly error');
+  // regression: every legacy-accepted input still parses
+  assert(!w.eval('parseCode('+JSON.stringify(realCode)+')').err, 'import regression: plain base64 still parses');
+  assert(!w.eval('parseCode('+JSON.stringify(realCode.replace(/=+$/,''))+')').err, 'import regression: unpadded still parses');
+
+  // restore an ordinary tab for the remaining suite
+  w.eval('setTab("cards")'); await sleep(10);
 
   // AI mocked
   w.eval('setTab("ai")'); d.querySelector('#btn-ask').click(); await sleep(80);
