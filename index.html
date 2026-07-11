@@ -1686,20 +1686,27 @@ function unescXml(s){
 /* R5-J: pull every deck out of a video description, reusing parseCode's decoders
    (mirrors creator-decks.mjs extractDecks: untapped /decks/ slugs + standalone base64 codes). */
 function extractDecksFromDesc(desc){
-  const out=[], seen=new Set();
-  (String(desc||'').match(/https?:\/\/snap\.untapped\.gg\/[a-z]{2}\/decks\/[^\s"'<>]+/gi) || []).forEach(u => {
-    if(seen.has(u)) return; seen.add(u);
+  const out=[], seen=new Set(), text=String(desc||'');
+  // R11.3: creators label their links ("Bishop Venus: https://…") — prefer that label over
+  // the URL slug, which for Hoogland named all 13 decks the same ("Venus").
+  const rx = /https?:\/\/snap\.untapped\.gg\/[a-z]{2}\/decks\/[^\s"'<>]+/gi;
+  let m;
+  while((m = rx.exec(text))){
+    const u = m[0];
+    if(seen.has(u)) continue; seen.add(u);
+    const pre = text.slice(Math.max(0, m.index - 80), m.index);
+    const lab = ((pre.match(/(?:^|\n)\s*([^\n:]{2,40}):\s*$/) || [])[1] || '').trim();
     const r = parseCode(u);
-    if(!r.err) out.push({ name:r.name||'', ids:r.ids, untapped:u });
-    else out.push({ name:'', ids:[], untapped:u });               // undecodable slug -> link-out only
-  });
+    if(!r.err) out.push({ name:lab || r.name || '', ids:r.ids, untapped:u });
+    else out.push({ name:lab, ids:[], untapped:u });               // undecodable slug -> link-out only
+  }
   (String(desc||'').match(/^[A-Za-z0-9+/]{16,}={0,2}$/gm) || []).forEach(code => {
     const r = parseCode(code);
     if(!r.err && r.ids.length) out.push({ name:r.name||'', ids:r.ids });
   });
   return out;
 }
-/* R5-J: fetch a YouTube channel's last-2-weeks decks via the relay's /yt proxy. */
+/* R5-J/R11.3: fetch a YouTube channel's recent decks (60-day window over the ~15-video feed) via the relay's /yt proxy. */
 /* R11.1: canonical channel id. YouTube RSS yt:channelId drops the "UC" prefix; stored
    entries from the buggy window carry that form, so every reader normalizes first. */
 function normChannelId(id){
@@ -1764,7 +1771,9 @@ async function addCreator(url){
   const now = Date.now(); const decks = [];
   for(const e of entries){
     const published = ((e.match(/<published>([^<]+)</) || [])[1] || '').slice(0,10);
-    if(published && (now - Date.parse(published)) >= 14*86400000) continue;   // 14-day window
+    // R11.3: 60-day window, not 14 — some creators (Hoogland) post their deck-dump videos
+    // monthly, and YouTube's feed only serves ~15 recent videos anyway, so this stays bounded.
+    if(published && (now - Date.parse(published)) >= 60*86400000) continue;
     const title = unescXml((e.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || '');
     const vurl = unescXml((e.match(/<link[^>]*rel="alternate"[^>]*href="([^"]+)"/) || [])[1] || '');
     const desc = unescXml((e.match(/<media:description[^>]*>([\s\S]*?)<\/media:description>/) || [])[1] || '');
@@ -1772,7 +1781,7 @@ async function addCreator(url){
       creator:chName, video:title, url:vurl, published,
       name:dk.name||'', ids:dk.ids||[], untapped:dk.untapped||'', added:true, chId:uc }));
   }
-  if(!decks.length){ say('Found ' + chName + ' — but no Snap deck codes in their last two weeks of videos. (They may share decks another way, or post less often.)'); return; }
+  if(!decks.length){ say('Found ' + chName + ' — but no Snap deck codes in their ' + entries.length + ' most recent videos (YouTube only lets me see the latest ~15, going back 60 days). They may share decks in video comments or on another channel.'); return; }
   // R11.2: compare NORMALIZED ids so re-adding replaces entries saved under the old UC-less form
   S.addedCreators = S.addedCreators.filter(c => normChannelId(c.id) !== uc).concat([{ id:uc, name:chName, handle:url }]);
   S.addedCreatorDecks = S.addedCreatorDecks.filter(d => normChannelId(d.chId) !== uc).concat(decks);
