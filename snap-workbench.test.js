@@ -1591,5 +1591,87 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   assert(errors.length===0, 'R11.3: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
 
+  // ============ R12: buildability, version memory, locations ============
+  // --- A: creator-deck buildability ---
+  w.eval('window.__oldOwned = S.owned; window.__oldCD3 = S.creatorDecks;'+
+    'S.owned = new Set(["Hulk","AntMan","Wong","Odin","Psylocke","Mystique","IronMan","KaZar","Wolfsbane","Ironheart","Sunspot"]);'+
+    'S.creatorDecks = ['+
+    '{creator:"Full Guy",published:"2026-07-10",url:"https://youtu.be/f",ids:["Hulk","AntMan","Wong"]},'+
+    '{creator:"Close Guy",published:"2026-07-09",url:"https://youtu.be/c",ids:["Hulk","AntMan","BlackPanther"]},'+
+    '{creator:"Far Guy",published:"2026-07-08",url:"https://youtu.be/x",ids:["BlackPanther","WhiteTiger","ArnimZola","Daredevil","Angela","Bishop"]}];'+
+    'S.addedCreatorDecks=[]; S.crFilter=null; S.prefs.crBuildable=false; renderCreatorDecks();'); await sleep(20);
+  const ownChips = [...d.querySelectorAll('#creatorlist .cr-own')].map(e=>e.textContent);
+  assert(ownChips.length===3 && ownChips[0]==='✓ buildable' && ownChips[1]==='own 2/3', 'R12-A: own-count chips render per row ('+ownChips.join(' | ')+')');
+  const missTxt = [...d.querySelectorAll('#creatorlist .cr-missing')].map(e=>e.textContent);
+  assert(missTxt.length===2 && /Missing: Black Panther$/.test(missTxt[0]), 'R12-A: missing cards named ('+missTxt[0]+')');
+  assert(/\+3 more/.test(missTxt[1]), 'R12-A: long missing lists truncate to +N more ('+missTxt[1]+')');
+  d.querySelector('#cr-buildable').click(); await sleep(20);
+  assert(w.eval('S.prefs.crBuildable')===true && d.querySelectorAll('#creatorlist .crow').length===1, 'R12-A: Buildable-only shows just the fully-owned deck');
+  d.querySelector('#cr-buildable').click(); await sleep(20);
+  assert(d.querySelectorAll('#creatorlist .crow').length===3, 'R12-A: untoggle restores all rows');
+  w.eval('window.__t=S.owned; S.owned=new Set(); renderCreatorDecks();'); await sleep(20);
+  assert(d.querySelector('#creatorlist .cr-own')===null && d.querySelector('#cr-buildable')===null, 'R12-A: no collection marked -> no chips, no toggle');
+  w.eval('S.owned=window.__t; S.creatorDecks=window.__oldCD3; renderCreatorDecks();'); await sleep(10);
+
+  // --- B: version memory ---
+  w.eval('S.decks.unshift({id:"r12v",name:"Versions",cards:["Hulk","AntMan","Wong","Odin"],updated:Date.now()}); S.activeId="r12v";');
+  w.eval('finishDeck()'); await sleep(20);
+  assert(w.eval('(S.decks.find(x=>x.id==="r12v").vers||[]).length')===1, 'R12-B: Done creates v1');
+  w.eval('S.activeId="r12v"; finishDeck()'); await sleep(20);
+  assert(w.eval('S.decks.find(x=>x.id==="r12v").vers.length')===1, 'R12-B: Done again with the same cards does NOT duplicate');
+  w.eval('(function(){ const dd=S.decks.find(x=>x.id==="r12v"); S.activeId="r12v"; dd.cards=["Hulk","AntMan","Wong","Psylocke"]; touch(dd); })(); finishDeck()'); await sleep(20);
+  assert(w.eval('S.decks.find(x=>x.id==="r12v").vers.length')===2, 'R12-B: Done after a card swap creates v2');
+  // verdict stamps the version you played
+  w.eval('S.activeId="r12v"; renderAll(); setTab("deck");'); await sleep(20);
+  d.querySelector('#verdictrow [data-verdict="good"]').click(); await sleep(20);
+  assert(w.eval('S.decks.find(x=>x.id==="r12v").vers[1].verdict')==='good', 'R12-B: verdict lands on the matching latest version');
+  // rating an EDITED deck checkpoints it first
+  w.eval('(function(){ const dd=activeDeck(); dd.cards=["Hulk","AntMan","Wong","Mystique"]; touch(dd); })();'); await sleep(10);
+  d.querySelector('#verdictrow [data-verdict="bad"]').click(); await sleep(20);
+  const vers3 = w.eval('S.decks.find(x=>x.id==="r12v").vers');
+  assert(vers3.length===3 && vers3[2].verdict==='bad' && vers3[1].verdict==='good', 'R12-B: rating an edited deck auto-checkpoints v3 with its own verdict');
+  // history UI: rows newest-first with restore
+  const vRows = d.querySelectorAll('#deckvers .ver-row');
+  assert(vRows.length===3 && vRows[0].querySelector('.ver-n').textContent==='v3', 'R12-B: history renders newest first ('+vRows.length+' rows)');
+  assert(/same as current/.test(vRows[0].textContent) && vRows[0].querySelector('[data-restore]')===null, 'R12-B: current version offers no Restore');
+  const r1 = [...vRows].find(r=>r.querySelector('.ver-n').textContent==='v1');
+  assert(r1 && /had /.test(r1.textContent), 'R12-B: older versions name their differing cards');
+  r1.querySelector('[data-restore]').click(); await sleep(20);
+  assert(w.eval('activeDeck().cards.indexOf("Odin")>=0 && activeDeck().cards.indexOf("Mystique")<0'), 'R12-B: Restore brings v1 cards back');
+  assert(w.eval('activeDeck().done')!==true, 'R12-B: restoring re-opens the deck for editing');
+  // cap at 10
+  w.eval('(function(){ const dd=activeDeck(); for(let i=0;i<14;i++){ dd.cards=["Hulk","AntMan","Wong","T"+i]; checkpointDeck(dd); } })()');
+  assert(w.eval('activeDeck().vers.length')===10, 'R12-B: version history caps at 10');
+  w.eval('S.decks=S.decks.filter(function(x){return x.id!=="r12v";}); S.activeId=null; renderAll(); setTab("cards");'); await sleep(10);
+
+  // --- C: locations ---
+  const LOCJ = { updated:'2026-07-11', cards: _mkCards(80), locations: [
+    { n:'Altar of Death', d:'AltarOfDeath', a:'After you play a card here, destroy it to get +2 Energy next turn.', r:'rare', i:'https://x/altar.webp' },
+    { n:'Asgard', d:'Asgard', a:'After turn 4, whoever is winning here draws 2 cards.', r:'common' },
+    { n:'Bad', d:'', a:'no id -> dropped' } ] };
+  await w.eval('(async()=>{ window.__oldDb=S.db; const of=window.fetch; window.fetch=async()=>({ok:true,json:async()=>('+JSON.stringify(LOCJ)+')}); window.__l1=await loadSiteData(); window.fetch=of; })()');
+  assert(w.eval('window.__l1')===true && w.eval('S.locations.length')===2, 'R12-C: locations ride cards.json intake (bad entries dropped)');
+  w.eval('S.prefs.featLoc=null; S.locSearch=""; renderCollection();'); await sleep(20);
+  assert(d.querySelectorAll('#loclist .loc-row').length===2, 'R12-C: locations reference renders on the Cards tab');
+  assert(/tap it here and mark it/.test(d.querySelector('#loclist').textContent), 'R12-C: no featured pick -> the weekly hint shows');
+  // search
+  w.eval('S.locSearch="asgard"; renderLocations();'); await sleep(10);
+  assert(d.querySelectorAll('#loclist .loc-row').length===1, 'R12-C: search narrows the list');
+  w.eval('S.locSearch=""; renderLocations();'); await sleep(10);
+  // featured pick flow
+  d.querySelector('#loclist .loc-row[data-locd="AltarOfDeath"]').click(); await sleep(20);
+  assert(/Altar of Death/.test(d.querySelector('#modal h2').textContent), 'R12-C: tapping a location opens its sheet');
+  d.querySelector('#loc-feat-btn').click(); await sleep(20);
+  assert(w.eval('S.prefs.featLoc && S.prefs.featLoc.d')==='AltarOfDeath', 'R12-C: marking featured persists the pick');
+  assert(d.querySelector('#loclist .loc-feat')!==null && /Featured this week: Altar of Death/.test(d.querySelector('#loclist .loc-feat').textContent),
+    'R12-C: the featured banner renders');
+  assert(w.eval('featuredLoc().n')==='Altar of Death', 'R12-C: featuredLoc() resolves the pick (feeds the coach)');
+  w.eval('S.prefs.featLoc.at = Date.now() - 11*86400000;');
+  assert(w.eval('featuredLoc()')===null, 'R12-C: an 11-day-old pick self-expires');
+  w.eval('S.prefs.featLoc=null; S.locations=[]; S.db=window.__oldDb; renderCollection();'); await sleep(10);
+  assert(d.querySelector('#loclist .loc-row')===null, 'R12-C: no locations data -> the section hides entirely');
+
+  assert(errors.length===0, 'R12: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
+
   console.log('\nDONE. errors:', errors.length?errors:'none');
 })();

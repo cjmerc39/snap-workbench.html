@@ -920,6 +920,44 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .cr-fgo:active{background:rgba(255,255,255,.15);}
 .cr-fn{font-family:var(--head); font-size:11px; color:var(--gold);}
 .cr-fx{background:transparent; border:none; color:var(--faint); font-size:15px; line-height:1; padding:0 0 0 2px;}
+/* R12: locations reference (Cards tab) */
+#loclist{margin-top:18px;}
+#loc-q{width:100%; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-radius:12px;
+  color:var(--text); font-size:13px; padding:11px 12px; margin:8px 0 10px; min-height:44px;}
+.loc-rows{display:grid; gap:6px;}
+.loc-row{display:flex; align-items:center; gap:10px; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair);
+  border-radius:10px; padding:8px 10px; cursor:pointer;}
+.loc-row:active{box-shadow:inset 0 0 0 1px var(--line2);}
+.loc-thumb{width:40px; height:26px; border-radius:6px; flex-shrink:0; background-size:cover; background-position:center;
+  box-shadow:0 0 0 1px rgba(170,140,255,.3); display:inline-flex; align-items:center; justify-content:center;
+  font-size:9px; font-weight:800; color:#fff; background-color:#3a2b5e;}
+.loc-txt{min-width:0; display:flex; flex-direction:column; gap:1px;}
+.loc-txt b{font-size:12.5px;}
+.loc-txt span{font-size:11px; color:var(--dim); overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;}
+.loc-feat{display:flex; align-items:center; gap:10px; background:linear-gradient(160deg, rgba(255,205,120,.14), rgba(143,107,255,.10));
+  box-shadow:inset 0 0 0 1px rgba(255,205,120,.35); border-radius:12px; padding:10px 12px; margin:8px 0 4px; cursor:pointer;}
+.loc-feat .loc-thumb{width:52px; height:34px;}
+.loc-feat-txt{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;}
+.loc-feat-txt b{font-size:13px; color:var(--gold);}
+.loc-feat-txt span{font-size:11px; color:var(--dim);}
+.loc-feat-x{flex-shrink:0; width:28px; height:28px; border-radius:50%; border:none; background:none; color:var(--faint); font-size:15px; cursor:pointer;}
+.loc-art{height:110px; border-radius:12px; background-size:cover; background-position:center; margin:4px 0 10px;
+  box-shadow:inset 0 0 0 1px var(--hair);}
+/* R12: version history rows */
+#deckvers{margin-top:12px;}
+.ver-row{display:flex; align-items:center; gap:9px; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair);
+  border-radius:10px; padding:8px 10px; margin-bottom:6px;}
+.ver-n{font-family:var(--head); font-weight:800; font-size:12px; color:var(--iris,#b794ff); flex-shrink:0;}
+.ver-verdict{font-size:14px; flex-shrink:0; width:18px; text-align:center;}
+.ver-meta{flex:1; min-width:0; font-size:11.5px; color:var(--dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.ver-restore{flex-shrink:0; background:var(--raise); border:none; color:var(--text); font-size:11px; font-weight:700;
+  border-radius:var(--r-pill); padding:6px 12px; min-height:30px; cursor:pointer;}
+.ver-restore:active{background:var(--gold); color:var(--iris-ink);}
+/* R12: buildability on creator rows */
+.cr-tools{margin:0 0 10px;}
+.cr-own{font-size:10px; font-weight:800; color:var(--dim); background:rgba(255,255,255,.06); border-radius:6px; padding:2px 7px; white-space:nowrap;}
+.cr-own.full{color:#0b1f17; background:var(--ok);}
+.cr-missing{font-size:11px; color:var(--faint); margin-top:6px;}
 .mc-strip{display:flex; flex-wrap:wrap; gap:5px; margin:2px 0 8px;}
 .mc-chip{font-size:10.5px; font-weight:600; color:var(--dim); background:rgba(255,255,255,.05); border-radius:7px; padding:3px 7px; white-space:nowrap;}
 .mc-chip b{color:var(--gold); font-weight:800; margin-left:2px;}
@@ -1048,6 +1086,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       <div id="curve"></div>
       <div id="curvehealth"></div>
       <div id="deckwarn"></div>
+      <div id="deckvers"></div>
     </div>
     <div class="dpane" data-pane="synergy" role="tabpanel" aria-label="Synergy">
       <div class="dpane-label">Synergy &amp; packages</div>
@@ -1119,6 +1158,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       </div>
     </div>
     <div id="colllist"></div>
+    <div id="loclist"></div>
   </section>
 </main>
 
@@ -1247,6 +1287,7 @@ function applyTokenData(tokens, links){
 const S = {
   tokens: buildTokenMap(TOKEN_SEED.tokens),       // R7-D: id -> token def (token:true). Seeded now; cards.json overrides at boot.
   tokenLinks: sanitizeLinks(TOKEN_SEED.links),    // R7-D: producer id -> [token id]
+  locations: [],                                  // R12: {n,d,a,r,i} from cards.json; empty -> feature hidden
   db: DB_BASE.slice(),
   dbLabel: DB_BASE_LABEL,
   byId: {},
@@ -2204,6 +2245,70 @@ function renderCollection(){
     html += '<div class="tilegrid cmp coll-grid">'+ cards.map(tileHtmlCompact).join('') +'</div>';
   });
   list.innerHTML = html;
+  renderLocations();   // R12: the locations reference lives at the bottom of the Cards tab
+}
+/* ============ R12: LOCATIONS — the one Snap concept the app couldn't see ============
+   Data ships as an additive `locations` key on cards.json (daily Action). The featured
+   location has no automated source anymore (marvelsnapzone's event feeds died in 2024),
+   so it's a one-tap weekly pick that auto-expires after 10 days. It feeds the coach. */
+function featuredLoc(){
+  const f = S.prefs && S.prefs.featLoc;
+  if(!f || !f.d) return null;
+  if(Date.now() - (+f.at || 0) > 10*86400000) return null;   // stale pick self-clears (weekly cadence)
+  return S.locations.find(l => l.d === f.d) || null;
+}
+function locThumb(l){
+  if(l.i) return '<span class="loc-thumb" style="background-image:url(&quot;' + esc(l.i) + '&quot;)"></span>';
+  return '<span class="loc-thumb noart">' + esc(initials(l)) + '</span>';
+}
+function renderLocations(){
+  const box = $('#loclist'); if(!box) return;
+  if(!S.locations.length){ box.innerHTML = ''; return; }
+  const q = (S.locSearch || '').toLowerCase();
+  const fl = featuredLoc();
+  const list = S.locations.filter(l => !q || l.n.toLowerCase().includes(q) || l.a.toLowerCase().includes(q));
+  box.innerHTML =
+    '<div class="coll-section">Locations <span class="cs-n">' + S.locations.length + '</span></div>' +
+    (fl ? '<div class="loc-feat" data-locd="' + esc(fl.d) + '">' + locThumb(fl) +
+      '<span class="loc-feat-txt"><b>Featured this week: ' + esc(fl.n) + '</b><span>' + esc(fl.a) + '</span></span>' +
+      '<button class="loc-feat-x" type="button" aria-label="Clear featured location">×</button></div>'
+      : '<div class="odds-hint">When the new featured location drops (Wednesdays), tap it here and mark it — the coach will plan around it.</div>') +
+    '<input id="loc-q" type="search" placeholder="Search locations by name or effect" autocomplete="off" value="' + esc(S.locSearch || '') + '">' +
+    (list.length ? '<div class="loc-rows">' + list.map(l =>
+      '<div class="loc-row" data-locd="' + esc(l.d) + '">' + locThumb(l) +
+      '<span class="loc-txt"><b>' + esc(l.n) + (fl && fl.d === l.d ? ' ★' : '') + '</b><span>' + esc(l.a) + '</span></span>' +
+      '</div>').join('') + '</div>'
+      : '<div class="odds-hint">No location matches “' + esc(S.locSearch || '') + '”.</div>');
+  const qEl = $('#loc-q');
+  if(qEl){
+    qEl.oninput = () => { S.locSearch = qEl.value;
+      const at = qEl.selectionStart; renderLocations();
+      const q2 = $('#loc-q'); if(q2){ q2.focus(); q2.setSelectionRange(at, at); } };
+  }
+  box.querySelectorAll('.loc-row').forEach(r => r.onclick = () => openLocSheet(r.dataset.locd));
+  const fx = box.querySelector('.loc-feat-x');
+  if(fx) fx.onclick = e => { e.stopPropagation(); S.prefs.featLoc = null; sSet(K.prefs, S.prefs); scheduleSync(); renderLocations(); };   // null (not delete) so the clear survives the prefs merge
+  const fb = box.querySelector('.loc-feat');
+  if(fb) fb.onclick = e => { if(!e.target.closest('.loc-feat-x')) openLocSheet(fb.dataset.locd); };
+}
+function openLocSheet(defid){
+  const l = S.locations.find(x => x.d === defid); if(!l) return;
+  const isFeat = !!(featuredLoc() && featuredLoc().d === l.d);
+  openModal(
+    '<h2>' + esc(l.n) + '</h2>' +
+    (l.i ? '<div class="loc-art" style="background-image:url(&quot;' + esc(l.i) + '&quot;)"></div>' : '') +
+    '<div class="mnote">' + esc(l.a || 'No effect text.') + '</div>' +
+    (l.r ? '<div class="odds-hint">Appearance rate: ' + esc(l.r) + '</div>' : '') +
+    '<div class="mrow"><button class="abtn ' + (isFeat ? 'danger' : 'primary') + '" id="loc-feat-btn">' +
+      (isFeat ? 'Unmark featured' : '★ Featured this week') + '</button></div>');
+  const b = $('#loc-feat-btn');
+  if(b) b.onclick = () => {
+    if(isFeat) S.prefs.featLoc = null;
+    else S.prefs.featLoc = { d: l.d, at: Date.now() };
+    sSet(K.prefs, S.prefs); scheduleSync();
+    closeModal(); renderLocations();
+    toast(isFeat ? 'Featured cleared' : l.n + ' marked as this week’s featured location');
+  };
 }
 if($('#colllist')) $('#colllist').addEventListener('click', e => {
   const t = e.target.closest('.tile'); if(!t) return;
@@ -2575,6 +2680,36 @@ async function coachSynergy(){
   }
 }
 
+/* R12: version history — newest first, verdict per version, swap summary vs current, one-tap restore. */
+function renderDeckVersions(){
+  const box = $('#deckvers'); if(!box) return;
+  const d = activeDeck();
+  if(!d || !Array.isArray(d.vers) || !d.vers.length){ box.innerHTML = ''; return; }
+  const V = { good:'👍', meh:'😐', bad:'👎' };
+  const cur = new Set(d.cards);
+  box.innerHTML = '<div class="syn-sec">Version history — what you played, and how it felt</div>' +
+    d.vers.map((v, i) => {
+      const out = v.cards.filter(id => cur.has(id) === false);
+      const same = !out.length && v.cards.length === d.cards.length;
+      const names = out.slice(0,3).map(id => (getCard(id)||{n:id}).n).join(', ');
+      const diffTxt = same ? 'same as current'
+        : out.length <= 3 ? 'had ' + names
+        : out.length + ' cards differ';
+      return '<div class="ver-row" data-vi="' + i + '">' +
+        '<span class="ver-n">v' + (i+1) + '</span>' +
+        '<span class="ver-verdict">' + (v.verdict ? V[v.verdict] : '·') + '</span>' +
+        '<span class="ver-meta">' + new Date(v.at).toLocaleDateString() + ' · ' + esc(diffTxt) + '</span>' +
+        (same ? '' : '<button class="ver-restore" type="button" data-restore="' + i + '">Restore</button>') +
+        '</div>';
+    }).reverse().join('');
+  box.querySelectorAll('[data-restore]').forEach(bt => bt.onclick = () => {
+    const v = d.vers[+bt.dataset.restore]; if(!v) return;
+    d.cards = v.cards.slice();
+    touch(d);   // restoring is a build edit: back to editing, change-flags re-anchor
+    renderAll(); setTab('deck');
+    toast('Restored v' + (+bt.dataset.restore + 1));
+  });
+}
 /* --- R5: deck verdict (self-rating, meta-edit — never clears "done") --- */
 function renderVerdict(){
   const d = activeDeck(); if(!d) return;
@@ -3251,6 +3386,7 @@ function renderDeck(){
   renderPlanner();
   renderLinePlan();
   renderVerdict();
+  renderDeckVersions();
 
   // R5-G: "what changed" banner — cards whose cost/power/ability moved since this deck was built
   const chBox = $('#deckchanges');
@@ -3441,12 +3577,14 @@ if($('#decktabs')) $('#decktabs').addEventListener('click', e => {
   const b = e.target.closest('[data-dtab]'); if(!b) return;
   setDeckTab(b.dataset.dtab);
 });
-/* R5: verdict segment — tap sets, re-tap clears; a verdict is meta (touchMeta), it does NOT un-"done" the deck. */
+/* R5: verdict segment — tap sets, re-tap clears; a verdict is meta (touchMeta), it does NOT un-"done" the deck.
+   R12: the verdict also lands on the VERSION you just played — rating an edited deck checkpoints it first. */
 if($('#verdictrow')) $('#verdictrow').addEventListener('click', e => {
   const b = e.target.closest('[data-verdict]'); if(!b) return;
   const d = activeDeck(); if(!d) return;
   d.verdict = d.verdict === b.dataset.verdict ? null : b.dataset.verdict;
-  touchMeta(d); renderVerdict(); renderSaved();
+  checkpointDeck(d, d.verdict);
+  touchMeta(d); renderVerdict(); renderSaved(); renderDeckVersions();
 });
 
 /* ============ RENDER: DECK ZONE (build screen) ============ */
@@ -3526,10 +3664,29 @@ function syncStickyTop(){
 if(typeof window !== 'undefined') window.addEventListener('resize', syncStickyTop);
 /* R5: "Done" — mark the current deck finished, save, and jump to Saved so you can pick the next one.
    Any later card/name/clear edit routes through touch() and clears done -> back into "editing". */
+/* R12: version memory — the workbench finally remembers WHICH shape of a deck you rated.
+   A checkpoint lands when you mark Done and when you rate the deck; if the cards match the
+   latest version it updates in place, otherwise a new version is born. Capped at 10. */
+function checkpointDeck(d, verdict){
+  if(!d || !d.cards.length) return null;
+  d.vers = Array.isArray(d.vers) ? d.vers : [];
+  const last = d.vers[d.vers.length - 1];
+  const same = last && last.cards.length === d.cards.length && last.cards.every(id => d.cards.indexOf(id) >= 0);
+  let v;
+  if(same){ v = last; v.at = Date.now(); }
+  else {
+    v = { at: Date.now(), cards: d.cards.slice(), verdict: null };
+    d.vers.push(v);
+    if(d.vers.length > 10) d.vers = d.vers.slice(-10);
+  }
+  if(verdict !== undefined) v.verdict = verdict;
+  return v;
+}
 function finishDeck(){
   const d = activeDeck();
   if(!d || !d.cards.length) return;                        // R6: Done is meaningless on a blank/empty bench
   d.done = true; d.updated = Date.now(); snapshotDeck(d);   // re-baseline: the deck as you finished it
+  checkpointDeck(d);                                        // R12: Done = a version worth remembering
   S.activeId = null;                                        // R6: file the deck; the bench goes BLANK
   persistDecks(); renderAll();
   setTab('saved'); toast('Saved ✓');
@@ -3656,6 +3813,29 @@ function renderCreatorDecks(){
       return;
     }
   }
+  // R12: buildability — the first question a collection-gated game asks of any deck.
+  // Only meaningful once the user has marked a collection (S.owned non-empty).
+  const healId0 = id => S.byId[id] ? id : (S.short[id] || id);
+  const buildInfo = cd => {
+    const ids = (cd.ids || []).map(healId0);
+    if(!ids.length) return null;                     // link-out-only rows can't be judged
+    const missing = ids.filter(id => !S.owned.has(id));
+    return { own: ids.length - missing.length, total: ids.length, missing };
+  };
+  if(S.owned.size){
+    const bt = el('button','chip' + (S.prefs.crBuildable ? ' on' : ''), (S.prefs.crBuildable ? '✓ ' : '') + 'Buildable only');
+    bt.id = 'cr-buildable'; bt.type = 'button';
+    bt.onclick = () => { S.prefs.crBuildable = !S.prefs.crBuildable; sSet(K.prefs, S.prefs); renderCreatorDecks(); };
+    const btRow = el('div','cr-tools'); btRow.appendChild(bt);
+    wrap.appendChild(btRow);
+    if(S.prefs.crBuildable){
+      all = all.filter(cd => { const b = buildInfo(cd); return b && b.missing.length === 0; });
+      if(!all.length){
+        wrap.appendChild(el('div','warnbox','None of these decks are fully buildable from your collection yet — untoggle to see what you’re missing.'));
+        return;
+      }
+    }
+  }
   const httpOk = u => /^https?:\/\//i.test(u);   // defense-in-depth: only http(s) hrefs ever become links
   const linkBtn = (href, label) => { const a=document.createElement('a'); a.className='abtn'; a.href=href; a.target='_blank'; a.rel='noopener noreferrer'; a.textContent=label; return a; };
   // R10.2: heal fossil ids (pre-vowel-fix compressed tokens like Agn5) via the same skeleton index,
@@ -3668,12 +3848,21 @@ function renderCreatorDecks(){
     if(cd.video) head.appendChild(el('span','cr-video', cd.video));
     if(cd.added) head.appendChild(el('span','cr-added','Added'));
     if(cd.published) head.appendChild(el('span','cr-date', cd.published));
+    // R12: can you actually build this? Own-count chip + what's missing, right on the row.
+    const bi = S.owned.size ? buildInfo(cd) : null;
+    if(bi) head.appendChild(el('span','cr-own' + (bi.missing.length ? '' : ' full'),
+      bi.missing.length ? 'own ' + bi.own + '/' + bi.total : '✓ buildable'));
     row.appendChild(head);
     const healed = (cd.ids||[]).map(healId);
     if(healed.length){
       const strip = el('div','cr-strip');
       strip.innerHTML = healed.map(id => getCard(id) || makeStub(id)).sort(SORTS[0].fn).map(miniHtml).join('');
       row.appendChild(strip);
+    }
+    if(bi && bi.missing.length){
+      const names = bi.missing.map(id => (getCard(id)||{n:id}).n);
+      row.appendChild(el('div','cr-missing', 'Missing: ' +
+        (names.length <= 4 ? names.join(', ') : names.slice(0,3).join(', ') + ' +' + (names.length-3) + ' more')));
     }
     const acts = el('div','cr-acts');
     if(cd.ids.length){
@@ -4070,11 +4259,14 @@ $('#btn-ask').onclick = async () => {
     else ownedBlock = '\nOnly suggest cards from this owned list:\n' + [...S.owned].map(id => (getCard(id)||{n:id}).n).join(', ');
   }
   const creatorMetaBlock = creatorMetaDigest();
+  // R12: the user marks the week's featured location once; the coach plans around it
+  const _fl = featuredLoc();
+  const locBlock = _fl ? '\nThis week\'s featured location (appears in roughly half of games): ' + _fl.n + ' — ' + _fl.a : '';
   const prompt =
     'You are a sharp, honest Marvel Snap deck-building coach.\n' +
     'Card data below comes from an up-to-date database and may be newer than your training; when they conflict, trust the text below.\n\n' +
     'Current deck ("'+(d.name||'Deck')+'"):\n' + deckAsText() + '\n' +
-    ownedBlock + creatorMetaBlock + '\n\n' +
+    ownedBlock + creatorMetaBlock + locBlock + '\n\n' +
     'Question: ' + q + '\n\n' +
     'Answer in plain text (no markdown syntax), under 220 words. Be specific: name exact cards for cuts and adds, reference costs, and explain the game plan reasoning briefly.';
   const askOnce = async () => {
@@ -4171,6 +4363,9 @@ async function loadSiteData(){
     S.dbLabel = 'auto-updated' + (j.updated ? ' ' + j.updated : '');
     S.siteData = true;
     applyTokenData(j.tokens, j.links);   // R7-D: additive token intake — non-fatal; missing/garbage -> TOKEN_SEED
+    // R12: additive locations intake — absent/garbage -> [] and the whole feature stays hidden
+    S.locations = (Array.isArray(j.locations) ? j.locations : []).filter(l => l && l.d && l.n)
+      .map(l => ({ n:String(l.n), d:String(l.d), a:String(l.a||''), r:String(l.r||''), i:(l.i && /^https?:\/\//.test(l.i)) ? String(l.i) : '' }));
     return true;
   }catch(e){ return false; }
 }

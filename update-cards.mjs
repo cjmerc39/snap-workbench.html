@@ -202,8 +202,33 @@ for (const [pid, toks] of Object.entries(LINKS)) {
 const tokenFloor = Math.max(15, prevTokenCount);
 if (outTokens.length < tokenFloor) { console.error(`token sanity check failed: only`, outTokens.length, `tokens (<`, tokenFloor, `), not writing`); process.exit(1); }
 
-fs.writeFileSync(`cards.json`, JSON.stringify({ updated: new Date().toISOString().slice(0, 10), cards: out, tokens: outTokens, links: LINKS }));
-console.log(`wrote`, out.length, `cards +`, outTokens.length, `tokens /`, Object.keys(LINKS).length, `producers`);
+// ---- R12: locations (additive key on cards.json; the app hides the feature when absent) ----
+const LOC_FEED = `https://marvelsnapzone.com/getinfo/?searchtype=locations&searchcardstype=true`;
+let outLocs = [];
+try {
+  const lr = await fetch(LOC_FEED, UA);
+  if (lr.ok) {
+    const lj = await lr.json();
+    outLocs = ((lj.success && lj.success.cards) || [])
+      .filter(l => l.type === `Location` && l.carddefid && strip(l.name) && l.status === `released`)
+      .map(l => {
+        const loc = { n: strip(l.name), d: l.carddefid, a: strip(l.ability), r: String(l.rarity_slug || ``) };
+        if (l.art && /^https?:\/\//.test(l.art)) loc.i = String(l.art);
+        return loc;
+      });
+    outLocs.sort((a, b) => a.n.localeCompare(b.n));
+  } else console.log(`locations feed returned`, lr.status);
+} catch (e) { console.log(`locations fetch failed:`, e && e.message); }
+// sanity floor mirrors cards/tokens: a broken locations fetch keeps the previous set
+if (outLocs.length < 50) {
+  try {
+    const prevL = JSON.parse(fs.readFileSync(`cards.json`, `utf8`)).locations || [];
+    if (prevL.length > outLocs.length) { console.log(`locations: fetch thin (` + outLocs.length + `), keeping previous`, prevL.length); outLocs = prevL; }
+  } catch (e) {}
+}
+
+fs.writeFileSync(`cards.json`, JSON.stringify({ updated: new Date().toISOString().slice(0, 10), cards: out, tokens: outTokens, links: LINKS, locations: outLocs }));
+console.log(`wrote`, out.length, `cards +`, outTokens.length, `tokens /`, Object.keys(LINKS).length, `producers +`, outLocs.length, `locations`);
 console.log(`EVENT-RELEASED via schedule:`, recent.length ? recent.join(`, `) : `(none)`);
 console.log(`KEPT via seed/memory:`, kept.length ? kept.join(`, `) : `(none)`);
 console.log(`FUTURE (auto-include on their day):`, future.length ? future.join(`, `) : `(none)`);
