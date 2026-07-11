@@ -323,8 +323,8 @@ h1 .h-snap{color:var(--gold);}
 .sim-grid{grid-template-columns:repeat(6,1fr); margin-bottom:10px;}
 /* R6-C: play-line composer — six always-visible turn slots (no scroll to a card) */
 .pl-slots{display:flex; flex-direction:column; gap:7px;}
-.pl-slot{display:flex; align-items:stretch; gap:10px; min-height:64px;
-  background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:var(--r-md); padding:8px 10px; cursor:pointer;
+.pl-slot{display:flex; align-items:stretch; gap:10px; min-height:56px;
+  background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:var(--r-md); padding:6px 10px; cursor:pointer;
   transition:box-shadow var(--dur-1) var(--ease-out);}
 .pl-slot:active{box-shadow:inset 0 0 0 1px var(--line2);}
 .pl-slot.vacant .pl-mini-row{align-items:center;}
@@ -362,7 +362,12 @@ h1 .h-snap{color:var(--gold);}
 .pl-pick-head{display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:2;
   padding:2px 2px 10px; margin-bottom:6px;
   background:linear-gradient(180deg, rgba(21,16,31,.94), rgba(21,16,31,0));}
-.pl-pick-title{font-family:var(--head); font-weight:800; letter-spacing:.2px; font-size:15px; color:var(--text);}
+.pl-pick-title{font-family:var(--head); font-weight:800; letter-spacing:.2px; font-size:15px; color:var(--text); min-width:58px; text-align:center;}
+/* R11.1: hop turns without closing the sheet */
+.pl-pick-nav{width:34px; height:34px; border-radius:50%; border:none; background:var(--raise); color:var(--text);
+  font-size:19px; line-height:1; font-weight:700; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center;}
+.pl-pick-nav:disabled{opacity:.3; cursor:default;}
+.pl-pick-nav:not(:disabled):active{background:var(--gold); color:var(--iris-ink);}
 #pl-picker-energy{font-size:12px; font-weight:800; color:var(--dim);}
 #pl-picker-energy.over{color:var(--warn);}
 .pl-pick-done{margin-left:auto; background:linear-gradient(160deg,#b794ff,#8f6bff); color:var(--iris-ink); border:none;
@@ -376,6 +381,7 @@ h1 .h-snap{color:var(--gold);}
   text-align:center; font-size:11px; font-weight:800; color:var(--iris-ink); background:var(--gold); border-radius:999px; z-index:2;}
 .pl-pick .mini .pl-tag{position:absolute; top:3px; left:3px; font-size:9px; font-weight:800; color:var(--text);
   background:rgba(0,0,0,.6); border-radius:5px; padding:1px 4px; z-index:2;}
+.pl-pick .mini .pl-tag.rep{color:var(--iris-ink); background:var(--iris-soft,#b794ff);}   /* repeatable: informative, not greyed */
 /* R7-D/E: created-token tiles + the picker-head energy nudge control */
 .pl-tok-head{grid-column:1/-1; margin-top:8px; padding:7px 2px 3px; font-size:11px; font-weight:800; letter-spacing:.3px;
   text-transform:uppercase; color:var(--iris-soft); border-top:1px solid var(--hair);}
@@ -1044,7 +1050,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       </div>
     </div>
     <div class="dpane" data-pane="planner" role="tabpanel" aria-label="Play line">
-      <div class="dpane-label">Optimal game — tap a turn, pick its cards</div>
+      <div class="dpane-label">Map your best game — tap a turn, use ‹ › to hop turns</div>
       <div id="planner"></div>
     </div>
     <div class="dpane" data-pane="notes" role="tabpanel" aria-label="Notes">
@@ -1127,7 +1133,9 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   <div class="pl-sheet" role="dialog" aria-label="Assign cards to a turn">
     <div class="sheet-grab"></div>
     <div class="pl-pick-head">
+      <button class="pl-pick-nav" id="pl-prev" type="button" aria-label="Previous turn">&#8249;</button>
       <span class="pl-pick-title" id="pl-picker-title">Turn 1</span>
+      <button class="pl-pick-nav" id="pl-next" type="button" aria-label="Next turn">&#8250;</button>
       <span class="pl-energy" id="pl-picker-energy">0/1&#9889;</span>
       <span class="pl-nudge" id="pl-nudge"></span>
       <button class="pl-pick-done" id="pl-pick-done" type="button">Done</button>
@@ -1392,6 +1400,7 @@ function applyStateBlob(b){
   S.decks=b.decks||[]; S.activeId=b.activeId; S.owned=new Set(b.owned||[]);
   if(b.creators) S.addedCreators=b.creators;
   if(b.creatorDecksCache) S.addedCreatorDecks=b.creatorDecksCache;
+  healCreatorIds();   // R11.1: synced copies may still carry UC-less ids from the buggy window
   if(b.prefs) S.prefs=Object.assign(S.prefs, b.prefs);
   persistDecks(); persistColl(); persistCreators(); sSet(K.prefs, S.prefs);
 }
@@ -1676,6 +1685,35 @@ function extractDecksFromDesc(desc){
   return out;
 }
 /* R5-J: fetch a YouTube channel's last-2-weeks decks via the relay's /yt proxy. */
+/* R11.1: canonical channel id. YouTube RSS yt:channelId drops the "UC" prefix; stored
+   entries from the buggy window carry that form, so every reader normalizes first. */
+function normChannelId(id){
+  id = String(id || '').trim();
+  if(/^UC[\w-]{22}$/.test(id)) return id;
+  if(/^[\w-]{22}$/.test(id)) return 'UC' + id;
+  return id;
+}
+/* R11.1: healing pass (lesson from the fossil-id saga: fix the decoder AND the data it
+   already produced). Normalizes ids on both sides and dedupes channels. Returns true if
+   anything changed so callers know to persist. */
+function healCreatorIds(){
+  let changed = false;
+  const byId = {};
+  (S.addedCreators || []).forEach(c => {
+    if(!c || !c.id) return;
+    const nid = normChannelId(c.id);
+    if(nid !== c.id){ c.id = nid; changed = true; }
+    if(byId[c.id]) changed = true;   // duplicate channel (added under both id forms)
+    byId[c.id] = c;
+  });
+  S.addedCreators = Object.values(byId);
+  (S.addedCreatorDecks || []).forEach(dk => {
+    if(!dk || !dk.chId) return;
+    const nid = normChannelId(dk.chId);
+    if(nid !== dk.chId){ dk.chId = nid; changed = true; }
+  });
+  return changed;
+}
 async function addCreator(url){
   // R8: failures land in the modal (#cr-msg) so they don't vanish like a toast; each failure mode gets its own words
   const say = m => { const box = $('#cr-msg'); if(box){ box.textContent = m; box.style.display='block'; } else toast(m); };
@@ -1692,7 +1730,11 @@ async function addCreator(url){
     return;
   }
   const chName = (xml.match(/<author>[\s\S]*?<name>([^<]+)<\/name>/) || [])[1] || 'Creator';
-  const uc = (xml.match(/<yt:channelId>([^<]+)<\/yt:channelId>/) || xml.match(/channel_id=(UC[\w-]{22})/) || [])[1];
+  // R11.1: YouTube's RSS <yt:channelId> omits the UC prefix (verified: Regis's feed says
+  // "bt1SGM..."), which made every added creator invisible to the Following pane's UC guard.
+  // Prefer the feed's self-link (always the full id), normalize whatever we get.
+  const uc = normChannelId((xml.match(/channel_id=(UC[\w-]{22})/) || xml.match(/<yt:channelId>([^<]+)<\/yt:channelId>/) || [])[1]);
+  if(!uc){ say('Found the feed but couldn’t identify the channel — try its full youtube.com/channel/UC… URL.'); return; }
   const entries = xml.split('<entry>').slice(1);
   const now = Date.now(); const decks = [];
   for(const e of entries){
@@ -2675,40 +2717,61 @@ function turnBudget(turns, adj, t, d){
 function budget(lineObj, t, d){ lineObj = lineObj || {}; return turnBudget(lineObj.turns || [], lineObj.adj, t, d); }
 /* tokens are CREATED, not drawn — they never count toward the "cards seen by Tn" draw math (only energy). */
 function drawCount(ids){ let n = 0; for(const id of (ids || [])) if(!S.tokens[id]) n++; return n; }
+/* R11.1: cumulative cards-drawn-by-turn for a whole line. A repeated id (Kitty replayed
+   every turn) is the SAME physical card — it only needs drawing once. */
+function cumDraws(line){
+  const seen = new Set(); const out = []; let cum = 0;
+  for(let t=1; t<=6; t++){
+    for(const id of (line[t-1] || [])) if(!S.tokens[id] && !seen.has(id)){ seen.add(id); cum++; }
+    out[t-1] = cum;
+  }
+  return out;
+}
 function lineFlags(line, adj, d){
-  const out = []; let cum = 0;
+  const out = []; const cums = cumDraws(line);
   for(let t=1; t<=6; t++){
     const ids = line[t-1] || [];
     const cards = ids.map(id => getCard(id) || makeStub(id));
     const spent = cards.reduce((s,c) => s + (c.c||0), 0);
     const b = turnBudget(line, adj, t, d);
-    cum += drawCount(ids);
+    const cum = cums[t-1];
     if(spent > b)          out.push({ turn:t, type:'energy', msg:'T' + t + ' spends ' + spent + ' energy (only ' + b + ' available)' });
     if(cum > DRAWN[t])     out.push({ turn:t, type:'draw',   msg:'T' + t + ': line plays ' + cum + ' cards but you’ve drawn ~' + DRAWN[t] });
   }
   return out;
 }
+/* R11.1: cards you can legitimately play on MORE than one turn — Kitty returns to hand every
+   turn, the Virus copies itself, and shuffle-in-multiples tokens (3 Demons) repeat too.
+   Detected from ability text so future cards with these wordings work without a code change. */
+const REPLAY_RX = /returns at the start of each turn|returns? to your hand|copy (this|itself) to your (hand|deck)/i;
+function isReplayable(id, d){
+  const c = getCard(id); if(!c) return false;
+  if(c.token) return (((d && d.cards) || []).some(pid =>
+    (S.tokenLinks[pid] || []).indexOf(id) >= 0 && /shuffle (in )?\d/i.test((getCard(pid)||{}).a || '')));
+  return REPLAY_RX.test(c.a || '');
+}
 /* R7-D: a token stays in a line only while a producer that creates it sits on a STRICTLY earlier turn AND is
-   still one of the 12. Moving the producer later / removing it / dropping it from the deck auto-orphans the token. */
-function isValidToken(id, turns, d){
-  if(!S.tokens[id]) return false;
+   still one of the 12. Moving the producer later / removing it / dropping it from the deck auto-orphans the token.
+   R11.1: validity is judged per SLOT (turn t), so a repeated token is legal on every turn after its producer. */
+function isValidTokenAt(id, t, turns, d){
+  if(!S.tokens[id] || !t) return false;
   const inDeck = new Set((d && d.cards) || []);
-  const tTok = turnOfId(turns, id); if(!tTok) return false;
   for(const pid in S.tokenLinks){
     if(!inDeck.has(pid)) continue;
     if((S.tokenLinks[pid] || []).indexOf(id) < 0) continue;
     const tp = turnOfId(turns, pid);
-    if(tp && tp < tTok) return true;
+    if(tp && tp < t) return true;
   }
   return false;
 }
+function isValidToken(id, turns, d){ return isValidTokenAt(id, turnOfId(turns, id), turns, d); }
 /* live line, pruned to the active deck — the single source both the slots and picker read.
    R7: reads the ACTIVE line's turns (multi-line); keeps real cards in the 12 + valid created tokens, same shape. */
 function currentLine(d){
   const raw = normLine(activeLine(d).turns);
   const inDeck = new Set(d.cards || []);
   const line = emptyLine();
-  for(let i=0; i<6; i++) line[i] = raw[i].filter(id => inDeck.has(id) || isValidToken(id, raw, d));
+  for(let i=0; i<6; i++) line[i] = raw[i].filter(id => inDeck.has(id) || isValidTokenAt(id, i+1, raw, d));
   return line;
 }
 function turnOfId(line, id){ for(let i=0;i<6;i++) if((line[i]||[]).indexOf(id) >= 0) return i+1; return 0; }
@@ -2791,9 +2854,10 @@ function renderPlanner(){
 
   // R11 de-clunk: flags first, so each violation renders ON its own turn row
   const flags = lineFlags(line, active.adj, d);
-  let cum = 0; const slotHtml = [];
+  const cums = cumDraws(line);   // R11.1: replayed cards draw once
+  const slotHtml = [];
   for(let t=1; t<=6; t++){
-    const ids = line[t-1]; cum += drawCount(ids);
+    const ids = line[t-1]; const cum = cums[t-1];
     const cards = ids.map(id => getCard(id) || makeStub(id));
     const spent = cards.reduce((s,c) => s + (c.c||0), 0);
     const b = turnBudget(line, active.adj, t, d);   // R7-E: energy nudge (explicit adj or auto ramp)
@@ -2988,10 +3052,16 @@ function refreshPlPicker(){
       };
     });
   }
+  // R11.1: ‹ › hop between turns without closing the sheet (was: 6 open/close cycles per line)
+  const pv = $('#pl-prev'), nx = $('#pl-next');
+  if(pv) pv.disabled = t <= 1;
+  if(nx) nx.disabled = t >= 6;
   const grid = $('#pl-pick-grid'); if(!grid) return;
   const mark = (h, id) => {
     const tn = turnOfId(line, id);
-    if(tn === t) return h.replace('class="mini', 'class="mini on');
+    if(line[t-1].indexOf(id) >= 0) return h.replace('class="mini', 'class="mini on');
+    if(tn && isReplayable(id, d))   // R11.1: Kitty & friends can ride multiple turns — show where, stay addable
+      return h.replace('</div></div>', '</div><span class="pl-tag rep" title="Also on turn ' + tn + ' — repeatable cards can play again">↺T' + tn + '</span></div>');
     if(tn) return h.replace('class="mini', 'class="mini elsewhere').replace('</div></div>', '</div><span class="pl-tag">T' + tn + '</span></div>');
     return h;
   };
@@ -3153,10 +3223,11 @@ function renderLinePlan(){
         '<button data-lid="' + esc(l.id) + '"' + (l.id === active.id ? ' class="on"' : '') + ' type="button">' + esc(l.name || 'Line') + '</button>'
       ).join('') + '</div>'
     : '';
-  let cum = 0, minConf = null;
+  const cums = cumDraws(line);   // tokens don't count; replayed cards draw once (R11.1)
+  let minConf = null;
   const rows = [];
   for(let t=1; t<=6; t++){
-    const ids = line[t-1]; cum += drawCount(ids);   // tokens don't count toward cards-drawn
+    const ids = line[t-1]; const cum = cums[t-1];
     if(!ids.length) continue;   // only turns that actually play a card (compact)
     const cards = ids.map(id => getCard(id) || makeStub(id));
     const spent = cards.reduce((s,c) => s + (c.c||0), 0);
@@ -3217,14 +3288,20 @@ if($('#pl-pick-grid')) $('#pl-pick-grid').onclick = e => {
   const d = activeDeck(); if(!d) return;
   const id = m.dataset.d;
   const line = currentLine(d);
-  const cur = turnOfId(line, id);
-  if(cur === t){ line[t-1] = line[t-1].filter(x => x !== id); }          // already here -> toggle off
-  else { if(cur) line[cur-1] = line[cur-1].filter(x => x !== id); line[t-1].push(id); }  // move / add
+  if(line[t-1].indexOf(id) >= 0){ line[t-1] = line[t-1].filter(x => x !== id); }   // already here -> toggle off
+  else if(isReplayable(id, d)){ line[t-1].push(id); }   // R11.1: repeatable -> add here TOO (Kitty every turn)
+  else { const cur = turnOfId(line, id); if(cur) line[cur-1] = line[cur-1].filter(x => x !== id); line[t-1].push(id); }  // move / add
   mutateActiveLine(d, lo => { lo.turns = line; });   // write the active line + re-mirror the primary
   renderPlanner();   // re-renders slot rows AND the open picker (energy + grid) in one pass
   renderLinePlan();
 };
 if($('#pl-pick-done')) $('#pl-pick-done').onclick = () => closePlPicker();
+// R11.1: hop turns inside the sheet — build the whole line in one open
+const _plHop = dir => { const t = S.plannerTurn; if(!t) return;
+  const n = t + dir; if(n < 1 || n > 6) return;
+  S.plannerTurn = n; refreshPlPicker(); renderPlanner(); };
+if($('#pl-prev')) $('#pl-prev').onclick = () => _plHop(-1);
+if($('#pl-next')) $('#pl-next').onclick = () => _plHop(1);
 if($('#pl-picker')) $('#pl-picker').addEventListener('click', e => { if(e.target.id === 'pl-picker') closePlPicker(); });
 if($('#de-build')) $('#de-build').onclick = () => setTab('cards');
 if($('#de-saved')) $('#de-saved').onclick = () => setTab('saved');
@@ -3424,7 +3501,10 @@ const BUILTIN_CREATORS = [
 function renderCreatorDecks(){
   const wrap = $('#creatorlist'); if(!wrap) return;
   wrap.innerHTML='';
-  const all = S.creatorDecks.concat(S.addedCreatorDecks || []);   // R5-J: harvested + in-app added, tagged
+  // R5-J: harvested + in-app added, tagged. R11.1: newest first — a just-added creator's
+  // decks used to land BELOW 30+ builtin rows, invisible without a long scroll.
+  const all = S.creatorDecks.concat(S.addedCreatorDecks || [])
+    .slice().sort((a,b) => String(b.published||'').localeCompare(String(a.published||'')));
   // R10: Following pane — everyone whose decks land here, each linking to their channel
   const fstrip = el('div','cr-follow-strip');
   const fpill = (name, url, count, removeId) => {
@@ -3444,8 +3524,12 @@ function renderCreatorDecks(){
   };
   BUILTIN_CREATORS.forEach(b => fstrip.appendChild(fpill(b.name, b.url, all.filter(x => x.creator === b.name).length, null)));
   (S.addedCreators||[]).forEach(c => {
-    if(!/^UC[\w-]{22}$/.test(c.id||'')) return;
-    fstrip.appendChild(fpill(c.name || 'Creator', 'https://www.youtube.com/channel/' + c.id,
+    // R11.1: NEVER silently hide a followed channel — this exact guard ate every new add
+    // (YouTube RSS ids arrive without the UC prefix). Malformed id -> fall back to the handle.
+    const id = normChannelId(c.id);
+    const href = /^UC[\w-]{22}$/.test(id) ? 'https://www.youtube.com/channel/' + id
+      : (/^https?:\/\//i.test(c.handle||'') ? c.handle : 'https://www.youtube.com/' + String(c.handle||'').replace(/^\/+/,''));
+    fstrip.appendChild(fpill(c.name || 'Creator', href,
       (S.addedCreatorDecks||[]).filter(x => x.chId === c.id).length, c.id));
   });
   const fsec = el('div','cr-follow');
@@ -4034,6 +4118,7 @@ async function boot(){
   // R5-J: restore in-app added creators (rides in the previously-unused K.creators key)
   const cr = await sGet(K.creators);
   if(cr){ S.addedCreators = cr.channels || []; S.addedCreatorDecks = cr.decks || []; }
+  if(healCreatorIds()) persistCreators();   // R11.1: normalize UC-less ids saved by the buggy window
   // R5-I: device-local sync token (never in a URL), then pull-and-merge remote once at boot.
   // The pull is capped at 6s so a hung (not merely offline) relay can never stall first render.
   S.syncToken = (await sGet(K.synctoken)) || '';

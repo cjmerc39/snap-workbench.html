@@ -1414,5 +1414,86 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   assert(errors.length===0, 'R11-UI: no runtime errors during the UI suite'+(errors.length?' -> '+errors.join(' | '):''));
 
+  // ============ R11.1: the REAL vanishing-creator bug (UC-less RSS ids) + replayable cards + picker nav ============
+  // normChannelId: YouTube RSS <yt:channelId> omits the UC prefix (verified against Regis's live feed)
+  assert(w.eval('normChannelId("UCbt1SGMrWj5Q7TMXAfmTERQ")')==='UCbt1SGMrWj5Q7TMXAfmTERQ', 'R11.1: full UC id passes through');
+  assert(w.eval('normChannelId("bt1SGMrWj5Q7TMXAfmTERQ")')==='UCbt1SGMrWj5Q7TMXAfmTERQ', 'R11.1: bare 22-char RSS id gains its UC prefix');
+  assert(w.eval('normChannelId("garbage")')==='garbage' && w.eval('normChannelId("")')==='', 'R11.1: junk ids pass through unharmed');
+  // addCreator against REAL-shaped XML: yt:channelId WITHOUT UC, self-link WITH — must store the UC form
+  const regisXml = '<feed><link rel="self" href="https://www.youtube.com/feeds/videos.xml?channel_id=UCbt1SGMrWj5Q7TMXAfmTERQ"/>'+
+    '<id>yt:channel:bt1SGMrWj5Q7TMXAfmTERQ</id><yt:channelId>bt1SGMrWj5Q7TMXAfmTERQ</yt:channelId>'+
+    '<author><name>RegisKillbin</name></author>'+
+    '<entry><published>'+new Date().toISOString()+'</published><title>Deck video</title>'+
+    '<link rel="alternate" href="https://youtu.be/x"/>'+
+    '<media:description>Deck: https://snap.untapped.gg/en/decks/Hulk-AntMan-Wong</media:description></entry></feed>';
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async()=>({ok:true,text:async()=>'+JSON.stringify(regisXml)+',json:async()=>({})});'+
+    'S.addedCreators=[]; S.addedCreatorDecks=[]; await addCreator("youtube.com/@RegisKillbin"); window.fetch=of; })()');
+  assert(w.eval('S.addedCreators.length')===1 && w.eval('S.addedCreators[0].id')==='UCbt1SGMrWj5Q7TMXAfmTERQ',
+    'R11.1: addCreator stores the CANONICAL UC id from a real-shaped feed');
+  assert(w.eval('S.addedCreatorDecks.every(d=>d.chId==="UCbt1SGMrWj5Q7TMXAfmTERQ")'), 'R11.1: harvested decks carry the same canonical id');
+  // the pane must show the new creator (the old UC-guard silently hid every real add)
+  w.eval('renderCreatorDecks()'); await sleep(20);
+  let regisPill11 = [...d.querySelectorAll('#creatorlist .cr-fpill')].find(a=>/RegisKillbin/.test(a.textContent));
+  assert(regisPill11 && /channel\/UCbt1SGMrWj5Q7TMXAfmTERQ/.test(regisPill11.href), 'R11.1: freshly-added creator is VISIBLE in Following with a working channel link');
+  // healing: stored UC-less entries (saved by the buggy window, incl. synced copies) get normalized + deduped
+  w.eval('S.addedCreators=[{id:"bt1SGMrWj5Q7TMXAfmTERQ",name:"RegisKillbin",handle:"https://youtube.com/@RegisKillbin"},{id:"UCbt1SGMrWj5Q7TMXAfmTERQ",name:"RegisKillbin",handle:"x"}];'+
+    'S.addedCreatorDecks=[{chId:"bt1SGMrWj5Q7TMXAfmTERQ",name:"D1",url:"u1",cards:[]}]; window.__healed=healCreatorIds();');
+  assert(w.eval('window.__healed')===true, 'R11.1: healing reports changes');
+  assert(w.eval('S.addedCreators.length')===1 && w.eval('S.addedCreators[0].id')==='UCbt1SGMrWj5Q7TMXAfmTERQ', 'R11.1: heal dedupes the two id forms into one channel');
+  assert(w.eval('S.addedCreatorDecks[0].chId')==='UCbt1SGMrWj5Q7TMXAfmTERQ', 'R11.1: heal fixes deck chIds too');
+  // a malformed-id creator STILL shows (handle fallback) — never silently hidden again
+  w.eval('S.addedCreators=[{id:"weird",name:"Mystery Channel",handle:"https://youtube.com/@mystery"}]; S.addedCreatorDecks=[]; renderCreatorDecks();'); await sleep(20);
+  assert([...d.querySelectorAll('#creatorlist .cr-fpill')].some(a=>/Mystery Channel/.test(a.textContent)), 'R11.1: even a weird-id creator stays visible via its handle link');
+  w.eval('S.addedCreators=[]; S.addedCreatorDecks=[]; persistCreators(); flushSaves();');
+  // deck rows sort newest-first so a fresh add is seen without scrolling
+  w.eval('window.__oldCD=S.creatorDecks; S.creatorDecks=[{creator:"Old",published:"2026-07-01",ids:["Hulk"],url:"https://youtu.be/o"}];'+
+    'S.addedCreatorDecks=[{chId:"UCbt1SGMrWj5Q7TMXAfmTERQ",creator:"New",published:"2026-07-11",ids:["Hulk"],added:true,url:"https://youtu.be/n"}]; renderCreatorDecks();'); await sleep(20);
+  const crRows = [...d.querySelectorAll('#creatorlist .crow .cr-creator')].map(e=>e.textContent);
+  assert(crRows[0]==='New' && crRows[1]==='Old', 'R11.1: creator deck rows render newest-first ('+crRows.join(',')+')');
+  w.eval('S.creatorDecks=window.__oldCD; S.addedCreatorDecks=[]; renderCreatorDecks();'); await sleep(10);
+
+  // --- replayable cards ---
+  // the embedded snapshot predates these two cards — seed them with their LIVE cards.json wording
+  w.eval('S.byId["TechnoOrganicVirus"]=S.byId["TechnoOrganicVirus"]||{n:"Techno-Organic Virus",d:"TechnoOrganicVirus",c:2,p:0,a:"On Reveal: Infect your other cards here (replace their text). Copy this to your hand."};'+
+    'S.byId["ShadowlandsDaredevil"]=S.byId["ShadowlandsDaredevil"]||{n:"Shadowlands Daredevil",d:"ShadowlandsDaredevil",c:2,p:3,a:"On Reveal: Shuffle in 3 Demons. When you draw a card with 6 or more Power, +2 Power."};');
+  assert(w.eval('isReplayable("KittyPryde", {cards:[]})')===true, 'R11.1: Kitty Pryde (returns each turn) is replayable');
+  assert(w.eval('isReplayable("TechnoOrganicVirus", {cards:[]})')===true, 'R11.1: Techno-Organic Virus (copies itself) is replayable');
+  assert(w.eval('isReplayable("Hulk", {cards:[]})')===false, 'R11.1: Hulk is not replayable');
+  assert(w.eval('isReplayable("Demon", {cards:["ShadowlandsDaredevil"]})')===true, 'R11.1: Demon repeats when Shadowlands Daredevil (shuffle in 3) is in the deck');
+  assert(w.eval('isReplayable("Demon", {cards:["Hood"]})')===false, 'R11.1: a single-copy Demon producer does not make it repeatable');
+  assert(w.eval('isReplayable("Squirrel", {cards:["SquirrelGirl"]})')===false, 'R11.1: Squirrel stays single-placement');
+  // picker: Kitty can sit on several turns; a normal card still MOVES
+  w.eval('(function(){ S.decks.unshift({id:"r111pl",name:"Rep",cards:["KittyPryde","Hulk","AntMan","Wong"],updated:Date.now()}); S.activeId="r111pl"; })(); setTab("deck"); setDeckTab("planner"); renderPlanner(); openPlPicker(1);'); await sleep(20);
+  d.querySelector('#pl-pick-grid .mini[data-d="KittyPryde"]').click(); await sleep(20);
+  w.eval('S.plannerTurn=3; refreshPlPicker();'); await sleep(20);
+  d.querySelector('#pl-pick-grid .mini[data-d="KittyPryde"]').click(); await sleep(20);
+  assert(w.eval('currentLine(activeDeck())[0].indexOf("KittyPryde")>=0 && currentLine(activeDeck())[2].indexOf("KittyPryde")>=0',),
+    'R11.1: Kitty rides BOTH T1 and T3');
+  const repTag = d.querySelector('#pl-pick-grid .mini[data-d="KittyPryde"] .pl-tag.rep, #pl-pick-grid .pl-tag.rep');
+  w.eval('S.plannerTurn=5; refreshPlPicker();'); await sleep(20);
+  assert(d.querySelector('#pl-pick-grid .mini[data-d="KittyPryde"]')!==null && d.querySelector('#pl-pick-grid .pl-tag.rep')!==null,
+    'R11.1: on another turn Kitty wears the repeatable ↺ tag, not the greyed elsewhere state');
+  assert(d.querySelector('#pl-pick-grid .mini[data-d="KittyPryde"].elsewhere')===null, 'R11.1: repeatable card is never greyed out');
+  d.querySelector('#pl-pick-grid .mini[data-d="Hulk"]').click(); await sleep(20);
+  w.eval('S.plannerTurn=6; refreshPlPicker();'); await sleep(20);
+  d.querySelector('#pl-pick-grid .mini[data-d="Hulk"]').click(); await sleep(20);
+  assert(w.eval('currentLine(activeDeck())[4].indexOf("Hulk")<0 && currentLine(activeDeck())[5].indexOf("Hulk")>=0'),
+    'R11.1: a normal card still MOVES between turns (T5 -> T6)');
+  // draw math counts a replayed card once
+  assert(w.eval('cumDraws([["KittyPryde"],["KittyPryde"],["KittyPryde","Hulk"],[],[],[]]).join()')==='1,1,2,2,2,2',
+    'R11.1: cumulative draws count Kitty once no matter how often she replays');
+  assert(w.eval('lineFlags([["KittyPryde"],["KittyPryde"],["KittyPryde"],["KittyPryde"],["KittyPryde"],["KittyPryde"]],[0,0,0,0,0,0],activeDeck()).filter(f=>f.type==="draw").length')===0,
+    'R11.1: Kitty-every-turn raises no draw violations');
+  // picker ‹ › nav
+  w.eval('S.plannerTurn=1; refreshPlPicker();'); await sleep(10);
+  assert(d.querySelector('#pl-prev').disabled===true && d.querySelector('#pl-next').disabled===false, 'R11.1: prev disabled on T1');
+  d.querySelector('#pl-next').click(); await sleep(20);
+  assert(w.eval('S.plannerTurn')===2 && /Turn 2/.test(d.querySelector('#pl-picker-title').textContent), 'R11.1: › hops the sheet to T2 without closing');
+  w.eval('S.plannerTurn=6; refreshPlPicker();'); await sleep(10);
+  assert(d.querySelector('#pl-next').disabled===true, 'R11.1: next disabled on T6');
+  w.eval('closePlPicker(true); S.decks=S.decks.filter(function(x){return x.id!=="r111pl";}); S.activeId=null; renderAll(); setTab("cards");'); await sleep(20);
+
+  assert(errors.length===0, 'R11.1: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
+
   console.log('\nDONE. errors:', errors.length?errors:'none');
 })();
