@@ -3340,6 +3340,9 @@ function renderCreatorDecks(){
   }
   const httpOk = u => /^https?:\/\//i.test(u);   // defense-in-depth: only http(s) hrefs ever become links
   const linkBtn = (href, label) => { const a=document.createElement('a'); a.className='abtn'; a.href=href; a.target='_blank'; a.rel='noopener noreferrer'; a.textContent=label; return a; };
+  // R10.2: heal fossil ids (pre-vowel-fix compressed tokens like Agn5) via the same skeleton index,
+  // and show every strip in the app's default order: energy asc -> power asc -> name.
+  const healId = id => S.byId[id] ? id : (S.short[id] || id);
   all.forEach(cd => {
     const row = el('div','crow');
     const head = el('div','cr-head');
@@ -3348,17 +3351,19 @@ function renderCreatorDecks(){
     if(cd.added) head.appendChild(el('span','cr-added','Added'));
     if(cd.published) head.appendChild(el('span','cr-date', cd.published));
     row.appendChild(head);
-    if(cd.ids.length){
+    const healed = (cd.ids||[]).map(healId);
+    if(healed.length){
       const strip = el('div','cr-strip');
-      strip.innerHTML = cd.ids.map(id => miniHtml(getCard(id) || makeStub(id))).join('');
+      strip.innerHTML = healed.map(id => getCard(id) || makeStub(id)).sort(SORTS[0].fn).map(miniHtml).join('');
       row.appendChild(strip);
     }
     const acts = el('div','cr-acts');
     if(cd.ids.length){
       const saveB = el('button','abtn primary','Save a copy');
       saveB.onclick = () => {
-        const unknown = cd.ids.filter(id => !S.byId[id]); unknown.forEach(makeStub);
-        const dk = { id:uid(), name: cd.name || (cd.creator + ' deck'), cards: cd.ids.slice(0,12), updated: Date.now() };
+        const ids2 = healed.slice(0,12);
+        const unknown = ids2.filter(id => !S.byId[id]); unknown.forEach(makeStub);
+        const dk = { id:uid(), name: cd.name || (cd.creator + ' deck'), cards: ids2, updated: Date.now() };
         snapshotDeck(dk); S.decks.unshift(dk); S.activeId = dk.id; persistDecks(); renderAll(); setTab('deck');
         toast('Saved “' + dk.name + '”');
       };

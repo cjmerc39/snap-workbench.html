@@ -1318,6 +1318,13 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(regisPill && /channel\/UCbt1SGMr/.test(regisPill.href) && regisPill.querySelector('.cr-fx'), 'R10: added creator pill links to the channel and has an unfollow button');
   regisPill.querySelector('.cr-fx').click(); await sleep(20);
   assert(w.eval('S.addedCreators.length')===0, 'R10: unfollow from the pane removes the channel');
+  // R10.2: creator strips heal fossil compressed ids and render in default Energy order
+  w.eval('S.addedCreators=[{id:"UCbt1SGMrWj5Q7TMXAfmTERQ",name:"RegisKillbin",handle:"@RegisKillbin"}];'+
+    'S.addedCreatorDecks=[{chId:"UCbt1SGMrWj5Q7TMXAfmTERQ",creator:"RegisKillbin",video:"vid",url:"https://youtu.be/x",published:"2026-07-10",name:"t",ids:["Hulk","Armr5","AntMan"],added:true}]; renderCreatorDecks();'); await sleep(20);
+  const stripMinis = [...d.querySelectorAll('#creatorlist .cr-strip .mini')].map(m=>m.dataset.d);
+  assert(stripMinis.indexOf('Armor')>=0 && stripMinis.indexOf('Armr5')<0, 'R10.2: fossil id Armr5 heals to Armor in the strip ('+stripMinis.join(',')+')');
+  assert(stripMinis[0]==='AntMan' && stripMinis[stripMinis.length-1]==='Hulk', 'R10.2: creator strip sorts energy asc (AntMan first, Hulk last)');
+  w.eval('S.addedCreators=[]; S.addedCreatorDecks=[]; renderCreatorDecks();'); await sleep(10);
   w.eval('setTab("cards")'); await sleep(10);
 
   assert(errors.length===0, 'R9: no runtime errors during the meta/coach/branch suite'+(errors.length?' -> '+errors.join(' | '):''));

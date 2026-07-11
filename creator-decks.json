@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-10",
+  "updated": "2026-07-11",
   "decks": [
     {
       "creator": "Alexander Coccia",
@@ -404,7 +404,7 @@
         "GrandMaster",
         "Bullseye",
         "Daken",
-        "MthrAsknC",
+        "MotherAskani",
         "Quinjet",
         "MoonGirl",
         "MajesticWingbeat",
@@ -423,13 +423,13 @@
       "ids": [
         "Shuri",
         "Taskmaster",
-        "FllnOn9",
+        "FallenOne",
         "Magik",
         "LunaSnow",
         "StormHorseman",
         "FinFangFoom",
         "JimHammond",
-        "StrlrdMstrOfThSn16",
+        "StarlordMasterOfTheSun",
         "Juggernaut",
         "SymbioteSpiderMan",
         "ManSpider"
@@ -444,10 +444,10 @@
       "ids": [
         "CaptainCarter",
         "Brood",
-        "MthrAsknC",
+        "MotherAskani",
         "Stick",
         "Maverick",
-        "Agn5",
+        "Agony",
         "Prodigy",
         "HopeSummers",
         "GrandMaster",
@@ -472,7 +472,7 @@
         "Batroc",
         "SpiderManBrandNewDay",
         "Juggernaut",
-        "Isc4",
+        "Isca",
         "Nocturne",
         "MadameWeb"
       ]

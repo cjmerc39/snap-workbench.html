@@ -197,6 +197,9 @@ async function main(){
   const merged = [...map.values()]
     .sort((a, b) => (b.published || ``).localeCompare(a.published || ``))
     .slice(0, CAP);
+  // R10.2: heal fossil ids in kept entries (tokens decoded before a decoder fix, preserved by the merge)
+  const healIds = arr => (arr || []).map(id => table.KNOWN.has(id) ? id : (table.SHORT[id] || id));
+  merged.forEach(x => { if(x.ids && x.ids.length) x.ids = healIds(x.ids); });
   const today = new Date().toISOString().slice(0, 10);
 
   console.log(`fresh: ${fresh.length} | kept-from-prev (<${AGE_DAYS}d): ${keepPrev.length} | merged+deduped+capped: ${merged.length}`);
@@ -224,7 +227,7 @@ async function main(){
   for(const x of fresh.filter(x => x.ids && x.ids.length).concat(ledger)){
     if(!x || !x.published || (nowMs - Date.parse(x.published)) >= STATS_DAYS * DAY) continue;
     const k = dedupKey(x);
-    if(k && !lmap.has(k)) lmap.set(k, { creator: x.creator, published: x.published, ids: x.ids });
+    if(k && !lmap.has(k)) lmap.set(k, { creator: x.creator, published: x.published, ids: healIds(x.ids) });
   }
   const led = [...lmap.values()];
   const cardN = {}, pairN = {};
