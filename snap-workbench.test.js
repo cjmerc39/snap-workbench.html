@@ -1745,7 +1745,51 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     'R13-C: card query composes with the creator filter');
   w.eval('S.crFilter=null; S.crCardQ=""; S.creatorDecks=window.__oldCD4; renderCreatorDecks();'); await sleep(10);
 
-  assert(errors.length===0, 'R13: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
+  /* ============ R14: trending cards from the dated ledger ============ */
+  // Fixture: anchor = 07-10 (newest entry), 7-day cut = 07-03. Recent 6 decks, prior 10.
+  // Expected: Wong rises (3/6 vs 0, NEW), Hulk rises (4/6 vs 2/10), Mystique rises (2/6 vs 2/10);
+  // Odin + Psylocke cool (4/10 each, absent this week); IronMan flat (2/6 vs 4/10); AntMan r=1 ignored.
+  w.eval('window.__oldCS = S.creatorStats;'+
+    'S.creatorStats = { deckCount: 16, windowDays: 30, cards: {}, pairs: {}, ledger: ['+
+    '{published:"2026-07-10",ids:["Wong","Hulk"]},'+
+    '{published:"2026-07-09",ids:["Wong","Hulk","Mystique"]},'+
+    '{published:"2026-07-08",ids:["Wong","Hulk"]},'+
+    '{published:"2026-07-07",ids:["Hulk","Mystique"]},'+
+    '{published:"2026-07-06",ids:["AntMan","IronMan"]},'+
+    '{published:"2026-07-05",ids:["IronMan","KaZar"]},'+
+    '{published:"2026-06-30",ids:["Odin","IronMan"]},'+
+    '{published:"2026-06-29",ids:["Odin","IronMan"]},'+
+    '{published:"2026-06-28",ids:["Odin","IronMan"]},'+
+    '{published:"2026-06-27",ids:["Odin","IronMan"]},'+
+    '{published:"2026-06-26",ids:["Hulk","KaZar"]},'+
+    '{published:"2026-06-25",ids:["Hulk","KaZar"]},'+
+    '{published:"2026-06-24",ids:["Mystique","Psylocke"]},'+
+    '{published:"2026-06-23",ids:["Mystique","Psylocke"]},'+
+    '{published:"2026-06-22",ids:["Psylocke","KaZar"]},'+
+    '{published:"2026-06-21",ids:["Psylocke","KaZar"]}]};'+
+    'renderCreatorDecks();'); await sleep(20);
+  const tt = w.eval('trendingCards()');
+  assert(tt && tt.recN===6 && tt.prevN===10, 'R14: window split off the anchor date (6 recent / 10 prior)');
+  assert(tt.risers.length===3 && tt.risers[0].d==='Wong' && tt.risers[0].isNew===true, 'R14: Wong tops the risers and is flagged new');
+  assert(tt.risers[1].d==='Hulk' && tt.risers[1].isNew===false && tt.risers[2].d==='Mystique', 'R14: Hulk then Mystique follow, not new');
+  assert(!tt.risers.some(x=>x.d==='IronMan') && !tt.risers.some(x=>x.d==='AntMan'), 'R14: flat cards and single-deck blips do not trend');
+  assert(tt.coolers.some(x=>x.d==='Odin') && tt.coolers.some(x=>x.d==='Psylocke'), 'R14: absent-this-week staples cool off');
+  const tbox = d.querySelector('#creatorlist .trend-box');
+  assert(tbox!==null && tbox.querySelectorAll('.trend-row').length===3, 'R14: trending panel renders above the deck rows');
+  assert(tbox.querySelector('.trend-row').dataset.d==='Wong' && tbox.querySelector('.trend-row .trend-new')!==null, 'R14: top row is Wong with the new badge');
+  assert(/in 3 of 6/.test(tbox.querySelector('.trend-chip').textContent), 'R14: riser chip states its evidence (3 of 6 decks)');
+  assert(/Cooling off:/.test(tbox.querySelector('.trend-cool').textContent) && /Odin/.test(tbox.querySelector('.trend-cool').textContent), 'R14: cooling line names the fading staples');
+  tbox.querySelector('.trend-row[data-d="Wong"]').click(); await sleep(20);
+  assert(d.querySelector('#modalwrap').classList.contains('on') && d.querySelector('#modal .sname').textContent==='Wong', 'R14: tapping a trend row opens the card sheet');
+  w.eval('closeModal()'); await sleep(10);
+  // thin/absent data hides the panel entirely
+  w.eval('S.creatorStats.ledger = S.creatorStats.ledger.slice(0,5); renderCreatorDecks();'); await sleep(20);
+  assert(w.eval('trendingCards()')===null && d.querySelector('#creatorlist .trend-box')===null, 'R14: a thin ledger renders no panel');
+  w.eval('S.creatorStats = { deckCount: 5, windowDays: 30, cards: {}, pairs: {} }; renderCreatorDecks();'); await sleep(20);
+  assert(d.querySelector('#creatorlist .trend-box')===null, 'R14: pre-R14 stats shape (no ledger) renders no panel');
+  w.eval('S.creatorStats = window.__oldCS; renderCreatorDecks();'); await sleep(10);
+
+  assert(errors.length===0, 'R14: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
 
   console.log('\nDONE. errors:', errors.length?errors:'none');
 })();

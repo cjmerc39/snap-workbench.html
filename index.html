@@ -924,6 +924,17 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 #loclist{margin-top:18px;}
 #loc-q, #cr-cardq{width:100%; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-radius:12px;
   color:var(--text); font-size:13px; padding:11px 12px; margin:8px 0 10px; min-height:44px;}
+/* R14: trending panel (Saved > Creator decks) */
+.trend-box{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:12px; padding:10px 12px; margin:0 0 12px;}
+.trend-box .syn-sec{margin:0 0 6px;}
+.trend-box .syn-sec .cs-n{display:block; text-transform:none; letter-spacing:0; font-weight:600; font-size:10.5px; color:var(--faint); margin-top:2px;}
+.trend-row{display:flex; align-items:center; gap:9px; padding:6px 0; cursor:pointer;}
+.trend-row + .trend-row{border-top:1px solid rgba(255,255,255,.05);}
+.trend-row:active{background:rgba(255,255,255,.04);}
+.trend-name{flex:1 1 auto; min-width:0; font-size:12.5px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.trend-new{font-size:9px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--iris-ink); background:var(--iris); border-radius:5px; padding:2px 5px; flex-shrink:0;}
+.trend-chip{font-size:10.5px; font-weight:800; color:var(--ok); white-space:nowrap; flex-shrink:0;}
+.trend-cool{font-size:11px; color:var(--faint); margin-top:8px;}
 /* R13: creator card search — the searched card glows, its deckmates step back */
 .cr-search{margin:2px 0 8px;}
 .cr-search .odds-hint{margin:0 0 2px;}
@@ -2511,6 +2522,51 @@ function creatorPairEvidence(cards){
   }
   return rows.sort((x,y) => y.n - x.n).slice(0, 4);
 }
+/* R14: week-over-week movement in the creator field. Shares (fraction of the window's
+   decks playing a card), not raw counts, so a slow harvest week doesn't read as
+   "everything is falling". Anchor = newest ledger deck, not today — a stalled
+   harvester freezes the picture instead of skewing it. */
+function trendingCards(){
+  const st = S.creatorStats;
+  const heal = id => S.byId[id] ? id : (S.short[id] || id);
+  const entries = ((st && st.ledger) || [])
+    .map(e => ({ at: Date.parse(e.published || ''), ids: (e.ids || []).map(heal) }))
+    .filter(e => !isNaN(e.at) && e.ids.length);
+  if(entries.length < 10) return null;                       // too thin to call anything a trend
+  const anchor = Math.max(...entries.map(e => e.at));
+  const cut = anchor - 7 * 86400000;
+  const rec = entries.filter(e => e.at > cut), prev = entries.filter(e => e.at <= cut);
+  if(rec.length < 4 || prev.length < 6) return null;         // need both sides of the fence
+  const count = list => { const m = {}; list.forEach(e => new Set(e.ids).forEach(id => m[id] = (m[id] || 0) + 1)); return m; };
+  const rN = count(rec), pN = count(prev);
+  const risers = [], coolers = [];
+  new Set([...Object.keys(rN), ...Object.keys(pN)]).forEach(id => {
+    if(!getCard(id)) return;                                  // unknown/fossil ids never trend
+    const r = rN[id] || 0, p = pN[id] || 0;
+    const score = r / rec.length - p / prev.length;
+    if(r >= 2 && score > 0.02) risers.push({ d: id, r, p, score, isNew: p === 0 });
+    else if(p >= 3 && r === 0 && p / prev.length >= 0.1) coolers.push({ d: id, p, score });
+  });
+  risers.sort((a, b) => b.score - a.score || b.r - a.r);
+  coolers.sort((a, b) => a.score - b.score);
+  if(!risers.length && !coolers.length) return null;
+  return { risers: risers.slice(0, 6), coolers: coolers.slice(0, 3), recN: rec.length, prevN: prev.length };
+}
+function renderTrending(){
+  const t = trendingCards(); if(!t) return null;
+  const box = el('div', 'trend-box');
+  box.innerHTML =
+    '<div class="syn-sec">Trending this week <span class="cs-n">' + t.recN + ' new decks vs ' + t.prevN + ' before</span></div>' +
+    t.risers.map(x =>
+      '<div class="trend-row" data-d="' + esc(x.d) + '">' + synThumb(x.d) +
+      '<span class="trend-name">' + esc(getCard(x.d).n) + '</span>' +
+      (x.isNew ? '<span class="trend-new">new</span>' : '') +
+      '<span class="trend-chip">&#8593; in ' + x.r + ' of ' + t.recN + '</span></div>').join('') +
+    (t.coolers.length ? '<div class="trend-cool">Cooling off: ' +
+      t.coolers.map(x => esc((getCard(x.d) || { n: x.d }).n)).join(', ') + '</div>' : '');
+  box.querySelectorAll('.trend-row').forEach(r => r.onclick = () => openCardSheet(r.dataset.d));
+  return box;
+}
 /* R11: how often two cards ride the same creator deck in the 30-day ledger */
 function fieldPairN(a, b){
   const st = S.creatorStats;
@@ -3825,6 +3881,9 @@ function renderCreatorDecks(){
   fsec.appendChild(el('div','syn-sec', S.crFilter ? 'Following · showing ' + S.crFilter + ' — tap the pill again for all' : 'Following · tap a name to filter'));
   fsec.appendChild(fstrip);
   wrap.appendChild(fsec);
+  // R14: field-level trending sits above the deck rows — it reads the 30-day ledger,
+  // not the display decks, so it renders even while the 14-day window is empty.
+  const tb = renderTrending(); if(tb) wrap.appendChild(tb);
   if(!all.length){
     wrap.appendChild(el('div','warnbox','No creator decks yet — these refresh daily. Tap “+ Add creator” to follow any YouTube channel.'));
     return;
@@ -4445,7 +4504,9 @@ async function loadCreatorStats(){
     const j = await r.json();
     if(!j || typeof j.cards !== 'object' || typeof j.pairs !== 'object') return false;
     S.creatorStats = { deckCount: +j.deckCount || 0, windowDays: +j.windowDays || 30,
-      cards: j.cards || {}, pairs: j.pairs || {} };
+      cards: j.cards || {}, pairs: j.pairs || {},
+      // R14: keep the dated per-deck ledger — trending needs a time axis, not just totals
+      ledger: (Array.isArray(j.ledger) ? j.ledger : []).filter(e => e && e.published && Array.isArray(e.ids)) };
     return true;
   }catch(e){ return false; }
 }
