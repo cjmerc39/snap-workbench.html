@@ -1302,14 +1302,26 @@ async function sPut(key, str){
   if(HAS_CLAUDE_STORE){ await window.storage.set(key, str); return; }
   if(HAS_LOCAL_STORE){ localStorage.setItem(key, str); return; }
 }
-const _saveTimers = {};
+/* R11: the debounce keeps rapid card-toggles from hammering storage, but the pending
+   payload must survive the app being backgrounded/killed inside the 400ms window —
+   iOS freezes timers on hide and never thaws a killed PWA, so an un-flushed timer IS
+   data loss (this exact path ate freshly-added creators). flushSaves() writes every
+   pending key synchronously and runs on visibilitychange->hidden and pagehide. */
+const _saveTimers = {}, _savePending = {};
+function _flushKey(key){
+  const p = _savePending[key]; if(!p) return;
+  delete _savePending[key]; clearTimeout(_saveTimers[key]); delete _saveTimers[key];
+  // sPut is async but its localStorage write happens synchronously on call — that is
+  // what makes a pagehide flush reliable. The promise only matters for errors/done.
+  const r = sPut(key, JSON.stringify(p.obj));
+  if(r && r.then) r.then(() => { if(p.done) p.done(); }, e => console.error('save failed', key, e));
+}
+function flushSaves(){ Object.keys(_savePending).forEach(_flushKey); }
 function sSet(key, obj, done){
   if(!S.storageOK) return;
   clearTimeout(_saveTimers[key]);
-  _saveTimers[key] = setTimeout(async () => {
-    try{ await sPut(key, JSON.stringify(obj)); if(done) done(); }
-    catch(e){ console.error('save failed', key, e); }
-  }, 400);
+  _savePending[key] = { obj, done };
+  _saveTimers[key] = setTimeout(() => _flushKey(key), 400);
 }
 /* R5: reflect the debounced deck-save in every .savestate chip (Saving… -> Saved ✓). */
 function showSaveState(s){
@@ -1365,16 +1377,33 @@ function applyStateBlob(b){
 }
 let _syncT;
 function scheduleSync(){ if(!S.syncToken || !SYNC_URL) return; clearTimeout(_syncT); _syncT=setTimeout(syncPush, 2000); }
-// R10.1: iOS freezes timers the instant the app backgrounds — flush any pending push before we lose the tab
+// R10.1/R11: iOS freezes timers the instant the app backgrounds — flush pending LOCAL
+// saves first (they are the source of truth; the write is synchronous and reliable),
+// then fire any pending push as best-effort. Local-first means a failed dying-breath
+// push costs nothing: the next boot pulls, merges and re-pushes the saved state.
 document.addEventListener('visibilitychange', () => {
-  if(document.visibilityState === 'hidden' && _syncT){ clearTimeout(_syncT); _syncT = null; syncPush(); }
+  if(document.visibilityState === 'hidden'){
+    flushSaves();
+    if(_syncT){ clearTimeout(_syncT); _syncT = null; syncPush(true); }
+  }
 });
-async function syncPush(){
+window.addEventListener('pagehide', flushSaves);
+/* R11: keepalive uploads over 64KiB THROW in Chromium/WebKit (verified empirically —
+   TypeError at exactly 65537 bytes), and the catch below would masquerade that as
+   'offline' forever. So: normal in-app pushes never use keepalive (no need — the page
+   is alive), and the hide-flush uses it only when the body is safely under the quota. */
+function pushFetchOpts(body, flush){
+  const opts = { method:'PUT',
+    headers:{ 'content-type':'application/json', 'authorization':'Bearer '+S.syncToken },
+    body };
+  const bytes = (typeof Blob !== 'undefined') ? new Blob([body]).size : body.length;
+  if(flush && bytes < 57344) opts.keepalive = true;
+  return opts;
+}
+async function syncPush(flush){
   if(!S.syncToken || !SYNC_URL) return;
   try{
-    const r = await fetch(SYNC_URL, { method:'PUT',
-      headers:{ 'content-type':'application/json', 'authorization':'Bearer '+S.syncToken },
-      body: JSON.stringify(pushableBlob()), keepalive:true });
+    const r = await fetch(SYNC_URL, pushFetchOpts(JSON.stringify(pushableBlob()), flush === true));
     S.syncState = r.ok ? 'ok' : 'error'; if(r.ok) S.syncLast=Date.now();
   }catch(e){ S.syncState='offline'; }
   updateSyncStatus();
@@ -3530,7 +3559,7 @@ $('#btn-settings').onclick = () => {
   $('#sync-save').onclick = () => {
     const val = ($('#sync-token').value || '').trim();
     S.syncToken = val; sPut(K.synctoken, JSON.stringify(val)); S.syncState = 'idle';
-    if(val){ updateSyncStatus(); toast('Sync token saved'); syncPull().then(syncPush); }
+    if(val){ updateSyncStatus(); toast('Sync token saved'); syncPull().then(() => syncPush()); }
     else { updateSyncStatus(); toast('Token cleared'); }
   };
   $('#sync-forget').onclick = () => {

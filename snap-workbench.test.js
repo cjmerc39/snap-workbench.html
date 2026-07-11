@@ -1329,5 +1329,41 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   assert(errors.length===0, 'R9: no runtime errors during the meta/coach/branch suite'+(errors.length?' -> '+errors.join(' | '):''));
 
+  // ============ R11: the vanishing-creator fix — flush pending saves on hide/pagehide ============
+  // (empirically verified: a creator added then backgrounded within the 400ms sSet debounce
+  //  was never written; and fetch keepalive bodies >64KiB throw in Chromium/WebKit)
+  // 1) the debounce is intact (no write yet) AND flushSaves lands it without waiting
+  w.eval('localStorage.removeItem("snapwb-creators"); S.addedCreators=[{id:"UCflush1",name:"Flush Test"}]; S.addedCreatorDecks=[]; persistCreators();');
+  assert(!/UCflush1/.test(w.localStorage.getItem('snapwb-creators')||''), 'R11: sSet still debounces (no write inside the 400ms window)');
+  w.eval('flushSaves()');
+  assert(/UCflush1/.test(w.localStorage.getItem('snapwb-creators')||''), 'R11: flushSaves persists the pending creator immediately');
+  // 2) the flushed timer must not double-fire later (pending entry consumed)
+  w.eval('localStorage.setItem("snapwb-creators", JSON.stringify({channels:[{id:"UCcanary"}],decks:[]}))');
+  await sleep(500);
+  assert(/UCcanary/.test(w.localStorage.getItem('snapwb-creators')||''), 'R11: a flushed save does not re-fire when its old timer lapses');
+  // 3) pagehide flushes pending saves (the quick-exit path)
+  w.eval('S.addedCreators=[{id:"UCpagehide",name:"PH"}]; persistCreators(); window.dispatchEvent(new Event("pagehide"));');
+  assert(/UCpagehide/.test(w.localStorage.getItem('snapwb-creators')||''), 'R11: pagehide flushes the pending creator save');
+  // 4) visibilitychange->hidden flushes too (iOS backgrounding path)
+  w.eval('S.addedCreators=[{id:"UChidden",name:"VH"}]; persistCreators();'+
+    'Object.defineProperty(document,"visibilityState",{configurable:true,get:function(){return "hidden";}});'+
+    'document.dispatchEvent(new Event("visibilitychange"));'+
+    'delete document.visibilityState;');
+  assert(/UChidden/.test(w.localStorage.getItem('snapwb-creators')||''), 'R11: visibilitychange->hidden flushes the pending creator save');
+  // 5) the done callback still fires after a manual flush (Saved ✓ chip path)
+  w.eval('window.__r11done=0; sSet("snapwb-prefs", S.prefs, function(){ window.__r11done=1; }); flushSaves();');
+  await sleep(30);
+  assert(w.eval('window.__r11done')===1, 'R11: sSet done callback fires on flushed saves');
+  // 6) keepalive is only used on hide-flush pushes AND only under the 64KiB quota
+  assert(w.eval('pushFetchOpts("x".repeat(1000), true).keepalive')===true, 'R11: small hide-flush push uses keepalive');
+  assert(w.eval('pushFetchOpts("x".repeat(70000), true).keepalive')===undefined, 'R11: oversized hide-flush push drops keepalive (>64KiB would THROW)');
+  assert(w.eval('pushFetchOpts("x".repeat(1000), false).keepalive')===undefined, 'R11: normal in-app push never needs keepalive');
+  assert(w.eval('pushFetchOpts("x".repeat(1000), true).method')==='PUT' && /Bearer/.test(w.eval('pushFetchOpts("x".repeat(10), true).headers.authorization')), 'R11: push opts keep method + auth header intact');
+  // 7) byte-accurate quota check: multi-byte characters count as bytes, not string length
+  assert(w.eval('pushFetchOpts("\\u00e9".repeat(40000), true).keepalive')===undefined, 'R11: quota measured in BYTES (40k two-byte chars = 80KB, keepalive dropped)');
+  w.eval('S.addedCreators=[]; S.addedCreatorDecks=[]; persistCreators(); flushSaves();');
+
+  assert(errors.length===0, 'R11: no runtime errors during the flush suite'+(errors.length?' -> '+errors.join(' | '):''));
+
   console.log('\nDONE. errors:', errors.length?errors:'none');
 })();
