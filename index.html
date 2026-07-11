@@ -924,6 +924,12 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 #loclist{margin-top:18px;}
 #loc-q, #cr-cardq{width:100%; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-radius:12px;
   color:var(--text); font-size:13px; padding:11px 12px; margin:8px 0 10px; min-height:44px;}
+/* R15: line-consistency readout */
+.lp-sim{display:flex; flex-direction:column; gap:4px; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair);
+  border-radius:10px; padding:9px 11px; margin-top:10px; font-size:11.5px; color:var(--dim); line-height:1.45;}
+.lp-sim-lab{font-family:var(--head); font-weight:800; letter-spacing:.3px; text-transform:uppercase; font-size:10px; color:var(--iris-soft);}
+.lp-sim-txt b{color:var(--text);}
+.lp-sim-note{font-size:10.5px; color:var(--faint);}
 /* R14: trending panel (Saved > Creator decks) */
 .trend-box{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:12px; padding:10px 12px; margin:0 0 12px;}
 .trend-box .syn-sec{margin:0 0 6px;}
@@ -2989,6 +2995,79 @@ function lineFlags(line, adj, d, costs){
   }
   return out;
 }
+/* ===== R15: EXACT line-consistency odds ==========================================
+   How often does the plan actually come together? Every real deck card in the line
+   must be among the first 3+t cards seen by its (earliest) turn. Over a uniform
+   shuffle that's a sequential hypergeometric chain — exact and deterministic, so
+   the numbers never flicker between renders:
+     P = ∏ over turns  C(seen_t − placedEarlier, c_t) / C(12 − placedEarlier, c_t)
+   Tokens are created (never drawn) and replayed cards count once — cumDraws rules.
+   The model assumes exactly one draw per turn; extra-draw effects only raise these. */
+function assembleOdds(d, lo, extra){
+  const turns = normLine(lo && lo.turns);
+  const inDeck = new Set((d && d.cards) || []);
+  const first = {};                                   // id -> earliest turn it must be drawn by
+  for(let t=1; t<=6; t++) (turns[t-1] || []).forEach(id => {
+    if(!inDeck.has(id) || S.tokens[id]) return;
+    if(!first[id]) first[id] = t;
+  });
+  if(extra && inDeck.has(extra.id))                   // branch math: "…AND ifNot drawn by byTurn"
+    first[extra.id] = Math.min(first[extra.id] || 7, Math.min(6, Math.max(1, extra.turn)));
+  const groups = [0,0,0,0,0,0];
+  let any = false;
+  for(const id in first){ groups[first[id]-1]++; any = true; }
+  if(!any) return null;
+  let placed = 0, p = 1;
+  const perTurn = [], cond = [];
+  for(let t=1; t<=6; t++){
+    const c = groups[t-1]; let step = 1;
+    if(c){ step = nCk(DRAWN[t] - placed, c) / nCk(12 - placed, c); placed += c; p *= step; }
+    perTurn[t-1] = p; cond[t-1] = step;
+  }
+  return { p, perTurn, cond, groups };
+}
+/* Branch-aware odds of ending the game on a COMPLETED line, following the Plan B policy:
+   play the active line if `ifNot` shows by its deadline, else pivot to the fallback.
+   P = P(A ∧ drawn) + P(B) − P(B ∧ drawn) — all three exact via the same chain. */
+function branchAssembleOdds(d, active, lines){
+  const br = active && active.branch;
+  if(!br || !br.ifNot || !br.toLineId) return null;
+  if(((d && d.cards) || []).indexOf(br.ifNot) < 0) return null;
+  const tgt = (lines || getLines(d)).find(l => l.id === br.toLineId);
+  if(!tgt) return null;
+  const A = assembleOdds(d, active), B = assembleOdds(d, tgt);
+  if(!A || !B) return null;
+  const ex = { id: br.ifNot, turn: br.byTurn };
+  const aD = assembleOdds(d, active, ex), bD = assembleOdds(d, tgt, ex);
+  const p = (aD ? aD.p : 0) + B.p - (bD ? bD.p : 0);
+  return { p: Math.max(0, Math.min(1, p)), pivot: 1 - DRAWN[br.byTurn] / 12 };
+}
+const DRAW_FX_RX = /draws? (you )?(a|an|one|two|three|\d+) card/i;
+/* The human framing — one compact box, milestones instead of per-slot doom (R9.5).
+   Only meaningful on a full 12: the chain's denominators are the 12-card shuffle. */
+function simSummaryHtml(d, active, lines, full){
+  if(((d && d.cards) || []).length !== 12) return '';
+  const A = assembleOdds(d, active);
+  if(!A) return '';
+  const pct = p => p >= 0.995 ? '99%+' : p >= 0.01 ? Math.round(p * 100) + '%' : '<1%';
+  const hasEarly = A.groups[0] + A.groups[1] + A.groups[2] > 0;
+  const hasLate  = A.groups[3] + A.groups[4] + A.groups[5] > 0;
+  const split = hasEarly && hasLate;
+  let chokeT = 0, chokeC = 1;
+  for(let t=1; t<=6; t++) if(A.groups[t-1] && A.cond[t-1] < chokeC){ chokeC = A.cond[t-1]; chokeT = t; }
+  const B = branchAssembleOdds(d, active, lines);
+  return '<div class="lp-sim"><span class="lp-sim-lab">Consistency</span><span class="lp-sim-txt">' +
+    (split
+      ? 'Draws land for T1–3 in <b>' + pct(A.perTurn[2]) + '</b> of games · the full script in <b>' + pct(A.p) + '</b>'
+      : 'Comes together as written in <b>' + pct(A.p) + '</b> of games') +
+    (full && chokeT && chokeC < 0.8 ? ' · toughest draw: <b title="Needs ' + A.groups[chokeT-1] + ' specific card' + (A.groups[chokeT-1] > 1 ? 's' : '') + ' drawn by then">T' + chokeT + '</b>' : '') +
+    '</span>' +
+    (B ? '<span class="lp-sim-txt">With the Plan B pivot, <b>' + pct(B.p) + '</b> of games end on a completed line (you’d pivot in ~' + Math.round(B.pivot * 100) + '%).</span>' : '') +
+    (A.p < 0.05 ? '<span class="lp-sim-note">These are the odds of the <i>perfect</i> game — a full script is a ceiling, not a requirement.</span>' : '') +
+    (full && ((d && d.cards) || []).some(id => DRAW_FX_RX.test((getCard(id) || {}).a || ''))
+      ? '<span class="lp-sim-note">Extra-draw cards in this deck push the real odds above these floor numbers.</span>' : '') +
+    '</div>';
+}
 /* R11.1: cards you can legitimately play on MORE than one turn — Kitty returns to hand every
    turn, the Virus copies itself, and shuffle-in-multiples tokens (3 Demons) repeat too.
    Detected from ability text so future cards with these wordings work without a code change. */
@@ -3190,6 +3269,7 @@ function renderPlanner(){
     managerHtml +
     '<div class="pl-slots">' + slotHtml.join('') + '</div>' +
     hint + flagsHtml +
+    simSummaryHtml(d, active, lines, true) +   // R15: exact assemble odds, full readout
     '<div class="pl-actions"><button class="abtn primary" id="pl-auto">Auto-sketch</button><button class="abtn danger" id="pl-clear">Clear line</button></div>';
 
   const bWrap = box.querySelector('.pl-branch:not(.info)');
@@ -3576,6 +3656,7 @@ function renderLinePlan(){
   box.innerHTML = '<div class="lp-card">' + segHtml +
     '<div class="lp-head"><span class="lp-name">' + esc(active.name || 'Line') + '</span>' + confChip + '</div>' +
     (rows.length ? rows.join('') : '<div class="odds-hint">This line is empty — switch or plan it in Play line.</div>') +
+    simSummaryHtml(d, active, lines, false) +   // R15: compact assemble odds on the showcase
     branchPill +
     '</div>';
   box.querySelectorAll('.lp-seg button').forEach(b => {

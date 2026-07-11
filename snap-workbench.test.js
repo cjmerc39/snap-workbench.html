@@ -1789,7 +1789,47 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.querySelector('#creatorlist .trend-box')===null, 'R14: pre-R14 stats shape (no ledger) renders no panel');
   w.eval('S.creatorStats = window.__oldCS; renderCreatorDecks();'); await sleep(10);
 
-  assert(errors.length===0, 'R14: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
+  /* ============ R15: exact line-consistency odds ============ */
+  // Hand-computed truths over a 12-card shuffle (seen by turn t = 3+t):
+  //   one card @T3 -> 6/12 = .5 ; A@T1,B@T2 -> (4/12)(4/11) = 4/33 ; five @T1 -> C(4,5)=0
+  //   branch A{Wong@3} else B{Hulk@3} -> .5 + .5 - C(6,2)/C(12,2) = 1 - 15/66 = 51/66
+  w.eval('S.decks.unshift({id:"r15",name:"Sim",cards:["Wong","Hulk","AntMan","Odin","Mystique","Psylocke","IronMan","KaZar","Ironheart","Sunspot","Wolfsbane","WhiteTiger"],updated:Date.now()}); S.activeId="r15"; renderAll();'); await sleep(20);
+  const near = (x, v) => Math.abs(x - v) < 1e-9;
+  w.eval('(function(){ const d=activeDeck(); mutateActiveLine(d, function(lo){ lo.turns=[[],[],["Wong"],[],[],[]]; }); })()');
+  assert(near(w.eval('assembleOdds(activeDeck(), activeLine(activeDeck())).p'), 0.5), 'R15: one card by T3 = 6/12 exactly');
+  w.eval('(function(){ const d=activeDeck(); mutateActiveLine(d, function(lo){ lo.turns=[["Wong"],["Hulk"],[],[],[],[]]; }); })()');
+  assert(near(w.eval('assembleOdds(activeDeck(), activeLine(activeDeck())).p'), 4/33), 'R15: chained turns multiply conditionally (4/33)');
+  w.eval('(function(){ const d=activeDeck(); mutateActiveLine(d, function(lo){ lo.turns=[["Wong","Hulk","AntMan","Odin","Mystique"],[],[],[],[],[]]; }); })()');
+  assert(w.eval('assembleOdds(activeDeck(), activeLine(activeDeck())).p')===0, 'R15: five cards by T1 is impossible (0)');
+  w.eval('(function(){ const d=activeDeck(); mutateActiveLine(d, function(lo){ lo.turns=[[],["Wong"],[],["Wong"],[],[]]; }); })()');
+  assert(near(w.eval('assembleOdds(activeDeck(), activeLine(activeDeck())).p'), 5/12), 'R15: a replayed card counts once, at its earliest turn');
+  w.eval('(function(){ const d=activeDeck(); mutateActiveLine(d, function(lo){ lo.turns=[[],[],["Wong","NotACard2026"],[],[],[]]; }); })()');
+  assert(near(w.eval('assembleOdds(activeDeck(), activeLine(activeDeck())).p'), 0.5), 'R15: ids not in the 12 are ignored by the math');
+  // branch policy odds
+  w.eval('(function(){ const d=activeDeck(); materializeLines(d);'+
+    'd.lines=[{id:"LA",name:"A",turns:[[],[],["Wong"],[],[],[]],adj:[0,0,0,0,0,0],branch:{ifNot:"Wong",byTurn:3,toLineId:"LB"}},'+
+    '{id:"LB",name:"B",turns:[[],[],["Hulk"],[],[],[]],adj:[0,0,0,0,0,0]}];'+
+    'd.activeLineId="LA"; d.line=d.lines[0].turns; })()');
+  const bo = w.eval('branchAssembleOdds(activeDeck(), activeLine(activeDeck()), getLines(activeDeck()))');
+  assert(near(bo.p, 51/66) && near(bo.pivot, 0.5), 'R15: Plan B policy odds exact (51/66, pivot 50%)');
+  // UI: full readout in the planner, compact on the showcase, both with the branch line
+  w.eval('setTab("deck"); setDeckTab("planner"); renderPlanner();'); await sleep(20);
+  const simP = d.querySelector('#planner .lp-sim');
+  assert(simP!==null && /Consistency/.test(simP.textContent) && /%/.test(simP.textContent), 'R15: planner shows the consistency box');
+  assert(/Plan B pivot/.test(simP.textContent) && /pivot in ~50%/.test(simP.textContent), 'R15: planner box includes branch-aware odds');
+  w.eval('setDeckTab("overview"); renderLinePlan();'); await sleep(20);
+  const simR = d.querySelector('#lineplan .lp-sim');
+  assert(simR!==null && /Comes together as written in/.test(simR.textContent), 'R15: showcase read view carries the compact readout');
+  // milestone split when the line spans early + late game
+  w.eval('(function(){ const d=activeDeck(); mutateActiveLine(d, function(lo){ lo.turns=[[],["Wong"],[],[],["Hulk"],[]]; delete lo.branch; }); })(); renderLinePlan();'); await sleep(20);
+  assert(/T1–3/.test(d.querySelector('#lineplan .lp-sim').textContent) && /full script/.test(d.querySelector('#lineplan .lp-sim').textContent),
+    'R15: early/late lines split into T1–3 + full-script milestones');
+  // not a full 12 -> no consistency claims
+  w.eval('(function(){ const d=activeDeck(); d.cards=d.cards.slice(0,8); })(); renderPlanner(); renderLinePlan();'); await sleep(20);
+  assert(d.querySelector('#planner .lp-sim')===null && d.querySelector('#lineplan .lp-sim')===null, 'R15: partial decks show no consistency box');
+  w.eval('S.decks=S.decks.filter(function(x){return x.id!=="r15";}); S.activeId=null; renderAll(); setTab("cards");'); await sleep(10);
+
+  assert(errors.length===0, 'R15: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
 
   console.log('\nDONE. errors:', errors.length?errors:'none');
 })();
