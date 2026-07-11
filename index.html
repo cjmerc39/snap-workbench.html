@@ -1349,8 +1349,12 @@ function mergeState(local, remote){
   const prefs = (remote.updatedAt||0) > (local.updatedAt||0)
       ? Object.assign({}, local.prefs, remote.prefs) : Object.assign({}, remote.prefs, local.prefs);
   const activeId = decks.some(d => d.id===local.activeId) ? local.activeId : (remote.activeId || (decks[0] && decks[0].id) || null);
+  // R10.1 fix: creator decks must UNION like everything else — remote-wins here wiped freshly-added
+  // channels' decks whenever the pull arrived before the debounced push escaped the phone.
+  const cdKey = x => (x.chId||'') + '|' + (x.url||'') + '|' + (x.name||'');
+  const cdMap = {}; [...(remote.creatorDecksCache||[]), ...(local.creatorDecksCache||[])].forEach(x => { if(x) cdMap[cdKey(x)] = x; });
   return { decks, activeId, owned:[...owned], creators:Object.values(crById),
-           creatorDecksCache: remote.creatorDecksCache || local.creatorDecksCache || [], prefs };
+           creatorDecksCache: Object.values(cdMap), prefs };
 }
 function applyStateBlob(b){
   S.decks=b.decks||[]; S.activeId=b.activeId; S.owned=new Set(b.owned||[]);
@@ -1361,12 +1365,16 @@ function applyStateBlob(b){
 }
 let _syncT;
 function scheduleSync(){ if(!S.syncToken || !SYNC_URL) return; clearTimeout(_syncT); _syncT=setTimeout(syncPush, 2000); }
+// R10.1: iOS freezes timers the instant the app backgrounds — flush any pending push before we lose the tab
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'hidden' && _syncT){ clearTimeout(_syncT); _syncT = null; syncPush(); }
+});
 async function syncPush(){
   if(!S.syncToken || !SYNC_URL) return;
   try{
     const r = await fetch(SYNC_URL, { method:'PUT',
       headers:{ 'content-type':'application/json', 'authorization':'Bearer '+S.syncToken },
-      body: JSON.stringify(pushableBlob()) });
+      body: JSON.stringify(pushableBlob()), keepalive:true });
     S.syncState = r.ok ? 'ok' : 'error'; if(r.ok) S.syncLast=Date.now();
   }catch(e){ S.syncState='offline'; }
   updateSyncStatus();
@@ -1623,6 +1631,8 @@ async function addCreator(url){
   // R8: failures land in the modal (#cr-msg) so they don't vanish like a toast; each failure mode gets its own words
   const say = m => { const box = $('#cr-msg'); if(box){ box.textContent = m; box.style.display='block'; } else toast(m); };
   if(!YT_URL) return say('Add-creator needs the relay configured.');
+  url = String(url||'').trim();
+  if(/^(www\.)?(m\.)?youtube\.com\//i.test(url)) url = 'https://' + url;   // R10.1: forgive a missing https://
   let xml;
   try{
     const r = await fetch(YT_URL + '?url=' + encodeURIComponent(url), {cache:'no-store'});   // R10.1: the relay's max-age header let phones replay stale (pre-fix) answers for an hour

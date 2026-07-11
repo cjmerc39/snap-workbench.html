@@ -1295,6 +1295,19 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(rc!==null && /good|mid|low/.test(rc.className) && /draws/i.test(rc.textContent), 'R9.5: demand tier chip is worded + tiered (' + (rc?rc.className:'none') + ')');
   assert(d.querySelector('#lineplan .lp-t')!==null, 'R9.5: timeline turn nodes render');
 
+  // R10.1: the Regis wipe — a sync pull must never eat freshly-added creator decks (union, not remote-wins)
+  const mLoc = { v:1, updatedAt:2000, decks:[], owned:[], prefs:{},
+    creators:[{id:'UCbt1SGMrWj5Q7TMXAfmTERQ', name:'RegisKillbin'}],
+    creatorDecksCache:[{chId:'UCbt1SGMrWj5Q7TMXAfmTERQ', creator:'RegisKillbin', video:'v', url:'https://youtu.be/x', published:'2026-07-10', name:'Rama-Tut', ids:['Wong'], added:true}] };
+  const mRem = { v:1, updatedAt:1000, decks:[], owned:[], prefs:{}, creators:[], creatorDecksCache:[] };
+  const mOut = w.eval('mergeState('+JSON.stringify(mLoc)+','+JSON.stringify(mRem)+')');
+  assert(mOut.creatorDecksCache.length===1 && mOut.creatorDecksCache[0].name==='Rama-Tut', 'R10.1: pull merge keeps locally-added creator decks (the Regis wipe)');
+  const mOut2 = w.eval('mergeState('+JSON.stringify(mRem)+','+JSON.stringify(mLoc)+')');
+  assert(mOut2.creatorDecksCache.length===1, 'R10.1: merge unions creator decks in both directions');
+  // R10.1: protocol-less channel URLs are forgiven app-side
+  const seenUrl = await w.eval('(async()=>{ let hit=""; const of=window.fetch; window.fetch=async(u,o)=>{ hit=String(u); return {ok:false,status:400,json:async()=>({error:"x"}),text:async()=>""}; }; await addCreator("youtube.com/@RegisKillbin"); window.fetch=of; return hit; })()');
+  assert(/url=https%3A%2F%2Fyoutube\.com%2F%40RegisKillbin/.test(seenUrl), 'R10.1: missing https:// is added before asking the relay ('+seenUrl.slice(-45)+')');
+
   // R10: Following pane — built-in creators always listed with channel links; added ones removable
   w.eval('setTab("saved"); document.querySelector("#savedseg button[data-seg=\'creator\']") && document.querySelector("#savedseg button[data-seg=\'creator\']").click(); renderCreatorDecks();'); await sleep(20);
   const fpills = d.querySelectorAll('#creatorlist .cr-fpill');
