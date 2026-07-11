@@ -1706,7 +1706,7 @@ function extractDecksFromDesc(desc){
   });
   return out;
 }
-/* R5-J/R11.3: fetch a YouTube channel's recent decks (60-day window over the ~15-video feed) via the relay's /yt proxy. */
+/* R5-J/R11.3: fetch a YouTube channel's recent decks (30-day window over the ~15-video feed) via the relay's /yt proxy. */
 /* R11.1: canonical channel id. YouTube RSS yt:channelId drops the "UC" prefix; stored
    entries from the buggy window carry that form, so every reader normalizes first. */
 function normChannelId(id){
@@ -1771,9 +1771,9 @@ async function addCreator(url){
   const now = Date.now(); const decks = [];
   for(const e of entries){
     const published = ((e.match(/<published>([^<]+)</) || [])[1] || '').slice(0,10);
-    // R11.3: 60-day window, not 14 — some creators (Hoogland) post their deck-dump videos
-    // monthly, and YouTube's feed only serves ~15 recent videos anyway, so this stays bounded.
-    if(published && (now - Date.parse(published)) >= 60*86400000) continue;
+    // R11.3: 30-day window (user's pick; was 14, briefly 60) — monthly deck-dump creators fit,
+    // and YouTube's feed only serves ~15 recent videos anyway, so this stays bounded.
+    if(published && (now - Date.parse(published)) >= 30*86400000) continue;
     const title = unescXml((e.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || '');
     const vurl = unescXml((e.match(/<link[^>]*rel="alternate"[^>]*href="([^"]+)"/) || [])[1] || '');
     const desc = unescXml((e.match(/<media:description[^>]*>([\s\S]*?)<\/media:description>/) || [])[1] || '');
@@ -1781,7 +1781,7 @@ async function addCreator(url){
       creator:chName, video:title, url:vurl, published,
       name:dk.name||'', ids:dk.ids||[], untapped:dk.untapped||'', added:true, chId:uc }));
   }
-  if(!decks.length){ say('Found ' + chName + ' — but no Snap deck codes in their ' + entries.length + ' most recent videos (YouTube only lets me see the latest ~15, going back 60 days). They may share decks in video comments or on another channel.'); return; }
+  if(!decks.length){ say('Found ' + chName + ' — but no Snap deck codes in their ' + entries.length + ' most recent videos (YouTube only lets me see the latest ~15, going back 30 days). They may share decks in video comments or on another channel.'); return; }
   // R11.2: compare NORMALIZED ids so re-adding replaces entries saved under the old UC-less form
   S.addedCreators = S.addedCreators.filter(c => normChannelId(c.id) !== uc).concat([{ id:uc, name:chName, handle:url }]);
   S.addedCreatorDecks = S.addedCreatorDecks.filter(d => normChannelId(d.chId) !== uc).concat(decks);

@@ -1023,9 +1023,9 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   // --- J: failure paths — bad URL (worker 400) and out-of-window videos add nothing ---
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u,o)=>({ok:false,status:400,json:async()=>({error:"not a resolvable YouTube channel URL/handle/UC id"}),text:async()=>""}); await addCreator("https://example.com/not-youtube"); window.fetch=of; })()');
   assert(w.eval('S.addedCreatorDecks.length')===0 && w.eval('S.addedCreators.length')===0, 'J: a bad/non-YouTube URL (worker 400) adds nothing');
-  const OLD_RSS = MOCK_RSS.replace(_pubRecent, new Date(Date.now()-90*86400000).toISOString());   // R11.3: window widened to 60 days
+  const OLD_RSS = MOCK_RSS.replace(_pubRecent, new Date(Date.now()-90*86400000).toISOString());   // R11.3: window widened to 30 days
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u,o)=>({ok:true,status:200,text:async()=>('+JSON.stringify(OLD_RSS)+'),json:async()=>({})}); await addCreator("https://youtube.com/@mocktuber"); window.fetch=of; })()');
-  assert(w.eval('S.addedCreatorDecks.length')===0, 'J: videos older than the 60-day window add no decks');
+  assert(w.eval('S.addedCreatorDecks.length')===0, 'J: videos older than the 30-day window add no decks');
   // R8: with the modal open, failures land in #cr-msg (visible, named channel) instead of a vanishing toast
   w.eval('openAddCreator()'); await sleep(10);
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u,o)=>({ok:true,status:200,text:async()=>('+JSON.stringify(OLD_RSS)+'),json:async()=>({})}); await addCreator("https://youtube.com/@mocktuber"); window.fetch=of; })()');
@@ -1568,17 +1568,17 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const hoog = w.eval('extractDecksFromDesc(' + JSON.stringify(hoogDesc) + ')');
   assert(hoog.length===2 && hoog[0].ids.length===12 && hoog[1].ids.length===12, 'R11.3: both labelled untapped links extract 12-card decks');
   assert(hoog[0].name==='Bishop Venus' && hoog[1].name==='Venus Movers', 'R11.3: deck names come from the creator\'s labels, not the shared slug ('+hoog[0].name+', '+hoog[1].name+')');
-  // 60-day window: a 30-day-old deck video now counts; a 90-day-old one does not
+  // 30-day window: a 20-day-old deck video counts (was filtered at 14 days); a 40-day-old one does not
   const mkEntry = (daysAgo, url) => '<entry><published>' + new Date(Date.now()-daysAgo*86400000).toISOString() + '</published>'+
     '<title>Deck video ' + daysAgo + 'd</title><link rel="alternate" href="https://youtu.be/v' + daysAgo + '"/>'+
     '<media:description>My Deck: ' + url + '</media:description></entry>';
   const hoogXml = '<feed><link rel="self" href="https://www.youtube.com/feeds/videos.xml?channel_id=UCxxxxxxxxxxxxxxxxxxxxxx"/>'+
     '<yt:channelId>xxxxxxxxxxxxxxxxxxxxxx</yt:channelId><author><name>HooglandiaSnap</name></author>'+
-    mkEntry(30, 'https://snap.untapped.gg/en/decks/Hulk-AntMan-Wong_Test') + mkEntry(90, 'https://snap.untapped.gg/en/decks/Odin-Wong-Hulk_Old') + '</feed>';
+    mkEntry(20, 'https://snap.untapped.gg/en/decks/Hulk-AntMan-Wong_Test') + mkEntry(40, 'https://snap.untapped.gg/en/decks/Odin-Wong-Hulk_Old') + '</feed>';
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async()=>({ok:true,text:async()=>'+JSON.stringify(hoogXml)+',json:async()=>({})});'+
     'S.addedCreators=[]; S.addedCreatorDecks=[]; await addCreator("youtube.com/@HooglandiaSnap"); window.fetch=of; })()');
   assert(w.eval('S.addedCreatorDecks.length')===1 && w.eval('S.addedCreatorDecks[0].name')==='My Deck',
-    'R11.3: a 30-day-old deck video lands (was filtered at 14 days); a 90-day-old one stays out');
+    'R11.3: a 20-day-old deck video lands (was filtered at 14 days); a 40-day-old one stays out');
   assert(w.eval('S.addedCreators.length')===1 && w.eval('S.addedCreators[0].name')==='HooglandiaSnap', 'R11.3: the channel itself is followed');
   // no-codes message mentions how far the scan reaches
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async()=>({ok:true,text:async()=>'+JSON.stringify(
@@ -1586,7 +1586,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     '<entry><published>2026-07-10T00:00:00Z</published><title>t</title><media:description>just chatting</media:description></entry></feed>')+',json:async()=>({})});'+
     'openAddCreator(); await addCreator("youtube.com/@NoCodes"); window.fetch=of; })()'); await sleep(20);
   const ncMsg = d.querySelector('#cr-msg');
-  assert(ncMsg && /60 days/.test(ncMsg.textContent) && /comments/.test(ncMsg.textContent), 'R11.3: the no-codes message explains the 60-day / ~15-video reach');
+  assert(ncMsg && /30 days/.test(ncMsg.textContent) && /comments/.test(ncMsg.textContent), 'R11.3: the no-codes message explains the 30-day / ~15-video reach');
   w.eval('closeModal(); S.addedCreators=[]; S.addedCreatorDecks=[]; persistCreators(); flushSaves();');
 
   assert(errors.length===0, 'R11.3: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
