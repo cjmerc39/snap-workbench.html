@@ -839,7 +839,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.querySelectorAll('#lineplan .lp-row').length===_nonEmpty && _nonEmpty===3, 'R7-C: one .lp-row per non-empty turn (3 here)');
   assert(d.querySelectorAll('#lineplan .lp-chips .mini').length>0, 'R7-C: read-view turn chips render as .mini');
   assert(/⚡/.test(d.querySelector('#lineplan .lp-row .lp-energy').textContent), 'R7-C: each row shows per-turn energy (spent/budget⚡)');
-  assert(d.querySelector('#lineplan .lp-conf')!==null && /%/.test(d.querySelector('#lineplan .lp-conf').textContent), 'R7-C: the line shows a bottleneck confidence chip');
+  assert(d.querySelector('#lineplan .lp-conf')!==null && /draws/i.test(d.querySelector('#lineplan .lp-conf').textContent)
+    && /%/.test(d.querySelector('#lineplan .lp-conf').title), 'R7-C/R9.5: draw-demand tier chip (raw % lives in the tooltip)');
   w.eval('(function(){ var dd=activeDeck(); materializeLines(dd); dd.lines.push(newLineObj("Aggro",[["Odin"],[],[],[],[],[]])); persistDecks(); })(); renderDeck();'); await sleep(20);
   assert(d.querySelectorAll('#lineplan .lp-seg button').length===w.eval('getLines(activeDeck()).length') && w.eval('getLines(activeDeck()).length')>=2, 'R7-C: the switcher shows one button per line (>=2 lines)');
   // no-plan invite
@@ -1289,9 +1290,10 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   bpill.click(); await sleep(20);
   assert(w.eval('activeDeck().activeLineId')!==preLid, 'R9: tapping the Plan B pill switches to the fallback line');
   // confidence tiers carry a color class
-  w.eval('(function(){ const dd=activeDeck(); const A=getLines(dd).find(l=>l.id==="'+preLid+'")||getLines(dd)[0]; dd.activeLineId=A.id; if(!A.turns.some(t=>t.length)) A.turns[0]=[dd.cards[0]]; touch(dd); renderLinePlan(); })()'); await sleep(20);
-  const rc = d.querySelector('#lineplan .lp-rconf');
-  assert(rc!==null && /good|mid|low/.test(rc.className), 'R9: read-view confidence is tiered (' + (rc?rc.className:'none') + ')');
+  w.eval('(function(){ const dd=activeDeck(); dd.activeLineId="'+preLid+'"; mutateActiveLine(dd, function(lo){ if(!lo.turns.some(function(t){return t.length;})) lo.turns[0]=[dd.cards[0]]; }); renderLinePlan(); })()'); await sleep(20);
+  const rc = d.querySelector('#lineplan .lp-conf');
+  assert(rc!==null && /good|mid|low/.test(rc.className) && /draws/i.test(rc.textContent), 'R9.5: demand tier chip is worded + tiered (' + (rc?rc.className:'none') + ')');
+  assert(d.querySelector('#lineplan .lp-t')!==null, 'R9.5: timeline turn nodes render');
 
   assert(errors.length===0, 'R9: no runtime errors during the meta/coach/branch suite'+(errors.length?' -> '+errors.join(' | '):''));
 

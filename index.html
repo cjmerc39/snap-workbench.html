@@ -54,7 +54,7 @@ input,textarea{font-size:16px;}
 /* ---------- header ---------- */
 header{
   padding:12px 14px; display:flex; align-items:center; justify-content:space-between;
-  background:var(--glass); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  background:rgba(13,8,22,.94); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
   box-shadow:inset 0 -1px 0 var(--hair);
   position:sticky; top:0; z-index:30;
 }
@@ -824,35 +824,53 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   #modal{background:var(--card);}
 }
 
-/* ============ R9: play-line design pass + meta check + coach read ============ */
+/* ============ R9.5: play-line visual language (screenshot-driven redesign) ============ */
 .lp-card{background:linear-gradient(165deg, rgba(150,116,255,.10), rgba(20,12,36,.55) 45%); border-radius:var(--r-lg,16px);
   padding:14px 12px 12px; box-shadow:inset 0 0 0 1px rgba(170,140,255,.16), 0 10px 26px -18px rgba(0,0,0,.9);}
 .lp-head{display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0 2px 10px;}
 .lp-name{font-family:var(--head); font-weight:800; font-size:13px; letter-spacing:.6px; text-transform:uppercase;}
-.lp-conf{font-size:11px; font-weight:800; padding:3px 9px; border-radius:999px;}
-.lp-conf.good,.lp-rconf.good{color:#0b1f17; background:var(--ok);}
-.lp-conf.mid,.lp-rconf.mid{color:#2a1509; background:var(--warn);}
-.lp-conf.low,.lp-rconf.low{color:#fff; background:#c0392b;}
-.lp-row{display:flex; align-items:center; gap:10px; padding:8px 6px 8px 0; position:relative; margin-left:14px;
-  border-bottom:1px solid rgba(255,255,255,.04);}
-.lp-row:last-of-type{border-bottom:none;}
-.lp-row::before{content:''; position:absolute; left:-14px; top:0; bottom:0; width:2px;
-  background:linear-gradient(180deg, rgba(170,140,255,.35), rgba(170,140,255,.08));}
-.lp-t{font-family:var(--head); font-weight:800; font-size:12px; color:var(--iris,#b794ff); min-width:24px;}
-.lp-chips .mini{width:44px;}
-.lp-energy{font-size:11px; font-weight:800; padding:2px 8px; border-radius:999px; background:rgba(122,162,255,.15); color:#9db8ff; white-space:nowrap;}
+.lp-conf{font-size:11px; font-weight:800; padding:3px 10px; border-radius:999px;}
+.lp-conf.good{color:#0b1f17; background:var(--ok);}
+.lp-conf.mid{color:#2a1509; background:var(--warn);}
+.lp-conf.low{color:#f3e8ff; background:rgba(150,116,255,.35); box-shadow:inset 0 0 0 1px rgba(170,140,255,.5);}
+.lp-row{display:flex; align-items:center; gap:10px; padding:9px 2px 9px 0; position:relative; margin-left:30px;}
+.lp-row::before{content:''; position:absolute; left:-19px; top:-6px; bottom:-6px; width:2px;
+  background:rgba(170,140,255,.22);}
+.lp-row:first-of-type::before{top:50%;} .lp-row:last-of-type::before{bottom:50%;}
+.lp-t{position:absolute; left:-30px; top:50%; transform:translateY(-50%); width:24px; height:24px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-family:var(--head); font-weight:800; font-size:11px;
+  color:#f3e8ff; background:linear-gradient(160deg,#8f6bff,#5d3fc4); box-shadow:0 0 0 3px rgba(20,12,36,.9); z-index:1;}
+.lp-chips{display:flex; gap:6px; flex-wrap:wrap; flex:1; min-width:0;}
+.lp-chips .mini{width:52px;}
+.lp-bad{font-size:13px; line-height:1;}
+.lp-energy{font-size:11px; font-weight:800; padding:3px 9px; border-radius:999px; background:rgba(122,162,255,.15); color:#9db8ff; white-space:nowrap;}
 .lp-energy.over{background:rgba(220,80,60,.25); color:#ff9c8a;}
-.lp-rconf{font-size:10px; font-weight:800; padding:2px 7px; border-radius:999px; margin-left:auto; white-space:nowrap;}
-.lp-branch{display:block; width:100%; margin-top:10px; padding:9px 12px; border:none; border-radius:12px; text-align:left;
+.lp-nudge-note{font-size:9px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; color:var(--faint);}
+.lp-branch{display:block; width:100%; margin-top:12px; padding:10px 12px; border:none; border-radius:12px; text-align:left;
   font-size:12px; font-weight:700; color:var(--iris,#b794ff); background:rgba(150,116,255,.12);
   box-shadow:inset 0 0 0 1px rgba(170,140,255,.25);}
-.pl-branch{display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin:8px 2px 10px; padding:8px 10px;
+/* planner slots: node | cards grow | stats right */
+.pl-slot{display:flex; align-items:center; gap:10px;}
+.pl-slot .pl-t{position:static; transform:none; flex-shrink:0; width:24px; height:24px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-family:var(--head); font-weight:800; font-size:11px;
+  color:#f3e8ff; background:linear-gradient(160deg,#8f6bff,#5d3fc4);}
+.pl-mini-row{flex:1; min-width:0; display:flex; gap:6px; flex-wrap:wrap; align-items:center;}
+.pl-side{display:flex; align-items:center; gap:6px; flex-shrink:0;}
+.pl-slot-add.ghost{width:40px; height:54px; border-radius:10px; border:1.5px dashed rgba(170,140,255,.35);
+  background:transparent; color:var(--faint); font-size:15px; padding:0;}
+.pl-branch{display:flex; align-items:center; gap:6px; margin:8px 2px 10px; padding:8px 10px;
   background:var(--glass-2); border-radius:10px; box-shadow:inset 0 0 0 1px var(--hair);}
 .pl-branch.info{opacity:.6;}
-.pl-branch-lab{font-family:var(--head); font-weight:800; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--iris,#b794ff);}
-.pl-branch-txt{font-size:11.5px; color:var(--dim);}
+.pl-branch-lab{font-family:var(--head); font-weight:800; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--iris,#b794ff); flex-shrink:0;}
+.pl-branch-txt{font-size:11px; color:var(--dim); flex-shrink:0;}
 .pl-bsel{background:var(--panel); color:var(--text,#eee); border:1px solid var(--line); border-radius:8px;
-  font-size:12px; padding:4px 6px; max-width:38%;}
+  font-size:11.5px; padding:4px 4px; min-width:0; flex:1;}
+.pl-branch [data-plbturn]{flex:0 0 52px;}
+.pl-branch [data-plbclear]{margin-left:auto; flex-shrink:0;}
+.syn-thumb{width:26px; height:26px; border-radius:50%; flex-shrink:0; background-size:cover; background-position:center 18%;
+  box-shadow:0 0 0 1.5px rgba(170,140,255,.35); display:inline-flex; align-items:center; justify-content:center;
+  font-size:9px; font-weight:800; color:#fff;}
+.syn-thumb + .syn-thumb{margin-left:-9px;}
 .mc-strip{display:flex; flex-wrap:wrap; gap:5px; margin:2px 0 8px;}
 .mc-chip{font-size:10.5px; font-weight:600; color:var(--dim); background:rgba(255,255,255,.05); border-radius:7px; padding:3px 7px; white-space:nowrap;}
 .mc-chip b{color:var(--gold); font-weight:800; margin-left:2px;}
@@ -2153,7 +2171,7 @@ function deckSynergies(cards){
 
 /* --- R8: positive interactions — each row fires only when the deck holds BOTH halves --- */
 const INTERACTION_RULES = [
-  { key:'echo',    find:c => /on reveal[^.]{0,60}\b(again|twice)\b/i.test(c.a||'') || /activate[^.]{0,50}on reveal/i.test(c.a||''),
+  { key:'echo',    find:c => /on reveal[^.]{0,60}\b(again|twice|repeat)\b/i.test(c.a||'') || /\b(repeat|activate)\b[^.]{0,50}on reveal/i.test(c.a||''),
     partners:(cards,f) => cards.filter(c => c !== f && /on reveal/i.test(c.a||'')),
     min:3, text:(f,ps) => f.n + ' re-triggers your ' + ps.length + ' On Reveal cards' },
   { key:'ongoing', find:c => /(your|other)[^.]{0,30}ongoing/i.test(c.a||''),
@@ -2175,23 +2193,30 @@ function deckInteractions(cards){
   INTERACTION_RULES.forEach(rule => {
     cards.filter(rule.find).forEach(f => {
       const ps = rule.partners(cards, f);
-      if(ps.length >= rule.min) push({ text: rule.text(f, ps), chips: ps.slice(0,4).map(p => p.n) });
+      if(ps.length >= rule.min) push({ text: rule.text(f, ps), chips: ps.slice(0,4).map(p => p.n), thumb: f.d });
     });
   });
   // cost-tribe buffers ("your 1-cost cards" à la Ka-Zar)
   cards.forEach(f => {
     const m = /your (\d)[- ]cost/i.exec(f.a||''); if(!m) return;
     const ps = cards.filter(c => c !== f && c.c === +m[1]);
-    if(ps.length >= 3) push({ text: f.n + ' buffs your ' + ps.length + ' ' + m[1] + '-cost cards', chips: ps.slice(0,4).map(p => p.n) });
+    if(ps.length >= 3) push({ text: f.n + ' buffs your ' + ps.length + ' ' + m[1] + '-cost cards', chips: ps.slice(0,4).map(p => p.n), thumb: f.d });
   });
   // token producers (round-7 links)
   cards.forEach(f => {
     (S.tokenLinks[f.d]||[]).forEach(tid => {
       const t = S.tokens[tid];
-      if(t) push({ text: f.n + ' creates ' + t.n + (/s$/i.test(t.n)?'':'s') + ' in play', chips: [], info:true });
+      if(t) push({ text: f.n + ' creates ' + t.n + (/s$/i.test(t.n)?'':'s') + ' in play', chips: [], info:true, thumb: f.d });
     });
   });
   return rows.slice(0, 8);
+}
+/* R9.5: small round art thumb — the synergy tab was the only surface with no card faces */
+function synThumb(id){
+  const c = getCard(id); if(!c) return '';
+  const u = (c.i && /^https?:\/\//.test(c.i)) ? c.i : artUrl(c);
+  if(u) return '<span class="syn-thumb" style="background-image:url(&quot;' + esc(u) + '&quot;)"></span>';
+  return '<span class="syn-thumb noart" style="background:' + tileGrad(c) + '">' + esc(initials(c.n)) + '</span>';
 }
 /* --- R8: empirical evidence — pairs from this deck seen together in creator decks --- */
 function creatorPairEvidence(cards){
@@ -2266,11 +2291,13 @@ function renderSynergy(cards){
   if(inter.length || pairs.length){
     html += '<div class="syn-sec">Working together</div>' +
       inter.map(r =>
-        '<div class="syn-row' + (r.info ? ' info' : '') + '"><span class="syn-text">' + esc(r.text) + '</span>' +
+        '<div class="syn-row' + (r.info ? ' info' : '') + '">' + (r.thumb ? synThumb(r.thumb) : '') +
+        '<span class="syn-text">' + esc(r.text) + '</span>' +
         (r.chips.length ? '<span class="syn-chips-sm">' + r.chips.map(n => '<span>' + esc(n) + '</span>').join('') + '</span>' : '') +
         '</div>').join('') +
       pairs.map(p =>
-        '<div class="syn-row"><span class="syn-text">' + esc((getCard(p.a)||{n:p.a}).n) + ' + ' + esc((getCard(p.b)||{n:p.b}).n) + '</span>' +
+        '<div class="syn-row">' + synThumb(p.a) + synThumb(p.b) +
+        '<span class="syn-text">' + esc((getCard(p.a)||{n:p.a}).n) + ' + ' + esc((getCard(p.b)||{n:p.b}).n) + '</span>' +
         '<span class="syn-pair-n">' + p.n + ' creator decks</span></div>').join('');
   }
   if(committed.length) html += '<div class="syn-sec">Packages</div>';
@@ -2644,20 +2671,17 @@ function renderPlanner(){
     const over = spent > b;
     const rampTag = (normAdj(active.adj)[t-1] === 0 && rampAuto(line, t, d) > 0) ? ' <span class="pl-ramp" title="+1 Energy from a ramp card the prior turn">ramp</span>' : '';
     const overDraw = cum > DRAWN[t];
-    const conf = Math.round(pAll(cum, t) * 100);
-    const low = cum > 0 && pAll(cum, t) < 0.35;
-    const minis = cards.length
-      ? cards.map(miniHtml).join('')
-      : '<button class="pl-slot-add" type="button" aria-label="Add cards to turn ' + t + '">&#65291; add cards</button>';
+    // R9.5 owner fix: per-slot doom percentages removed — the flags box + row badges carry violations
+    const minis = (cards.length ? cards.map(miniHtml).join('') : '') +
+      '<button class="pl-slot-add' + (cards.length ? ' ghost' : '') + '" type="button" aria-label="Add cards to turn ' + t + '">&#65291;' + (cards.length ? '' : ' add cards') + '</button>';
     slotHtml.push(
       '<div class="pl-slot' + (cards.length?'':' vacant') + '" data-t="' + t + '">' +
-        '<div class="pl-rail">' +
-          '<span class="pl-t">T' + t + '</span>' +
-          '<span class="pl-energy' + (over?' over':'') + '">' + spent + '/' + b + '⚡</span>' + rampTag +
-          (cum ? '<span class="pl-conf' + (low?' low':'') + '">~' + conf + '% by T' + t +
-            (overDraw ? ' <span class="pl-drawwarn" title="More cards than you’ll have drawn by T' + t + '">⚠</span>' : '') + '</span>' : '') +
-        '</div>' +
+        '<span class="pl-t">' + t + '</span>' +
         '<div class="pl-mini-row">' + minis + '</div>' +
+        '<div class="pl-side">' +
+          (overDraw ? '<span class="lp-bad" title="More cards than you’ll have drawn by T' + t + '">⚠</span>' : '') +
+          '<span class="pl-energy' + (over?' over':'') + '">' + spent + '/' + b + '⚡</span>' + rampTag +
+        '</div>' +
       '</div>');
   }
   const flags = lineFlags(line, active.adj, d);
@@ -3007,14 +3031,18 @@ function renderLinePlan(){
     const adjV = normAdj(active.adj)[t-1];
     const nudgeNote = adjV !== 0 ? ' <span class="lp-nudge-note" title="Manual energy nudge">' + (adjV>0?'+'+adjV:String(adjV)) + '⚡</span>'
       : (rampAuto(line, t, d) > 0 ? ' <span class="lp-nudge-note" title="+1 Energy from a ramp card the prior turn">ramp</span>' : '');
-    const tier = conf >= 70 ? 'good' : conf >= 40 ? 'mid' : 'low';   // R9: confidence reads as color, not just math
-    rows.push('<div class="lp-row"><span class="lp-t">T' + t + '</span>' +
+    // R9.5 owner fix: no per-row doom percentages — a full line is ALWAYS statistically unlikely and the
+    // wall of red read as "your plan is garbage". Rows flag only real violations; demand is one headline tier.
+    const overDraw = cum > DRAWN[t];
+    const bad = over || overDraw;
+    rows.push('<div class="lp-row"><span class="lp-t">' + t + '</span>' +
       '<div class="lp-chips">' + cards.map(miniHtml).join('') + '</div>' +
-      '<span class="lp-energy' + (over?' over':'') + '">' + spent + '/' + b + '⚡</span>' + nudgeNote +
-      '<span class="lp-rconf ' + tier + '">~' + conf + '%</span></div>');
+      (bad ? '<span class="lp-bad" title="' + (over ? 'Spends more energy than available' : 'Needs more cards than you’ll have drawn') + '">⚠</span>' : '') +
+      '<span class="lp-energy' + (over?' over':'') + '">' + spent + '/' + b + '⚡</span>' + nudgeNote + '</div>');
   }
-  const mTier = minConf === null ? '' : (minConf >= 70 ? 'good' : minConf >= 40 ? 'mid' : 'low');
-  const confChip = minConf === null ? '' : '<span class="lp-conf ' + mTier + '" title="Weakest-turn draw confidence for this line">' + minConf + '% line</span>';
+  const mTier = minConf === null ? '' : (minConf >= 35 ? 'good' : minConf >= 15 ? 'mid' : 'low');
+  const mWord = mTier === 'good' ? 'Relaxed draws' : mTier === 'mid' ? 'Tight draws' : 'Greedy draws';
+  const confChip = minConf === null ? '' : '<span class="lp-conf ' + mTier + '" title="Chance the full line assembles as written: ~' + minConf + '%. Greedy isn’t bad — it’s a ceiling plan.">' + mWord + '</span>';
   // R9: Plan B pill — jumps the read view to the fallback line
   let branchPill = '';
   const br = active.branch;
