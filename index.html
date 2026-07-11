@@ -1625,7 +1625,7 @@ async function addCreator(url){
   if(!YT_URL) return say('Add-creator needs the relay configured.');
   let xml;
   try{
-    const r = await fetch(YT_URL + '?url=' + encodeURIComponent(url));
+    const r = await fetch(YT_URL + '?url=' + encodeURIComponent(url), {cache:'no-store'});   // R10.1: the relay's max-age header let phones replay stale (pre-fix) answers for an hour
     if(!r.ok){ const j = await r.json().catch(() => ({})); throw new Error(j.error || 'bad channel'); }
     xml = await r.text();
   }catch(e){
