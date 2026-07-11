@@ -871,6 +871,14 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   box-shadow:0 0 0 1.5px rgba(170,140,255,.35); display:inline-flex; align-items:center; justify-content:center;
   font-size:9px; font-weight:800; color:#fff;}
 .syn-thumb + .syn-thumb{margin-left:-9px;}
+/* R10: Following pane */
+.cr-follow{margin:2px 0 12px;}
+.cr-follow-strip{display:flex; flex-wrap:wrap; gap:6px;}
+.cr-fpill{display:inline-flex; align-items:center; gap:7px; padding:7px 10px; border-radius:999px; text-decoration:none;
+  background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); color:var(--text,#eee); font-size:12px; font-weight:700;}
+.cr-fname{color:var(--iris,#b794ff);}
+.cr-fn{font-family:var(--head); font-size:11px; color:var(--gold);}
+.cr-fx{background:transparent; border:none; color:var(--faint); font-size:15px; line-height:1; padding:0 0 0 2px;}
 .mc-strip{display:flex; flex-wrap:wrap; gap:5px; margin:2px 0 8px;}
 .mc-chip{font-size:10.5px; font-weight:600; color:var(--dim); background:rgba(255,255,255,.05); border-radius:7px; padding:3px 7px; white-space:nowrap;}
 .mc-chip b{color:var(--gold); font-weight:800; margin-left:2px;}
@@ -3279,12 +3287,45 @@ function renderSaved(){
   });
 }
 /* R4: Creator-decks segment of the Saved tab (harvested daily; see creator-decks.mjs). */
+/* R10: the channels the daily robot watches (keep in sync with creator-decks.mjs CHANNELS) */
+const BUILTIN_CREATORS = [
+  { name:'Alexander Coccia', url:'https://www.youtube.com/@AlexanderCoccia' },
+  { name:'Coougarrr',        url:'https://www.youtube.com/@CoougarrrSNAP' },
+  { name:'Unfitparrot',      url:'https://www.youtube.com/@Unfitparrot' },
+];
 function renderCreatorDecks(){
   const wrap = $('#creatorlist'); if(!wrap) return;
   wrap.innerHTML='';
   const all = S.creatorDecks.concat(S.addedCreatorDecks || []);   // R5-J: harvested + in-app added, tagged
+  // R10: Following pane — everyone whose decks land here, each linking to their channel
+  const fstrip = el('div','cr-follow-strip');
+  const fpill = (name, url, count, removeId) => {
+    const a = document.createElement('a');
+    a.className = 'cr-fpill'; a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.innerHTML = '<span class="cr-fname">' + esc(name) + ' ↗</span><b class="cr-fn">' + count + '</b>';
+    if(removeId){
+      const x = document.createElement('button');
+      x.className = 'cr-fx'; x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label','Unfollow ' + name);
+      x.onclick = ev => { ev.preventDefault(); ev.stopPropagation();
+        S.addedCreators = S.addedCreators.filter(c => c.id !== removeId);
+        S.addedCreatorDecks = S.addedCreatorDecks.filter(d => d.chId !== removeId);
+        persistCreators(); renderCreatorDecks(); };
+      a.appendChild(x);
+    }
+    return a;
+  };
+  BUILTIN_CREATORS.forEach(b => fstrip.appendChild(fpill(b.name, b.url, all.filter(x => x.creator === b.name).length, null)));
+  (S.addedCreators||[]).forEach(c => {
+    if(!/^UC[\w-]{22}$/.test(c.id||'')) return;
+    fstrip.appendChild(fpill(c.name || 'Creator', 'https://www.youtube.com/channel/' + c.id,
+      (S.addedCreatorDecks||[]).filter(x => x.chId === c.id).length, c.id));
+  });
+  const fsec = el('div','cr-follow');
+  fsec.appendChild(el('div','syn-sec','Following'));
+  fsec.appendChild(fstrip);
+  wrap.appendChild(fsec);
   if(!all.length){
-    wrap.appendChild(el('div','warnbox','No creator decks yet — these refresh daily from Alexander Coccia, Coougarrr and Unfitparrot. Or tap “+ Add creator” to pull any YouTube channel’s recent decks.'));
+    wrap.appendChild(el('div','warnbox','No creator decks yet — these refresh daily. Tap “+ Add creator” to follow any YouTube channel.'));
     return;
   }
   const httpOk = u => /^https?:\/\//i.test(u);   // defense-in-depth: only http(s) hrefs ever become links

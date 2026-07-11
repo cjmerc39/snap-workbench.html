@@ -1295,6 +1295,18 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(rc!==null && /good|mid|low/.test(rc.className) && /draws/i.test(rc.textContent), 'R9.5: demand tier chip is worded + tiered (' + (rc?rc.className:'none') + ')');
   assert(d.querySelector('#lineplan .lp-t')!==null, 'R9.5: timeline turn nodes render');
 
+  // R10: Following pane — built-in creators always listed with channel links; added ones removable
+  w.eval('setTab("saved"); document.querySelector("#savedseg button[data-seg=\'creator\']") && document.querySelector("#savedseg button[data-seg=\'creator\']").click(); renderCreatorDecks();'); await sleep(20);
+  const fpills = d.querySelectorAll('#creatorlist .cr-fpill');
+  assert(fpills.length>=3, 'R10: Following pane lists the built-in creators ('+fpills.length+')');
+  assert([...fpills].every(a=>/^https:\/\/www\.youtube\.com\//.test(a.href)), 'R10: every following pill links to a YouTube channel');
+  w.eval('S.addedCreators=[{id:"UCbt1SGMrWj5Q7TMXAfmTERQ",name:"RegisKillbin",handle:"@RegisKillbin"}]; S.addedCreatorDecks=[]; renderCreatorDecks();'); await sleep(20);
+  const regisPill = [...d.querySelectorAll('#creatorlist .cr-fpill')].find(a=>/RegisKillbin/.test(a.textContent));
+  assert(regisPill && /channel\/UCbt1SGMr/.test(regisPill.href) && regisPill.querySelector('.cr-fx'), 'R10: added creator pill links to the channel and has an unfollow button');
+  regisPill.querySelector('.cr-fx').click(); await sleep(20);
+  assert(w.eval('S.addedCreators.length')===0, 'R10: unfollow from the pane removes the channel');
+  w.eval('setTab("cards")'); await sleep(10);
+
   assert(errors.length===0, 'R9: no runtime errors during the meta/coach/branch suite'+(errors.length?' -> '+errors.join(' | '):''));
 
   console.log('\nDONE. errors:', errors.length?errors:'none');
