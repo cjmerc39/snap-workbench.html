@@ -1365,5 +1365,54 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   assert(errors.length===0, 'R11: no runtime errors during the flush suite'+(errors.length?' -> '+errors.join(' | '):''));
 
+  // ============ R11-UI: synergy suggestions + planner de-clunk ============
+  // fieldSuggestions: pure ledger math — outside cards credited, in-deck/unknown/thin pairs skipped
+  w.eval('window.__oldStats = S.creatorStats; S.creatorStats = { updated:"x", windowDays:30, deckCount:40, cards:{Hulk:10},'+
+    'pairs:{ "Hulk|Wong":6, "AntMan|Hulk":3, "Hulk|Odin":2, "AbsorbingMan|Hulk":1, "Fake2099X|Wong":9 } };');
+  const sugg = w.eval('fieldSuggestions([{d:"Wong"},{d:"Hulk"}], 5)');
+  assert(sugg.length===2, 'R11-UI: suggestions skip in-deck pairs, thin (n<2) pairs and unknown cards ('+sugg.length+')');
+  assert(sugg[0].d==='AntMan' && sugg[0].vn===3 && sugg[0].via==='Hulk', 'R11-UI: strongest outside partner ranks first (AntMan via Hulk, 3x)');
+  assert(sugg[1].d==='Odin', 'R11-UI: second suggestion is Odin (2x)');
+  assert(w.eval('fieldPairN("Wong","Hulk")')===6 && w.eval('fieldPairN("Hulk","Wong")')===6, 'R11-UI: fieldPairN is order-insensitive');
+  // renderSynergy: Worth-a-try rows render and tapping one opens the card sheet
+  w.eval('renderSynergy([S.byId["Wong"], S.byId["Hulk"]])'); await sleep(20);
+  const tryRows = d.querySelectorAll('#synergy [data-syntry]');
+  assert(tryRows.length===2 && tryRows[0].dataset.syntry==='AntMan', 'R11-UI: Worth-a-try section renders tappable suggestion rows');
+  assert(/Worth a try/i.test(d.querySelector('#synergy').textContent), 'R11-UI: suggestions section is labelled');
+  tryRows[0].click(); await sleep(20);
+  assert(d.querySelector('#modalwrap').classList.contains('on') && d.querySelector('#modal .sname').textContent===w.eval('S.byId["AntMan"].n'),
+    'R11-UI: tapping a suggestion opens the Ant-Man card sheet (with its Add button)');
+  w.eval('closeModal()'); await sleep(10);
+  // interaction rows carry partner ids so field evidence can rank them
+  const inter11 = w.eval('deckInteractions([S.byId["Wong"],S.byId["WhiteTiger"],S.byId["BlackPanther"],S.byId["Odin"],S.byId["KaZar"]].filter(Boolean))');
+  assert(inter11.every(r => !r.chips || !r.chips.length || (r.chipIds && r.chipIds.length===r.chips.length)),
+    'R11-UI: every interaction row pairs chip names with chip ids');
+  w.eval('S.creatorStats = window.__oldStats;');
+  // planner: a violation explains itself on the offending turn row, not in a bottom box
+  w.eval('(function(){ S.decks.unshift({id:"r11pl",name:"R11",cards:["Hulk","AntMan","Wong","Odin"],updated:Date.now()}); S.activeId="r11pl";'+
+    'mutateActiveLine(activeDeck(), function(lo){ lo.turns=[[],[],["Hulk"],[],[],[]]; }); })(); setTab("deck"); setDeckTab("planner"); renderPlanner();'); await sleep(20);
+  const note3 = d.querySelector('#planner .pl-slot[data-t="3"] .pl-slot-note');
+  assert(note3!==null && /^Spends 6 energy/.test(note3.textContent), 'R11-UI: T3 overspend note renders inside the T3 row ('+(note3?note3.textContent:'none')+')');
+  assert(d.querySelector('#planner .pl-flags .warnbox')===null, 'R11-UI: no duplicate bottom warning box when notes are inline');
+  w.eval('mutateActiveLine(activeDeck(), function(lo){ lo.turns=[[],[],["AntMan"],[],[],[]]; }); renderPlanner();'); await sleep(20);
+  assert(d.querySelector('#planner .pl-slot-note')===null && d.querySelector('#planner .pl-flags .odds-hint')!==null,
+    'R11-UI: a legal line shows the all-clear hint and zero notes');
+  // manager bar: tools folded into the pills row, still labelled for screen readers
+  assert(d.querySelector('#planner .pl-mgr .pl-line-tools [data-pldel]')!==null, 'R11-UI: line tools live beside the pills row');
+  assert([...d.querySelectorAll('#planner .pl-line-tools .pl-line-tool')].every(b => b.getAttribute('aria-label')),
+    'R11-UI: icon-only tools keep aria-labels');
+  // Plan B: sentence layout keeps all three selects wired
+  d.querySelector('#planner [data-pldupe]').click(); await sleep(20);
+  const bsels = d.querySelectorAll('#planner .pl-branch [data-plbcard], #planner .pl-branch [data-plbturn], #planner .pl-branch [data-plbline]');
+  assert(bsels.length===3, 'R11-UI: Plan B renders card + turn + line selects once a second line exists');
+  w.eval('(function(){ var w2=document.querySelector("#planner .pl-branch:not(.info)");'+
+    'w2.querySelector("[data-plbcard]").value="Wong"; w2.querySelector("[data-plbturn]").value="3";'+
+    'var ls=w2.querySelector("[data-plbline]"); ls.value=ls.options[1].value;'+
+    'ls.onchange ? ls.onchange() : ls.dispatchEvent(new Event("change")); })()'); await sleep(20);
+  assert(w.eval('activeLine(activeDeck()).branch && activeLine(activeDeck()).branch.ifNot')==='Wong', 'R11-UI: Plan B selects still write the branch');
+  w.eval('S.decks=S.decks.filter(function(x){return x.id!=="r11pl";}); S.activeId=null; renderAll(); setTab("cards");'); await sleep(20);
+
+  assert(errors.length===0, 'R11-UI: no runtime errors during the UI suite'+(errors.length?' -> '+errors.join(' | '):''));
+
   console.log('\nDONE. errors:', errors.length?errors:'none');
 })();

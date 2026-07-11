@@ -278,7 +278,12 @@ h1 .h-snap{color:var(--gold);}
 .syn-row{display:flex; align-items:center; justify-content:space-between; gap:8px; background:var(--glass-2);
   border-radius:10px; padding:8px 10px; margin-bottom:6px; box-shadow:inset 0 0 0 1px var(--hair);}
 .syn-row.info{opacity:.75;}
-.syn-text{font-size:12.5px; font-weight:600; min-width:0;}
+.syn-text{font-size:12.5px; font-weight:600; min-width:0; flex:1 1 auto;}   /* grows so lone text stays left-aligned; basis:auto keeps chip rows from squeezing it */
+/* R11: actionable suggestion rows — tap opens the card sheet (which offers Add) */
+.syn-row.tap{cursor:pointer; transition:box-shadow var(--dur-1) var(--ease-out);}
+.syn-row.tap:active{box-shadow:inset 0 0 0 1px var(--line2);}
+.syn-fieldn{font-size:10px; font-weight:800; color:var(--gold); background:rgba(255,205,120,.08);
+  border-radius:6px; padding:2px 6px; white-space:nowrap; flex-shrink:0;}
 .syn-chips-sm{display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end;}
 .syn-chips-sm span{font-size:10px; color:var(--dim); background:rgba(255,255,255,.05); border-radius:6px; padding:2px 6px; white-space:nowrap;}
 .syn-pair-n{font-size:10.5px; font-weight:800; color:var(--gold); white-space:nowrap;}
@@ -337,6 +342,9 @@ h1 .h-snap{color:var(--gold);}
 .pl-flags{margin-top:10px;}
 .pl-flags .warnbox{margin-bottom:6px;}
 .pl-flags .warnbox:last-child{margin-bottom:0;}
+/* R11 de-clunk: a violation explains itself ON the offending turn row, not three rows below */
+.pl-slot{flex-wrap:wrap;}
+.pl-slot-note{flex-basis:100%; font-size:11px; font-weight:600; color:var(--warn); padding:2px 0 0 34px; cursor:default;}
 .pl-actions{display:flex; gap:8px; margin-top:12px;}
 .pl-actions .abtn{flex:1; min-height:44px;}
 /* the card picker — thumb-anchored bottom sheet over the viewport */
@@ -394,10 +402,15 @@ h1 .h-snap{color:var(--gold);}
   border-radius:999px; width:32px; height:32px; font-size:16px; font-weight:800; line-height:1; cursor:pointer;}
 .pl-line-name-input{flex:0 0 auto; min-width:120px; background:var(--glass-2); color:var(--text);
   border:1px solid var(--gold); border-radius:var(--r-pill); padding:5px 12px; min-height:32px; font-size:12px; font-weight:700;}
-.pl-line-tools{display:flex; gap:14px; margin-bottom:10px; padding:0 2px;}
-.pl-line-tool{background:none; border:none; color:var(--faint); font-size:12px; font-weight:700; padding:2px 0; cursor:pointer;}
-.pl-line-tool:disabled{opacity:.4; cursor:default;}
-.pl-line-tool:not(:disabled):active{color:var(--text);}
+/* R11 de-clunk: the Rename/Duplicate/Delete text row folds into icon buttons beside the pills */
+.pl-mgr{display:flex; align-items:center; gap:4px; margin-bottom:8px;}
+.pl-mgr .pl-lines{flex:1; min-width:0; margin-bottom:0;}
+.pl-line-tools{display:flex; gap:2px; flex-shrink:0;}
+.pl-line-tool{background:none; border:none; color:var(--faint); width:32px; height:32px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;}
+.pl-line-tool svg{display:block;}
+.pl-line-tool:disabled{opacity:.35; cursor:default;}
+.pl-line-tool:not(:disabled):active{color:var(--text); background:var(--raise);}
 /* R7-C: line-plan read view — art-forward, per-turn energy + confidence, above the sub-tabs */
 #lineplan:empty{display:none;}
 .lp-empty{display:flex; align-items:center; gap:10px; flex-wrap:wrap;
@@ -858,15 +871,22 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .pl-side{display:flex; align-items:center; gap:6px; flex-shrink:0;}
 .pl-slot-add.ghost{width:40px; height:54px; border-radius:10px; border:1.5px dashed rgba(170,140,255,.35);
   background:transparent; color:var(--faint); font-size:15px; padding:0;}
-.pl-branch{display:flex; align-items:center; gap:6px; margin:8px 2px 10px; padding:8px 10px;
+/* R11 de-clunk: Plan B reads as a sentence; selects never overflow their pills */
+.pl-branch{display:flex; flex-direction:column; gap:7px; margin:8px 2px 10px; padding:9px 11px;
   background:var(--glass-2); border-radius:10px; box-shadow:inset 0 0 0 1px var(--hair);}
-.pl-branch.info{opacity:.6;}
+.pl-branch.info{flex-direction:row; align-items:center; gap:6px; opacity:.6;}
+.pl-branch-head{display:flex; align-items:center; justify-content:space-between;}
 .pl-branch-lab{font-family:var(--head); font-weight:800; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--iris,#b794ff); flex-shrink:0;}
-.pl-branch-txt{font-size:11px; color:var(--dim); flex-shrink:0;}
-.pl-bsel{background:var(--panel); color:var(--text,#eee); border:1px solid var(--line); border-radius:8px;
-  font-size:11.5px; padding:4px 4px; min-width:0; flex:1;}
-.pl-branch [data-plbturn]{flex:0 0 52px;}
-.pl-branch [data-plbclear]{margin-left:auto; flex-shrink:0;}
+.pl-branch-row{display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
+.pl-branch-txt{font-size:11.5px; color:var(--dim); flex-shrink:0;}
+.pl-bsel{-webkit-appearance:none; appearance:none; color:var(--text,#eee); border:1px solid var(--line); border-radius:10px;
+  font-size:12px; font-weight:600; padding:6px 24px 6px 10px; min-height:32px; min-width:0; flex:1 1 auto; max-width:100%;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  background:var(--panel) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a99bd6' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 9px center;}
+.pl-branch [data-plbturn]{flex:0 0 66px;}
+.pl-branch [data-plbclear]{width:26px; height:26px; border-radius:50%; background:none; border:none; color:var(--faint);
+  font-size:14px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;}
+.pl-branch [data-plbclear]:active{color:var(--text); background:var(--raise);}
 .syn-thumb{width:26px; height:26px; border-radius:50%; flex-shrink:0; background-size:cover; background-position:center 18%;
   box-shadow:0 0 0 1.5px rgba(170,140,255,.35); display:inline-flex; align-items:center; justify-content:center;
   font-size:9px; font-weight:800; color:#fff;}
@@ -2240,14 +2260,14 @@ function deckInteractions(cards){
   INTERACTION_RULES.forEach(rule => {
     cards.filter(rule.find).forEach(f => {
       const ps = rule.partners(cards, f);
-      if(ps.length >= rule.min) push({ text: rule.text(f, ps), chips: ps.slice(0,4).map(p => p.n), thumb: f.d });
+      if(ps.length >= rule.min) push({ text: rule.text(f, ps), chips: ps.slice(0,4).map(p => p.n), chipIds: ps.slice(0,4).map(p => p.d), thumb: f.d });
     });
   });
   // cost-tribe buffers ("your 1-cost cards" à la Ka-Zar)
   cards.forEach(f => {
     const m = /your (\d)[- ]cost/i.exec(f.a||''); if(!m) return;
     const ps = cards.filter(c => c !== f && c.c === +m[1]);
-    if(ps.length >= 3) push({ text: f.n + ' buffs your ' + ps.length + ' ' + m[1] + '-cost cards', chips: ps.slice(0,4).map(p => p.n), thumb: f.d });
+    if(ps.length >= 3) push({ text: f.n + ' buffs your ' + ps.length + ' ' + m[1] + '-cost cards', chips: ps.slice(0,4).map(p => p.n), chipIds: ps.slice(0,4).map(p => p.d), thumb: f.d });
   });
   // token producers (round-7 links)
   cards.forEach(f => {
@@ -2285,6 +2305,43 @@ function creatorPairEvidence(cards){
     if(n >= 2) rows.push({ a: ids[i], b: ids[j], n });
   }
   return rows.sort((x,y) => y.n - x.n).slice(0, 4);
+}
+/* R11: how often two cards ride the same creator deck in the 30-day ledger */
+function fieldPairN(a, b){
+  const st = S.creatorStats;
+  return (st && st.pairs && st.pairs[[a, b].sort().join('|')]) || 0;
+}
+/* R11: actionable suggestions — cards NOT in the deck that the creator field keeps
+   pairing with cards that ARE. Pure ledger data, no heuristics: for every ledger pair
+   with exactly one foot in this deck, credit the outside card. */
+function fieldSuggestions(cards, max){
+  const st = S.creatorStats;
+  if(!st || !st.pairs || !(st.deckCount >= 5) || !cards.length) return [];
+  const inDeck = new Set(cards.map(c => c.d));
+  const agg = {};
+  for(const key in st.pairs){
+    const n = st.pairs[key]; if(n < 2) continue;
+    const parts = key.split('|');
+    const mine = inDeck.has(parts[0]) ? (inDeck.has(parts[1]) ? null : parts[0]) : (inDeck.has(parts[1]) ? parts[1] : null);
+    if(!mine) continue;
+    const partner = mine === parts[0] ? parts[1] : parts[0];
+    if(!S.byId[partner]) continue;              // suggest only real, current, addable cards
+    const g = agg[partner] || (agg[partner] = { d: partner, score: 0, via: null, vn: 0 });
+    g.score += n;
+    if(n > g.vn){ g.vn = n; g.via = mine; }
+  }
+  // diversity pass: prefer at most two suggestions per anchor card so one hot archetype
+  // can't monopolize the list — but backfill from the skipped ranks rather than run short.
+  const ranked = Object.values(agg).sort((x,y) => y.score - x.score || y.vn - x.vn);
+  const cap = max || 5, out = [], skipped = [], viaN = {};
+  for(const g of ranked){
+    if(out.length >= cap) break;
+    if((viaN[g.via] || 0) >= 2){ skipped.push(g); continue; }
+    viaN[g.via] = (viaN[g.via] || 0) + 1;
+    out.push(g);
+  }
+  while(out.length < cap && skipped.length) out.push(skipped.shift());
+  return out.sort((x,y) => y.score - x.score || y.vn - x.vn);
 }
 /* R9: per-card play rates vs the 30-day creator field */
 function metaCheckRows(cards){
@@ -2329,7 +2386,12 @@ function renderSynergy(cards){
     wrap.innerHTML = '<div class="odds-hint">Add cards to see how they work together.</div>';
     return;
   }
-  const inter = deckInteractions(cards);
+  // R11: rank engines by real-world evidence — the ledger count of the strongest
+  // thumb↔partner pair rides each row, and proven engines float to the top.
+  const inter = deckInteractions(cards).map(r => {
+    const ev = (r.chipIds || []).reduce((m, id) => Math.max(m, fieldPairN(r.thumb, id)), 0);
+    return Object.assign({ ev }, r);
+  }).sort((a, b) => b.ev - a.ev);
   const pairs = creatorPairEvidence(cards);
   const syns = deckSynergies(cards);
   const committed = syns.filter(s => s.status !== 'incidental');
@@ -2340,12 +2402,25 @@ function renderSynergy(cards){
       inter.map(r =>
         '<div class="syn-row' + (r.info ? ' info' : '') + '">' + (r.thumb ? synThumb(r.thumb) : '') +
         '<span class="syn-text">' + esc(r.text) + '</span>' +
+        (r.ev >= 2 ? '<span class="syn-fieldn" title="Creator decks running this pair in the last 30 days">' + r.ev + '× in field</span>' : '') +
         (r.chips.length ? '<span class="syn-chips-sm">' + r.chips.map(n => '<span>' + esc(n) + '</span>').join('') + '</span>' : '') +
         '</div>').join('') +
       pairs.map(p =>
         '<div class="syn-row">' + synThumb(p.a) + synThumb(p.b) +
         '<span class="syn-text">' + esc((getCard(p.a)||{n:p.a}).n) + ' + ' + esc((getCard(p.b)||{n:p.b}).n) + '</span>' +
         '<span class="syn-pair-n">' + p.n + ' creator decks</span></div>').join('');
+  }
+  // R11: the actionable part — cards the field pairs with yours. Tap -> card sheet -> Add.
+  const tries = fieldSuggestions(cards, 5);
+  if(tries.length){
+    html += '<div class="syn-sec">Worth a try · the field pairs these with yours</div>' +
+      tries.map(s => {
+        const via = getCard(s.via) || { n: s.via };
+        return '<div class="syn-row tap" data-syntry="' + esc(s.d) + '" role="button" tabindex="0">' + synThumb(s.d) +
+          '<span class="syn-text"><b>' + esc((getCard(s.d)||{n:s.d}).n) + '</b> — runs alongside your ' + esc(via.n) + '</span>' +
+          '<span class="syn-fieldn">' + s.vn + '×</span></div>';
+      }).join('') +
+      '<div class="odds-hint">From the 30-day creator field — tap one to view or add it.</div>';
   }
   if(committed.length) html += '<div class="syn-sec">Packages</div>';
   html += committed.map(s => {
@@ -2392,6 +2467,11 @@ function renderSynergy(cards){
     }
   }
   wrap.innerHTML = html || '<div class="odds-hint">No package signal — this deck plays it straight, and that’s fine.</div>';
+  wrap.querySelectorAll('[data-syntry]').forEach(el => {
+    const go = () => openCardSheet(el.dataset.syntry);
+    el.onclick = go;
+    el.onkeydown = e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } };
+  });
   const aiBtn = $('#syn-ai'); if(aiBtn) aiBtn.onclick = coachSynergy;
 }
 async function coachSynergy(){
@@ -2709,6 +2789,8 @@ function renderPlanner(){
   const active = activeLine(d);
   const assigned = new Set(); line.forEach(sl => sl.forEach(id => assigned.add(id)));
 
+  // R11 de-clunk: flags first, so each violation renders ON its own turn row
+  const flags = lineFlags(line, active.adj, d);
   let cum = 0; const slotHtml = [];
   for(let t=1; t<=6; t++){
     const ids = line[t-1]; cum += drawCount(ids);
@@ -2718,9 +2800,12 @@ function renderPlanner(){
     const over = spent > b;
     const rampTag = (normAdj(active.adj)[t-1] === 0 && rampAuto(line, t, d) > 0) ? ' <span class="pl-ramp" title="+1 Energy from a ramp card the prior turn">ramp</span>' : '';
     const overDraw = cum > DRAWN[t];
-    // R9.5 owner fix: per-slot doom percentages removed — the flags box + row badges carry violations
+    // R9.5 owner fix: per-slot doom percentages removed — the row badges + inline notes carry violations
     const minis = (cards.length ? cards.map(miniHtml).join('') : '') +
       '<button class="pl-slot-add' + (cards.length ? ' ghost' : '') + '" type="button" aria-label="Add cards to turn ' + t + '">&#65291;' + (cards.length ? '' : ' add cards') + '</button>';
+    const notes = flags.filter(f => f.turn === t)
+      .map(f => { const m = f.msg.replace(/^T\d+:?\s*/, '');
+        return '<div class="pl-slot-note">' + esc(m.charAt(0).toUpperCase() + m.slice(1)) + '</div>'; }).join('');
     slotHtml.push(
       '<div class="pl-slot' + (cards.length?'':' vacant') + '" data-t="' + t + '">' +
         '<span class="pl-t">' + t + '</span>' +
@@ -2728,13 +2813,11 @@ function renderPlanner(){
         '<div class="pl-side">' +
           (overDraw ? '<span class="lp-bad" title="More cards than you’ll have drawn by T' + t + '">⚠</span>' : '') +
           '<span class="pl-energy' + (over?' over':'') + '">' + spent + '/' + b + '⚡</span>' + rampTag +
-        '</div>' +
+        '</div>' + notes +
       '</div>');
   }
-  const flags = lineFlags(line, active.adj, d);
-  const flagsHtml = flags.length
-    ? '<div class="pl-flags">' + flags.map(f => '<div class="warnbox">' + esc(f.msg) + '</div>').join('') + '</div>'
-    : (assigned.size ? '<div class="pl-flags"><div class="odds-hint">Line looks legal — energy and draw both check out.</div></div>' : '');
+  const flagsHtml = (!flags.length && assigned.size)
+    ? '<div class="pl-flags"><div class="odds-hint">Line looks legal — energy and draw both check out.</div></div>' : '';
   const hint = assigned.size ? '' : '<div class="odds-hint">Tap a turn to add cards — or Auto-sketch a first draft.</div>';
 
   // R7-B: multi-line manager bar (≤2 compact rows above the six slots — DOES NOT touch the .pl-slot DOM)
@@ -2749,25 +2832,28 @@ function renderPlanner(){
   const others = lines.filter(l => l.id !== active.id);
   const br = active.branch || {};
   const branchHtml = others.length
-    ? '<div class="pl-branch"><span class="pl-branch-lab">Plan B</span><span class="pl-branch-txt">if no</span>' +
-      '<select class="pl-bsel" data-plbcard><option value="">card…</option>' +
+    ? '<div class="pl-branch">' +
+      '<div class="pl-branch-head"><span class="pl-branch-lab">Plan B</span>' +
+        (br.ifNot ? '<button data-plbclear type="button" aria-label="Clear Plan B" title="Clear Plan B">×</button>' : '') + '</div>' +
+      '<div class="pl-branch-row"><span class="pl-branch-txt">If</span>' +
+      '<select class="pl-bsel" data-plbcard aria-label="Card you need to draw"><option value="">this card…</option>' +
         sortedDeckCards(d).map(c => '<option value="' + esc(c.d) + '"' + (br.ifNot===c.d?' selected':'') + '>' + esc(c.n) + '</option>').join('') + '</select>' +
-      '<span class="pl-branch-txt">by</span>' +
-      '<select class="pl-bsel" data-plbturn>' + [1,2,3,4,5,6].map(t => '<option value="' + t + '"' + ((br.byTurn||3)===t?' selected':'') + '>T' + t + '</option>').join('') + '</select>' +
-      '<span class="pl-branch-txt">→</span>' +
-      '<select class="pl-bsel" data-plbline><option value="">line…</option>' +
-        others.map(l => '<option value="' + esc(l.id) + '"' + (br.toLineId===l.id?' selected':'') + '>' + esc(l.name||'Line') + '</option>').join('') + '</select>' +
-      (br.ifNot ? '<button class="pl-line-tool" data-plbclear type="button" aria-label="Clear Plan B">×</button>' : '') +
+      '<span class="pl-branch-txt">hasn’t shown by</span>' +
+      '<select class="pl-bsel" data-plbturn aria-label="Deadline turn">' + [1,2,3,4,5,6].map(t => '<option value="' + t + '"' + ((br.byTurn||3)===t?' selected':'') + '>T' + t + '</option>').join('') + '</select></div>' +
+      '<div class="pl-branch-row"><span class="pl-branch-txt">switch to</span>' +
+      '<select class="pl-bsel" data-plbline aria-label="Fallback line"><option value="">a line…</option>' +
+        others.map(l => '<option value="' + esc(l.id) + '"' + (br.toLineId===l.id?' selected':'') + '>' + esc(l.name||'Line') + '</option>').join('') + '</select></div>' +
     '</div>'
     : '<div class="pl-branch info"><span class="pl-branch-lab">Plan B</span><span class="pl-branch-txt">Duplicate this line first, then link the fallback here.</span></div>';
+  const _svg = p => '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + '</svg>';
   const managerHtml =
-    '<div class="pl-lines">' + chipsHtml +
+    '<div class="pl-mgr"><div class="pl-lines">' + chipsHtml +
       '<button class="pl-line-add" data-pladd type="button" aria-label="Add play line">&#65291;</button></div>' +
     '<div class="pl-line-tools">' +
-      '<button class="pl-line-tool" data-plrename type="button">Rename</button>' +
-      '<button class="pl-line-tool" data-pldupe type="button">Duplicate</button>' +
-      '<button class="pl-line-tool" data-pldel type="button"' + (lines.length <= 1 ? ' disabled' : '') + '>Delete</button>' +
-    '</div>' + branchHtml;
+      '<button class="pl-line-tool" data-plrename type="button" aria-label="Rename line" title="Rename">' + _svg('<path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>') + '</button>' +
+      '<button class="pl-line-tool" data-pldupe type="button" aria-label="Duplicate line" title="Duplicate">' + _svg('<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>') + '</button>' +
+      '<button class="pl-line-tool" data-pldel type="button" aria-label="Delete line" title="Delete"' + (lines.length <= 1 ? ' disabled' : '') + '>' + _svg('<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>') + '</button>' +
+    '</div></div>' + branchHtml;
 
   box.innerHTML =
     managerHtml +
@@ -3030,9 +3116,12 @@ function renderDeck(){
   const gaps = syns.filter(s => /^missing/.test(s.status)).length;   // R8: incidental cards never count as gaps
   const gs = $('#gl-syn');
   if(gs){
-    gs.textContent = !cards.length ? '–' : gaps ? ('⚠' + gaps) : (syns.length ? '✓' : '–');
+    // R11: engines (interaction rows) count as synergy too — a Wong deck with no formal
+    // "package" used to glance as "–" while its synergy tab was full of working pairs.
+    const engines = cards.length ? deckInteractions(cards).length : 0;
+    gs.textContent = !cards.length ? '–' : gaps ? ('⚠' + gaps) : ((syns.length || engines) ? '✓' : '–');
     gs.classList.toggle('warn', !!gaps && cards.length > 0);
-    gs.classList.toggle('good', !gaps && syns.length > 0);
+    gs.classList.toggle('good', !gaps && (syns.length > 0 || engines > 0));
   }
   const hints = curveHealth(cards);
   const balanced = hints.length === 1 && /balanced/i.test(hints[0]);
