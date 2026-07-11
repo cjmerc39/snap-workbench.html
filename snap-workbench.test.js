@@ -1495,5 +1495,70 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   assert(errors.length===0, 'R11.1: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
 
+  // ============ R11.2: deck dedupe, creator filter, expected-cost overrides ============
+  // healing collapses the SAME deck saved under both id forms (the "seeing his decks twice" bug)
+  w.eval('S.addedCreators=[{id:"bt1SGMrWj5Q7TMXAfmTERQ",name:"RegisKillbin",handle:"h"}];'+
+    'S.addedCreatorDecks=[{chId:"bt1SGMrWj5Q7TMXAfmTERQ",name:"Rama-Tut",url:"https://youtu.be/x",cards:[]},'+
+    '{chId:"UCbt1SGMrWj5Q7TMXAfmTERQ",name:"Rama-Tut",url:"https://youtu.be/x",cards:[]},'+
+    '{chId:"UCbt1SGMrWj5Q7TMXAfmTERQ",name:"Other Deck",url:"https://youtu.be/y",cards:[]}]; window.__h2=healCreatorIds();');
+  assert(w.eval('window.__h2')===true && w.eval('S.addedCreatorDecks.length')===2,
+    'R11.2: heal dedupes decks saved under both id forms (3 -> 2)');
+  assert(w.eval('S.addedCreatorDecks.every(d=>d.chId==="UCbt1SGMrWj5Q7TMXAfmTERQ")'), 'R11.2: surviving decks carry the canonical id');
+  // re-adding a creator replaces decks stored under the OLD id form (no doubles on re-add)
+  w.eval('S.addedCreators=[{id:"bt1SGMrWj5Q7TMXAfmTERQ",name:"RegisKillbin",handle:"h"}];'+
+    'S.addedCreatorDecks=[{chId:"bt1SGMrWj5Q7TMXAfmTERQ",name:"Old Copy",url:"u",cards:[]}];');
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async()=>({ok:true,text:async()=>'+JSON.stringify(regisXml)+',json:async()=>({})});'+
+    'await addCreator("youtube.com/@RegisKillbin"); window.fetch=of; })()');
+  assert(w.eval('S.addedCreators.length')===1 && w.eval('S.addedCreatorDecks.every(d=>d.name!=="Old Copy")'),
+    'R11.2: re-add replaces old-form entries instead of doubling them');
+  // creator filter: tap a pill -> only that creator's rows; tap again -> all
+  w.eval('window.__oldCD2=S.creatorDecks; S.creatorDecks=[{creator:"Alexander Coccia",published:"2026-07-10",ids:["Hulk"],url:"https://youtu.be/a"},'+
+    '{creator:"Coougarrr",published:"2026-07-09",ids:["Wong"],url:"https://youtu.be/b"}]; S.addedCreatorDecks=[]; S.crFilter=null; renderCreatorDecks();'); await sleep(20);
+  assert(d.querySelectorAll('#creatorlist .crow').length===2, 'R11.2: unfiltered pane shows both rows');
+  const cocPill = [...d.querySelectorAll('#creatorlist .cr-fpill')].find(a=>/Alexander Coccia/.test(a.textContent));
+  cocPill.click(); await sleep(20);
+  assert(w.eval('S.crFilter')==='Alexander Coccia', 'R11.2: tapping a pill sets the filter');
+  const fRows = [...d.querySelectorAll('#creatorlist .crow .cr-creator')].map(e=>e.textContent);
+  assert(fRows.length===1 && fRows[0]==='Alexander Coccia', 'R11.2: filtered pane shows only that creator');
+  assert(d.querySelector('#creatorlist .cr-fpill.on')!==null, 'R11.2: the active pill is highlighted');
+  [...d.querySelectorAll('#creatorlist .cr-fpill')].find(a=>/Alexander Coccia/.test(a.textContent)).click(); await sleep(20);
+  assert(w.eval('S.crFilter')===null && d.querySelectorAll('#creatorlist .crow').length===2, 'R11.2: tapping again clears the filter');
+  assert([...d.querySelectorAll('#creatorlist .cr-fpill')].every(a=>/^https:\/\/www\.youtube\.com\//.test(a.href)||/youtube\.com/.test(a.href)),
+    'R11.2: pills keep their channel hrefs for the ↗ link');
+  w.eval('S.creatorDecks=window.__oldCD2; S.addedCreatorDecks=[]; S.addedCreators=[]; S.crFilter=null; persistCreators(); flushSaves(); renderCreatorDecks();'); await sleep(10);
+
+  // --- expected-cost overrides ---
+  assert(w.eval('costOf("Hulk", null)')===6 && w.eval('costOf("Hulk", {costs:{Hulk:3}})')===3, 'R11.2: costOf honors the override, defaults to printed');
+  const nl2 = w.eval('normLineObj({turns:[["Hulk"]], costs:{Hulk:3, Bad:"x", Neg:-2, Big:99}})');
+  assert(nl2.costs && nl2.costs.Hulk===3 && nl2.costs.Bad===undefined && nl2.costs.Neg===undefined && nl2.costs.Big===undefined,
+    'R11.2: normLineObj keeps sane cost overrides and drops garbage (sync-safe)');
+  assert(w.eval('lineFlags([[],[],["Hulk"],[],[],[]],[0,0,0,0,0,0],activeDeck()).some(f=>f.type==="energy")')===true,
+    'R11.2: Hulk on T3 at printed cost still flags');
+  assert(w.eval('lineFlags([[],[],["Hulk"],[],[],[]],[0,0,0,0,0,0],activeDeck(),{Hulk:3}).some(f=>f.type==="energy")')===false,
+    'R11.2: with an expected cost of 3 the flag clears');
+  // UI: tap the ⚡ chip -> editor opens; − adjusts; chip shows ≈
+  w.eval('(function(){ S.decks.unshift({id:"r112pl",name:"Cost",cards:["Hulk","AntMan","Wong","Odin"],updated:Date.now()}); S.activeId="r112pl";'+
+    'mutateActiveLine(activeDeck(), function(lo){ lo.turns=[[],[],["Hulk"],[],[],[]]; }); })(); setTab("deck"); setDeckTab("planner"); renderPlanner();'); await sleep(20);
+  d.querySelector('#planner .pl-slot[data-t="3"] [data-costs]').click(); await sleep(20);
+  assert(d.querySelector('#modalwrap').classList.contains('on') && /what will these cost/i.test(d.querySelector('#modal h2').textContent),
+    'R11.2: tapping the ⚡ chip opens the real-cost editor');
+  for(let i=0;i<3;i++){ d.querySelector('#modal .cost-row[data-cid="Hulk"] .cost-b[data-cd="-1"]').click(); await sleep(15); }
+  assert(w.eval('activeLine(activeDeck()).costs.Hulk')===3, 'R11.2: three taps of − take Hulk from 6 to an expected 3');
+  assert(/printed 6/.test(d.querySelector('#modal .cost-row[data-cid="Hulk"]').textContent), 'R11.2: the editor shows the printed cost for reference');
+  w.eval('closeModal()'); await sleep(10);
+  const chip3 = d.querySelector('#planner .pl-slot[data-t="3"] [data-costs]');
+  assert(/≈3\/3⚡/.test(chip3.textContent), 'R11.2: the turn chip shows ≈3/3⚡ ('+chip3.textContent+')');
+  assert(d.querySelector('#planner .pl-slot[data-t="3"] .pl-slot-note')===null, 'R11.2: the T3 violation note is gone at the expected cost');
+  // the override rides a duplicated line
+  d.querySelector('#planner [data-pldupe]').click(); await sleep(20);
+  assert(w.eval('activeLine(activeDeck()).costs.Hulk')===3, 'R11.2: duplicating a line carries the expected costs');
+  // reset restores printed costs
+  d.querySelector('#planner .pl-slot[data-t="3"] [data-costs]').click(); await sleep(20);
+  d.querySelector('#cost-reset').click(); await sleep(20);
+  assert(w.eval('!activeLine(activeDeck()).costs'), 'R11.2: reset clears the overrides for that turn');
+  w.eval('S.decks=S.decks.filter(function(x){return x.id!=="r112pl";}); S.activeId=null; renderAll(); setTab("cards");'); await sleep(20);
+
+  assert(errors.length===0, 'R11.2: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
+
   console.log('\nDONE. errors:', errors.length?errors:'none');
 })();

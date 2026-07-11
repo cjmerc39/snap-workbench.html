@@ -345,6 +345,16 @@ h1 .h-snap{color:var(--gold);}
 /* R11 de-clunk: a violation explains itself ON the offending turn row, not three rows below */
 .pl-slot{flex-wrap:wrap;}
 .pl-slot-note{flex-basis:100%; font-size:11px; font-weight:600; color:var(--warn); padding:2px 0 0 34px; cursor:default;}
+/* R11.2: the ⚡ chip opens the real-cost editor */
+.pl-energy.tap{text-decoration:underline dotted rgba(255,255,255,.35); text-underline-offset:3px; cursor:pointer; padding:6px 2px;}
+.cost-row{display:flex; align-items:center; gap:8px; padding:8px 2px; border-bottom:1px solid var(--hair);}
+.cost-name{flex:1; min-width:0; font-size:13px; font-weight:600;}
+.cost-base{font-size:10.5px; color:var(--faint); white-space:nowrap;}
+.cost-ctl{display:flex; align-items:center; gap:8px; flex-shrink:0;}
+.cost-b{width:34px; height:34px; border-radius:50%; border:none; background:var(--raise); color:var(--text);
+  font-size:17px; line-height:1; cursor:pointer;}
+.cost-b:active{background:var(--gold); color:var(--iris-ink);}
+.cost-v{font-family:var(--head); font-size:14px; min-width:34px; text-align:center; color:var(--gold);}
 .pl-actions{display:flex; gap:8px; margin-top:12px;}
 .pl-actions .abtn{flex:1; min-height:44px;}
 /* the card picker — thumb-anchored bottom sheet over the viewport */
@@ -903,6 +913,11 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .cr-fpill{display:inline-flex; align-items:center; gap:7px; padding:7px 10px; border-radius:999px; text-decoration:none;
   background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); color:var(--text,#eee); font-size:12px; font-weight:700;}
 .cr-fname{color:var(--iris,#b794ff);}
+/* R11.2: pill = filter toggle; the ↗ inside opens the channel */
+.cr-fpill.on{background:var(--gold); box-shadow:var(--glow-iris);}
+.cr-fpill.on .cr-fname, .cr-fpill.on .cr-fn, .cr-fpill.on .cr-fgo{color:var(--iris-ink);}
+.cr-fgo{color:var(--faint); font-size:12px; padding:2px 3px; border-radius:5px;}
+.cr-fgo:active{background:rgba(255,255,255,.15);}
 .cr-fn{font-family:var(--head); font-size:11px; color:var(--gold);}
 .cr-fx{background:transparent; border:none; color:var(--faint); font-size:15px; line-height:1; padding:0 0 0 2px;}
 .mc-strip{display:flex; flex-wrap:wrap; gap:5px; margin:2px 0 8px;}
@@ -1712,6 +1727,16 @@ function healCreatorIds(){
     const nid = normChannelId(dk.chId);
     if(nid !== dk.chId){ dk.chId = nid; changed = true; }
   });
+  // R11.2: normalizing ids can leave the SAME deck twice (one saved under each id form,
+  // e.g. a pre-fix add + a post-fix re-add) — collapse them with the sync merge's own key.
+  const dkey = x => (x.chId||'') + '|' + (x.url||'') + '|' + (x.name||'');
+  const seen = {};
+  const before = (S.addedCreatorDecks || []).length;
+  S.addedCreatorDecks = (S.addedCreatorDecks || []).filter(dk => {
+    if(!dk) return false;
+    const k = dkey(dk); if(seen[k]) return false; seen[k] = 1; return true;
+  });
+  if(S.addedCreatorDecks.length !== before) changed = true;
   return changed;
 }
 async function addCreator(url){
@@ -1748,8 +1773,9 @@ async function addCreator(url){
       name:dk.name||'', ids:dk.ids||[], untapped:dk.untapped||'', added:true, chId:uc }));
   }
   if(!decks.length){ say('Found ' + chName + ' — but no Snap deck codes in their last two weeks of videos. (They may share decks another way, or post less often.)'); return; }
-  S.addedCreators = S.addedCreators.filter(c => c.id !== uc).concat([{ id:uc, name:chName, handle:url }]);
-  S.addedCreatorDecks = S.addedCreatorDecks.filter(d => d.chId !== uc).concat(decks);
+  // R11.2: compare NORMALIZED ids so re-adding replaces entries saved under the old UC-less form
+  S.addedCreators = S.addedCreators.filter(c => normChannelId(c.id) !== uc).concat([{ id:uc, name:chName, handle:url }]);
+  S.addedCreatorDecks = S.addedCreatorDecks.filter(d => normChannelId(d.chId) !== uc).concat(decks);
   persistCreators(); closeModal(); renderCreatorDecks();
   toast('Added ' + chName + ' (' + decks.length + ' deck' + (decks.length>1?'s':'') + ')');
 }
@@ -2727,12 +2753,12 @@ function cumDraws(line){
   }
   return out;
 }
-function lineFlags(line, adj, d){
+function lineFlags(line, adj, d, costs){
   const out = []; const cums = cumDraws(line);
+  const lo = costs ? { costs } : null;   // R11.2: optional per-card expected-cost overrides
   for(let t=1; t<=6; t++){
     const ids = line[t-1] || [];
-    const cards = ids.map(id => getCard(id) || makeStub(id));
-    const spent = cards.reduce((s,c) => s + (c.c||0), 0);
+    const spent = ids.reduce((s,id) => s + costOf(id, lo), 0);
     const b = turnBudget(line, adj, t, d);
     const cum = cums[t-1];
     if(spent > b)          out.push({ turn:t, type:'energy', msg:'T' + t + ' spends ' + spent + ' energy (only ' + b + ' available)' });
@@ -2804,7 +2830,20 @@ function normLineObj(o){ o = (o && typeof o === 'object') ? o : {};
   const b = o.branch;   // R9: Plan B condition rides normalization {ifNot, byTurn, toLineId}
   if(b && typeof b === 'object' && typeof b.ifNot === 'string' && b.ifNot && b.toLineId)
     L.branch = { ifNot: b.ifNot, byTurn: Math.min(6, Math.max(1, +b.byTurn || 3)), toLineId: String(b.toLineId) };
+  // R11.2: per-card expected-cost overrides (Monstro, Wilson Fisk & co get discounted in
+  // real games) — MUST survive normalization like branch does, or sync eats them.
+  const cs = o.costs;
+  if(cs && typeof cs === 'object'){
+    const out = {};
+    for(const k in cs){ const v = +cs[k]; if(k && Number.isFinite(v) && v >= 0 && v <= 9) out[k] = Math.round(v); }
+    if(Object.keys(out).length) L.costs = out;
+  }
   return L; }
+/* R11.2: what a card is EXPECTED to cost on this line — the override if set, else printed cost. */
+function costOf(id, lo){
+  if(lo && lo.costs && lo.costs[id] != null) return lo.costs[id];
+  return (getCard(id) || makeStub(id)).c || 0;
+}
 function sameLine(a, b){ a = normLine(a); b = normLine(b);
   for(let i=0;i<6;i++){ if(a[i].length !== b[i].length) return false;
     for(let j=0;j<a[i].length;j++) if(a[i][j] !== b[i][j]) return false; } return true; }
@@ -2853,13 +2892,15 @@ function renderPlanner(){
   const assigned = new Set(); line.forEach(sl => sl.forEach(id => assigned.add(id)));
 
   // R11 de-clunk: flags first, so each violation renders ON its own turn row
-  const flags = lineFlags(line, active.adj, d);
+  const flags = lineFlags(line, active.adj, d, active.costs);
   const cums = cumDraws(line);   // R11.1: replayed cards draw once
+  const DISCOUNT_RX = /cost (is )?reduced|\d+ less|less for (each|every)|costs? \d+ if/i;   // Monstro, Fisk & co
   const slotHtml = [];
   for(let t=1; t<=6; t++){
     const ids = line[t-1]; const cum = cums[t-1];
     const cards = ids.map(id => getCard(id) || makeStub(id));
-    const spent = cards.reduce((s,c) => s + (c.c||0), 0);
+    const spent = ids.reduce((s,id) => s + costOf(id, active), 0);   // R11.2: expected costs
+    const hasCostAdj = ids.some(id => active.costs && active.costs[id] != null);
     const b = turnBudget(line, active.adj, t, d);   // R7-E: energy nudge (explicit adj or auto ramp)
     const over = spent > b;
     const rampTag = (normAdj(active.adj)[t-1] === 0 && rampAuto(line, t, d) > 0) ? ' <span class="pl-ramp" title="+1 Energy from a ramp card the prior turn">ramp</span>' : '';
@@ -2868,15 +2909,18 @@ function renderPlanner(){
     const minis = (cards.length ? cards.map(miniHtml).join('') : '') +
       '<button class="pl-slot-add' + (cards.length ? ' ghost' : '') + '" type="button" aria-label="Add cards to turn ' + t + '">&#65291;' + (cards.length ? '' : ' add cards') + '</button>';
     const notes = flags.filter(f => f.turn === t)
-      .map(f => { const m = f.msg.replace(/^T\d+:?\s*/, '');
-        return '<div class="pl-slot-note">' + esc(m.charAt(0).toUpperCase() + m.slice(1)) + '</div>'; }).join('');
+      .map(f => { let m = f.msg.replace(/^T\d+:?\s*/, '');
+        m = m.charAt(0).toUpperCase() + m.slice(1);
+        // R11.2: point discounted decks at the fix instead of shouting at them
+        if(f.type === 'energy' && cards.some(c => DISCOUNT_RX.test(c.a || ''))) m += ' — a card here usually costs less; tap the ⚡ to set it';
+        return '<div class="pl-slot-note">' + esc(m) + '</div>'; }).join('');
     slotHtml.push(
       '<div class="pl-slot' + (cards.length?'':' vacant') + '" data-t="' + t + '">' +
         '<span class="pl-t">' + t + '</span>' +
         '<div class="pl-mini-row">' + minis + '</div>' +
         '<div class="pl-side">' +
           (overDraw ? '<span class="lp-bad" title="More cards than you’ll have drawn by T' + t + '">⚠</span>' : '') +
-          '<span class="pl-energy' + (over?' over':'') + '">' + spent + '/' + b + '⚡</span>' + rampTag +
+          '<span class="pl-energy' + (ids.length ? ' tap' : '') + (over?' over':'') + '" data-costs="' + t + '" title="Tap to set what these will really cost">' + (hasCostAdj ? '≈' : '') + spent + '/' + b + '⚡</span>' + rampTag +
         '</div>' + notes +
       '</div>');
   }
@@ -2942,6 +2986,7 @@ function renderPlanner(){
   box.querySelectorAll('.pl-slot').forEach(slot => {
     slot.onclick = e => {
       const t = +slot.dataset.t;
+      if(e.target.closest('[data-costs]')){ openCostSheet(t); return; }   // R11.2: ⚡ chip -> real-cost editor
       const mini = e.target.closest('.pl-mini-row .mini');
       if(mini){   // tap an assigned mini -> unassign it from this turn (of the active line)
         const id = mini.dataset.d;
@@ -2971,6 +3016,7 @@ function renderPlanner(){
     const src = d.lines.find(l => l.id === d.activeLineId) || d.lines[0];
     const copy = newLineObj((src.name || 'Line') + ' copy', src.turns.map(t => t.slice()));   // deep-clone turns
     copy.adj = normAdj(src.adj);
+    if(src.costs) copy.costs = Object.assign({}, src.costs);   // R11.2: expected costs ride the copy
     d.lines.splice(d.lines.indexOf(src) + 1, 0, copy);
     d.activeLineId = copy.id; d.line = d.lines[0].turns; touchMeta(d);
     renderPlanner(); renderLinePlan();
@@ -3010,6 +3056,49 @@ function renderPlanner(){
   if(S.plannerTurn) refreshPlPicker();   // keep an open picker in sync after a re-render
 }
 
+/* ---- R11.2: "real costs" editor — Monstro & friends rarely cost their printed number.
+   Tap a turn row's ⚡ chip, set what you expect to pay; the override lives on the LINE
+   (lo.costs, survives normLineObj + sync) and feeds every energy computation. ---- */
+function openCostSheet(t){
+  const d = activeDeck(); if(!d) return;
+  const ids = currentLine(d)[t-1]; if(!ids || !ids.length) return;
+  const rowHtml = id => {
+    const c = getCard(id) || makeStub(id); const base = c.c || 0;
+    const cur = costOf(id, activeLine(d));
+    return '<span class="cost-name">' + esc(c.n) + '</span>' +
+      (cur !== base ? '<span class="cost-base">printed ' + base + '</span>' : '') +
+      '<span class="cost-ctl"><button class="cost-b" data-cd="-1" type="button" aria-label="Costs less">&#8722;</button>' +
+      '<b class="cost-v">' + cur + '⚡</b>' +
+      '<button class="cost-b" data-cd="1" type="button" aria-label="Costs more">&#65291;</button></span>';
+  };
+  openModal('<h2>Turn ' + t + ' — what will these cost?</h2>' +
+    '<div class="odds-hint">Cards like Monstro or Wilson Fisk usually come down cheaper than printed. Set what you expect to pay and the energy math follows.</div>' +
+    ids.map(id => '<div class="cost-row" data-cid="' + esc(id) + '">' + rowHtml(id) + '</div>').join('') +
+    '<div class="mrow"><button class="abtn subtle" id="cost-reset" type="button">Reset to printed costs</button></div>');
+  const wireRow = row => row.querySelectorAll('.cost-b').forEach(bt => bt.onclick = () => {
+    const id = row.dataset.cid;
+    const base = (getCard(id) || makeStub(id)).c || 0;
+    mutateActiveLine(d, lo => {
+      const cs = Object.assign({}, lo.costs);
+      let v = (cs[id] != null ? cs[id] : base) + (+bt.dataset.cd);
+      if(v < 0) v = 0; if(v > 9) v = 9;
+      if(v === base) delete cs[id]; else cs[id] = v;
+      if(Object.keys(cs).length) lo.costs = cs; else delete lo.costs;
+    });
+    renderPlanner(); renderLinePlan();
+    row.innerHTML = rowHtml(id);
+    wireRow(row);
+  });
+  document.querySelectorAll('#modal .cost-row').forEach(wireRow);
+  const rs = document.getElementById('cost-reset');
+  if(rs) rs.onclick = () => {
+    mutateActiveLine(d, lo => {
+      const cs = Object.assign({}, lo.costs); ids.forEach(id => delete cs[id]);
+      if(Object.keys(cs).length) lo.costs = cs; else delete lo.costs;
+    });
+    renderPlanner(); renderLinePlan(); closeModal();
+  };
+}
 /* ---- R6-C: the card picker bottom sheet (thumb-anchored, no scroll to the card) ---- */
 function openPlPicker(t){
   const d = activeDeck(); if(!d || !d.cards.length) return;
@@ -3029,7 +3118,7 @@ function refreshPlPicker(){
   const d = activeDeck(); if(!d || !d.cards.length){ closePlPicker(true); return; }
   const line = currentLine(d);
   const active = activeLine(d);
-  const spent = line[t-1].reduce((s,id) => s + ((getCard(id) || makeStub(id)).c || 0), 0);
+  const spent = line[t-1].reduce((s,id) => s + costOf(id, active), 0);   // R11.2: expected costs
   const b = turnBudget(line, active.adj, t, d);
   const title = $('#pl-picker-title'); if(title) title.textContent = 'Turn ' + t;
   const en = $('#pl-picker-energy');
@@ -3230,7 +3319,8 @@ function renderLinePlan(){
     const ids = line[t-1]; const cum = cums[t-1];
     if(!ids.length) continue;   // only turns that actually play a card (compact)
     const cards = ids.map(id => getCard(id) || makeStub(id));
-    const spent = cards.reduce((s,c) => s + (c.c||0), 0);
+    const spent = ids.reduce((s,id) => s + costOf(id, active), 0);   // R11.2: expected costs
+    const hasCostAdj = ids.some(id => active.costs && active.costs[id] != null);
     const b = turnBudget(line, active.adj, t, d);   // R7-E: ramp/nudge-adjusted budget
     const over = spent > b;
     const conf = Math.round(pAll(cum, t) * 100);
@@ -3245,7 +3335,7 @@ function renderLinePlan(){
     rows.push('<div class="lp-row"><span class="lp-t">' + t + '</span>' +
       '<div class="lp-chips">' + cards.map(miniHtml).join('') + '</div>' +
       (bad ? '<span class="lp-bad" title="' + (over ? 'Spends more energy than available' : 'Needs more cards than you’ll have drawn') + '">⚠</span>' : '') +
-      '<span class="lp-energy' + (over?' over':'') + '">' + spent + '/' + b + '⚡</span>' + nudgeNote + '</div>');
+      '<span class="lp-energy' + (over?' over':'') + '"' + (hasCostAdj ? ' title="Uses your expected costs"' : '') + '>' + (hasCostAdj ? '≈' : '') + spent + '/' + b + '⚡</span>' + nudgeNote + '</div>');
   }
   const mTier = minConf === null ? '' : (minConf >= 35 ? 'good' : minConf >= 15 ? 'mid' : 'low');
   const mWord = mTier === 'good' ? 'Relaxed draws' : mTier === 'mid' ? 'Tight draws' : 'Greedy draws';
@@ -3503,14 +3593,24 @@ function renderCreatorDecks(){
   wrap.innerHTML='';
   // R5-J: harvested + in-app added, tagged. R11.1: newest first — a just-added creator's
   // decks used to land BELOW 30+ builtin rows, invisible without a long scroll.
-  const all = S.creatorDecks.concat(S.addedCreatorDecks || [])
+  let all = S.creatorDecks.concat(S.addedCreatorDecks || [])
     .slice().sort((a,b) => String(b.published||'').localeCompare(String(a.published||'')));
   // R10: Following pane — everyone whose decks land here, each linking to their channel
   const fstrip = el('div','cr-follow-strip');
+  // R11.2: a pill is now a FILTER (tap = only that creator's decks, tap again = all);
+  // the ↗ inside it still opens the channel. Links keep their href for middle-click/tests.
   const fpill = (name, url, count, removeId) => {
     const a = document.createElement('a');
-    a.className = 'cr-fpill'; a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
-    a.innerHTML = '<span class="cr-fname">' + esc(name) + ' ↗</span><b class="cr-fn">' + count + '</b>';
+    a.className = 'cr-fpill' + (S.crFilter === name ? ' on' : '');
+    a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.innerHTML = '<span class="cr-fname">' + esc(name) + '</span><span class="cr-fgo" title="Open channel">↗</span><b class="cr-fn">' + count + '</b>';
+    a.onclick = ev => {
+      if(ev.target.closest('.cr-fx')) return;                    // unfollow handles itself
+      ev.preventDefault();
+      if(ev.target.closest('.cr-fgo')){ try{ window.open(a.href, '_blank', 'noopener'); }catch(e){} return; }
+      S.crFilter = (S.crFilter === name) ? null : name;
+      renderCreatorDecks();
+    };
     if(removeId){
       const x = document.createElement('button');
       x.className = 'cr-fx'; x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label','Unfollow ' + name);
@@ -3533,12 +3633,19 @@ function renderCreatorDecks(){
       (S.addedCreatorDecks||[]).filter(x => x.chId === c.id).length, c.id));
   });
   const fsec = el('div','cr-follow');
-  fsec.appendChild(el('div','syn-sec','Following'));
+  fsec.appendChild(el('div','syn-sec', S.crFilter ? 'Following · showing ' + S.crFilter + ' — tap the pill again for all' : 'Following · tap a name to filter'));
   fsec.appendChild(fstrip);
   wrap.appendChild(fsec);
   if(!all.length){
     wrap.appendChild(el('div','warnbox','No creator decks yet — these refresh daily. Tap “+ Add creator” to follow any YouTube channel.'));
     return;
+  }
+  if(S.crFilter){                                    // R11.2: per-creator filter
+    all = all.filter(cd => cd.creator === S.crFilter);
+    if(!all.length){
+      wrap.appendChild(el('div','warnbox','No decks from ' + S.crFilter + ' in the current window.'));
+      return;
+    }
   }
   const httpOk = u => /^https?:\/\//i.test(u);   // defense-in-depth: only http(s) hrefs ever become links
   const linkBtn = (href, label) => { const a=document.createElement('a'); a.className='abtn'; a.href=href; a.target='_blank'; a.rel='noopener noreferrer'; a.textContent=label; return a; };
