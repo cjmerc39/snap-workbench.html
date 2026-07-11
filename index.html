@@ -920,10 +920,15 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .cr-fgo:active{background:rgba(255,255,255,.15);}
 .cr-fn{font-family:var(--head); font-size:11px; color:var(--gold);}
 .cr-fx{background:transparent; border:none; color:var(--faint); font-size:15px; line-height:1; padding:0 0 0 2px;}
-/* R12: locations reference (Cards tab) */
+/* R12: locations reference (Library tab) */
 #loclist{margin-top:18px;}
-#loc-q{width:100%; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-radius:12px;
+#loc-q, #cr-cardq{width:100%; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-radius:12px;
   color:var(--text); font-size:13px; padding:11px 12px; margin:8px 0 10px; min-height:44px;}
+/* R13: creator card search — the searched card glows, its deckmates step back */
+.cr-search{margin:2px 0 8px;}
+.cr-search .odds-hint{margin:0 0 2px;}
+.cr-strip.q .mini:not(.hit){opacity:.38; filter:grayscale(.5);}
+.cr-strip.q .mini.hit{box-shadow:inset 0 0 0 2px var(--iris), var(--glow-iris);}
 .loc-rows{display:grid; gap:6px;}
 .loc-row{display:flex; align-items:center; gap:10px; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair);
   border-radius:10px; padding:8px 10px; cursor:pointer;}
@@ -1012,14 +1017,6 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
         </div>
       </div>
       <div id="cardlist" class="tilegrid"></div>
-    </div>
-    <div id="flyout" role="dialog" aria-label="Filter and sort" aria-modal="false">
-      <div class="sheet-grab"></div>
-      <div id="fly-head">
-        <span class="fly-title">Filter &amp; sort</span>
-        <button id="fly-close" aria-label="Close filters">&times;</button>
-      </div>
-      <aside id="filterpanel" aria-label="Filters and sort"></aside>
     </div>
   </section>
 
@@ -1168,6 +1165,16 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   <button id="sb-x" aria-label="Clear search">&times;</button>
 </div>
 <button id="btn-clearall" aria-hidden="true">&times; Clear <span id="clr-n"></span></button>
+<!-- R13: the flyout lives at body level (it used to sit inside #view-cards, where the
+     hidden Build view display:none'd it on every other tab — now Library uses it too) -->
+<div id="flyout" role="dialog" aria-label="Filter and sort" aria-modal="false">
+  <div class="sheet-grab"></div>
+  <div id="fly-head">
+    <span class="fly-title">Filter &amp; sort</span>
+    <button id="fly-close" aria-label="Close filters">&times;</button>
+  </div>
+  <aside id="filterpanel" aria-label="Filters and sort"></aside>
+</div>
 <div id="toolbar" aria-label="Search, sort, filter">
   <button id="btn-search" aria-label="Search cards" aria-controls="searchbar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
   <button id="btn-sort" aria-label="Sort" aria-controls="flyout" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M8 4v16"/><path d="M4 8l4-4 4 4"/><path d="M16 20V4"/><path d="M12 16l4 4 4-4"/></svg></button>
@@ -1179,7 +1186,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   <button data-tab="deck"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="12" height="16" rx="2"/><path d="M9 19l1.5 2h5a2 2 0 0 0 2-2V8"/></svg>Deck</button>
   <button data-tab="saved"><svg viewBox="0 0 24 24"><path d="M4 6a2 2 0 0 1 2-2h4l2 2.5h6a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>Saved</button>
   <button data-tab="ai"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg>Coach</button>
-  <button data-tab="collection"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="12" height="15" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v12"/><path d="M7.5 12.5l2 2 4-4.5"/></svg>Cards</button>
+  <button data-tab="collection"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="12" height="15" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v12"/><path d="M7.5 12.5l2 2 4-4.5"/></svg>Library</button>
 </nav>
 
 <div id="modalwrap"><div id="modal"></div></div>
@@ -1974,7 +1981,10 @@ function toggleFacet(name){
   S.prefs.facetOpen[name] = open;
   sSet(K.prefs, S.prefs); scheduleSync();
 }
-function afterFilterChange(){ renderCards(); updateFilterBadge(); renderActiveChips(); updateClearBtn(); }
+/* R13: search/sort/filter drive TWO surfaces now — the Build grid and the Library grid.
+   renderBrowse refreshes whichever is visible (renderCards is cheap enough to always run). */
+function renderBrowse(){ renderCards(); if(S.tab === 'collection') renderCollection(); }
+function afterFilterChange(){ renderBrowse(); updateFilterBadge(); renderActiveChips(); updateClearBtn(); }
 function removeFilter(facet, v){
   if(facet==='owned'){ S.filters.owned = false; return; }
   const set = S.filters[facet];
@@ -1984,7 +1994,7 @@ $('#filterpanel').addEventListener('click', e => {
   const head = e.target.closest('.fw-head');
   if(head){ toggleFacet(head.closest('.fwidget').dataset.facet); return; }
   const sortBtn = e.target.closest('[data-sort]');
-  if(sortBtn){ S.sort = sortBtn.dataset.sort; renderCards(); return; }
+  if(sortBtn){ S.sort = sortBtn.dataset.sort; renderBrowse(); return; }
   if(e.target.closest('#fw-owned')){ S.filters.owned = !S.filters.owned; afterFilterChange(); return; }
   if(e.target.closest('#fp-clear')){ clearAllFilters(); return; }
   const fpChip = e.target.closest('.fp-chip');
@@ -2053,7 +2063,7 @@ if($('#sb-x')) $('#sb-x').onclick = () => {
   const q = $('#q');
   if(q && !q.value){ setSearchbar(false); return; }  // nothing to clear -> close the bar (the toolbar is tucked while searching)
   if(q){ q.value = ''; q.focus(); }
-  S.filters.q = ''; renderCards(); updateClearBtn();
+  S.filters.q = ''; renderBrowse(); updateClearBtn();
 };
 if($('#btn-clearall')) $('#btn-clearall').onclick = clearAllFilters;
 if($('#fly-close')) $('#fly-close').onclick = closeFlyout;
@@ -2222,10 +2232,13 @@ function syncCollMeta(){
   $('#coll-count').textContent = S.owned.size;
   $('#coll-total').textContent = S.db.length;
   $('#coll-bars').innerHTML = collBarsHtml(groups);
-  document.querySelectorAll('#colllist .coll-section').forEach(h => {
-    const g = groups[h.dataset.series] || [];
-    const own = g.filter(c => S.owned.has(c.d)).length;
-    const n = h.querySelector('.cs-n'); if(n) n.textContent = own + '/' + g.length;
+  // R13: sections may be showing a FILTERED subset — recount from the tiles on screen,
+  // not the full db, so a flip while searching doesn't snap the header back to full counts.
+  document.querySelectorAll('#colllist .coll-section[data-series]').forEach(h => {
+    const grid = h.nextElementSibling; if(!grid) return;
+    const tiles = grid.querySelectorAll('.tile');
+    let own = 0; tiles.forEach(t => { if(t.classList.contains('owned')) own++; });
+    const n = h.querySelector('.cs-n'); if(n) n.textContent = own + '/' + tiles.length;
   });
 }
 function renderCollection(){
@@ -2235,15 +2248,25 @@ function renderCollection(){
   $('#coll-count').textContent = S.owned.size;
   $('#coll-total').textContent = S.db.length;
   $('#coll-bars').innerHTML = collBarsHtml(groups);
-  let html = '';
+  // R13: the Library obeys the same search/sort/filter cluster as Build — same
+  // predicate (filteredCards), same sort, grouped by series with empty groups hidden.
+  const narrowed = hasAnyActive();
+  const keep = narrowed ? new Set(filteredCards().map(c => c.d)) : null;
+  const sorter = (SORTS.find(s => s.k === S.sort) || SORTS[0]).fn;
+  let html = '', shown = 0;
   COLL_SERIES.forEach(k => {
-    const g = groups[k]; if(!g.length) return;
+    const g = keep ? groups[k].filter(c => keep.has(c.d)) : groups[k];
+    if(!g.length) return;
+    shown += g.length;
     const own = g.filter(c => S.owned.has(c.d)).length;
-    const cards = g.slice().sort((a,b) => (a.c-b.c) || (a.p-b.p) || a.n.localeCompare(b.n));
+    const cards = g.slice().sort(sorter);
     html += '<div class="coll-section" data-series="'+esc(k)+'">'+esc(collLabel(k))+
       ' <span class="cs-n">'+own+'/'+g.length+'</span></div>';
     html += '<div class="tilegrid cmp coll-grid">'+ cards.map(tileHtmlCompact).join('') +'</div>';
   });
+  if(narrowed) html = '<div id="coll-match" class="odds-hint">' +
+    (shown ? shown + ' of ' + S.db.length + ' cards match — clear the search or filters to see your whole library.'
+           : 'Nothing in the library matches the current search/filters.') + '</div>' + html;
   list.innerHTML = html;
   renderLocations();   // R12: the locations reference lives at the bottom of the Cards tab
 }
@@ -3806,6 +3829,19 @@ function renderCreatorDecks(){
     wrap.appendChild(el('div','warnbox','No creator decks yet — these refresh daily. Tap “+ Add creator” to follow any YouTube channel.'));
     return;
   }
+  const healId0 = id => S.byId[id] ? id : (S.short[id] || id);
+  // R13: card search — "is anyone building around the card I want to play?"
+  // Transient like crFilter; matches card NAMES in each deck (healed ids), hits glow in the strip.
+  const sr = el('div','cr-search');
+  sr.innerHTML = '<input id="cr-cardq" type="search" placeholder="Find decks playing a card… (e.g. Wong)" autocomplete="off" value="' + esc(S.crCardQ || '') + '">';
+  wrap.appendChild(sr);
+  const cqEl = $('#cr-cardq');
+  cqEl.oninput = () => {                             // rows are heavy (12 minis each) — debounce, keep the caret
+    clearTimeout(window._crQT);
+    const v = cqEl.value, at = cqEl.selectionStart;
+    window._crQT = setTimeout(() => { S.crCardQ = v; renderCreatorDecks();
+      const q2 = $('#cr-cardq'); if(q2){ q2.focus(); q2.setSelectionRange(at, at); } }, 160);
+  };
   if(S.crFilter){                                    // R11.2: per-creator filter
     all = all.filter(cd => cd.creator === S.crFilter);
     if(!all.length){
@@ -3813,9 +3849,19 @@ function renderCreatorDecks(){
       return;
     }
   }
+  const cq = (S.crCardQ || '').trim().toLowerCase();
+  const cardHits = cd => (cd.ids || []).map(healId0)
+    .filter(id => { const c = getCard(id); return ((c && c.n) || id).toLowerCase().includes(cq); });
+  if(cq){
+    all = all.filter(cd => cardHits(cd).length);
+    if(!all.length){
+      wrap.appendChild(el('div','warnbox','No creator decks are playing a card matching “' + S.crCardQ.trim() + '” in the current window.'));
+      return;
+    }
+    sr.appendChild(el('div','odds-hint', all.length + (all.length === 1 ? ' deck plays' : ' decks play') + ' a card matching “' + S.crCardQ.trim() + '”.'));
+  }
   // R12: buildability — the first question a collection-gated game asks of any deck.
   // Only meaningful once the user has marked a collection (S.owned non-empty).
-  const healId0 = id => S.byId[id] ? id : (S.short[id] || id);
   const buildInfo = cd => {
     const ids = (cd.ids || []).map(healId0);
     if(!ids.length) return null;                     // link-out-only rows can't be judged
@@ -3838,9 +3884,8 @@ function renderCreatorDecks(){
   }
   const httpOk = u => /^https?:\/\//i.test(u);   // defense-in-depth: only http(s) hrefs ever become links
   const linkBtn = (href, label) => { const a=document.createElement('a'); a.className='abtn'; a.href=href; a.target='_blank'; a.rel='noopener noreferrer'; a.textContent=label; return a; };
-  // R10.2: heal fossil ids (pre-vowel-fix compressed tokens like Agn5) via the same skeleton index,
+  // R10.2: heal fossil ids (pre-vowel-fix compressed tokens like Agn5) via the skeleton index,
   // and show every strip in the app's default order: energy asc -> power asc -> name.
-  const healId = id => S.byId[id] ? id : (S.short[id] || id);
   all.forEach(cd => {
     const row = el('div','crow');
     const head = el('div','cr-head');
@@ -3853,10 +3898,15 @@ function renderCreatorDecks(){
     if(bi) head.appendChild(el('span','cr-own' + (bi.missing.length ? '' : ' full'),
       bi.missing.length ? 'own ' + bi.own + '/' + bi.total : '✓ buildable'));
     row.appendChild(head);
-    const healed = (cd.ids||[]).map(healId);
+    const healed = (cd.ids||[]).map(healId0);
     if(healed.length){
       const strip = el('div','cr-strip');
       strip.innerHTML = healed.map(id => getCard(id) || makeStub(id)).sort(SORTS[0].fn).map(miniHtml).join('');
+      if(cq){                                        // R13: light up the searched card, dim the rest
+        const hits = new Set(cardHits(cd));
+        strip.classList.add('q');
+        strip.querySelectorAll('.mini').forEach(m => { if(hits.has(m.dataset.d)) m.classList.add('hit'); });
+      }
       row.appendChild(strip);
     }
     if(bi && bi.missing.length){
@@ -4325,7 +4375,7 @@ function setTab(t){
   S.tab = t;
   closeFlyout();
   if(t !== 'deck' && S.plannerTurn) closePlPicker(true);   // leaving the Deck tab dismisses the card picker
-  document.body.classList.toggle('on-cards', t === 'cards'); // floating tool cluster only on Build
+  document.body.classList.toggle('on-cards', t === 'cards' || t === 'collection'); // floating tool cluster on Build + Library (R13: the Library grid obeys it too)
   document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'view-'+t));
   renderDeckbar();
@@ -4337,7 +4387,7 @@ document.querySelectorAll('#tabbar button').forEach(b => b.onclick = () => setTa
 let _qT;
 $('#q').addEventListener('input', e => {
   clearTimeout(_qT);
-  _qT = setTimeout(() => { S.filters.q = e.target.value; renderCards(); updateClearBtn(); }, 120);
+  _qT = setTimeout(() => { S.filters.q = e.target.value; renderBrowse(); updateClearBtn(); }, 120);
 });
 
 function renderAll(){

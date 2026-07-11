@@ -463,11 +463,14 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   // ============ WP2 round-3: 5th tab, Collection, bulk owned, import torture ============
   // --- 5-up tab bar + Collection view routing ---
   assert(d.querySelectorAll('#tabbar button').length===5, 'tab bar now has exactly 5 tabs');
-  assert(d.querySelector('#tabbar [data-tab="collection"]')!==null, 'Collection (Cards) tab button present');
+  assert(d.querySelector('#tabbar [data-tab="collection"]')!==null, 'Collection (Library) tab button present');
   w.eval('setTab("collection")'); await sleep(20);
   assert(d.querySelector('#view-collection').classList.contains('on'), 'collection view activates on setTab');
   assert(!d.querySelector('#view-cards').classList.contains('on'), 'build view is hidden while on collection');
-  assert(!d.body.classList.contains('on-cards'), 'floating tool cluster is gated OFF on the collection tab');
+  assert(d.body.classList.contains('on-cards'), 'R13: floating tool cluster stays available on the Library tab');
+  w.eval('setTab("deck")'); await sleep(10);
+  assert(!d.body.classList.contains('on-cards'), 'floating tool cluster is gated OFF elsewhere (Deck tab)');
+  w.eval('setTab("collection")'); await sleep(10);
 
   // isolate owned state (earlier tests left stray non-db ids like Hulk in S.owned)
   w.eval('S.owned.clear(); renderCollection();'); await sleep(10);
@@ -1671,7 +1674,78 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   w.eval('S.prefs.featLoc=null; S.locations=[]; S.db=window.__oldDb; renderCollection();'); await sleep(10);
   assert(d.querySelector('#loclist .loc-row')===null, 'R12-C: no locations data -> the section hides entirely');
 
-  assert(errors.length===0, 'R12: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
+  /* ============ R13: Library rename + library search/sort/filter + creator card search ============ */
+  // --- A: the 5th tab is Library (it holds cards AND locations now) ---
+  assert(d.querySelector('#tabbar [data-tab="collection"]').textContent.trim()==='Library', 'R13-A: 5th tab is labelled Library');
+
+  // --- B: the Library grid obeys the global search/sort/filter cluster ---
+  w.eval('S.db=DB_BASE.slice(); indexDb(); applyTokenData();');   // earlier intake mocks left an 80-card db behind
+  w.eval('S.sort="cost"; clearAllFilters(); setTab("collection");'); await sleep(20);
+  assert(d.body.classList.contains('on-cards'), 'R13-B: search/sort/filter cluster is available on Library');
+  const libAll = d.querySelectorAll('#colllist .tile').length;
+  assert(libAll===w.eval('S.db.length'), 'R13-B: unfiltered Library shows the whole db ('+libAll+')');
+  w.eval('S.filters.q="hulk"; renderCollection();'); await sleep(20);
+  const hulkN = w.eval('filteredCards().length');
+  assert(hulkN>0 && hulkN<libAll && d.querySelectorAll('#colllist .tile').length===hulkN,
+    'R13-B: search narrows the Library grid ('+hulkN+' hulk matches)');
+  assert(/of \d+ cards match/.test(d.querySelector('#coll-match').textContent), 'R13-B: match hint renders while narrowed');
+  assert([...d.querySelectorAll('#colllist .coll-grid')].every(g=>g.querySelector('.tile')), 'R13-B: series sections without matches are hidden');
+  // in-place flip meta refresh recounts the SHOWN subset, not the full db
+  const sec0 = d.querySelector('#colllist .coll-section[data-series]');
+  const gridN = sec0.nextElementSibling.querySelectorAll('.tile').length;
+  w.eval('syncCollMeta()');
+  assert(sec0.querySelector('.cs-n').textContent.endsWith('/'+gridN), 'R13-B: section counts track the filtered subset ('+sec0.querySelector('.cs-n').textContent+')');
+  // facet filters flow through afterFilterChange while Library is the active tab
+  w.eval('S.filters.q=""; S.filters.cost.add("6"); afterFilterChange();'); await sleep(20);
+  const sixN = w.eval('filteredCards().length');
+  assert(sixN>0 && d.querySelectorAll('#colllist .tile').length===sixN, 'R13-B: facet filters narrow the Library too ('+sixN+' at 6+ cost)');
+  // sort applies inside each section
+  w.eval('S.sort="power"; renderCollection();'); await sleep(20);
+  const powOrder = w.eval('(function(){var g=document.querySelector("#colllist .coll-grid");'+
+    'var t=[].slice.call(g.querySelectorAll(".tile")).map(function(e){return getCard(e.dataset.d).p;});'+
+    'for(var i=1;i<t.length;i++){if(t[i-1]<t[i])return false;}return true;})()');
+  assert(powOrder, 'R13-B: Power sort orders a section power-descending');
+  // zero matches -> explanatory empty state
+  w.eval('S.filters.q="zzz-no-card-ever"; renderCollection();'); await sleep(10);
+  assert(d.querySelectorAll('#colllist .tile').length===0 && /Nothing in the library matches/.test(d.querySelector('#coll-match').textContent),
+    'R13-B: zero matches -> empty-state hint, no ghost sections');
+  w.eval('S.sort="cost"; clearAllFilters();'); await sleep(20);
+  assert(d.querySelectorAll('#colllist .tile').length===libAll && d.querySelector('#coll-match')===null, 'R13-B: clearing restores the full Library');
+  w.eval('setTab("cards");'); await sleep(10);
+
+  // --- C: creator card search ---
+  w.eval('window.__oldCD4 = S.creatorDecks;'+
+    'S.creatorDecks = ['+
+    '{creator:"Wong Guy",published:"2026-07-10",url:"https://youtu.be/w",ids:["Wong","Odin","IronMan"]},'+
+    '{creator:"Move Guy",published:"2026-07-09",url:"https://youtu.be/m",ids:["Hulk","AntMan","BlackPanther"]}];'+
+    'S.addedCreatorDecks=[]; S.crFilter=null; S.crCardQ=""; S.prefs.crBuildable=false; renderCreatorDecks();'); await sleep(20);
+  assert(d.querySelector('#cr-cardq')!==null, 'R13-C: card search input renders above creator decks');
+  assert(d.querySelectorAll('#creatorlist .crow').length===2, 'R13-C: empty query shows all decks');
+  w.eval('S.crCardQ="wong"; renderCreatorDecks();'); await sleep(20);
+  assert(d.querySelectorAll('#creatorlist .crow').length===1, 'R13-C: query keeps only decks playing the card');
+  assert(d.querySelector('#creatorlist .cr-strip').classList.contains('q'), 'R13-C: strip enters highlight mode');
+  const crHit = d.querySelector('#creatorlist .cr-strip .mini.hit');
+  assert(crHit && crHit.dataset.d==='Wong', 'R13-C: the searched card is the highlighted mini');
+  assert(d.querySelectorAll('#creatorlist .cr-strip .mini:not(.hit)').length===2, 'R13-C: deckmates stay unhighlighted');
+  assert(/1 deck plays/.test(d.querySelector('.cr-search .odds-hint').textContent), 'R13-C: hit-count hint renders');
+  assert(d.querySelector('#cr-cardq').value==='wong', 'R13-C: input keeps its query across the re-render');
+  // the real typing path (debounced input event)
+  const crQi = d.querySelector('#cr-cardq');
+  crQi.value='ant man';
+  crQi.dispatchEvent(new w.Event('input', {bubbles:true})); await sleep(260);
+  assert(w.eval('S.crCardQ')==='ant man' && d.querySelectorAll('#creatorlist .crow').length===1
+    && d.querySelector('#creatorlist .cr-strip .mini.hit').dataset.d==='AntMan', 'R13-C: typing filters after the debounce');
+  // zero matches keeps the input and says so
+  w.eval('S.crCardQ="zzznope"; renderCreatorDecks();'); await sleep(20);
+  assert(d.querySelector('#cr-cardq')!==null && /No creator decks are playing/.test(d.querySelector('#creatorlist .warnbox').textContent),
+    'R13-C: zero matches keeps the input and explains');
+  // composes with the creator pill filter (pill first, then card query)
+  w.eval('S.crCardQ="hulk"; S.crFilter="Wong Guy"; renderCreatorDecks();'); await sleep(20);
+  assert(d.querySelectorAll('#creatorlist .crow').length===0 && d.querySelector('#creatorlist .warnbox')!==null,
+    'R13-C: card query composes with the creator filter');
+  w.eval('S.crFilter=null; S.crCardQ=""; S.creatorDecks=window.__oldCD4; renderCreatorDecks();'); await sleep(10);
+
+  assert(errors.length===0, 'R13: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
 
   console.log('\nDONE. errors:', errors.length?errors:'none');
 })();
