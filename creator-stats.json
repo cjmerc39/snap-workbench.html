@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-12",
+ "updated": "2026-07-13",
  "windowDays": 30,
  "deckCount": 59,
  "ledger": [
@@ -760,24 +760,6 @@
    ]
   },
   {
-   "creator": "Alexander Coccia",
-   "published": "2026-06-16",
-   "ids": [
-    "Agony",
-    "Clea",
-    "JeffTheBabyDolphin",
-    "KarenPage",
-    "MarvelBoy",
-    "MotherAskani",
-    "PeniParker",
-    "SubMariner",
-    "SuperiorSpiderMan",
-    "TheCollector",
-    "Venus",
-    "VictoriaHand"
-   ]
-  },
-  {
    "creator": "Coougarrr",
    "published": "2026-07-11",
    "ids": [
@@ -1064,6 +1046,24 @@
     "ShadowKing",
     "Titania"
    ]
+  },
+  {
+   "creator": "Alexander Coccia",
+   "published": "2026-06-16",
+   "ids": [
+    "Agony",
+    "Clea",
+    "JeffTheBabyDolphin",
+    "KarenPage",
+    "MarvelBoy",
+    "MotherAskani",
+    "PeniParker",
+    "SubMariner",
+    "SuperiorSpiderMan",
+    "TheCollector",
+    "Venus",
+    "VictoriaHand"
+   ]
   }
  ],
  "cards": {
@@ -1270,8 +1270,6 @@
   "Havok": 1,
   "Sunspot": 1,
   "Thena": 1,
-  "KarenPage": 1,
-  "TheCollector": 2,
   "MilesMorales": 1,
   "Bullseye": 4,
   "Frigga": 3,
@@ -1281,6 +1279,7 @@
   "StarlordMasterOfTheSun": 1,
   "WolverineHorseman": 1,
   "Wave": 1,
+  "TheCollector": 2,
   "ColleenWing": 1,
   "Swarm": 1,
   "Elektra": 2,
@@ -1310,7 +1309,8 @@
   "DeafeningChord": 1,
   "HitMonkey": 1,
   "RocketRaccoon": 1,
-  "Titania": 1
+  "Titania": 1,
+  "KarenPage": 1
  },
  "pairs": {
   "GalactusFirstSteps|Iceman": 2,
@@ -2110,7 +2110,6 @@
   "MarvelBoy|SuperiorSpiderMan": 2,
   "SubMariner|SuperiorSpiderMan": 2,
   "SuperiorSpiderMan|Venus": 2,
-  "Agony|MotherAskani": 2,
   "GrandMaster|Surge": 3,
   "Bullseye|Surge": 3,
   "Daken|Surge": 3,
@@ -2151,6 +2150,7 @@
   "Magik|ManSpider": 2,
   "FinFangFoom|LunaSnow": 2,
   "FinFangFoom|ManSpider": 2,
+  "Agony|MotherAskani": 2,
   "HopeSummers|MotherAskani": 2,
   "GrandMaster|HopeSummers": 2,
   "MoonGirl|Namorita": 2,
