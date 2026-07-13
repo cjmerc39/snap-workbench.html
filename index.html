@@ -1351,7 +1351,7 @@ const S = {
   syncState: 'idle',       // 'idle' | 'ok' | 'offline' | 'error'
   syncLast: 0,             // last successful sync (ms)
 };
-const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb', prefs:'snapwb-prefs', creators:'snapwb-creators', synctoken:'snapwb-synctoken' };
+const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb', prefs:'snapwb-prefs', creators:'snapwb-creators', synctoken:'snapwb-synctoken', crfresh:'snapwb-crfresh' };
 
 /* ============ UTIL ============ */
 const $ = s => document.querySelector(s);
@@ -1826,6 +1826,63 @@ function healCreatorIds(){
   if(S.addedCreatorDecks.length !== before) changed = true;
   return changed;
 }
+/* shared by add + the daily refresh: one feed's XML -> channel identity + harvested decks */
+function parseCreatorFeed(xml){
+  const chName = (xml.match(/<author>[\s\S]*?<name>([^<]+)<\/name>/) || [])[1] || 'Creator';
+  // R11.1: YouTube's RSS <yt:channelId> omits the UC prefix (verified: Regis's feed says
+  // "bt1SGM..."), which made every added creator invisible to the Following pane's UC guard.
+  // Prefer the feed's self-link (always the full id), normalize whatever we get.
+  const uc = normChannelId((xml.match(/channel_id=(UC[\w-]{22})/) || xml.match(/<yt:channelId>([^<]+)<\/yt:channelId>/) || [])[1]);
+  const entries = xml.split('<entry>').slice(1);
+  const now = Date.now(); const decks = [];
+  for(const e of entries){
+    const published = ((e.match(/<published>([^<]+)</) || [])[1] || '').slice(0,10);
+    // R11.3: 30-day window (user's pick; was 14, briefly 60) — monthly deck-dump creators fit,
+    // and YouTube's feed only serves ~15 recent videos anyway, so this stays bounded.
+    if(published && (now - Date.parse(published)) >= 30*86400000) continue;
+    const title = unescXml((e.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || '');
+    const vurl = unescXml((e.match(/<link[^>]*rel="alternate"[^>]*href="([^"]+)"/) || [])[1] || '');
+    const desc = unescXml((e.match(/<media:description[^>]*>([\s\S]*?)<\/media:description>/) || [])[1] || '');
+    extractDecksFromDesc(desc).forEach(dk => decks.push({
+      creator:chName, video:title, url:vurl, published,
+      name:dk.name||'', ids:dk.ids||[], untapped:dk.untapped||'', added:true, chId:uc }));
+  }
+  return { uc, chName, entryCount: entries.length, decks };
+}
+/* R16: the missing half of "these refresh daily" — added creators were harvested ONCE,
+   at add time, and never again (only the three built-in channels get the nightly
+   GitHub refresh). This re-harvests followed channels at most once per 20h per
+   device: per-channel guarded, and a failed or codeless fetch NEVER clobbers the
+   cached decks (same never-clobber-to-empty rule as the nightly harvester). */
+const CR_FRESH_MS = 20*3600*1000;
+let _crBusy = false;
+async function refreshAddedCreators(force){
+  if(_crBusy || !YT_URL || !(S.addedCreators || []).length) return;
+  const last = (await sGet(K.crfresh)) || 0;
+  if(!force && Date.now() - last < CR_FRESH_MS) return;
+  _crBusy = true;
+  try{
+    await sPut(K.crfresh, JSON.stringify(Date.now())); // stamp first: a bad day retries tomorrow, not on every render
+    let changed = false;
+    for(const c of (S.addedCreators || []).slice()){
+      // as tolerant as addCreator, which stored the id: junk ids just 404 at the relay
+      const id = normChannelId(c && c.id);
+      if(!id) continue;
+      try{
+        const r = await fetch(YT_URL + '?url=' + encodeURIComponent('https://www.youtube.com/channel/' + id), {cache:'no-store'});
+        if(!r.ok) continue;
+        const f = parseCreatorFeed(await r.text());
+        if(normChannelId(f.uc) !== id || !f.decks.length) continue; // wrong or codeless feed: keep what we have
+        const prev = S.addedCreatorDecks.filter(d => normChannelId(d.chId) === id);
+        if(JSON.stringify(prev) === JSON.stringify(f.decks)) continue;
+        S.addedCreatorDecks = S.addedCreatorDecks.filter(d => normChannelId(d.chId) !== id).concat(f.decks);
+        if(f.chName && f.chName !== 'Creator' && c.name !== f.chName) c.name = f.chName; // channels rename
+        changed = true;
+      }catch(e){ /* offline / YouTube blocking: yesterday's decks stay */ }
+    }
+    if(changed){ persistCreators(); renderCreatorDecks(); }
+  }finally{ _crBusy = false; }
+}
 async function addCreator(url){
   // R8: failures land in the modal (#cr-msg) so they don't vanish like a toast; each failure mode gets its own words
   const say = m => { const box = $('#cr-msg'); if(box){ box.textContent = m; box.style.display='block'; } else toast(m); };
@@ -1841,27 +1898,9 @@ async function addCreator(url){
     say('Couldn\u2019t reach that channel \u2014 YouTube sometimes blocks for a while; worth retrying in a few minutes. (' + (e && e.message ? e.message : 'network error') + ')');
     return;
   }
-  const chName = (xml.match(/<author>[\s\S]*?<name>([^<]+)<\/name>/) || [])[1] || 'Creator';
-  // R11.1: YouTube's RSS <yt:channelId> omits the UC prefix (verified: Regis's feed says
-  // "bt1SGM..."), which made every added creator invisible to the Following pane's UC guard.
-  // Prefer the feed's self-link (always the full id), normalize whatever we get.
-  const uc = normChannelId((xml.match(/channel_id=(UC[\w-]{22})/) || xml.match(/<yt:channelId>([^<]+)<\/yt:channelId>/) || [])[1]);
+  const { uc, chName, entryCount, decks } = parseCreatorFeed(xml);
   if(!uc){ say('Found the feed but couldn’t identify the channel — try its full youtube.com/channel/UC… URL.'); return; }
-  const entries = xml.split('<entry>').slice(1);
-  const now = Date.now(); const decks = [];
-  for(const e of entries){
-    const published = ((e.match(/<published>([^<]+)</) || [])[1] || '').slice(0,10);
-    // R11.3: 30-day window (user's pick; was 14, briefly 60) — monthly deck-dump creators fit,
-    // and YouTube's feed only serves ~15 recent videos anyway, so this stays bounded.
-    if(published && (now - Date.parse(published)) >= 30*86400000) continue;
-    const title = unescXml((e.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || '');
-    const vurl = unescXml((e.match(/<link[^>]*rel="alternate"[^>]*href="([^"]+)"/) || [])[1] || '');
-    const desc = unescXml((e.match(/<media:description[^>]*>([\s\S]*?)<\/media:description>/) || [])[1] || '');
-    extractDecksFromDesc(desc).forEach(dk => decks.push({
-      creator:chName, video:title, url:vurl, published,
-      name:dk.name||'', ids:dk.ids||[], untapped:dk.untapped||'', added:true, chId:uc }));
-  }
-  if(!decks.length){ say('Found ' + chName + ' — but no Snap deck codes in their ' + entries.length + ' most recent videos (YouTube only lets me see the latest ~15, going back 30 days). They may share decks in video comments or on another channel.'); return; }
+  if(!decks.length){ say('Found ' + chName + ' — but no Snap deck codes in their ' + entryCount + ' most recent videos (YouTube only lets me see the latest ~15, going back 30 days). They may share decks in video comments or on another channel.'); return; }
   // R11.2: compare NORMALIZED ids so re-adding replaces entries saved under the old UC-less form
   S.addedCreators = S.addedCreators.filter(c => normChannelId(c.id) !== uc).concat([{ id:uc, name:chName, handle:url }]);
   S.addedCreatorDecks = S.addedCreatorDecks.filter(d => normChannelId(d.chId) !== uc).concat(decks);
@@ -1871,7 +1910,7 @@ async function addCreator(url){
 function openAddCreator(){
   openModal(
     '<h2>Add a creator</h2>'+
-    '<div class="mnote">Paste a YouTube channel link or @handle. We read their last two weeks of videos and pull any Marvel Snap deck codes from the descriptions.</div>'+
+    '<div class="mnote">Paste a YouTube channel link or @handle. We read their last month of videos, pull any Marvel Snap deck codes from the descriptions, and re-check daily.</div>'+
     '<div class="mrow"><input id="cr-url" class="minput" type="text" placeholder="youtube.com/@handle or channel link" autocomplete="off" autocapitalize="off" spellcheck="false"></div>'+
     '<div id="cr-msg" class="mnote" style="display:none; color:var(--warn);"></div>'+
     '<div class="mrow"><button class="abtn primary" id="cr-fetch">Fetch decks</button><button class="abtn" id="cr-cancel">Cancel</button></div>'
@@ -3930,6 +3969,7 @@ const BUILTIN_CREATORS = [
   { name:'Unfitparrot',      url:'https://www.youtube.com/@Unfitparrot' },
 ];
 function renderCreatorDecks(){
+  refreshAddedCreators(); // fire-and-forget; TTL + busy guard make this a no-op except ~once a day
   const wrap = $('#creatorlist'); if(!wrap) return;
   wrap.innerHTML='';
   // R5-J: harvested + in-app added, tagged. R11.1: newest first — a just-added creator's
@@ -4638,6 +4678,7 @@ async function boot(){
   const cr = await sGet(K.creators);
   if(cr){ S.addedCreators = cr.channels || []; S.addedCreatorDecks = cr.decks || []; }
   if(healCreatorIds()) persistCreators();   // R11.1: normalize UC-less ids saved by the buggy window
+  refreshAddedCreators();                   // R16: quiet daily re-harvest of followed channels (never blocks boot)
   // R5-I: device-local sync token (never in a URL), then pull-and-merge remote once at boot.
   // The pull is capped at 6s so a hung (not merely offline) relay can never stall first render.
   S.syncToken = (await sGet(K.synctoken)) || '';

@@ -1039,6 +1039,33 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   w.eval('closeModal()');
   w.eval('setTab("cards")'); await sleep(10);
 
+  // --- R16: added creators refresh daily (the "refresh daily" promise was only true for built-ins) ---
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u,o)=>({ok:true,status:200,text:async()=>('+JSON.stringify(MOCK_RSS)+'),json:async()=>({})}); await addCreator("https://youtube.com/@mocktuber"); window.fetch=of; })()');
+  assert(w.eval('S.addedCreatorDecks.length')===1, 'R16 setup: MockTuber re-added with one deck');
+  const _pubNewest = new Date(Date.now()-1*86400000).toISOString();
+  const FRESH_ENTRY = '<entry><title>Brand New Banger</title>'+
+    '<link rel="alternate" href="https://www.youtube.com/watch?v=mock456"/>'+
+    '<published>'+_pubNewest+'</published>'+
+    '<media:group><media:description>Code:\n'+_dcode+'\nGG</media:description></media:group>'+
+    '</entry>';
+  const MOCK_RSS2 = MOCK_RSS.replace('<entry>', FRESH_ENTRY + '<entry>');
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u,o)=>({ok:true,status:200,text:async()=>('+JSON.stringify(MOCK_RSS2)+'),json:async()=>({})}); await refreshAddedCreators(true); window.fetch=of; })()');
+  assert(w.eval('S.addedCreatorDecks.length')===2, 'R16: the daily refresh harvests the channel\'s NEW video');
+  assert(w.eval('S.addedCreatorDecks.some(d=>d.video==="Brand New Banger")'), 'R16: the new deck carries its video title');
+  await sleep(400);
+  assert(typeof JSON.parse(w.eval('localStorage.getItem("snapwb-crfresh")')||'0')==='number' && JSON.parse(w.eval('localStorage.getItem("snapwb-crfresh")'))>0, 'R16: the refresh stamps its freshness');
+  const _crPersist2 = w.eval('JSON.parse(localStorage.getItem("snapwb-creators")||"null")');
+  assert(_crPersist2 && _crPersist2.decks && _crPersist2.decks.length===2, 'R16: refreshed decks persist to K.creators');
+  const _ttlHits = await w.eval('(async()=>{ let n=0; const of=window.fetch; window.fetch=async(u,o)=>{n++; return {ok:true,status:200,text:async()=>"",json:async()=>({})};}; await refreshAddedCreators(); window.fetch=of; return n; })()');
+  assert(_ttlHits===0, 'R16: a fresh stamp means no network — at most one re-harvest a day');
+  w.eval('localStorage.setItem("snapwb-crfresh", JSON.stringify(Date.now()-30*3600*1000))');
+  const _failHits = await w.eval('(async()=>{ let n=0; const of=window.fetch; window.fetch=async(u,o)=>{n++; return {ok:false,status:502,json:async()=>({}),text:async()=>""};}; await refreshAddedCreators(); window.fetch=of; return n; })()');
+  assert(_failHits>0 && w.eval('S.addedCreatorDecks.length')===2, 'R16: a stale stamp retries, and a dead relay never clobbers cached decks');
+  w.eval('localStorage.setItem("snapwb-crfresh", JSON.stringify(Date.now()-30*3600*1000))');
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u,o)=>({ok:true,status:200,text:async()=>('+JSON.stringify(OLD_RSS)+'),json:async()=>({})}); await refreshAddedCreators(); window.fetch=of; })()');
+  assert(w.eval('S.addedCreatorDecks.length')===2, 'R16: a codeless (out-of-window) feed keeps yesterday\'s decks');
+  w.eval('S.addedCreators=[]; S.addedCreatorDecks=[]; persistCreators(); localStorage.removeItem("snapwb-crfresh");'); await sleep(10);
+
   // ============ R6 WP1: draft lifecycle · blank bench · empty states · connective flow · sync safety ============
   // item 1: a blank draft is hidden from Saved AND the sync push; its first card promotes it
   w.eval('S.decks = S.decks.filter(x=>!isDraft(x)); S.activeId=null; S.syncToken="";'); await sleep(10);
