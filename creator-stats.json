@@ -1,7 +1,7 @@
 {
- "updated": "2026-07-13",
+ "updated": "2026-07-14",
  "windowDays": 30,
- "deckCount": 59,
+ "deckCount": 58,
  "ledger": [
   {
    "creator": "Alexander Coccia",
@@ -958,24 +958,6 @@
    ]
   },
   {
-   "creator": "Coougarrr",
-   "published": "2026-06-14",
-   "ids": [
-    "RavonnaRenslayer",
-    "Sage",
-    "Mystique",
-    "LunaSnow",
-    "AntiVenom",
-    "IronMan",
-    "Gorr",
-    "ShadowKing",
-    "Magik",
-    "Moonstone",
-    "HydroMan",
-    "EsmeCuckoo"
-   ]
-  },
-  {
    "creator": "Unfitparrot",
    "published": "2026-07-09",
    "ids": [
@@ -1094,7 +1076,7 @@
   "NegasonicTeenageWarhead": 4,
   "Ronan": 1,
   "ScarletWitch": 1,
-  "ShadowKing": 7,
+  "ShadowKing": 6,
   "Supergiant": 6,
   "WilsonFisk": 7,
   "BuckyBarnes": 1,
@@ -1137,7 +1119,7 @@
   "AmericaChavez": 3,
   "JeffTheBabyDolphin": 14,
   "JubileeSilverSurfer": 1,
-  "Magik": 8,
+  "Magik": 7,
   "Maverick": 4,
   "NicoMinoru": 8,
   "Stick": 4,
@@ -1248,9 +1230,9 @@
   "Agony": 3,
   "Hulkbuster": 2,
   "JenniferKale": 1,
-  "LunaSnow": 6,
+  "LunaSnow": 5,
   "ManSpider": 3,
-  "RavonnaRenslayer": 2,
+  "RavonnaRenslayer": 1,
   "Taskmaster": 3,
   "Wong": 1,
   "RedHulk": 1,
@@ -1284,7 +1266,7 @@
   "Swarm": 1,
   "Elektra": 2,
   "Crystal": 1,
-  "IronMan": 2,
+  "IronMan": 1,
   "Wiccan": 1,
   "MsMarvel": 1,
   "TheAncientOne": 1,
@@ -1292,13 +1274,6 @@
   "Onslaught": 1,
   "Quicksilver": 1,
   "Domino": 1,
-  "Sage": 1,
-  "Mystique": 1,
-  "AntiVenom": 1,
-  "Gorr": 1,
-  "Moonstone": 1,
-  "HydroMan": 1,
-  "EsmeCuckoo": 1,
   "ShadowlandsDaredevil": 1,
   "ArchangelHorseman": 1,
   "Hood": 1,
@@ -2081,7 +2056,6 @@
   "Hulkbuster|Taskmaster": 2,
   "LunaSnow|ManSpider": 3,
   "LunaSnow|PeniParker": 2,
-  "LunaSnow|RavonnaRenslayer": 2,
   "LunaSnow|SymbioteSpiderMan": 2,
   "LunaSnow|Taskmaster": 3,
   "ManSpider|PeniParker": 2,
@@ -2145,7 +2119,7 @@
   "Frigga|GambitHorseman": 2,
   "Magik|Taskmaster": 2,
   "FinFangFoom|Taskmaster": 2,
-  "LunaSnow|Magik": 4,
+  "LunaSnow|Magik": 3,
   "FinFangFoom|Magik": 2,
   "Magik|ManSpider": 2,
   "FinFangFoom|LunaSnow": 2,
@@ -2155,8 +2129,6 @@
   "GrandMaster|HopeSummers": 2,
   "MoonGirl|Namorita": 2,
   "Namorita|NicoMinoru": 2,
-  "Elektra|MoonGirl": 2,
-  "IronMan|Magik": 2,
-  "IronMan|LunaSnow": 2
+  "Elektra|MoonGirl": 2
  }
 }
