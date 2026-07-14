@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>Snap Workbench</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0d0a17">
@@ -52,15 +52,16 @@ html,body{margin:0; padding:0; color:var(--text); font-family:var(--body);
    toolbar were present, leaving a phantom gap at the bottom — 100lvh ignores
    it. Safari itself keeps dvh, which tracks the real toolbar correctly. */
 html{height:100%;}
-body{height:100%; display:flex; flex-direction:column; overflow:hidden;}
+body{height:100%; display:flex; flex-direction:column; overflow:hidden; overscroll-behavior:none;}
 @supports (height:100dvh){body{height:100dvh;}}
 @media (display-mode: standalone){
   @supports (height:100lvh){body{height:100lvh;}}
 }
 main{flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain; /* rubber-band stays inside the scroller — never shoves the shell */
   padding-bottom:24px;}
 button{font-family:var(--body); cursor:pointer; touch-action:manipulation;}
-input,textarea{font-size:16px;}
+input,textarea,select{font-size:16px;} /* iOS auto-zooms any focused field whose computed size is under 16px */
 
 /* ---------- header ---------- */
 header{
@@ -315,7 +316,7 @@ h1 .h-snap{color:var(--gold);}
 .oc label{font-size:9.5px; color:var(--faint); font-weight:700;}
 .comborow{display:flex; align-items:center; gap:8px; margin-bottom:8px;}
 .comborow select{flex:1; min-width:0; background:var(--card); color:var(--text); border:1px solid var(--line);
-  border-radius:10px; padding:10px 8px; font-size:13px;}
+  border-radius:10px; padding:8px; font-size:16px;}
 .combo-amp{font-family:var(--head); font-weight:800; color:var(--gold); font-size:16px;}
 .combo-head{font-size:12.5px; color:var(--text); margin-bottom:8px; line-height:1.35;}
 .combo-head b{color:var(--gold);}
@@ -432,7 +433,7 @@ h1 .h-snap{color:var(--gold);}
 .pl-line-add{flex:0 0 auto; background:none; border:1px dashed var(--line2); color:var(--faint);
   border-radius:999px; width:32px; height:32px; font-size:16px; font-weight:800; line-height:1; cursor:pointer;}
 .pl-line-name-input{flex:0 0 auto; min-width:120px; background:var(--glass-2); color:var(--text);
-  border:1px solid var(--gold); border-radius:var(--r-pill); padding:5px 12px; min-height:32px; font-size:12px; font-weight:700;}
+  border:1px solid var(--gold); border-radius:var(--r-pill); padding:4px 12px; min-height:32px; font-size:16px; font-weight:700;}
 /* R11 de-clunk: the Rename/Duplicate/Delete text row folds into icon buttons beside the pills */
 .pl-mgr{display:flex; align-items:center; gap:4px; margin-bottom:8px;}
 .pl-mgr .pl-lines{flex:1; min-width:0; margin-bottom:0;}
@@ -547,7 +548,7 @@ h1 .h-snap{color:var(--gold);}
 #modal h2{font-family:var(--head); font-weight:800; letter-spacing:.2px; font-size:17px; margin:6px 0 12px;}
 #modal textarea{
   width:100%; background:var(--bg0); border:1px solid var(--line); color:var(--text);
-  border-radius:10px; padding:10px; min-height:96px; font-family:var(--mono); font-size:12px; resize:vertical;
+  border-radius:10px; padding:10px; min-height:96px; font-family:var(--mono); font-size:16px; resize:vertical;
 }
 .minput{
   flex:1; width:100%; min-height:44px; background:var(--bg0); border:1px solid var(--line); color:var(--text);
@@ -597,7 +598,7 @@ h1 .h-snap{color:var(--gold);}
 
 /* ---------- v3: notes & polish ---------- */
 #decknotes{width:100%; background:var(--panel); border:1px solid var(--line); color:var(--text);
-  border-radius:12px; padding:11px 14px; min-height:88px; resize:vertical; outline:none; font-size:14px; line-height:1.5;}
+  border-radius:12px; padding:11px 14px; min-height:88px; resize:vertical; outline:none; font-size:16px; line-height:1.5;}
 #decknotes:focus{border-color:var(--cost);}
 .tile, .mini, .saverow{border-color:rgba(255,255,255,.09);}
 #ai-save{margin-top:8px; width:100%;}
@@ -745,7 +746,7 @@ body.sheet-open main{overflow:hidden;}   /* engaged ONLY by the import/settings 
   opacity:0; transform:translateY(8px); pointer-events:none;
   transition:opacity var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out);}
 body.on-cards #searchbar.on{display:flex; opacity:1; transform:none; pointer-events:auto;}
-#searchbar #q{flex:1; background:none; border:none; color:var(--text); font-size:15px; min-width:0;}
+#searchbar #q{flex:1; background:none; border:none; color:var(--text); font-size:16px; min-width:0;}
 #searchbar #q:focus{outline:none;}
 #searchbar .sb-ic{width:18px; height:18px; stroke:var(--faint); fill:none; stroke-width:1.9; flex:0 0 auto;}
 #sb-x{background:none; border:none; color:var(--faint); font-size:20px; line-height:1; flex:0 0 auto;}
@@ -911,7 +912,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .pl-branch-row{display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
 .pl-branch-txt{font-size:11.5px; color:var(--dim); flex-shrink:0;}
 .pl-bsel{-webkit-appearance:none; appearance:none; color:var(--text,#eee); border:1px solid var(--line); border-radius:10px;
-  font-size:12px; font-weight:600; padding:6px 24px 6px 10px; min-height:32px; min-width:0; flex:1 1 auto; max-width:100%;
+  font-size:16px; font-weight:600; padding:4px 24px 4px 10px; min-height:32px; min-width:0; flex:1 1 auto; max-width:100%;
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
   background:var(--panel) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a99bd6' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 9px center;}
 .pl-branch [data-plbturn]{flex:0 0 66px;}
@@ -938,7 +939,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 /* R12: locations reference (Library tab) */
 #loclist{margin-top:18px;}
 #loc-q, #cr-cardq{width:100%; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-radius:12px;
-  color:var(--text); font-size:13px; padding:11px 12px; margin:8px 0 10px; min-height:44px;}
+  color:var(--text); font-size:16px; padding:10px 12px; margin:8px 0 10px; min-height:44px;}
 /* R15: line-consistency readout */
 .lp-sim{display:flex; flex-direction:column; gap:4px; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair);
   border-radius:10px; padding:9px 11px; margin-top:10px; font-size:11.5px; color:var(--dim); line-height:1.45;}
