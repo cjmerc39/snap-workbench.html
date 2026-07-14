@@ -591,6 +591,30 @@ h1 .h-snap{color:var(--gold);}
 .cib::after{content:''; position:absolute; inset:-3px;} /* expands tap target to 33px without growing the visible circle */
 .viewrow{display:flex; align-items:center; justify-content:space-between; margin:0 2px 10px;}
 .viewrow #matchcount{margin:0;}
+.viewrow-tools{display:flex; align-items:center; gap:6px;}
+#own-quick{padding:6px 11px; font-size:12px;}
+/* NEW pill — a fresh release announces itself on its tile (Build + Library) */
+.newpill{position:absolute; top:5px; left:50%; transform:translateX(-50%); z-index:3;
+  font-size:8.5px; font-weight:800; letter-spacing:.5px; color:var(--iris-ink);
+  background:var(--iris); border-radius:5px; padding:1.5px 5px; box-shadow:0 1px 4px rgba(0,0,0,.5);}
+/* the fit shelf — ranked "fits this deck" suggestions above the grid while building */
+#fitshelf{margin:0 0 12px;}
+.fit-head{font-family:var(--head); font-weight:800; letter-spacing:.6px; font-size:11px;
+  color:var(--iris-soft); text-transform:uppercase; margin:0 2px 7px;}
+#fitrow{display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding:1px 1px 3px;}
+#fitrow::-webkit-scrollbar{display:none;}
+.fitcard{flex:0 0 64px; cursor:pointer; transition:transform var(--dur-1) var(--ease-out);}
+.fitcard:active{transform:scale(.94);}
+.fitcard .mini{width:64px;}
+.fit-why{margin-top:3px; font-size:9px; font-weight:700; color:var(--faint); line-height:1.25; text-align:center;
+  overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;}
+/* the insight curve doubles as a cost filter — tap a bar to browse that cost */
+#ins-curve i{position:relative; cursor:pointer;}
+#ins-curve i::after{content:''; position:absolute; left:-1px; right:-1px; top:-22px; bottom:0;} /* full-height tap target over each thin bar */
+#ins-curve i.sel{box-shadow:0 0 0 1.5px var(--iris); filter:brightness(1.2);}
+/* a card landing in the deck row pops into place */
+@keyframes mpop{0%{transform:scale(.55);} 60%{transform:scale(1.1);} 100%{transform:scale(1);}}
+#dz .mini.pop{animation:mpop .32s var(--ease-spring);}
 .segment{display:flex; background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:2px;}
 .segment button{background:none; border:none; color:var(--faint); font-size:12px; font-weight:700; padding:5px 12px; border-radius:var(--r-pill);
   transition:background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);}
@@ -1044,10 +1068,17 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       <div id="artnote">Card art seems blocked in this environment, so you&rsquo;re seeing tile view. Everything else works the same.</div>
       <div class="viewrow">
         <div id="matchcount"></div>
-        <div class="segment" id="densityseg">
-          <button data-den="cmp">Grid</button>
-          <button data-den="det">Detail</button>
+        <div class="viewrow-tools">
+          <button class="chip c-own" id="own-quick">Owned</button>
+          <div class="segment" id="densityseg">
+            <button data-den="cmp">Grid</button>
+            <button data-den="det">Detail</button>
+          </div>
         </div>
+      </div>
+      <div id="fitshelf" hidden>
+        <div class="fit-head">&#10022; Fits this deck</div>
+        <div id="fitrow"></div>
       </div>
       <div id="cardlist" class="tilegrid"></div>
     </div>
@@ -1650,6 +1681,7 @@ function toggleCard(defid){
     if(S.tokens[defid] && !S.byId[defid]){ toast('Tokens are created in play — they can’t join the 12'); return; }
     if(d.cards.length >= 12){ toast('Deck is full (12 cards)'); return; }
     d.cards.push(defid);
+    S._pop = defid;   // the deck-zone render pops the newcomer into place
   }
   buzz();
   touch(d);
@@ -2067,7 +2099,7 @@ $('#filterpanel').addEventListener('click', e => {
   if(head){ toggleFacet(head.closest('.fwidget').dataset.facet); return; }
   const sortBtn = e.target.closest('[data-sort]');
   if(sortBtn){ S.sort = sortBtn.dataset.sort; renderBrowse(); return; }
-  if(e.target.closest('#fw-owned')){ S.filters.owned = !S.filters.owned; afterFilterChange(); return; }
+  if(e.target.closest('#fw-owned')){ setOwnedFilter(!S.filters.owned); return; }
   if(e.target.closest('#fp-clear')){ clearAllFilters(); return; }
   const fpChip = e.target.closest('.fp-chip');
   if(fpChip){ removeFilter(fpChip.dataset.facet, fpChip.dataset.v); afterFilterChange(); return; }
@@ -2113,12 +2145,23 @@ function closeFlyout(){
   if(bs) bs.setAttribute('aria-expanded','false');
   syncScrollLock();
 }
+function relMs(c){ return c && c.r ? (Date.parse(c.r) || 0) : 0; }   // undated cards read as epoch -> they sink in Newest
+function isNewCard(c){ const t = relMs(c); return !!t && (Date.now() - t) < 32*86400000; }
 const SORTS = [
   { k:'cost',  label:'Energy', fn:(a,b)=>(a.c-b.c)||(a.p-b.p)||a.n.localeCompare(b.n) },
+  { k:'new',   label:'Newest', fn:(a,b)=>(relMs(b)-relMs(a))||(a.c-b.c)||a.n.localeCompare(b.n) },
   { k:'power', label:'Power',  fn:(a,b)=>(b.p-a.p)||(a.c-b.c)||a.n.localeCompare(b.n) },
   { k:'name',  label:'Name',   fn:(a,b)=>a.n.localeCompare(b.n) },
 ];
 S.sort = 'cost'; // DEFAULT = Energy (cost asc -> power DESC -> name A-Z)
+/* R17: Owned is one tap, not a trip into the flyout — and it remembers. The
+   flyout's "Owned only" and this pill drive the same switch. */
+function setOwnedFilter(v){
+  S.filters.owned = !!v;
+  S.prefs.ownedOnly = !!v; sSet(K.prefs, S.prefs); scheduleSync();
+  afterFilterChange();
+}
+if($('#own-quick')) $('#own-quick').onclick = () => setOwnedFilter(!S.filters.owned);
 $('#btn-filter').onclick = () => { flyoutOpen() ? closeFlyout() : openFlyout(false); };
 $('#btn-sort').onclick   = () => { openFlyout(true); };
 if($('#btn-search')) $('#btn-search').onclick = () => {
@@ -2176,6 +2219,7 @@ function tileHtml(c){
     '<span class="ownpip"></span>'+
     '<div class="tart" style="'+tileGrad(c)+'">'+img+
       '<span class="tinit">'+esc(initials(c))+'</span>'+
+      (isNewCard(c)?'<span class="newpill">NEW</span>':'')+
       '<span class="ovl tc">'+c.c+'</span><span class="ovl tp">'+c.p+'</span>'+
       '<span class="tick">&#10003;</span>'+
     '</div>'+
@@ -2194,12 +2238,76 @@ function tileHtmlCompact(c){
     '<span class="ownpip"></span>'+
     '<div class="tart" style="'+tileGrad(c)+'">'+img+
       '<span class="tinit">'+esc(initials(c))+'</span>'+
+      (isNewCard(c)?'<span class="newpill">NEW</span>':'')+
       '<span class="ovl tc">'+c.c+'</span><span class="ovl tp">'+c.p+'</span>'+
       '<span class="tick">&#10003;</span>'+
     '</div>'+
     '<div class="cname-scrim">'+esc(c.n)+'</div>'+
     '<button class="cib">i</button>'+
   '</div>';
+}
+/* ============ R17: the fit shelf — the grid finally knows what you're building ============
+   Ranks every out-of-deck card against the deck in progress, using the machinery
+   the Deck tab already trusts: package posture (2+ discard enablers want a discard
+   payoff), interaction finders (Wong wants On Reveal cards), cost tribes (Ka-Zar
+   wants 1-drops), and the creator ledger's pair counts as empirical evidence.
+   Each suggestion carries its strongest reason, so a pick explains itself. */
+function fitSuggestions(max){
+  const d = activeDeck();
+  if(!d || d.cards.length < 2 || d.cards.length >= 12) return [];
+  const deckCards = d.cards.map(id => getCard(id)).filter(Boolean);
+  if(deckCards.length < 2) return [];
+  const inSet = new Set(d.cards);
+  const st = S.creatorStats;
+  const pairs = (st && st.deckCount >= 5 && st.pairs) ? st.pairs : null;
+  const posture = SYNERGY_RULES.map(r => ({ r,
+    en: deckCards.filter(r.isEnabler).length, py: deckCards.filter(r.isPayoff).length }));
+  const finders = [];
+  INTERACTION_RULES.forEach(rule => deckCards.filter(rule.find).forEach(f => finders.push({ rule, f })));
+  const tribes = [];
+  deckCards.forEach(f => { const m = /your (\d)[- ]cost/i.exec(f.a||''); if(m) tribes.push({ f, cost:+m[1] }); });
+  const out = [];
+  for(const c of S.db){
+    if(inSet.has(c.d)) continue;
+    if(S.filters.owned && !S.owned.has(c.d)) continue;
+    let score = 0, why = '', whyScore = 0;
+    const consider = (pts, text) => { score += pts; if(pts > whyScore){ whyScore = pts; why = text; } };
+    for(const { r, en, py } of posture){
+      const isP = r.isPayoff(c), isE = r.isEnabler(c);
+      if(en >= 2 && isP) consider(12, r.label + ' payoff');
+      else if(py >= 2 && isE) consider(12, r.label + ' enabler');
+      else if(en + py >= 3 && (isP || isE)) consider(5, r.label + ' package');
+    }
+    for(const { rule, f } of finders){
+      if(rule.partners([c], f).length) consider(8, 'feeds ' + f.n);
+    }
+    for(const t of tribes){ if(c.c === t.cost) consider(6, t.f.n + ' buffs it'); }
+    if(pairs){
+      let pn = 0, best = 0, bestId = null;
+      for(const id of d.cards){
+        const n = pairs[[c.d, id].sort().join('|')] || 0;
+        pn += n; if(n > best){ best = n; bestId = id; }
+      }
+      if(best >= 2){
+        const bc = getCard(bestId);
+        consider(Math.min(14, 4 + pn), 'runs with ' + (bc ? bc.n : 'these'));
+      }
+    }
+    if(!S.filters.owned && S.owned.has(c.d)) score += 1;   // your copy outranks a maybe at equal fit
+    if(score >= 8) out.push({ c, score, why });
+  }
+  return out.sort((a,b) => b.score - a.score || a.c.c - b.c.c || a.c.n.localeCompare(b.c.n)).slice(0, max || 10);
+}
+function renderFitShelf(){
+  const shelf = $('#fitshelf'); if(!shelf) return;
+  const sugg = fitSuggestions(10);
+  shelf.hidden = !sugg.length;
+  if(!sugg.length){ const fr = $('#fitrow'); if(fr) fr.innerHTML = ''; return; }
+  const row = $('#fitrow');
+  row.innerHTML = sugg.map(s =>
+    '<div class="fitcard" data-d="'+esc(s.c.d)+'" title="'+esc(s.c.n)+' — '+esc(s.why)+'">'+
+      miniHtml(s.c)+'<div class="fit-why">'+esc(s.why)+'</div></div>').join('');
+  row.onclick = e => { const f = e.target.closest('.fitcard'); if(f) toggleCard(f.dataset.d); };
 }
 function renderCards(){
   const list = $('#cardlist');
@@ -2210,6 +2318,9 @@ function renderCards(){
   list.innerHTML = cards.map(cmp ? tileHtmlCompact : tileHtml).join('');
   document.querySelectorAll('#densityseg button').forEach(b =>
     b.classList.toggle('on', (b.dataset.den === 'det') === !cmp));
+  const oq = $('#own-quick');
+  if(oq) oq.classList.toggle('on', S.filters.owned);
+  renderFitShelf();
   updateFacetCounts();
   updateClearBtn();
 }
@@ -3803,6 +3914,23 @@ if($('#verdictrow')) $('#verdictrow').addEventListener('click', e => {
 });
 
 /* ============ RENDER: DECK ZONE (build screen) ============ */
+/* R17: the insight curve is a control, not a chart — each bar is a one-tap cost
+   filter for the grid below (see the gap at 2, tap the 2 bar, browse 2-drops). */
+function renderInsCurve(buckets){
+  const el = $('#ins-curve'); if(!el) return;
+  const mx = Math.max(1, ...buckets);
+  el.innerHTML = buckets.map((n, i) => {
+    const key = String(Math.min(Math.max(i, 1), 6));   // buckets 0+1 share the '1-' filter, 6 is '6+'
+    return '<i class="'+(n?'':'z')+(S.filters.cost.has(key)?' sel':'')+'" data-cost="'+key+
+      '" style="height:'+Math.max(3, Math.round(n/mx*18))+'px"></i>';
+  }).join('');
+  el.onclick = e => {
+    const b = e.target.closest('[data-cost]'); if(!b) return;
+    const key = b.dataset.cost;
+    if(S.filters.cost.has(key)) S.filters.cost.delete(key); else S.filters.cost.add(key);
+    afterFilterChange(); renderDeckbar();   // repaint the bar's selected ring
+  };
+}
 /* R6: blank-bench build header — no active deck. 12 empty slots, dashes, Done hidden. */
 function renderDeckbarEmpty(){
   const bm = $('#bh-mode'); if(bm) bm.textContent = '';
@@ -3817,7 +3945,7 @@ function renderDeckbarEmpty(){
   let html = ''; for(let i=0; i<12; i++) html += '<div class="mini empty">+</div>';
   dz.innerHTML = html;
   dz.onclick = e => { const m = e.target.closest('.mini'); if(!m || m.classList.contains('empty')) return; toggleCard(m.dataset.d); };
-  $('#ins-curve').innerHTML = [0,0,0,0,0,0,0].map(() => '<i class="z" style="height:3px"></i>').join('');
+  renderInsCurve([0,0,0,0,0,0,0]);
   $('#ins-avg').textContent = '–';
   $('#ins-pow').textContent = '0';
   const ia = $('#ins-arch'); if(ia) ia.textContent = '';
@@ -3842,6 +3970,11 @@ function renderDeckbar(){ // kept name; now renders the pinned zone + header
   let html = cards.map(c => miniHtml(c)).join('');
   for(let i=cards.length; i<12; i++) html += '<div class="mini empty">+</div>';
   dz.innerHTML = html;
+  if(S._pop){ // the card that just landed pops into place
+    const pm = dz.querySelector('.mini[data-d="'+S._pop+'"]');
+    if(pm) pm.classList.add('pop');
+    S._pop = null;
+  }
   dz.onclick = e => {
     const m = e.target.closest('.mini'); if(!m || m.classList.contains('empty')) return;
     toggleCard(m.dataset.d);
@@ -3849,9 +3982,7 @@ function renderDeckbar(){ // kept name; now renders the pinned zone + header
 
   const buckets=[0,0,0,0,0,0,0];
   cards.forEach(c => buckets[Math.min(c.c,6)]++);
-  const mx = Math.max(1, ...buckets);
-  $('#ins-curve').innerHTML = buckets.map(n =>
-    '<i class="'+(n?'':'z')+'" style="height:'+Math.max(3, Math.round(n/mx*18))+'px"></i>').join('');
+  renderInsCurve(buckets);
   $('#ins-avg').textContent = cards.length ? (cards.reduce((s,c)=>s+c.c,0)/cards.length).toFixed(1) : '\u2013';
   $('#ins-pow').textContent = cards.reduce((s,c)=>s+(c.p||0),0);
   const ia = $('#ins-arch');
@@ -4603,6 +4734,7 @@ async function loadSiteData(){
     const cards = arr.filter(c => c && c.d && c.n).map(c => {
       const k = { n:c.n, d:c.d, c:+c.c||0, p:+c.p||0, a:c.a||'', s:c.s||'?' };
       if(c.f) k.f = c.f; if(c.i) k.i = c.i;
+      if(c.r && /^\d{4}-\d{2}-\d{2}$/.test(c.r)) k.r = c.r;   // release date -> Newest sort + NEW pill
       return k;
     });
     if(cards.length < 50) return false;
@@ -4675,6 +4807,7 @@ async function boot(){
   const prefs = await sGet(K.prefs);
   if(prefs) S.prefs = Object.assign({ density:'cmp', collOpen:false }, prefs);
   S.prefs.facetOpen = Object.assign({ sort:false, cost:true, series:false, mech:false, power:false }, S.prefs.facetOpen || {});
+  if(S.prefs.ownedOnly) S.filters.owned = true;   // the Owned pill remembers across sessions
   // R5-J: restore in-app added creators (rides in the previously-unused K.creators key)
   const cr = await sGet(K.creators);
   if(cr){ S.addedCreators = cr.channels || []; S.addedCreatorDecks = cr.decks || []; }

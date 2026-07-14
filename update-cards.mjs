@@ -106,11 +106,13 @@ console.log(`schedule: dates for`, Object.keys(dates).length, `card ids`);
 // ---- memory: anything previously published stays published ----
 let prevIds = new Set();
 let prevTokenCount = 0;
+const prevR = {};   // defid -> 'YYYY-MM-DD': release dates persist across runs (seeded once by backfill-dates.mjs)
 try {
   const prev = JSON.parse(fs.readFileSync(`cards.json`, `utf8`));
   prevIds = new Set((prev.cards || []).map(x => x.d));
+  for (const x of prev.cards || []) if (x.r) prevR[x.d] = x.r;
   prevTokenCount = Array.isArray(prev.tokens) ? prev.tokens.length : 0;
-  console.log(`memory: `, prevIds.size, `cards +`, prevTokenCount, `tokens in previous output`);
+  console.log(`memory: `, prevIds.size, `cards (`, Object.keys(prevR).length, `dated) +`, prevTokenCount, `tokens in previous output`);
 } catch (e) { console.log(`memory: no previous cards.json (first run)`); }
 
 // ---- source 1: the feed ----
@@ -125,12 +127,18 @@ const future = [];
 const kept = [];
 let unscheduled = 0;
 
+const isoDay = ms => new Date(ms).toISOString().slice(0, 10);
 const slim = c => {
   const name = strip(c.name);
   const m = /pool-(\d)/.exec(c.source_slug || ``);
   const card = { n: name, d: c.carddefid, c: +c.cost || 0, p: +c.power || 0, a: strip(c.ability), s: SER[c.source_slug] || (m ? m[1] : `?`) };
   if (!card.a && c.flavor) card.f = strip(c.flavor).replace(/^"|"$/g, ``);
   if (c.art && /^https?:\/\//.test(c.art)) card.i = String(c.art);
+  // release date, powering the app's Newest sort: a previously stamped date is
+  // permanent; else the schedule's date; else (a card entering the file for the
+  // first time with no schedule entry) today — first inclusion IS its release day.
+  const r = prevR[c.carddefid] || (dates[c.carddefid] ? isoDay(dates[c.carddefid]) : (prevIds.has(c.carddefid) ? `` : isoDay(nowMs)));
+  if (r) card.r = r;
   return card;
 };
 

@@ -20,8 +20,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.querySelectorAll('#cardlist .tile').length===357, 'renders 357 tiles');
 
   // --- round-2 restyle: sorting (Energy default: cost asc -> power asc -> name) ---
-  assert(w.eval('SORTS.length')===3, 'SORTS has exactly 3 entries');
-  assert(w.eval('SORTS.map(s=>s.k).join()')==='cost,power,name', 'SORTS keys are [cost,power,name]');
+  assert(w.eval('SORTS.length')===4, 'SORTS has exactly 4 entries');
+  assert(w.eval('SORTS.map(s=>s.k).join()')==='cost,new,power,name', 'SORTS keys are [cost,new,power,name]');
   assert(w.eval('SORTS.every(s=>s.k!=="series")'), 'series removed from SORTS (stays a filter facet only)');
   assert(w.eval('SORTS[0].fn({c:1},{c:2})')<0, 'Energy fn: lower cost sorts first');
   assert(w.eval('SORTS[0].fn({c:2,p:3,n:"B"},{c:2,p:9,n:"A"})')<0, 'Energy fn: equal cost -> lower power first (power asc)');
@@ -1855,6 +1855,59 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   w.eval('(function(){ const d=activeDeck(); d.cards=d.cards.slice(0,8); })(); renderPlanner(); renderLinePlan();'); await sleep(20);
   assert(d.querySelector('#planner .lp-sim')===null && d.querySelector('#lineplan .lp-sim')===null, 'R15: partial decks show no consistency box');
   w.eval('S.decks=S.decks.filter(function(x){return x.id!=="r15";}); S.activeId=null; renderAll(); setTab("cards");'); await sleep(10);
+
+  // ================= R17: the Build tab knows what you're building =================
+  // Newest sort: later release first, undated cards sink, ties fall back to Energy order
+  assert(w.eval('SORTS[1].k')==='new' && /Newest/.test(d.querySelector('#fw-sort [data-sort="new"]').textContent), 'R17: Newest sort chip exists');
+  assert(w.eval('SORTS[1].fn({r:"2026-01-02",c:1,n:"A"},{r:"2026-06-01",c:1,n:"B"})')>0, 'R17: Newest fn puts the later release first');
+  assert(w.eval('SORTS[1].fn({c:1,n:"A"},{r:"2022-05-07",c:5,n:"B"})')>0, 'R17: undated cards sink below any dated card');
+  // NEW pill: a fresh release wears it, an old one doesn't
+  w.eval('(function(){var c=S.db.find(x=>x.d==="Hulk"); c.r=new Date(Date.now()-5*86400000).toISOString().slice(0,10); renderCards();})()');
+  assert(d.querySelector('#cardlist .tile[data-d="Hulk"] .newpill')!==null, 'R17: a card released this month wears the NEW pill');
+  w.eval('(function(){var c=S.db.find(x=>x.d==="Hulk"); c.r="2022-10-18"; renderCards();})()');
+  assert(d.querySelector('#cardlist .tile[data-d="Hulk"] .newpill')===null, 'R17: an old release shows no pill');
+  w.eval('(function(){delete S.db.find(x=>x.d==="Hulk").r; renderCards();})()');
+  // the insight curve is a cost filter
+  w.eval('(function(){var dd=ensureDraft(); dd.cards=S.db.filter(c=>c.c===6).slice(0,3).map(c=>c.d); touch(dd); renderAll();})()');
+  const preCount = d.getElementById('matchcount').textContent;
+  d.querySelector('#ins-curve i[data-cost="6"]').click(); await sleep(30);
+  assert(w.eval('S.filters.cost.has("6")'), 'R17: tapping a curve bar filters that cost');
+  assert(d.getElementById('matchcount').textContent!==preCount, 'R17: the grid narrows to the tapped cost');
+  assert(d.querySelector('#ins-curve i[data-cost="6"]').classList.contains('sel'), 'R17: the tapped bar wears its selected ring');
+  d.querySelector('#ins-curve i[data-cost="6"]').click(); await sleep(30);
+  assert(!w.eval('S.filters.cost.has("6")'), 'R17: tapping the bar again clears the filter');
+  // Owned quick pill: one tap, persists as a preference, syncs with the flyout switch
+  d.getElementById('own-quick').click(); await sleep(30);
+  assert(w.eval('S.filters.owned')===true && w.eval('S.prefs.ownedOnly')===true, 'R17: Owned pill flips the filter and remembers it');
+  assert(d.getElementById('own-quick').classList.contains('on'), 'R17: the pill lights up');
+  assert(d.querySelector('#fw-owned').classList.contains('on'), 'R17: the flyout switch agrees');
+  d.getElementById('own-quick').click(); await sleep(30);
+  assert(w.eval('S.filters.owned')===false && w.eval('S.prefs.ownedOnly')===false, 'R17: tapping again clears both');
+  // the fit shelf: two discard enablers summon discard payoffs
+  w.eval('(function(){var dd=activeDeck(); dd.cards=["Blade","Hellcow"]; touch(dd); renderAll();})()'); await sleep(20);
+  assert(d.getElementById('fitshelf').hidden===false, 'R17: a two-card deck summons the fit shelf');
+  const whys = [...d.querySelectorAll('#fitrow .fit-why')].map(e=>e.textContent);
+  assert(whys.some(t=>/Discard payoff/.test(t)), 'R17: discard enablers surface discard payoffs');
+  const firstFit = d.querySelector('#fitrow .fitcard');
+  const fitId = firstFit.dataset.d;
+  firstFit.click(); await sleep(30);
+  assert(w.eval('activeDeck().cards.includes("'+fitId+'")'), 'R17: tapping a suggestion adds it to the deck');
+  assert(d.querySelector('#fitrow .fitcard[data-d="'+fitId+'"]')===null, 'R17: the added card leaves the shelf');
+  // creator-ledger evidence outranks and explains itself
+  w.eval('window.__csFit = S.creatorStats; S.creatorStats = { updated:"x", windowDays:30, deckCount:40, cards:{}, pairs:{"AbsorbingMan|Blade":9}, ledger:[] };');
+  w.eval('(function(){var dd=activeDeck(); dd.cards=["Blade","Hellcow"]; touch(dd); renderAll();})()'); await sleep(20);
+  const amFit = [...d.querySelectorAll('#fitrow .fitcard')].find(f=>f.dataset.d==='AbsorbingMan');
+  assert(!!amFit && /runs with Blade/.test(amFit.querySelector('.fit-why').textContent), 'R17: pair evidence suggests the card and names its partner');
+  w.eval('S.creatorStats = window.__csFit;');
+  // the shelf stays out of the way: hidden at 12/12, hidden on a blank bench
+  w.eval('(function(){var dd=activeDeck(); dd.cards=S.db.slice(0,12).map(c=>c.d); touch(dd); renderAll();})()'); await sleep(20);
+  assert(d.getElementById('fitshelf').hidden===true, 'R17: a full deck hides the shelf');
+  w.eval('S.decks=S.decks.filter(function(x){return x.id!==S.activeId;}); S.activeId=null; renderAll();'); await sleep(20);
+  assert(d.getElementById('fitshelf').hidden===true, 'R17: a blank bench hides the shelf');
+  // the pop: the newest addition lands with its animation class
+  w.eval('(function(){var dd=ensureDraft(); dd.cards=["Blade"]; touch(dd); renderAll(); toggleCard("SwordMaster");})()'); await sleep(20);
+  assert(d.querySelector('#dz .mini[data-d="SwordMaster"]').classList.contains('pop'), 'R17: the just-added card pops into the deck row');
+  w.eval('S.decks=S.decks.filter(function(x){return x.id!==S.activeId;}); S.activeId=null; renderAll(); setTab("cards");'); await sleep(10);
 
   assert(errors.length===0, 'R15: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
 
