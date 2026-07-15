@@ -108,12 +108,16 @@ function extractDecks(desc, D){
     out.push({ name: r ? r.name : ``, ids: (r && r.ids) || [], zone: url });
   }
   // 1c) marvelsnapzone community deck pages are Cloudflare-walled and carry no code
-  //     in the URL, so they harvest as link-out-only entries (mirrors undecodable slugs)
-  const zpRe = /https?:\/\/marvelsnapzone\.com\/decks\/[^\s"'<>?#]+/gi;
+  //     in the URL, so they harvest as link-out-only entries (mirrors undecodable slugs).
+  //     & ends the URL too (docs-redirect residue like "…/decks/smitty/&sa=D…" is not slug),
+  //     and the slug doubles as the display name — several decks often share one video.
+  const slugName = u => ((u.match(/\/decks\/([^\/]+)/) || [])[1] || ``)
+    .replace(/[-_]+/g, ` `).trim().replace(/\b[a-z]/g, ch => ch.toUpperCase());
+  const zpRe = /https?:\/\/marvelsnapzone\.com\/decks\/[^\s"'<>?#&]+/gi;
   while((m = zpRe.exec(desc)) !== null){
     const url = m[0];
     if(seen.has(url)) continue; seen.add(url);
-    out.push({ name: ``, ids: [], zone: url });
+    out.push({ name: slugName(url), ids: [], zone: url });
   }
   // 1d) snap.fan deck pages: collect the numeric id here; resolveFanDecks() fetches the
   //     cards from snap.fan's open API after extraction (the page itself is bot-walled)
@@ -223,7 +227,12 @@ function selfcheck(){
     `deck-builder link decodes name + ids + keeps the zone url`);
   check(!!zp && zp.zone === `https://marvelsnapzone.com/decks/toxicsoulking32c870a/`,
     `community deck page becomes a link-out entry (got ${zp ? zp.zone : `none`})`);
+  check(!!zp && zp.name === `Toxicsoulking32c870a`, `zone slug doubles as the display name (got ${zp ? zp.name : `none`})`);
   check(dedupKey(zp) === zp.zone, `link-out zone entries dedupe on their zone url`);
+  // docs-redirect residue after the slug must not leak into the url
+  const gx = extractDecks(`see https://marvelsnapzone.com/decks/smitty/&sa=D&source=docs&ust=123`, D);
+  check(gx.length === 1 && gx[0].zone === `https://marvelsnapzone.com/decks/smitty/` && gx[0].name === `Smitty`,
+    `& ends the zone url (got ${gx.length ? gx[0].zone : `none`})`);
   // snap.fan: extraction collects the id for the API resolver; duplicate ids collapse
   const fx = extractDecks(`a https://snap.fan/decks/355403/ b https://snap.fan/decks/355403 c https://snap.fan/decks/9/`, D);
   check(fx.length === 2 && fx[0].fanId === `355403` && fx[1].fanId === `9`, `snap.fan links extract ids + dedupe (got ${fx.length})`);

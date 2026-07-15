@@ -505,6 +505,8 @@ h1 .h-snap{color:var(--gold);}
 .cr-head{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 8px; margin-bottom:8px;}
 .cr-creator{font-weight:800; font-size:13.5px; color:var(--gold);}
 .cr-video{flex:1; min-width:120px; font-size:12.5px; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+/* the deck's own name — the only thing telling apart 3 decks from one video */
+.cr-deckname{width:100%; font-size:12.5px; font-weight:800; color:var(--iris-soft,#b794ff);}
 .cr-date{font-size:11px; color:var(--faint);}
 .cr-strip, .dz-preview{display:grid; grid-template-columns:repeat(6,1fr); gap:5px; margin-bottom:10px;}
 .cr-strip .mini, .dz-preview .mini{width:auto; aspect-ratio:33/44; border-radius:7px;}
@@ -1884,11 +1886,16 @@ function extractDecksFromDesc(desc){
     if(!r.err && r.ids.length) out.push({ name:lab || r.name || '', ids:r.ids, zone:u });
     else out.push({ name:lab, ids:[], zone:u });
   }
-  const zp = /https?:\/\/marvelsnapzone\.com\/decks\/[^\s"'<>?#]+/gi;
+  // & also ends the URL: docs-redirect residue ("…/decks/smitty/&sa=D&source=docs…") is not slug.
+  // The slug is the only identity these link-outs have, so it doubles as a display name
+  // ("monkey-boomerang" -> "Monkey Boomerang") — several decks often share one video.
+  const slugName = u => ((u.match(/\/decks\/([^\/]+)/) || [])[1] || '')
+    .replace(/[-_]+/g,' ').trim().replace(/\b[a-z]/g, ch => ch.toUpperCase());
+  const zp = /https?:\/\/marvelsnapzone\.com\/decks\/[^\s"'<>?#&]+/gi;
   while((m = zp.exec(text))){
     const u = m[0];
     if(seen.has(u)) continue; seen.add(u);
-    out.push({ name:label(m.index), ids:[], zone:u });
+    out.push({ name:label(m.index) || slugName(u), ids:[], zone:u });
   }
   // snap.fan deck pages: no code in the URL and the page is bot-walled, so in-app
   // (added-creator) harvests link out; the nightly GitHub harvester resolves these
@@ -4492,6 +4499,7 @@ function renderCreatorDecks(){
     if(cd.video) head.appendChild(el('span','cr-video', cd.video));
     if(cd.added) head.appendChild(el('span','cr-added','Added'));
     if(cd.published) head.appendChild(el('span','cr-date', cd.published));
+    if(cd.name) head.appendChild(el('span','cr-deckname', cd.name));   // several decks can share one video — the name tells them apart
     // R12: can you actually build this? Own-count chip + what's missing, right on the row.
     const bi = S.owned.size ? buildInfo(cd) : null;
     if(bi) head.appendChild(el('span','cr-own' + (bi.missing.length ? '' : ' full'),

@@ -671,7 +671,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   // --- marvelsnapzone (zone) + snap.fan (fan) link-outs render for undecodable entries ---
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+
     JSON.stringify({updated:'2026-07-09',decks:[
-      {creator:'X',video:'Zone Video',url:'https://youtu.be/z1',published:'2026-07-08',name:'',ids:[],zone:'https://marvelsnapzone.com/decks/toxicsoulking32c870a/'},
+      {creator:'X',video:'Zone Video',url:'https://youtu.be/z1',published:'2026-07-08',name:'Toxic Thanos',ids:[],zone:'https://marvelsnapzone.com/decks/toxicsoulking32c870a/'},
       {creator:'Y',video:'Fan Video',url:'https://youtu.be/f1',published:'2026-07-07',name:'',ids:[],fan:'https://snap.fan/decks/355403/'}
     ]})+
     ')}); await loadCreatorDecks(); window.fetch=of; })()');
@@ -680,6 +680,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(30);
   const _zrows = d.querySelectorAll('#creatorlist .crow');
   assert(_zrows[0].querySelector('a[href*="marvelsnapzone.com"]')!==null, 'zone-only creator deck shows a Snap Zone link-out');
+  assert(_zrows[0].querySelector('.cr-deckname')!==null && _zrows[0].querySelector('.cr-deckname').textContent==='Toxic Thanos',
+    'the deck name renders on the row (tells apart multiple decks per video)');
   assert(_zrows[1].querySelector('a[href*="snap.fan"]')!==null, 'fan-only creator deck shows a snap.fan link-out');
 
   // --- E: the REAL shipped creator-decks.json parses + renders in-app ---
@@ -1023,6 +1025,10 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(_zx[0].ids.length===12 && _zx[0].name==='Deck A' && /deck-builder/.test(_zx[0].zone), 'zone deck-builder link decodes 12 ids in-app + keeps the label');
   assert(_zx[1].ids.length===0 && _zx[1].zone==='https://marvelsnapzone.com/decks/somebody123abc/', 'zone community page -> link-out entry');
   assert(_zx[2].ids.length===0 && _zx[2].fan==='https://snap.fan/decks/355403/', 'snap.fan page -> link-out entry');
+  // unlabelled zone pages take their name from the slug; docs-redirect junk never enters the url
+  const _zx2 = w.eval('extractDecksFromDesc('+JSON.stringify('x https://marvelsnapzone.com/decks/monkey-boomerang/ y https://marvelsnapzone.com/decks/smitty/&sa=D&source=docs&ust=1')+')');
+  assert(_zx2.length===2 && _zx2[0].name==='Monkey Boomerang', 'zone slug becomes the display name (got '+_zx2[0].name+')');
+  assert(_zx2[1].zone==='https://marvelsnapzone.com/decks/smitty/' && _zx2[1].name==='Smitty', '& cuts docs-redirect residue off the zone url');
 
   // --- J: addCreator harvests a mocked feed, tags decks, persists, renders + Remove ---
   const _mockUC = 'UCmocktuber000000000001';
