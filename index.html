@@ -835,6 +835,9 @@ body.on-cards #searchbar.on{display:flex; opacity:1; transform:none; pointer-eve
 body.on-cards #btn-clearall.on{display:inline-flex; align-items:center;}
 #clr-n{background:var(--iris); color:var(--iris-ink); border-radius:999px; min-width:16px; height:16px;
   line-height:16px; font-size:10px; padding:0 3px; margin-left:2px;}
+/* on Build the bench strip docks above the tab bar — every fixed bottom control clears it */
+body.on-build #searchbar, body.on-build #btn-clearall{
+  bottom:calc(58px + env(safe-area-inset-bottom) + 14px + var(--tray-h, 50px));}
 #clr-n:empty{display:none;}
 /* while the search bar is open it owns the bottom band: tuck the clear pill + toolbar
    so nothing collides with it (the bar has its own ×; an empty × closes the bar) */

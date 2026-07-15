@@ -1,46 +1,42 @@
-// One-time backfill: stamp a release date (r: 'YYYY-MM-DD') on every card in
-// cards.json that lacks one, scraped from each card's snap.fan page ("Released"
-// row). snap.fan is already this repo's authority for release dates (see
-// update-cards.mjs, which reads their schedule); this reaches the back catalog
-// the forward-looking schedule can't. Run once, locally: node backfill-dates.mjs
-// Going forward update-cards.mjs stamps new cards itself — this never re-runs.
+// Re-dating pass: stamp/repair the release date (r: 'YYYY-MM-DD') on EVERY card in
+// cards.json from its snap.fan card page. Authority is the card HISTORY TABLE row
+// (<div class="text-green">Released</div><div>YYYY-MM-DD</div>) — the page's variant
+// gallery ALSO says "Released" per variant art, and the first version of this script
+// grabbed that, poisoning many dates with variant-art days (Sebastian Shaw taught us).
+// Safe to re-run anytime, locally: node backfill-dates.mjs
+// Nightly update-cards.mjs preserves whatever this writes (prevR wins forever).
 const fs = (await import(`node:fs`)).default;
 
 const UA = { headers: { [`user-agent`]: `snap-workbench github action (personal deck builder)` } };
-const MONTHS = { jan:0, feb:1, mar:2, apr:3, may:4, jun:5, jul:6, aug:7, sep:8, oct:9, nov:10, dec:11 };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 function parseReleased(html){
-  const m = /Released[\s\S]{0,500}?title="([^"]+)"/.exec(html);
-  if (!m) return null;
-  // Django-style: "Dec. 7, 2022, 7 p.m." / "March 14, 2023, ..." / "Sept. 5, 2024"
-  const d = /^([A-Za-z]+)\.?\s+(\d{1,2}),\s+(\d{4})/.exec(m[1].trim());
-  if (!d) return null;
-  const mo = MONTHS[d[1].slice(0, 3).toLowerCase()];
-  if (mo == null) return null;
-  const iso = new Date(Date.UTC(+d[3], mo, +d[2])).toISOString().slice(0, 10);
-  return /^\d{4}-\d{2}-\d{2}$/.test(iso) ? iso : null;
+  const m = /class="text-green">Released<\/div>\s*<div>(\d{4}-\d{2}-\d{2})<\/div>/.exec(html);
+  return m ? m[1] : null;
 }
 
 const j = JSON.parse(fs.readFileSync(`cards.json`, `utf8`));
-const need = j.cards.filter(c => !c.r);
-console.log(j.cards.length, `cards,`, need.length, `missing a release date`);
-let hit = 0, miss = [];
-for (const c of need) {
-  await sleep(120);
+console.log(j.cards.length, `cards; verifying release dates against snap.fan history tables...`);
+let confirmed = 0, fixed = 0, filled = 0;
+const miss = [], changes = [];
+for (const c of j.cards) {
+  await sleep(130);
   try {
     const r = await fetch(`https://snap.fan/cards/` + encodeURIComponent(c.d) + `/`, UA);
     if (!r.ok) { miss.push(c.d + ` (http ` + r.status + `)`); continue; }
     const iso = parseReleased(await r.text());
-    if (!iso) { miss.push(c.d + ` (no date on page)`); continue; }
-    c.r = iso; hit++;
-    if (hit % 40 === 0) console.log(`…`, hit, `dated so far`);
+    if (!iso) { miss.push(c.d + ` (no history-table date)`); continue; }
+    if (!c.r) { c.r = iso; filled++; changes.push(c.d + `: (none) -> ` + iso); }
+    else if (c.r !== iso) { changes.push(c.d + `: ` + c.r + ` -> ` + iso); c.r = iso; fixed++; }
+    else confirmed++;
+    if ((confirmed + fixed + filled) % 60 === 0) console.log(`…`, confirmed + fixed + filled, `checked (` + fixed + ` fixed so far)`);
   } catch (e) { miss.push(c.d + ` (` + (e && e.message) + `)`); }
 }
-console.log(`dated`, hit, `cards;`, miss.length, `misses`);
+console.log(`confirmed:`, confirmed, `| fixed:`, fixed, `| filled:`, filled, `| unreachable:`, miss.length);
+if (changes.length) console.log(`changes:\n  ` + changes.join(`\n  `));
 if (miss.length) console.log(`missed:`, miss.join(`, `));
-// refuse a uselessly thin result — a snap.fan outage shouldn't write a half-dated file
-if (hit + (j.cards.length - need.length) < j.cards.length * 0.7) {
+// refuse a uselessly thin result — a snap.fan outage shouldn't write a half-verified file
+if (confirmed + fixed + filled < j.cards.length * 0.7) {
   console.error(`under 70% coverage — not writing`);
   process.exit(1);
 }
