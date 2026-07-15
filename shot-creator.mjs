@@ -37,6 +37,16 @@ await page.screenshot({ path: OUT + '/c1-zone-preview.png' });
 await page.evaluate(() => { const r = document.querySelector('#creatorlist .crow'); if (r) r.scrollIntoView({ block: 'start' }); });
 await page.waitForTimeout(1200);
 await page.screenshot({ path: OUT + '/c2-zone-preview-row.png' });
+
+// management strip: every pill removable, one built-in hidden -> restore row
+await page.evaluate(() => {
+  S.prefs.hiddenCreators = ['Coougarrr'];
+  S.addedCreators = [{ id:'UCbt1SGMrWj5Q7TMXAfmTERQ', name:'RegisKillbin', handle:'@RegisKillbin' }];
+  renderCreatorDecks();
+  document.querySelector('main').scrollTo(0, 0);
+});
+await page.waitForTimeout(800);
+await page.screenshot({ path: OUT + '/c3-manage-strip.png' });
 await browser.close();
 server.close();
 console.log('shots written to ' + OUT);

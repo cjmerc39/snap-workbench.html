@@ -699,6 +699,29 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(_drows[0].querySelectorAll('.cr-strip .mini').length===12, 'the surviving row is the decoded one (12-card strip)');
   w.eval('S.addedCreatorDecks=[];');
 
+  // --- creator management: every pill removable; built-ins mute + restore ---
+  w.eval('S.prefs.hiddenCreators=[]; S.crFilter=null; S.crCardQ=""; S.addedCreators=[]; renderCreatorDecks();'); await sleep(20);
+  const mgPills = [...d.querySelectorAll('#creatorlist .cr-fpill')];
+  assert(mgPills.length>=4 && mgPills.every(a=>a.querySelector('.cr-fx')!==null), 'every Following pill (built-ins too) carries a remove button');
+  const sjPill = mgPills.find(a=>/Snap Judgments/.test(a.textContent));
+  assert(sjPill!==undefined, 'Snap Judgments is a built-in pill');
+  sjPill.querySelector('.cr-fx').click(); await sleep(30);
+  assert(w.eval('S.prefs.hiddenCreators').includes('Snap Judgments'), 'hiding a built-in lands in prefs (synced)');
+  assert(![...d.querySelectorAll('#creatorlist .cr-fpill')].some(a=>/Snap Judgments/.test(a.textContent)), 'hidden built-in leaves the strip');
+  assert([...d.querySelectorAll('#creatorlist .crow .cr-creator')].every(e=>e.textContent!=='Snap Judgments'), 'hidden creator rows leave the list');
+  const hpill = [...d.querySelectorAll('#creatorlist .cr-hpill')].find(b=>/Snap Judgments/.test(b.textContent));
+  assert(hpill!==undefined, 'a restore chip appears under the strip');
+  hpill.click(); await sleep(30);
+  assert(w.eval('S.prefs.hiddenCreators.length')===0 && [...d.querySelectorAll('#creatorlist .cr-fpill')].some(a=>/Snap Judgments/.test(a.textContent)),
+    'restore chip brings the built-in back');
+  // built-in + followed channel: ONE merged pill whose × unfollows AND mutes
+  w.eval('S.addedCreators=[{id:"UCRM70o4UWSPL839M9d42xGw",name:"Snap Judgments",handle:"@snapjudgments"}]; renderCreatorDecks();'); await sleep(20);
+  const sjPills = [...d.querySelectorAll('#creatorlist .cr-fpill')].filter(a=>/Snap Judgments/.test(a.textContent));
+  assert(sjPills.length===1, 'built-in + followed channel merges to one pill (got '+sjPills.length+')');
+  sjPills[0].querySelector('.cr-fx').click(); await sleep(30);
+  assert(w.eval('S.addedCreators.length')===0 && w.eval('S.prefs.hiddenCreators').includes('Snap Judgments'), 'merged pill × unfollows and mutes in one tap');
+  w.eval('S.prefs.hiddenCreators=[]; sSet(K.prefs, S.prefs); renderCreatorDecks();'); await sleep(20);
+
   // --- E: the REAL shipped creator-decks.json parses + renders in-app ---
   const _realCD = JSON.parse(fs.readFileSync('creator-decks.json','utf8'));
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+JSON.stringify(_realCD)+')}); window.__realcd=await loadCreatorDecks(); window.fetch=of; })()');

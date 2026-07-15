@@ -1011,6 +1011,12 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .cr-fgo:active{background:rgba(255,255,255,.15);}
 .cr-fn{font-family:var(--head); font-size:11px; color:var(--gold);}
 .cr-fx{background:transparent; border:none; color:var(--faint); font-size:15px; line-height:1; padding:0 0 0 2px;}
+/* muted built-ins: a quiet one-tap-restore row under the Following strip */
+.cr-hiddenrow{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:8px;}
+.cr-hidden-lab{font-size:10px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; color:var(--faint);}
+.cr-hpill{background:transparent; border:1px dashed var(--line2); color:var(--faint);
+  border-radius:999px; padding:5px 10px; font-size:12px;}
+.cr-hpill:active{color:var(--text);}
 /* R12: locations reference (Library tab) */
 #loclist{margin-top:18px;}
 #loc-q, #cr-cardq{width:100%; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-radius:12px;
@@ -2957,7 +2963,9 @@ function creatorPairEvidence(cards){
 function trendingCards(){
   const st = S.creatorStats;
   const heal = id => S.byId[id] ? id : (S.short[id] || id);
+  const hidden = new Set((S.prefs && S.prefs.hiddenCreators) || []);   // muted creators don't steer the trend
   const entries = ((st && st.ledger) || [])
+    .filter(e => e && !hidden.has(e.creator))
     .map(e => ({ at: Date.parse(e.published || ''), ids: (e.ids || []).map(heal) }))
     .filter(e => !isNaN(e.at) && e.ids.length);
   if(entries.length < 10) return null;                       // too thin to call anything a trend
@@ -4405,46 +4413,83 @@ function renderCreatorDecks(){
   all.forEach(cd => { const k = dupKey(cd); if(!k) return;
     if(!bestDup[k] || ((cd.ids && cd.ids.length) && !(bestDup[k].ids && bestDup[k].ids.length))) bestDup[k] = cd; });
   all = all.filter(cd => { const k = dupKey(cd); return !k || bestDup[k] === cd; });
+  // Hidden creators: built-ins arrive in the nightly file for everyone, so "delete"
+  // means mute-by-name (persisted in prefs, so it syncs). Added channels get unfollowed
+  // outright. Both routes hang off the same pill ×.
+  const hidden = new Set((S.prefs && S.prefs.hiddenCreators) || []);
+  all = all.filter(cd => !hidden.has(cd.creator));
   // R10: Following pane — everyone whose decks land here, each linking to their channel
   const fstrip = el('div','cr-follow-strip');
   // R11.2: a pill is now a FILTER (tap = only that creator's decks, tap again = all);
   // the ↗ inside it still opens the channel. Links keep their href for middle-click/tests.
-  const fpill = (name, url, count, removeId) => {
+  const fpill = (name, url, count, r) => {
     const a = document.createElement('a');
     a.className = 'cr-fpill' + (S.crFilter === name ? ' on' : '');
     a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
     a.innerHTML = '<span class="cr-fname">' + esc(name) + '</span><span class="cr-fgo" title="Open channel">↗</span><b class="cr-fn">' + count + '</b>';
     a.onclick = ev => {
-      if(ev.target.closest('.cr-fx')) return;                    // unfollow handles itself
+      if(ev.target.closest('.cr-fx')) return;                    // remove/hide handles itself
       ev.preventDefault();
       if(ev.target.closest('.cr-fgo')){ try{ window.open(a.href, '_blank', 'noopener'); }catch(e){} return; }
       S.crFilter = (S.crFilter === name) ? null : name;
       renderCreatorDecks();
     };
-    if(removeId){
-      const x = document.createElement('button');
-      x.className = 'cr-fx'; x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label','Unfollow ' + name);
-      x.onclick = ev => { ev.preventDefault(); ev.stopPropagation();
-        S.addedCreators = S.addedCreators.filter(c => c.id !== removeId);
-        S.addedCreatorDecks = S.addedCreatorDecks.filter(d => d.chId !== removeId);
-        persistCreators(); renderCreatorDecks(); };
-      a.appendChild(x);
-    }
+    // every pill is removable: added channels unfollow, built-ins mute (restorable below)
+    const x = document.createElement('button');
+    x.className = 'cr-fx'; x.type = 'button'; x.textContent = '×';
+    x.setAttribute('aria-label', (r.builtin ? 'Hide ' : 'Unfollow ') + name);
+    x.onclick = ev => { ev.preventDefault(); ev.stopPropagation();
+      if(r.addedId){
+        S.addedCreators = S.addedCreators.filter(c => c.id !== r.addedId);
+        S.addedCreatorDecks = S.addedCreatorDecks.filter(d => d.chId !== r.addedId);
+        persistCreators();
+      }
+      if(r.builtin){
+        S.prefs.hiddenCreators = [...new Set([...(S.prefs.hiddenCreators || []), name])];
+        sSet(K.prefs, S.prefs); scheduleSync();
+      }
+      if(S.crFilter === name) S.crFilter = null;
+      renderCreatorDecks(); };
+    a.appendChild(x);
     return a;
   };
-  BUILTIN_CREATORS.forEach(b => fstrip.appendChild(fpill(b.name, b.url, all.filter(x => x.creator === b.name).length, null)));
+  // one pill per creator — a channel that's both built-in AND followed in-app
+  // (Snap Judgments) merges instead of appearing twice
+  const roster = [], rosterByName = {};
+  BUILTIN_CREATORS.forEach(b => {
+    const r = { name:b.name, url:b.url, builtin:true, addedId:null };
+    rosterByName[r.name] = r; roster.push(r);
+  });
   (S.addedCreators||[]).forEach(c => {
     // R11.1: NEVER silently hide a followed channel — this exact guard ate every new add
     // (YouTube RSS ids arrive without the UC prefix). Malformed id -> fall back to the handle.
     const id = normChannelId(c.id);
     const href = /^UC[\w-]{22}$/.test(id) ? 'https://www.youtube.com/channel/' + id
       : (/^https?:\/\//i.test(c.handle||'') ? c.handle : 'https://www.youtube.com/' + String(c.handle||'').replace(/^\/+/,''));
-    fstrip.appendChild(fpill(c.name || 'Creator', href,
-      (S.addedCreatorDecks||[]).filter(x => x.chId === c.id).length, c.id));
+    const nm = c.name || 'Creator';
+    if(rosterByName[nm]){ rosterByName[nm].addedId = c.id; return; }
+    const r = { name:nm, url:href, builtin:false, addedId:c.id };
+    rosterByName[nm] = r; roster.push(r);
   });
+  roster.filter(r => !hidden.has(r.name)).forEach(r =>
+    fstrip.appendChild(fpill(r.name, r.url, all.filter(x => x.creator === r.name).length, r)));
   const fsec = el('div','cr-follow');
-  fsec.appendChild(el('div','syn-sec', S.crFilter ? 'Following · showing ' + S.crFilter + ' — tap the pill again for all' : 'Following · tap a name to filter'));
+  fsec.appendChild(el('div','syn-sec', S.crFilter ? 'Following · showing ' + S.crFilter + ' — tap the pill again for all' : 'Following · tap a name to filter · × removes'));
   fsec.appendChild(fstrip);
+  if(hidden.size){                                   // muted built-ins come back with one tap
+    const hs = el('div','cr-hiddenrow');
+    hs.appendChild(el('span','cr-hidden-lab','Hidden'));
+    [...hidden].forEach(nm => {
+      const b = el('button','cr-hpill', nm + ' +');
+      b.type = 'button'; b.setAttribute('aria-label','Show ' + nm + ' again');
+      b.onclick = () => {
+        S.prefs.hiddenCreators = (S.prefs.hiddenCreators || []).filter(x => x !== nm);
+        sSet(K.prefs, S.prefs); scheduleSync(); renderCreatorDecks();
+      };
+      hs.appendChild(b);
+    });
+    fsec.appendChild(hs);
+  }
   wrap.appendChild(fsec);
   // R14: field-level trending sits above the deck rows — it reads the 30-day ledger,
   // not the display decks, so it renders even while the 14-day window is empty.
