@@ -682,7 +682,11 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(_zrows[0].querySelector('a[href*="marvelsnapzone.com"]')!==null, 'zone-only creator deck shows a Snap Zone link-out');
   assert(_zrows[0].querySelector('.cr-deckname')!==null && _zrows[0].querySelector('.cr-deckname').textContent==='Toxic Thanos',
     'the deck name renders on the row (tells apart multiple decks per video)');
+  const _zprev = _zrows[0].querySelector('img.cr-zoneprev');
+  assert(_zprev!==null && _zprev.src.indexOf('deckpreview.php?slug=toxicsoulking32c870a')>=0,
+    'undecoded zone deck shows the official 12-card preview image');
   assert(_zrows[1].querySelector('a[href*="snap.fan"]')!==null, 'fan-only creator deck shows a snap.fan link-out');
+  assert(_zrows[1].querySelector('img.cr-zoneprev')===null, 'fan-only rows get no zone preview image');
 
   // --- E: the REAL shipped creator-decks.json parses + renders in-app ---
   const _realCD = JSON.parse(fs.readFileSync('creator-decks.json','utf8'));

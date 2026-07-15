@@ -507,6 +507,10 @@ h1 .h-snap{color:var(--gold);}
 .cr-video{flex:1; min-width:120px; font-size:12.5px; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 /* the deck's own name — the only thing telling apart 3 decks from one video */
 .cr-deckname{width:100%; font-size:12.5px; font-weight:800; color:var(--iris-soft,#b794ff);}
+/* Snap Zone's rendered 12-card preview (1300x800) stands in for the mini strip
+   when a zone deck can't be decoded in the browser */
+.cr-zoneprev{display:block; width:100%; aspect-ratio:1300/800; border-radius:10px;
+  margin:2px 0 8px; box-shadow:inset 0 0 0 1px var(--hair); background:var(--card);}
 .cr-date{font-size:11px; color:var(--faint);}
 .cr-strip, .dz-preview{display:grid; grid-template-columns:repeat(6,1fr); gap:5px; margin-bottom:10px;}
 .cr-strip .mini, .dz-preview .mini{width:auto; aspect-ratio:33/44; border-radius:7px;}
@@ -4515,6 +4519,18 @@ function renderCreatorDecks(){
         strip.querySelectorAll('.mini').forEach(m => { if(hits.has(m.dataset.d)) m.classList.add('hit'); });
       }
       row.appendChild(strip);
+    } else if(cd.zone){
+      // Snap Zone deck pages can't be decoded in the browser (bot wall + no CORS on their
+      // API), but their preview renderer is open — show the official 12-card image, same
+      // host all the card art already comes from. The nightly harvester decodes built-ins.
+      const slug = (String(cd.zone).match(/marvelsnapzone\.com\/decks\/([^\/?#]+)/i) || [])[1];
+      if(slug){
+        const img = document.createElement('img');
+        img.className = 'cr-zoneprev'; img.loading = 'lazy'; img.decoding = 'async'; img.alt = 'Deck preview';
+        img.src = 'https://marvelsnapzone.com/img/deckpreview.php?slug=' + encodeURIComponent(slug);
+        img.onerror = () => img.remove();            // renderer down/blocked -> row just has no image
+        row.appendChild(img);
+      }
     }
     if(bi && bi.missing.length){
       const names = bi.missing.map(id => (getCard(id)||{n:id}).n);

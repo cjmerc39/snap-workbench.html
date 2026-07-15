@@ -9,8 +9,9 @@
 //                  or a bot-walled marvelsnapzone community page)
 //   - untapped   = the untapped.gg deck URL, present whenever the source was a slug (link-out when ids empty)
 //   - zone       = the marvelsnapzone.com URL, present whenever the source was one of theirs:
-//                  deck-builder/?deck=<base64> decodes fully; community /decks/<slug>/ pages sit
-//                  behind Cloudflare (no code in the URL), so those stay link-out only
+//                  deck-builder/?deck=<base64> decodes in place; community /decks/<slug>/ pages
+//                  are Cloudflare-walled but resolveZoneDecks() decodes them via the site's open
+//                  /pro/do.php?cmd=getdeck API (falls back to link-out when the call fails)
 //   - fan        = the snap.fan deck URL; the page is Cloudflare-walled but snap.fan's public
 //                  API (/api/decks/<id>/) is open, so resolveFanDecks() fills the ids after
 //                  harvest (falls back to link-out when the API call fails)
@@ -172,6 +173,26 @@ async function fetchChannel(ch, D){
 
 const dedupKey = x => (x.ids && x.ids.length) ? x.ids.slice().sort().join(`,`) : (x.untapped || x.zone || x.fan || x.url || ``);
 
+// ---- marvelsnapzone resolver: the deck page is Cloudflare-walled, /pro/do.php is not ----
+// Per-deck guarded and bounded; a failed call just leaves that entry as a link-out.
+async function resolveZoneDecks(decks, KNOWN){
+  const slugOf = x => ((x.zone || ``).match(/marvelsnapzone\.com\/decks\/([^\/?#]+)/i) || [])[1];
+  const targets = decks.filter(x => x && !(x.ids && x.ids.length) && slugOf(x)).slice(0, 20);
+  for(const x of targets){
+    const slug = slugOf(x);
+    try{
+      const r = await fetch(`https://marvelsnapzone.com/pro/do.php?cmd=getdeck&slug=` + encodeURIComponent(slug), UA);
+      if(!r.ok){ console.error(`  snapzone ${slug}: HTTP ${r.status}`); continue; }
+      const j = await r.json();
+      const ids = (j && Array.isArray(j.deck)) ? j.deck.filter(Boolean) : [];
+      if(ids.length >= 6 && ids.filter(id => KNOWN.has(id)).length * 2 > ids.length){
+        x.ids = ids.slice(0, 12);
+        if(j.humanname) x.name = String(j.humanname);   // the deck's own name beats the slug-derived one
+      }
+    }catch(err){ console.error(`  snapzone ${slug}: ${err && err.message}`); }
+  }
+}
+
 // ---- snap.fan resolver: the deck page is Cloudflare-walled, the JSON API is not ----
 // Per-deck guarded and bounded; a failed call just leaves that entry as a link-out.
 async function resolveFanDecks(decks, KNOWN){
@@ -257,6 +278,7 @@ async function main(){
     if(ok) anyOk = true;
     fresh = fresh.concat(decks);
   }
+  await resolveZoneDecks(fresh, table.KNOWN);           // fill marvelsnapzone link-outs via /pro/do.php
   await resolveFanDecks(fresh, table.KNOWN);            // fill snap.fan link-outs via their open API
   fresh.forEach(x => { if(x) delete x.fanId; });        // working field only — never written to the JSON
 
