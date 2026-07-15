@@ -634,7 +634,7 @@ h1 .h-snap{color:var(--gold);}
 #ins-curve i.sel{box-shadow:0 0 0 1.5px var(--iris); filter:brightness(1.2);}
 /* a card landing in the deck row pops into place */
 @keyframes mpop{0%{transform:scale(.55);} 60%{transform:scale(1.1);} 100%{transform:scale(1);}}
-#dz .mini.pop{animation:mpop .32s var(--ease-spring);}
+#dz .mini.pop, #dt .mini.pop{animation:mpop .32s var(--ease-spring);}
 /* R20: complete-my-deck — seed a few cards, let the bench finish the thought */
 #btn-complete{width:100%; margin:0 0 8px; padding:9px 8px; font-size:12.5px; font-weight:800;
   color:var(--iris-soft); background:rgba(150,116,255,.10); border:1px dashed rgba(170,140,255,.4);}
@@ -743,6 +743,19 @@ h1 .h-snap{color:var(--gold);}
 #dz .mini .ovl{width:15px; height:15px; font-size:9px; border-width:1.5px;}
 #dz .mini.empty{width:auto; aspect-ratio:33/44; font-size:15px;}
 @media (max-width:360px){ #dz{gap:4px;} }
+/* the bench strip — an app-shell row docked above the tab bar so the 12-slot deck
+   never leaves the screen while the card pool scrolls. Build tab only. */
+#decktray{display:none; flex:none; padding:7px 10px 6px;
+  background:var(--glass-2); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  box-shadow:inset 0 1px 0 var(--hair);}
+body.on-build #decktray{display:block;}
+#dt{display:grid; grid-template-columns:repeat(12,1fr); gap:4px; max-width:560px; margin-inline:auto;}
+#dt .mini{width:auto; aspect-ratio:33/44; border-radius:6px;}
+#dt .mini .ovl, #dt .mini .mname{display:none;}   /* gems + names unreadable at strip size */
+#dt .mini.empty{width:auto; aspect-ratio:33/44; font-size:13px;}
+@media (max-width:360px){ #dt{gap:3px;} }
+/* the floating tool cluster clears the strip while it's docked */
+body.on-build #toolbar{bottom:calc(58px + env(safe-area-inset-bottom) + 14px + var(--tray-h, 50px));}
 #insight{display:flex; align-items:center; gap:12px;}
 #ins-curve{display:flex; align-items:flex-end; gap:3px; height:20px; flex:1;}
 #ins-curve i{flex:1; border-radius:2px 2px 0 0; background:linear-gradient(180deg,#8fd4ff,var(--cost)); min-height:2px;}
@@ -920,7 +933,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 
 /* ---------- fallback: solid fills where backdrop-filter is unsupported (test env / old browsers) ---------- */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  header, #tabbar, #bhead, #browsebar, #toolbar, .gear, #collhead{background:var(--panel);}
+  header, #tabbar, #bhead, #browsebar, #decktray, #toolbar, .gear, #collhead{background:var(--panel);}
   #flyout, #searchbar, #btn-clearall{background:var(--panel);}
   #modal{background:var(--card);}
 }
@@ -1278,6 +1291,13 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   <button id="btn-search" aria-label="Search cards" aria-controls="searchbar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
   <button id="btn-sort" aria-label="Sort" aria-controls="flyout" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M8 4v16"/><path d="M4 8l4-4 4 4"/><path d="M16 20V4"/><path d="M12 16l4 4 4-4"/></svg></button>
   <button id="btn-filter" aria-label="Filter" aria-controls="flyout" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M3 5h18l-7 8v5l-4 2v-7z"/></svg><span id="fcount"></span></button>
+</div>
+
+<!-- the bench strip: an app-shell row (like the tab bar) so the whole 12-slot deck
+     stays in view while the card pool scrolls. Tap a card to remove it; tap an
+     empty slot to jump back up to the full tray. Build tab only (body.on-build). -->
+<div id="decktray" aria-label="Current deck">
+  <div id="dt"></div>
 </div>
 
 <nav id="tabbar">
@@ -1832,21 +1852,52 @@ function unescXml(s){
     .replace(/&#39;/g,"'").replace(/&apos;/g,"'").replace(/&amp;/g,'&');
 }
 /* R5-J: pull every deck out of a video description, reusing parseCode's decoders
-   (mirrors creator-decks.mjs extractDecks: untapped /decks/ slugs + standalone base64 codes). */
+   (mirrors creator-decks.mjs extractDecks: untapped /decks/ slugs, marvelsnapzone
+   links, and standalone base64 codes). */
 function extractDecksFromDesc(desc){
   const out=[], seen=new Set(), text=String(desc||'');
   // R11.3: creators label their links ("Bishop Venus: https://…") — prefer that label over
   // the URL slug, which for Hoogland named all 13 decks the same ("Venus").
+  const label = at => {
+    const pre = text.slice(Math.max(0, at - 80), at);
+    return ((pre.match(/(?:^|\n)\s*([^\n:]{2,40}):\s*$/) || [])[1] || '').trim();
+  };
   const rx = /https?:\/\/snap\.untapped\.gg\/[a-z]{2}\/decks\/[^\s"'<>]+/gi;
   let m;
   while((m = rx.exec(text))){
     const u = m[0];
     if(seen.has(u)) continue; seen.add(u);
-    const pre = text.slice(Math.max(0, m.index - 80), m.index);
-    const lab = ((pre.match(/(?:^|\n)\s*([^\n:]{2,40}):\s*$/) || [])[1] || '').trim();
+    const lab = label(m.index);
     const r = parseCode(u);
     if(!r.err) out.push({ name:lab || r.name || '', ids:r.ids, untapped:u });
     else out.push({ name:lab, ids:[], untapped:u });               // undecodable slug -> link-out only
+  }
+  // marvelsnapzone deck-builder links carry the whole deck as ?deck=<base64 JSON>
+  // (parseCode's URL-param strategy decodes it); community /decks/ pages sit behind
+  // a bot wall with no code in the URL -> link-out only.
+  const zb = /https?:\/\/marvelsnapzone\.com\/deck-builder\/\?deck=[^\s"'<>]+/gi;
+  while((m = zb.exec(text))){
+    const u = m[0];
+    if(seen.has(u)) continue; seen.add(u);
+    const lab = label(m.index);
+    const r = parseCode(u);
+    if(!r.err && r.ids.length) out.push({ name:lab || r.name || '', ids:r.ids, zone:u });
+    else out.push({ name:lab, ids:[], zone:u });
+  }
+  const zp = /https?:\/\/marvelsnapzone\.com\/decks\/[^\s"'<>?#]+/gi;
+  while((m = zp.exec(text))){
+    const u = m[0];
+    if(seen.has(u)) continue; seen.add(u);
+    out.push({ name:label(m.index), ids:[], zone:u });
+  }
+  // snap.fan deck pages: no code in the URL and the page is bot-walled, so in-app
+  // (added-creator) harvests link out; the nightly GitHub harvester resolves these
+  // fully via snap.fan's open API.
+  const fp = /https?:\/\/snap\.fan\/decks\/(\d+)\/?/gi;
+  while((m = fp.exec(text))){
+    const u = m[0];
+    if(seen.has('fan:'+m[1])) continue; seen.add('fan:'+m[1]);
+    out.push({ name:label(m.index), ids:[], fan:u });
   }
   (String(desc||'').match(/^[A-Za-z0-9+/]{16,}={0,2}$/gm) || []).forEach(code => {
     const r = parseCode(code);
@@ -1913,7 +1964,7 @@ function parseCreatorFeed(xml){
     const desc = unescXml((e.match(/<media:description[^>]*>([\s\S]*?)<\/media:description>/) || [])[1] || '');
     extractDecksFromDesc(desc).forEach(dk => decks.push({
       creator:chName, video:title, url:vurl, published,
-      name:dk.name||'', ids:dk.ids||[], untapped:dk.untapped||'', added:true, chId:uc }));
+      name:dk.name||'', ids:dk.ids||[], untapped:dk.untapped||'', zone:dk.zone||'', fan:dk.fan||'', added:true, chId:uc }));
   }
   return { uc, chName, entryCount: entries.length, decks };
 }
@@ -4123,6 +4174,21 @@ function renderInsCurve(buckets){
     toggleFacetValue('cost', b.dataset.cost);
   };
 }
+/* the bench strip mirrors the deck zone's 12 minis; tap a card to remove it,
+   tap an empty slot to jump back to the full tray at the top of the page */
+function syncDecktray(html){
+  const dt = $('#dt'); if(!dt) return;
+  dt.innerHTML = html;
+  dt.onclick = e => {
+    const m = e.target.closest('.mini'); if(!m) return;
+    if(m.classList.contains('empty')){
+      const sc = document.querySelector('main');
+      if(sc && sc.scrollTo) sc.scrollTo({ top:0, behavior:'smooth' });
+      return;
+    }
+    toggleCard(m.dataset.d);
+  };
+}
 /* R6: blank-bench build header — no active deck. 12 empty slots, dashes, Done hidden. */
 function renderDeckbarEmpty(){
   const bm = $('#bh-mode'); if(bm) bm.textContent = '';
@@ -4137,6 +4203,7 @@ function renderDeckbarEmpty(){
   let html = ''; for(let i=0; i<12; i++) html += '<div class="mini empty">+</div>';
   dz.innerHTML = html;
   dz.onclick = e => { const m = e.target.closest('.mini'); if(!m || m.classList.contains('empty')) return; toggleCard(m.dataset.d); };
+  syncDecktray(html);
   const bc0 = $('#btn-complete'); if(bc0) bc0.hidden = true;
   renderInsCurve([0,0,0,0,0,0,0]);
   $('#ins-avg').textContent = '–';
@@ -4163,9 +4230,12 @@ function renderDeckbar(){ // kept name; now renders the pinned zone + header
   let html = cards.map(c => miniHtml(c)).join('');
   for(let i=cards.length; i<12; i++) html += '<div class="mini empty">+</div>';
   dz.innerHTML = html;
+  syncDecktray(html);
   if(S._pop){ // the card that just landed pops into place
     const pm = dz.querySelector('.mini[data-d="'+S._pop+'"]');
     if(pm) pm.classList.add('pop');
+    const tm = document.querySelector('#dt .mini[data-d="'+S._pop+'"]');
+    if(tm) tm.classList.add('pop');
     S._pop = null;
   }
   dz.onclick = e => {
@@ -4203,6 +4273,8 @@ function syncStickyTop(){
     document.documentElement.style.setProperty('--bhead-h', Math.max(0, bhH - 1) + 'px');
     const top = (h ? h.offsetHeight : 0) + bhH + 8;
     document.documentElement.style.setProperty('--stick-top', top + 'px');
+    const tray = $('#decktray');   // the floating tool cluster hovers just above the bench strip
+    document.documentElement.style.setProperty('--tray-h', (tray ? tray.offsetHeight : 0) + 'px');
   }catch(e){}
 }
 if(typeof window !== 'undefined') window.addEventListener('resize', syncStickyTop);
@@ -4454,6 +4526,10 @@ function renderCreatorDecks(){
       acts.appendChild(saveB);
     } else if(cd.untapped && httpOk(cd.untapped)){
       acts.appendChild(linkBtn(cd.untapped, 'View on untapped'));
+    } else if(cd.zone && httpOk(cd.zone)){
+      acts.appendChild(linkBtn(cd.zone, 'View on Snap Zone'));
+    } else if(cd.fan && httpOk(cd.fan)){
+      acts.appendChild(linkBtn(cd.fan, 'View on snap.fan'));
     }
     if(cd.url && httpOk(cd.url)) acts.appendChild(linkBtn(cd.url, 'Watch'));
     if(cd.added){                                                 // R5-J: remove the whole channel + its decks
@@ -4912,6 +4988,7 @@ function setTab(t){
     }
   }
   document.body.classList.toggle('on-cards', t === 'cards' || t === 'collection'); // floating tool cluster on Build + Library (R13: the Library grid obeys it too)
+  document.body.classList.toggle('on-build', t === 'cards');                       // bench strip docks above the tab bar on Build only
   document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'view-'+t));
   renderDeckbar();
@@ -4970,7 +5047,7 @@ async function loadCreatorDecks(){
       creator:String(x.creator), video:String(x.video), url:String(x.url||''),
       published:String(x.published||''), name:String(x.name||''),
       ids:Array.isArray(x.ids)?x.ids.filter(Boolean):[],
-      untapped:x.untapped?String(x.untapped):'' }));
+      untapped:x.untapped?String(x.untapped):'', zone:x.zone?String(x.zone):'', fan:x.fan?String(x.fan):'' }));
     S.creatorDecksLabel = (j && j.updated) ? String(j.updated) : '';
     return true;
   }catch(e){ return false; }

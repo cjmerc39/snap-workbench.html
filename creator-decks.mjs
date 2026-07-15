@@ -3,10 +3,17 @@
 // UA header, per-source guards, never-clobber-to-empty, console reporting).
 //
 // Output contract (creator-decks.json):
-//   { updated:"YYYY-MM-DD", decks:[ { creator, video, url, published, name, ids[, untapped] } ] }
+//   { updated:"YYYY-MM-DD", decks:[ { creator, video, url, published, name, ids[, untapped][, zone] } ] }
 //   - url        = the YouTube video URL (always present, the "Watch" link-out)
-//   - ids        = decoded CardDefIds (empty when the source was an undecodable untapped slug)
+//   - ids        = decoded CardDefIds (empty when the source was an undecodable untapped slug
+//                  or a bot-walled marvelsnapzone community page)
 //   - untapped   = the untapped.gg deck URL, present whenever the source was a slug (link-out when ids empty)
+//   - zone       = the marvelsnapzone.com URL, present whenever the source was one of theirs:
+//                  deck-builder/?deck=<base64> decodes fully; community /decks/<slug>/ pages sit
+//                  behind Cloudflare (no code in the URL), so those stay link-out only
+//   - fan        = the snap.fan deck URL; the page is Cloudflare-walled but snap.fan's public
+//                  API (/api/decks/<id>/) is open, so resolveFanDecks() fills the ids after
+//                  harvest (falls back to link-out when the API call fails)
 //
 // Modes:
 //   node creator-decks.mjs              fetch + merge/age-out + write
@@ -76,21 +83,45 @@ function makeDecoders({ KNOWN, SHORT, SKEL }){
     const ids = list.map(x => x && (x.CardDefId || x.cardDefId || x.carddefid)).filter(Boolean);
     return ids.length ? { name: obj.Name || obj.name || ``, ids: ids.slice(0, 12) } : null;
   };
-  return { parseShortList, parseSlug, parseLong, b64 };
+  return { parseShortList, parseSlug, parseLong, b64, safeDec };
 }
 
 // ---- pull every deck out of one video description ----
 function extractDecks(desc, D){
   const out = [];
-  const seenUntapped = new Set();
+  const seen = new Set();
   // 1) untapped.gg deck links (NOT /profile/ — the /decks/ path prefix excludes those)
   const slugRe = /https?:\/\/snap\.untapped\.gg\/[a-z]{2}\/decks\/([^\s"'<>]+)/gi;
   let m;
   while((m = slugRe.exec(desc)) !== null){
     const url = m[0], slug = m[1];
-    if(seenUntapped.has(url)) continue; seenUntapped.add(url);
+    if(seen.has(url)) continue; seen.add(url);
     const r = D.parseSlug(slug);
     out.push({ name: r ? r.name : ``, ids: r ? r.ids : [], untapped: url });  // ids:[] => link-out only
+  }
+  // 1b) marvelsnapzone deck-builder links carry the whole deck as ?deck=<base64 {Cards} JSON>
+  const zbRe = /https?:\/\/marvelsnapzone\.com\/deck-builder\/\?deck=([^\s"'<>&]+)/gi;
+  while((m = zbRe.exec(desc)) !== null){
+    const url = m[0];
+    if(seen.has(url)) continue; seen.add(url);
+    const r = D.parseLong(D.safeDec(m[1]));
+    out.push({ name: r ? r.name : ``, ids: (r && r.ids) || [], zone: url });
+  }
+  // 1c) marvelsnapzone community deck pages are Cloudflare-walled and carry no code
+  //     in the URL, so they harvest as link-out-only entries (mirrors undecodable slugs)
+  const zpRe = /https?:\/\/marvelsnapzone\.com\/decks\/[^\s"'<>?#]+/gi;
+  while((m = zpRe.exec(desc)) !== null){
+    const url = m[0];
+    if(seen.has(url)) continue; seen.add(url);
+    out.push({ name: ``, ids: [], zone: url });
+  }
+  // 1d) snap.fan deck pages: collect the numeric id here; resolveFanDecks() fetches the
+  //     cards from snap.fan's open API after extraction (the page itself is bot-walled)
+  const fanRe = /https?:\/\/snap\.fan\/decks\/(\d+)\/?/gi;
+  while((m = fanRe.exec(desc)) !== null){
+    const url = m[0], id = m[1];
+    if(seen.has(`fan:` + id)) continue; seen.add(`fan:` + id);
+    out.push({ name: ``, ids: [], fan: url, fanId: id });
   }
   // 2) standalone base64 codes on their own line (compressed comma-list OR classic {Cards} JSON)
   const codeRe = /^[A-Za-z0-9+/]{16,}={0,2}$/gm;
@@ -122,6 +153,8 @@ async function fetchChannel(ch, D){
       for(const dk of extractDecks(desc, D)){
         const entry = { creator: ch.creator, video: title, url, published, name: dk.name || ``, ids: dk.ids || [] };
         if(dk.untapped) entry.untapped = dk.untapped;
+        if(dk.zone) entry.zone = dk.zone;
+        if(dk.fan){ entry.fan = dk.fan; entry.fanId = dk.fanId; }
         decks.push(entry);
       }
     }
@@ -133,7 +166,28 @@ async function fetchChannel(ch, D){
   }
 }
 
-const dedupKey = x => (x.ids && x.ids.length) ? x.ids.slice().sort().join(`,`) : (x.untapped || x.url || ``);
+const dedupKey = x => (x.ids && x.ids.length) ? x.ids.slice().sort().join(`,`) : (x.untapped || x.zone || x.fan || x.url || ``);
+
+// ---- snap.fan resolver: the deck page is Cloudflare-walled, the JSON API is not ----
+// Per-deck guarded and bounded; a failed call just leaves that entry as a link-out.
+async function resolveFanDecks(decks, KNOWN){
+  const fanIdOf = x => x.fanId || ((x.fan || ``).match(/\/decks\/(\d+)/) || [])[1];
+  const targets = decks.filter(x => x && fanIdOf(x) && !(x.ids && x.ids.length)).slice(0, 20);
+  for(const x of targets){
+    x.fanId = fanIdOf(x);
+    try{
+      const r = await fetch(`https://snap.fan/api/decks/` + x.fanId + `/`, UA);
+      if(!r.ok){ console.error(`  snap.fan ${x.fanId}: HTTP ${r.status}`); continue; }
+      const j = await r.json();
+      const cards = (j && j.data && Array.isArray(j.data.cards)) ? j.data.cards : [];
+      const ids = cards.map(c => c && c.cardDefKey).filter(Boolean);
+      if(ids.length >= 6 && ids.filter(id => KNOWN.has(id)).length * 2 > ids.length){
+        x.ids = ids.slice(0, 12);
+        if(!x.name && j.data.title) x.name = String(j.data.title);
+      }
+    }catch(err){ console.error(`  snap.fan ${x.fanId}: ${err && err.message}`); }
+  }
+}
 
 function selfcheck(){
   const table = loadCards();
@@ -158,6 +212,22 @@ function selfcheck(){
   // slug decoder: malformed missing-? UTM + hyphenated deck name
   const sr2 = D.parseSlug(`Hulk-AntMan-Wong-Odin-Ironheart-Klaw_Sub-Mariner&utm_campaign=x`);
   check(!!sr2 && sr2.name === `Sub-Mariner`, `slug decoder: malformed utm + hyphen name (got ${sr2 ? sr2.name : `null`})`);
+  // marvelsnapzone: deck-builder links decode fully; community pages become link-outs
+  const zCode = Buffer.from(JSON.stringify({ Name:`Zone Deck`, Cards:[{CardDefId:`Hulk`},{CardDefId:`AntMan`},{CardDefId:`Wong`},{CardDefId:`Odin`}] })).toString(`base64`);
+  const zDesc = `Deck: https://marvelsnapzone.com/deck-builder/?deck=${encodeURIComponent(zCode)}\n` +
+    `Page: https://marvelsnapzone.com/decks/toxicsoulking32c870a/ enjoy`;
+  const ex = extractDecks(zDesc, D);
+  check(ex.length === 2, `zone description yields 2 entries (got ${ex.length})`);
+  const zb = ex.find(x => x.ids && x.ids.length), zp = ex.find(x => !(x.ids && x.ids.length));
+  check(!!zb && zb.name === `Zone Deck` && zb.ids[0] === `Hulk` && zb.ids.length === 4 && /deck-builder/.test(zb.zone),
+    `deck-builder link decodes name + ids + keeps the zone url`);
+  check(!!zp && zp.zone === `https://marvelsnapzone.com/decks/toxicsoulking32c870a/`,
+    `community deck page becomes a link-out entry (got ${zp ? zp.zone : `none`})`);
+  check(dedupKey(zp) === zp.zone, `link-out zone entries dedupe on their zone url`);
+  // snap.fan: extraction collects the id for the API resolver; duplicate ids collapse
+  const fx = extractDecks(`a https://snap.fan/decks/355403/ b https://snap.fan/decks/355403 c https://snap.fan/decks/9/`, D);
+  check(fx.length === 2 && fx[0].fanId === `355403` && fx[1].fanId === `9`, `snap.fan links extract ids + dedupe (got ${fx.length})`);
+  check(fx[0].fan === `https://snap.fan/decks/355403/` && !fx[0].ids.length, `snap.fan entry starts as a link-out for the resolver`);
 
   console.log(ok ? `\nselfcheck OK (cards.json: ${table.count} cards)` : `\nselfcheck FAILED`);
   process.exit(ok ? 0 : 1);
@@ -178,6 +248,8 @@ async function main(){
     if(ok) anyOk = true;
     fresh = fresh.concat(decks);
   }
+  await resolveFanDecks(fresh, table.KNOWN);            // fill snap.fan link-outs via their open API
+  fresh.forEach(x => { if(x) delete x.fanId; });        // working field only — never written to the JSON
 
   // merge with previous, aging out entries older than AGE_DAYS
   const nowMs = Date.now();

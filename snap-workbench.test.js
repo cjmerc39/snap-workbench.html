@@ -136,6 +136,17 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.querySelector('#deckzone').classList.contains('closed'), 'first collapse click tucks the zone away');
   d.querySelector('#bh-collapse').click(); await sleep(20);
   assert(!d.querySelector('#deckzone').classList.contains('closed'), 'second collapse click re-opens the zone');
+  // bench strip: docked 12-slot mirror of the deck zone, Build tab only
+  assert(d.body.classList.contains('on-build'), 'Build tab docks the bench strip (body.on-build)');
+  assert(d.querySelectorAll('#dt .mini').length===12, 'bench strip always shows 12 slots');
+  assert(d.querySelectorAll('#dt .mini:not(.empty)').length===w.eval('activeDeck().cards.length'), 'bench strip mirrors the deck zone fill');
+  const cntS = w.eval('activeDeck().cards.length');
+  if(cntS){ d.querySelector('#dt .mini:not(.empty)').click(); await sleep(30);
+    assert(w.eval('activeDeck().cards.length')===cntS-1, 'tapping a strip card removes it');
+    assert(d.querySelectorAll('#dt .mini:not(.empty)').length===cntS-1, 'strip re-renders after the removal'); }
+  w.eval('setTab("saved")'); await sleep(20);
+  assert(!d.body.classList.contains('on-build'), 'leaving Build undocks the bench strip');
+  w.eval('setTab("cards")'); await sleep(20);
   // in-deck collection tiles gray out (class present in compact mode)
   const someInDeck = w.eval('activeDeck().cards[0]');
   if(someInDeck) assert(d.querySelector('#cardlist .tile[data-d="'+someInDeck+'"]').classList.contains('indeck'), 'in-deck collection tile carries gray state');
@@ -657,6 +668,20 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(_crows[1].querySelector('.abtn.primary')===null, 'undecodable creator deck (ids:[]) has no Save button');
   assert(_crows[1].querySelector('a[href*="untapped.gg"]')!==null, 'undecodable creator deck shows an untapped link-out');
 
+  // --- marvelsnapzone (zone) + snap.fan (fan) link-outs render for undecodable entries ---
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+
+    JSON.stringify({updated:'2026-07-09',decks:[
+      {creator:'X',video:'Zone Video',url:'https://youtu.be/z1',published:'2026-07-08',name:'',ids:[],zone:'https://marvelsnapzone.com/decks/toxicsoulking32c870a/'},
+      {creator:'Y',video:'Fan Video',url:'https://youtu.be/f1',published:'2026-07-07',name:'',ids:[],fan:'https://snap.fan/decks/355403/'}
+    ]})+
+    ')}); await loadCreatorDecks(); window.fetch=of; })()');
+  w.eval('setTab("saved")'); await sleep(10);
+  d.querySelector('#savedseg [data-seg="mine"]').click(); await sleep(10);
+  d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(30);
+  const _zrows = d.querySelectorAll('#creatorlist .crow');
+  assert(_zrows[0].querySelector('a[href*="marvelsnapzone.com"]')!==null, 'zone-only creator deck shows a Snap Zone link-out');
+  assert(_zrows[1].querySelector('a[href*="snap.fan"]')!==null, 'fan-only creator deck shows a snap.fan link-out');
+
   // --- E: the REAL shipped creator-decks.json parses + renders in-app ---
   const _realCD = JSON.parse(fs.readFileSync('creator-decks.json','utf8'));
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+JSON.stringify(_realCD)+')}); window.__realcd=await loadCreatorDecks(); window.fetch=of; })()');
@@ -990,6 +1015,14 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const _desc = 'Line one\n'+_dcode+'\nWatch here '+_slugUrl+' thanks';
   const _dd = w.eval('extractDecksFromDesc('+JSON.stringify(_desc)+')');
   assert(_dd.length===2 && _dd.every(x=>x.ids.length===12), 'J: extractDecksFromDesc decodes both a base64 code and an untapped slug');
+  // marvelsnapzone + snap.fan links: deck-builder decodes in-app, walled pages become link-outs
+  const _zdesc = 'Deck A: https://marvelsnapzone.com/deck-builder/?deck='+encodeURIComponent(_dcode)+
+    '\nDeck B: https://marvelsnapzone.com/decks/somebody123abc/\nDeck C: https://snap.fan/decks/355403/';
+  const _zx = w.eval('extractDecksFromDesc('+JSON.stringify(_zdesc)+')');
+  assert(_zx.length===3, 'zone/fan: three links -> three entries (got '+_zx.length+')');
+  assert(_zx[0].ids.length===12 && _zx[0].name==='Deck A' && /deck-builder/.test(_zx[0].zone), 'zone deck-builder link decodes 12 ids in-app + keeps the label');
+  assert(_zx[1].ids.length===0 && _zx[1].zone==='https://marvelsnapzone.com/decks/somebody123abc/', 'zone community page -> link-out entry');
+  assert(_zx[2].ids.length===0 && _zx[2].fan==='https://snap.fan/decks/355403/', 'snap.fan page -> link-out entry');
 
   // --- J: addCreator harvests a mocked feed, tags decks, persists, renders + Remove ---
   const _mockUC = 'UCmocktuber000000000001';
