@@ -1909,6 +1909,41 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.querySelector('#dz .mini[data-d="SwordMaster"]').classList.contains('pop'), 'R17: the just-added card pops into the deck row');
   w.eval('S.decks=S.decks.filter(function(x){return x.id!==S.activeId;}); S.activeId=null; renderAll(); setTab("cards");'); await sleep(10);
 
+  // ================= R18: the browse rail — sort/filter without the sheet =================
+  assert(d.getElementById('browsebar')!==null && d.getElementById('browsebar').closest('#buildtop')!==null, 'R18: the rail rides the sticky build header');
+  assert(d.getElementById('own-quick').closest('#browsebar')!==null, 'R18: the Owned pill moved onto the rail');
+  assert(d.querySelectorAll('#browsebar .bbf[data-facet="cost"]').length===6 && d.querySelectorAll('#browsebar .bbf[data-facet="mech"]').length===5
+    && d.querySelectorAll('#browsebar .bbf[data-facet="series"]').length===6, 'R18: cost, mechanic, and series chips all live on the rail');
+  // one-tap filtering, live grid, flyout stays in agreement
+  const preRail = d.getElementById('matchcount').textContent;
+  d.querySelector('#browsebar .bbf[data-facet="cost"][data-v="3"]').click(); await sleep(30);
+  assert(w.eval('S.filters.cost.has("3")'), 'R18: a rail chip filters in one tap');
+  assert(d.getElementById('matchcount').textContent!==preRail, 'R18: the grid live-updates behind the rail');
+  assert(d.querySelector('#browsebar .bbf[data-facet="cost"][data-v="3"]').classList.contains('on'), 'R18: the rail chip lights');
+  assert(d.querySelector('#filterpanel [data-facet="cost"] .chip[data-v="3"]').classList.contains('on'), 'R18: the flyout chip agrees');
+  assert(d.querySelector('#ins-curve i[data-cost="3"]').classList.contains('sel'), 'R18: the curve bar agrees too');
+  d.querySelector('#browsebar .bbf[data-facet="cost"][data-v="3"]').click(); await sleep(30);
+  assert(!w.eval('S.filters.cost.has("3")'), 'R18: tapping again clears it');
+  // the sort button cycles in place
+  assert(d.getElementById('bb-sort-label').textContent==='Energy', 'R18: sort chip names the current sort');
+  d.getElementById('bb-sort').click(); await sleep(30);
+  assert(w.eval('S.sort')==='new' && d.getElementById('bb-sort-label').textContent==='Newest', 'R18: one tap cycles Energy -> Newest');
+  d.getElementById('bb-sort').click(); await sleep(20);
+  d.getElementById('bb-sort').click(); await sleep(20);
+  d.getElementById('bb-sort').click(); await sleep(20);
+  assert(w.eval('S.sort')==='cost' && d.getElementById('bb-sort-label').textContent==='Energy', 'R18: the cycle wraps back to Energy');
+  // cost dividers: Energy order reads in rows, each divider is a tap-filter
+  assert(d.querySelectorAll('#cardlist .costdiv').length>=6, 'R18: Energy order breaks the grid into cost rows');
+  assert(d.querySelectorAll('#cardlist .tile').length===357, 'R18: dividers never change the tile count');
+  const div3 = [...d.querySelectorAll('#cardlist .costdiv')].find(x=>x.dataset.cost==='3');
+  div3.click(); await sleep(30);
+  assert(w.eval('S.filters.cost.has("3")'), 'R18: tapping a cost divider filters to that cost');
+  d.querySelector('#cardlist .costdiv[data-cost="3"]').click(); await sleep(30);
+  assert(!w.eval('S.filters.cost.has("3")'), 'R18: tapping the divider again clears it');
+  w.eval('S.sort="name"; renderBrowse();'); await sleep(20);
+  assert(d.querySelectorAll('#cardlist .costdiv').length===0, 'R18: other sorts drop the dividers (they only mean something in Energy order)');
+  w.eval('S.sort="cost"; renderBrowse();'); await sleep(20);
+
   assert(errors.length===0, 'R15: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
 
   console.log('\nDONE. errors:', errors.length?errors:'none');

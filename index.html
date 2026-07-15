@@ -591,8 +591,20 @@ h1 .h-snap{color:var(--gold);}
 .cib::after{content:''; position:absolute; inset:-3px;} /* expands tap target to 33px without growing the visible circle */
 .viewrow{display:flex; align-items:center; justify-content:space-between; margin:0 2px 10px;}
 .viewrow #matchcount{margin:0;}
-.viewrow-tools{display:flex; align-items:center; gap:6px;}
-#own-quick{padding:6px 11px; font-size:12px;}
+/* R18: the browse rail — one scrollable row of one-tap sort/filter chips,
+   riding the sticky build header so it never scrolls out of reach */
+#browsebar{display:flex; gap:6px; align-items:center; overflow-x:auto; -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain; scrollbar-width:none; padding:9px 2px 2px; margin:0;}
+#browsebar::-webkit-scrollbar{display:none;}
+#browsebar .chip{flex:0 0 auto; font-size:12px; padding:6px 11px;}
+#bb-sort{color:var(--iris-soft);}
+#bb-sort b{font-weight:800;}
+.bb-sep{flex:0 0 1px; height:18px; background:var(--line2);}
+/* cost dividers — in Energy order the grid reads in rows of a feeling: 1-drops, 2-drops… */
+.costdiv{grid-column:1/-1; display:flex; align-items:center; gap:8px; margin:8px 2px 0; cursor:pointer;
+  font-family:var(--head); font-weight:800; font-size:10.5px; letter-spacing:.8px; text-transform:uppercase; color:var(--faint);}
+.costdiv .cd-n{font-weight:700; color:var(--faint); opacity:.7; letter-spacing:.2px; text-transform:none;}
+.costdiv::after{content:''; flex:1; height:1px; background:var(--hair);}
 /* NEW pill — a fresh release announces itself on its tile (Build + Library) */
 .newpill{position:absolute; top:5px; left:50%; transform:translateX(-50%); z-index:3;
   font-size:8.5px; font-weight:800; letter-spacing:.5px; color:var(--iris-ink);
@@ -1063,17 +1075,42 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
         <span id="ins-syn" class="ins-tag"></span>
       </div>
     </div>
+    <!-- R18: the browse rail — every common sort/filter is ONE tap, always in reach
+         (it rides the sticky build header), with the grid live-updating behind it.
+         The flyout remains for the long tail (power buckets, counts). -->
+    <div id="browsebar" aria-label="Sort and filter">
+      <button class="chip" id="bb-sort" title="Cycle sort">&#8645; <b id="bb-sort-label">Energy</b></button>
+      <span class="bb-sep"></span>
+      <button class="chip c-own" id="own-quick">Owned</button>
+      <span class="bb-sep"></span>
+      <button class="chip c-cost bbf" data-facet="cost" data-v="1">1-</button>
+      <button class="chip c-cost bbf" data-facet="cost" data-v="2">2</button>
+      <button class="chip c-cost bbf" data-facet="cost" data-v="3">3</button>
+      <button class="chip c-cost bbf" data-facet="cost" data-v="4">4</button>
+      <button class="chip c-cost bbf" data-facet="cost" data-v="5">5</button>
+      <button class="chip c-cost bbf" data-facet="cost" data-v="6">6+</button>
+      <span class="bb-sep"></span>
+      <button class="chip bbf" data-facet="mech" data-v="On Reveal">On Reveal</button>
+      <button class="chip bbf" data-facet="mech" data-v="Ongoing">Ongoing</button>
+      <button class="chip bbf" data-facet="mech" data-v="Discard">Discard</button>
+      <button class="chip bbf" data-facet="mech" data-v="Destroy">Destroy</button>
+      <button class="chip bbf" data-facet="mech" data-v="Move">Move</button>
+      <span class="bb-sep"></span>
+      <button class="chip bbf" data-facet="series" data-v="1">S1</button>
+      <button class="chip bbf" data-facet="series" data-v="2">S2</button>
+      <button class="chip bbf" data-facet="series" data-v="3">S3</button>
+      <button class="chip bbf" data-facet="series" data-v="4">S4</button>
+      <button class="chip bbf" data-facet="series" data-v="5">S5</button>
+      <button class="chip bbf" data-facet="series" data-v="Base">Base</button>
+    </div>
     </div>
     <div id="gridcol">
       <div id="artnote">Card art seems blocked in this environment, so you&rsquo;re seeing tile view. Everything else works the same.</div>
       <div class="viewrow">
         <div id="matchcount"></div>
-        <div class="viewrow-tools">
-          <button class="chip c-own" id="own-quick">Owned</button>
-          <div class="segment" id="densityseg">
-            <button data-den="cmp">Grid</button>
-            <button data-den="det">Detail</button>
-          </div>
+        <div class="segment" id="densityseg">
+          <button data-den="cmp">Grid</button>
+          <button data-den="det">Detail</button>
         </div>
       </div>
       <div id="fitshelf" hidden>
@@ -2162,6 +2199,24 @@ function setOwnedFilter(v){
   afterFilterChange();
 }
 if($('#own-quick')) $('#own-quick').onclick = () => setOwnedFilter(!S.filters.owned);
+/* R18: one shared toggle for every one-tap filter surface — rail chips, cost
+   dividers, curve bars. renderDeckbar rides along so the curve's selected
+   rings always agree with the cost set. */
+function toggleFacetValue(facet, v){
+  const set = S.filters[facet]; if(!set) return;
+  if(set.has(v)) set.delete(v); else set.add(v);
+  afterFilterChange(); renderDeckbar();
+}
+if($('#browsebar')) $('#browsebar').addEventListener('click', e => {
+  if(e.target.closest('#bb-sort')){
+    const i = SORTS.findIndex(s => s.k === S.sort);
+    S.sort = SORTS[(i + 1) % SORTS.length].k;
+    renderBrowse();
+    return;
+  }
+  const ch = e.target.closest('.bbf'); if(!ch) return;
+  toggleFacetValue(ch.dataset.facet, ch.dataset.v);
+});
 $('#btn-filter').onclick = () => { flyoutOpen() ? closeFlyout() : openFlyout(false); };
 $('#btn-sort').onclick   = () => { openFlyout(true); };
 if($('#btn-search')) $('#btn-search').onclick = () => {
@@ -2309,17 +2364,46 @@ function renderFitShelf(){
       miniHtml(s.c)+'<div class="fit-why">'+esc(s.why)+'</div></div>').join('');
   row.onclick = e => { const f = e.target.closest('.fitcard'); if(f) toggleCard(f.dataset.d); };
 }
+function syncBrowseBar(){
+  const bar = $('#browsebar'); if(!bar) return;
+  const lbl = $('#bb-sort-label');
+  if(lbl) lbl.textContent = (SORTS.find(s => s.k === S.sort) || SORTS[0]).label;
+  bar.querySelectorAll('.bbf').forEach(ch => {
+    const set = S.filters[ch.dataset.facet];
+    ch.classList.toggle('on', !!set && set.has(ch.dataset.v));
+  });
+  const oq = $('#own-quick');
+  if(oq) oq.classList.toggle('on', S.filters.owned);
+}
 function renderCards(){
   const list = $('#cardlist');
   const cards = filteredCards();
   $('#matchcount').textContent = cards.length + ' of ' + S.db.length + ' cards';
   const cmp = S.prefs.density !== 'det';
   list.classList.toggle('cmp', cmp);
-  list.innerHTML = cards.map(cmp ? tileHtmlCompact : tileHtml).join('');
+  const tile = cmp ? tileHtmlCompact : tileHtml;
+  if(S.sort === 'cost'){
+    // Energy order reads in rows of a feeling — 1-drops, 2-drops… — so say so.
+    // Each divider is also a tap: filter to that cost, tap again to clear.
+    const bcount = {};
+    cards.forEach(c => { const b = Math.min(c.c, 6); bcount[b] = (bcount[b] || 0) + 1; });
+    const parts = []; let last = null;
+    for(const c of cards){
+      const b = Math.min(c.c, 6);
+      if(b !== last){
+        last = b;
+        parts.push('<div class="costdiv" data-cost="'+String(Math.min(Math.max(b,1),6))+'">'+
+          (b >= 6 ? '6+' : b)+'-Cost <span class="cd-n">'+bcount[b]+'</span></div>');
+      }
+      parts.push(tile(c));
+    }
+    list.innerHTML = parts.join('');
+  } else {
+    list.innerHTML = cards.map(tile).join('');
+  }
   document.querySelectorAll('#densityseg button').forEach(b =>
     b.classList.toggle('on', (b.dataset.den === 'det') === !cmp));
-  const oq = $('#own-quick');
-  if(oq) oq.classList.toggle('on', S.filters.owned);
+  syncBrowseBar();
   renderFitShelf();
   updateFacetCounts();
   updateClearBtn();
@@ -2330,6 +2414,8 @@ document.querySelectorAll('#densityseg button').forEach(b => b.onclick = () => {
   renderCards();
 });
 $('#cardlist').addEventListener('click', e => {
+  const cd = e.target.closest('.costdiv');
+  if(cd){ toggleFacetValue('cost', cd.dataset.cost); return; }
   const t = e.target.closest('.tile'); if(!t) return;
   const d = t.dataset.d;
   if(e.target.closest('.ib') || e.target.closest('.cib')){ openCardSheet(d); return; }
@@ -3926,9 +4012,7 @@ function renderInsCurve(buckets){
   }).join('');
   el.onclick = e => {
     const b = e.target.closest('[data-cost]'); if(!b) return;
-    const key = b.dataset.cost;
-    if(S.filters.cost.has(key)) S.filters.cost.delete(key); else S.filters.cost.add(key);
-    afterFilterChange(); renderDeckbar();   // repaint the bar's selected ring
+    toggleFacetValue('cost', b.dataset.cost);
   };
 }
 /* R6: blank-bench build header — no active deck. 12 empty slots, dashes, Done hidden. */
