@@ -4382,6 +4382,7 @@ const BUILTIN_CREATORS = [
   { name:'Alexander Coccia', url:'https://www.youtube.com/@AlexanderCoccia' },
   { name:'Coougarrr',        url:'https://www.youtube.com/@CoougarrrSNAP' },
   { name:'Unfitparrot',      url:'https://www.youtube.com/@Unfitparrot' },
+  { name:'Snap Judgments',   url:'https://www.youtube.com/channel/UCRM70o4UWSPL839M9d42xGw' },
 ];
 function renderCreatorDecks(){
   refreshAddedCreators(); // fire-and-forget; TTL + busy guard make this a no-op except ~once a day
@@ -4391,6 +4392,19 @@ function renderCreatorDecks(){
   // decks used to land BELOW 30+ builtin rows, invisible without a long scroll.
   let all = S.creatorDecks.concat(S.addedCreatorDecks || [])
     .slice().sort((a,b) => String(b.published||'').localeCompare(String(a.published||'')));
+  // A channel can be BOTH built-in and followed in-app (Snap Judgments) — the same deck
+  // then arrives from two sources. Keep one row per creator+deck, preferring the entry
+  // that carries card ids (the nightly harvest decodes link-outs the in-app fetch can't).
+  // Keyed per creator: two creators legitimately running the same 12 cards both show.
+  const dupKey = cd => {
+    const ident = String(cd.zone || cd.fan || cd.untapped || '') ||
+      ((cd.ids && cd.ids.length) ? cd.ids.slice().sort().join(',') : '');
+    return ident ? String(cd.creator || '') + '|' + ident : '';
+  };
+  const bestDup = {};
+  all.forEach(cd => { const k = dupKey(cd); if(!k) return;
+    if(!bestDup[k] || ((cd.ids && cd.ids.length) && !(bestDup[k].ids && bestDup[k].ids.length))) bestDup[k] = cd; });
+  all = all.filter(cd => { const k = dupKey(cd); return !k || bestDup[k] === cd; });
   // R10: Following pane — everyone whose decks land here, each linking to their channel
   const fstrip = el('div','cr-follow-strip');
   // R11.2: a pill is now a FILTER (tap = only that creator's decks, tap again = all);
@@ -4527,8 +4541,13 @@ function renderCreatorDecks(){
       if(slug){
         const img = document.createElement('img');
         img.className = 'cr-zoneprev'; img.loading = 'lazy'; img.decoding = 'async'; img.alt = 'Deck preview';
+        img.referrerPolicy = 'no-referrer';          // hotlink filters key on Referer
         img.src = 'https://marvelsnapzone.com/img/deckpreview.php?slug=' + encodeURIComponent(slug);
-        img.onerror = () => img.remove();            // renderer down/blocked -> row just has no image
+        img.onerror = () => {                        // burst-loading several previews can trip the CDN — retry once
+          if(img.dataset.retried){ img.remove(); return; }
+          img.dataset.retried = '1';
+          setTimeout(() => { img.src = img.src + (img.src.includes('&r=') ? '' : '&r=1'); }, 1500 + Math.floor(Math.random()*1500));
+        };
         row.appendChild(img);
       }
     }

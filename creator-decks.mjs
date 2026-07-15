@@ -26,10 +26,11 @@ const CHANNELS = [
   { creator:`Alexander Coccia`, id:`UCoJqslowQxACrT3msrmKJLg` },
   { creator:`Coougarrr`,        id:`UCdSQcEM6O1Hq09aWeDWbkPA` },
   { creator:`Unfitparrot`,      id:`UCvMrTBgyL5B51F_iT0iPq2w` },
+  { creator:`Snap Judgments`,   id:`UCRM70o4UWSPL839M9d42xGw` },
 ];
 const UA = { headers: { [`user-agent`]: `snap-workbench github action (personal deck builder)` } };
 const OUT = `creator-decks.json`;
-const CAP = 30;          // keep at most this many decks
+const CAP = 40;          // keep at most this many decks (was 30 for 3 channels; 4th channel added 2026-07-15)
 const AGE_DAYS = 14;     // only keep decks from videos published within this window (owner: two weeks)
 const DAY = 86400000;
 
@@ -174,43 +175,62 @@ async function fetchChannel(ch, D){
 const dedupKey = x => (x.ids && x.ids.length) ? x.ids.slice().sort().join(`,`) : (x.untapped || x.zone || x.fan || x.url || ``);
 
 // ---- marvelsnapzone resolver: the deck page is Cloudflare-walled, /pro/do.php is not ----
-// Per-deck guarded and bounded; a failed call just leaves that entry as a link-out.
+// One API call per UNIQUE slug (the same deck rides several videos), bounded per run;
+// a failed call just leaves those entries as link-outs for the next nightly pass.
 async function resolveZoneDecks(decks, KNOWN){
   const slugOf = x => ((x.zone || ``).match(/marvelsnapzone\.com\/decks\/([^\/?#]+)/i) || [])[1];
-  const targets = decks.filter(x => x && !(x.ids && x.ids.length) && slugOf(x)).slice(0, 20);
-  for(const x of targets){
-    const slug = slugOf(x);
+  const bySlug = new Map();
+  for(const x of decks){
+    if(!x || (x.ids && x.ids.length)) continue;
+    const s = slugOf(x); if(!s) continue;
+    if(!bySlug.has(s)) bySlug.set(s, []);
+    bySlug.get(s).push(x);
+  }
+  let calls = 0;
+  for(const [slug, xs] of bySlug){
+    if(++calls > 40) break;
     try{
       const r = await fetch(`https://marvelsnapzone.com/pro/do.php?cmd=getdeck&slug=` + encodeURIComponent(slug), UA);
       if(!r.ok){ console.error(`  snapzone ${slug}: HTTP ${r.status}`); continue; }
       const j = await r.json();
       const ids = (j && Array.isArray(j.deck)) ? j.deck.filter(Boolean) : [];
       if(ids.length >= 6 && ids.filter(id => KNOWN.has(id)).length * 2 > ids.length){
-        x.ids = ids.slice(0, 12);
-        if(j.humanname) x.name = String(j.humanname);   // the deck's own name beats the slug-derived one
+        for(const x of xs){
+          x.ids = ids.slice(0, 12);
+          if(j.humanname) x.name = String(j.humanname);   // the deck's own name beats the slug-derived one
+        }
       }
     }catch(err){ console.error(`  snapzone ${slug}: ${err && err.message}`); }
   }
 }
 
 // ---- snap.fan resolver: the deck page is Cloudflare-walled, the JSON API is not ----
-// Per-deck guarded and bounded; a failed call just leaves that entry as a link-out.
+// One API call per UNIQUE deck id, bounded per run; failures stay link-outs.
 async function resolveFanDecks(decks, KNOWN){
   const fanIdOf = x => x.fanId || ((x.fan || ``).match(/\/decks\/(\d+)/) || [])[1];
-  const targets = decks.filter(x => x && fanIdOf(x) && !(x.ids && x.ids.length)).slice(0, 20);
-  for(const x of targets){
-    x.fanId = fanIdOf(x);
+  const byId = new Map();
+  for(const x of decks){
+    if(!x || (x.ids && x.ids.length)) continue;
+    const id = fanIdOf(x); if(!id) continue;
+    if(!byId.has(id)) byId.set(id, []);
+    byId.get(id).push(x);
+  }
+  let calls = 0;
+  for(const [id, xs] of byId){
+    if(++calls > 40) break;
     try{
-      const r = await fetch(`https://snap.fan/api/decks/` + x.fanId + `/`, UA);
-      if(!r.ok){ console.error(`  snap.fan ${x.fanId}: HTTP ${r.status}`); continue; }
+      const r = await fetch(`https://snap.fan/api/decks/` + id + `/`, UA);
+      if(!r.ok){ console.error(`  snap.fan ${id}: HTTP ${r.status}`); continue; }
       const j = await r.json();
       const cards = (j && j.data && Array.isArray(j.data.cards)) ? j.data.cards : [];
       const ids = cards.map(c => c && c.cardDefKey).filter(Boolean);
-      if(ids.length >= 6 && ids.filter(id => KNOWN.has(id)).length * 2 > ids.length){
-        x.ids = ids.slice(0, 12);
-        if(!x.name && j.data.title) x.name = String(j.data.title);
+      if(ids.length >= 6 && ids.filter(id2 => KNOWN.has(id2)).length * 2 > ids.length){
+        for(const x of xs){
+          x.ids = ids.slice(0, 12);
+          if(!x.name && j.data.title) x.name = String(j.data.title);
+        }
       }
-    }catch(err){ console.error(`  snap.fan ${x.fanId}: ${err && err.message}`); }
+    }catch(err){ console.error(`  snap.fan ${id}: ${err && err.message}`); }
   }
 }
 

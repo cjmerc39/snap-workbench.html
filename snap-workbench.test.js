@@ -688,6 +688,17 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(_zrows[1].querySelector('a[href*="snap.fan"]')!==null, 'fan-only creator deck shows a snap.fan link-out');
   assert(_zrows[1].querySelector('img.cr-zoneprev')===null, 'fan-only rows get no zone preview image');
 
+  // --- built-in + followed channel: the same deck arrives twice, ids-bearing entry wins ---
+  w.eval('S.addedCreatorDecks=[{creator:"X",video:"Zone Video",url:"https://youtu.be/z1",published:"2026-07-08",name:"",ids:[],zone:"https://marvelsnapzone.com/decks/dupdeck1/",added:true,chId:"UCdup"}];'+
+    'S.creatorDecks=[{creator:"X",video:"Zone Video",url:"https://youtu.be/z1",published:"2026-07-08",name:"Dup Deck",ids:'+JSON.stringify(SLUGIDS)+',zone:"https://marvelsnapzone.com/decks/dupdeck1/",untapped:"",fan:""}];');
+  w.eval('setTab("saved")'); await sleep(10);
+  d.querySelector('#savedseg [data-seg="mine"]').click(); await sleep(10);
+  d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(30);
+  const _drows = d.querySelectorAll('#creatorlist .crow');
+  assert(_drows.length===1, 'built-in + added duplicate collapses to one row (got '+_drows.length+')');
+  assert(_drows[0].querySelectorAll('.cr-strip .mini').length===12, 'the surviving row is the decoded one (12-card strip)');
+  w.eval('S.addedCreatorDecks=[];');
+
   // --- E: the REAL shipped creator-decks.json parses + renders in-app ---
   const _realCD = JSON.parse(fs.readFileSync('creator-decks.json','utf8'));
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+JSON.stringify(_realCD)+')}); window.__realcd=await loadCreatorDecks(); window.fetch=of; })()');
