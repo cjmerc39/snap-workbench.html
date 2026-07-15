@@ -1899,9 +1899,10 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const amFit = [...d.querySelectorAll('#fitrow .fitcard')].find(f=>f.dataset.d==='AbsorbingMan');
   assert(!!amFit && /runs with Blade/.test(amFit.querySelector('.fit-why').textContent), 'R17: pair evidence suggests the card and names its partner');
   w.eval('S.creatorStats = window.__csFit;');
-  // the shelf stays out of the way: hidden at 12/12, hidden on a blank bench
+  // the shelf never dead-ends: at 12/12 it flips into swap ideas (R20), and a blank bench hides it
   w.eval('(function(){var dd=activeDeck(); dd.cards=S.db.slice(0,12).map(c=>c.d); touch(dd); renderAll();})()'); await sleep(20);
-  assert(d.getElementById('fitshelf').hidden===true, 'R17: a full deck hides the shelf');
+  assert(d.getElementById('fitshelf').hidden===false && /Swap ideas/.test(d.querySelector('#fitshelf .fit-head').textContent),
+    'R17/R20: a full deck flips the shelf into swap ideas');
   w.eval('S.decks=S.decks.filter(function(x){return x.id!==S.activeId;}); S.activeId=null; renderAll();'); await sleep(20);
   assert(d.getElementById('fitshelf').hidden===true, 'R17: a blank bench hides the shelf');
   // the pop: the newest addition lands with its animation class
@@ -1979,6 +1980,50 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.getElementById('q').value==='wong', 'R19: the Library search text is waiting where it was left');
   // tidy up both banks for anything downstream
   w.eval('clearAllFilters(); setSort("cost"); setTab("cards"); clearAllFilters(); setSort("cost");'); await sleep(20);
+
+  // ================= R20: complete my deck + swap ideas (the Hearthstone move) =================
+  // seed two discard cards + creator decks that vote for their real packages
+  w.eval('window.__cd0 = { decks:S.creatorDecks, stats:S.creatorStats };'+
+    'S.creatorDecks = ['+
+    ' {creator:"A",video:"v1",url:"",published:"",name:"Discard A",ids:["Blade","Hellcow","Morbius","Swarm","MODOK","Colleen","WolverineZabu","Apocalypse","X23","Daken","DraculaCh","Proxima"].map(x=>x)},'+
+    ' {creator:"B",video:"v2",url:"",published:"",name:"Discard B",ids:["Blade","Hellcow","Morbius","Swarm","MODOK","Apocalypse"]}'+
+    '];');
+  w.eval('(function(){var dd=ensureDraft(); dd.cards=["Blade","Hellcow"]; touch(dd); renderAll();})()'); await sleep(20);
+  assert(d.getElementById('btn-complete').hidden===false, 'R20: a seeded deck offers Complete my deck');
+  d.getElementById('btn-complete').click(); await sleep(40);
+  assert(w.eval('activeDeck().cards.length')===12, 'R20: one tap fills the deck to 12');
+  assert(w.eval('activeDeck().cards.includes("Morbius") && activeDeck().cards.includes("Swarm")'),
+    'R20: the meta layer votes real packagemates in (Morbius + Swarm ride with Blade/Hellcow)');
+  const filledOnce = w.eval('JSON.stringify(activeDeck().cards)');
+  const curveOk = w.eval('(function(){var b=[0,0,0,0,0,0,0]; activeDeck().cards.forEach(id=>{var c=S.byId[id]; if(c) b[Math.min(c.c,6)]++;}); return Math.max.apply(null,b);})()');
+  assert(curveOk<=5, 'R20: the curve conscience prevents a one-cost pileup (max bucket '+curveOk+')');
+  assert(d.getElementById('btn-complete').hidden===true, 'R20: a full deck hides the button');
+  // determinism: same seeds, same completion
+  w.eval('(function(){var dd=activeDeck(); dd.cards=["Blade","Hellcow"]; touch(dd); renderAll();})()'); await sleep(20);
+  d.getElementById('btn-complete').click(); await sleep(40);
+  assert(w.eval('JSON.stringify(activeDeck().cards)')===filledOnce, 'R20: completion is deterministic — same seeds, same 12');
+  // at 12/12 the shelf becomes swap ideas
+  assert(d.getElementById('fitshelf').hidden===false && /Swap ideas/.test(d.querySelector('#fitshelf .fit-head').textContent),
+    'R20: at 12/12 the shelf turns into swap ideas');
+  const swapCand = d.querySelector('#fitrow .fitcard');
+  assert(!!swapCand, 'R20: swap candidates are on offer');
+  const swapId = swapCand.dataset.d;
+  swapCand.click(); await sleep(30);
+  assert(d.getElementById('modalwrap').classList.contains('on') && d.querySelectorAll('#modal .swapgrid .mini').length===12,
+    'R20: tapping a swap idea opens the sheet with all 12 incumbents');
+  const outId = d.querySelector('#modal .swapgrid .mini').dataset.d;
+  d.querySelector('#modal .swapgrid .mini').click(); await sleep(30);
+  assert(w.eval('activeDeck().cards.length')===12 && w.eval('activeDeck().cards.includes("'+swapId+'")') && !w.eval('activeDeck().cards.includes("'+outId+'")'),
+    'R20: the swap lands — newcomer in, incumbent out, still 12');
+  assert(!d.getElementById('modalwrap').classList.contains('on'), 'R20: the sheet closes on the swap');
+  // Owned mode is a promise: completion draws only from the collection
+  w.eval('(function(){var dd=activeDeck(); dd.cards=["Blade","Hellcow"]; touch(dd);'+
+    ' S.owned=new Set(S.db.slice(0,40).map(c=>c.d).concat(["Blade","Hellcow"])); setOwnedFilter("owned"); renderAll();})()'); await sleep(20);
+  d.getElementById('btn-complete').click(); await sleep(40);
+  assert(w.eval('activeDeck().cards.every(id=>S.owned.has(id))'), 'R20: with Owned on, every fill comes from the collection');
+  w.eval('setOwnedFilter(""); S.owned=new Set();'+
+    'S.creatorDecks=window.__cd0.decks; S.creatorStats=window.__cd0.stats;'+
+    'S.decks=S.decks.filter(function(x){return x.id!==S.activeId;}); S.activeId=null; renderAll(); setTab("cards");'); await sleep(20);
 
   assert(errors.length===0, 'R15: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
 

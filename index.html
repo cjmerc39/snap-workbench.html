@@ -631,6 +631,13 @@ h1 .h-snap{color:var(--gold);}
 /* a card landing in the deck row pops into place */
 @keyframes mpop{0%{transform:scale(.55);} 60%{transform:scale(1.1);} 100%{transform:scale(1);}}
 #dz .mini.pop{animation:mpop .32s var(--ease-spring);}
+/* R20: complete-my-deck — seed a few cards, let the bench finish the thought */
+#btn-complete{width:100%; margin:0 0 8px; padding:9px 8px; font-size:12.5px; font-weight:800;
+  color:var(--iris-soft); background:rgba(150,116,255,.10); border:1px dashed rgba(170,140,255,.4);}
+#btn-complete:active{background:rgba(150,116,255,.22);}
+/* R20: the swap sheet — pick which of the 12 steps aside */
+.swapgrid{margin-top:10px;}
+.swapgrid .mini{cursor:pointer;}
 .segment{display:flex; background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:2px;}
 .segment button{background:none; border:none; color:var(--faint); font-size:12px; font-weight:700; padding:5px 12px; border-radius:var(--r-pill);
   transition:background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);}
@@ -721,7 +728,7 @@ h1 .h-snap{color:var(--gold);}
   background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(0,0,0,.14));
   padding:8px; margin-bottom:2px; overflow:hidden; transition:max-height var(--dur-2) var(--ease-inout);}
 #deckzone.closed{padding:0; margin-bottom:0; box-shadow:none; background:none;}
-#deckzone.closed #dz, #deckzone.closed #insight{display:none;}
+#deckzone.closed #dz, #deckzone.closed #insight, #deckzone.closed #btn-complete{display:none;}
 /* deck: 2x6 grid of 12 mini slots, always visible (open by default) */
 #dz{display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin-bottom:6px;}
 #dz .mini{width:auto; aspect-ratio:33/44; border-radius:8px;}
@@ -1072,6 +1079,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
     </div>
     <div id="deckzone">
       <div id="dz"></div>
+      <button class="abtn" id="btn-complete" hidden>&#10024; Complete my deck</button>
       <div id="insight">
         <div id="ins-curve"></div>
         <span class="ins-stat"><b id="ins-avg">&ndash;</b> avg</span>
@@ -2321,9 +2329,9 @@ function tileHtmlCompact(c){
    payoff), interaction finders (Wong wants On Reveal cards), cost tribes (Ka-Zar
    wants 1-drops), and the creator ledger's pair counts as empirical evidence.
    Each suggestion carries its strongest reason, so a pick explains itself. */
-function fitSuggestions(max){
+function fitSuggestions(max, opts){
   const d = activeDeck();
-  if(!d || d.cards.length < 2 || d.cards.length >= 12) return [];
+  if(!d || d.cards.length < 2 || (!(opts && opts.full) && d.cards.length >= 12)) return [];
   const deckCards = d.cards.map(id => getCard(id)).filter(Boolean);
   if(deckCards.length < 2) return [];
   const inSet = new Set(d.cards);
@@ -2369,15 +2377,92 @@ function fitSuggestions(max){
 }
 function renderFitShelf(){
   const shelf = $('#fitshelf'); if(!shelf) return;
-  const sugg = fitSuggestions(10);
+  const d = activeDeck();
+  // R20: at 12/12 the shelf turns into the tuning tool — swap ideas instead of adds.
+  // Deck building in the wild is deck TUNING: you finish a draft, then trade cards
+  // in and out until it's yours. The shelf now serves both halves of that loop.
+  const full = !!d && d.cards.length >= 12;
+  const sugg = full ? fitSuggestions(8, { full:true }) : fitSuggestions(10);
   shelf.hidden = !sugg.length;
+  const head = shelf.querySelector('.fit-head');
+  if(head) head.innerHTML = full ? '&#10022; Swap ideas' : '&#10022; Fits this deck';
   if(!sugg.length){ const fr = $('#fitrow'); if(fr) fr.innerHTML = ''; return; }
   const row = $('#fitrow');
   row.innerHTML = sugg.map(s =>
     '<div class="fitcard" data-d="'+esc(s.c.d)+'" title="'+esc(s.c.n)+' — '+esc(s.why)+'">'+
       miniHtml(s.c)+'<div class="fit-why">'+esc(s.why)+'</div></div>').join('');
-  row.onclick = e => { const f = e.target.closest('.fitcard'); if(f) toggleCard(f.dataset.d); };
+  row.onclick = e => {
+    const f = e.target.closest('.fitcard'); if(!f) return;
+    if(activeDeck() && activeDeck().cards.length >= 12) openSwapSheet(f.dataset.d);
+    else toggleCard(f.dataset.d);
+  };
 }
+/* R20: swap sheet — one tap picks the newcomer, one tap picks who steps aside */
+function openSwapSheet(candId){
+  const d = activeDeck(); const cand = getCard(candId);
+  if(!d || !cand || d.cards.length < 12) return;
+  const rows = sortedDeckCards(d).slice()
+    .sort((a,b) => Math.abs(a.c-cand.c) - Math.abs(b.c-cand.c) || (a.c-b.c) || a.n.localeCompare(b.n));
+  openModal('<h2>Swap in ' + esc(cand.n) + '</h2>'+
+    '<div class="mnote">for&hellip; (closest costs first)</div>'+
+    '<div class="minigrid swapgrid">' + rows.map(miniHtml).join('') + '</div>'+
+    '<div class="mrow"><button class="abtn subtle" onclick="closeModal()">Never mind</button></div>');
+  const grid = document.querySelector('#modal .swapgrid');
+  if(grid) grid.onclick = e => {
+    const m = e.target.closest('.mini'); if(!m) return;
+    const out = m.dataset.d;
+    const i = d.cards.indexOf(out); if(i < 0) return;
+    d.cards.splice(i, 1); d.cards.push(candId); S._pop = candId;
+    touch(d); closeModal(); renderAll();
+    toast('Swapped ' + ((getCard(out)||{}).n || 'it') + ' → ' + cand.n);
+  };
+}
+/* R20: complete my deck — the Hearthstone move. A meta layer (every harvested
+   creator deck votes for its cards, weighted by how many of your seeds it
+   shares) plus a structural layer (the fit engine) plus a curve conscience,
+   picked one slot at a time so each add reshapes the next. Deterministic. */
+function completeDeck(){
+  const d = activeDeck();
+  if(!d || !d.cards.length || d.cards.length >= 12) return;
+  const before = d.cards.length;
+  const heal = id => S.byId[id] ? id : (S.short[id] || id);
+  const pools = (S.creatorDecks||[]).concat(S.addedCreatorDecks||[]).map(x => (x.ids||[]))
+    .concat(((S.creatorStats && S.creatorStats.ledger) || []).map(e => (e.ids||[]).map(heal)));
+  const DESIRED = [0.5, 2, 2.5, 2, 2, 1.5, 1.5];   // a sane curve to lean toward, never a straitjacket
+  const hardOwned = S.filters.owned === 'owned';   // the Owned chip is a promise: complete from the collection
+  while(d.cards.length < 12){
+    const inSet = new Set(d.cards);
+    const votes = {};
+    for(const ids of pools){
+      if(!ids || !ids.length) continue;
+      const hit = d.cards.filter(id => ids.includes(id)).length;
+      if(!hit) continue;
+      for(const id of ids) if(!inSet.has(id) && S.byId[id]) votes[id] = (votes[id]||0) + hit*hit;
+    }
+    const buckets = [0,0,0,0,0,0,0];
+    d.cards.forEach(id => { const c = S.byId[id]; if(c) buckets[Math.min(c.c,6)]++; });
+    const fit = {};
+    fitSuggestions(40).forEach(s => fit[s.c.d] = s.score);
+    let best = null, bestScore = 0;
+    for(const c of S.db){
+      if(inSet.has(c.d)) continue;
+      if(hardOwned && !S.owned.has(c.d)) continue;
+      const b = Math.min(c.c, 6);
+      let sc = Math.min(votes[c.d]||0, 20)*3 + (fit[c.d]||0) + Math.max(0, DESIRED[b]-buckets[b])*5;
+      if(S.owned.has(c.d)) sc += 4;
+      if(sc > bestScore || (sc === bestScore && best && ((c.c - best.c) || c.n.localeCompare(best.n)) < 0)){
+        best = c; bestScore = sc;
+      }
+    }
+    if(!best || bestScore <= 0) break;   // nothing sensible left (tiny owned pool, say)
+    d.cards.push(best.d);
+  }
+  const added = d.cards.length - before;
+  touch(d); renderAll();
+  toast(added ? 'Filled ' + added + ' slot' + (added===1?'':'s') + ' — tap any deck card to drop it, or use the swap ideas.' :
+    'Couldn’t find sensible fills — try loosening the Owned filter.');
+}
+if($('#btn-complete')) $('#btn-complete').onclick = completeDeck;
 function syncBrowseBar(){
   const label = (SORTS.find(s => s.k === S.sort) || SORTS[0]).label;
   document.querySelectorAll('.browsebar').forEach(bar => {
@@ -4044,6 +4129,7 @@ function renderDeckbarEmpty(){
   let html = ''; for(let i=0; i<12; i++) html += '<div class="mini empty">+</div>';
   dz.innerHTML = html;
   dz.onclick = e => { const m = e.target.closest('.mini'); if(!m || m.classList.contains('empty')) return; toggleCard(m.dataset.d); };
+  const bc0 = $('#btn-complete'); if(bc0) bc0.hidden = true;
   renderInsCurve([0,0,0,0,0,0,0]);
   $('#ins-avg').textContent = '–';
   $('#ins-pow').textContent = '0';
@@ -4078,6 +4164,8 @@ function renderDeckbar(){ // kept name; now renders the pinned zone + header
     const m = e.target.closest('.mini'); if(!m || m.classList.contains('empty')) return;
     toggleCard(m.dataset.d);
   };
+  const bc = $('#btn-complete');
+  if(bc) bc.hidden = !(cards.length >= 1 && cards.length < 12);
 
   const buckets=[0,0,0,0,0,0,0];
   cards.forEach(c => buckets[Math.min(c.c,6)]++);
