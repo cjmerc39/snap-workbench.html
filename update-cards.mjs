@@ -135,9 +135,11 @@ const slim = c => {
   if (!card.a && c.flavor) card.f = strip(c.flavor).replace(/^"|"$/g, ``);
   if (c.art && /^https?:\/\//.test(c.art)) card.i = String(c.art);
   // release date, powering the app's Newest sort: a previously stamped date is
-  // permanent; else the schedule's date; else (a card entering the file for the
-  // first time with no schedule entry) today — first inclusion IS its release day.
-  const r = prevR[c.carddefid] || (dates[c.carddefid] ? isoDay(dates[c.carddefid]) : (prevIds.has(c.carddefid) ? `` : isoDay(nowMs)));
+  // permanent. Only a card entering the file for the FIRST time gets stamped —
+  // schedule date if listed, else today (first inclusion IS its release day).
+  // An already-published card never takes a schedule date: the schedule also
+  // mentions old cards for events/spotlights (Topaz taught us that).
+  const r = prevR[c.carddefid] || (prevIds.has(c.carddefid) ? `` : (dates[c.carddefid] ? isoDay(dates[c.carddefid]) : isoDay(nowMs)));
   if (r) card.r = r;
   return card;
 };

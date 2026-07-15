@@ -179,7 +179,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   d.querySelector('#fw-power .chip[data-v="1-3"]').click(); await sleep(20);
   assert(w.eval('S.filters.cost.size')===1 && w.eval('S.filters.power.size')===1, 'multiple facet sets populate');
   d.querySelector('#fp-clear').click(); await sleep(20);
-  assert(w.eval('S.filters.cost.size===0 && S.filters.power.size===0 && S.filters.mech.size===0 && S.filters.series.size===0 && S.filters.owned===false'), 'clear-all empties every filter set incl power');
+  assert(w.eval('S.filters.cost.size===0 && S.filters.power.size===0 && S.filters.mech.size===0 && S.filters.series.size===0 && S.filters.owned===""'), 'clear-all empties every filter set incl power');
   // deck menu on build screen
   d.querySelector('#bh-menu').click(); await sleep(20);
   assert(d.querySelector('#dm-copy')!==null, 'build-screen deck menu opens');
@@ -1877,12 +1877,12 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   d.querySelector('#ins-curve i[data-cost="6"]').click(); await sleep(30);
   assert(!w.eval('S.filters.cost.has("6")'), 'R17: tapping the bar again clears the filter');
   // Owned quick pill: one tap, persists as a preference, syncs with the flyout switch
-  d.getElementById('own-quick').click(); await sleep(30);
-  assert(w.eval('S.filters.owned')===true && w.eval('S.prefs.ownedOnly')===true, 'R17: Owned pill flips the filter and remembers it');
-  assert(d.getElementById('own-quick').classList.contains('on'), 'R17: the pill lights up');
+  d.querySelector('#browsebar .bb-own[data-own="owned"]').click(); await sleep(30);
+  assert(w.eval('S.filters.owned')==='owned' && w.eval('S.prefs.ownedMode.cards')==='owned', 'R17: Owned pill flips the filter and remembers it');
+  assert(d.querySelector('#browsebar .bb-own[data-own="owned"]').classList.contains('on'), 'R17: the pill lights up');
   assert(d.querySelector('#fw-owned').classList.contains('on'), 'R17: the flyout switch agrees');
-  d.getElementById('own-quick').click(); await sleep(30);
-  assert(w.eval('S.filters.owned')===false && w.eval('S.prefs.ownedOnly')===false, 'R17: tapping again clears both');
+  d.querySelector('#browsebar .bb-own[data-own="owned"]').click(); await sleep(30);
+  assert(w.eval('S.filters.owned')==='' && w.eval('S.prefs.ownedMode.cards')==='', 'R17: tapping again clears both');
   // the fit shelf: two discard enablers summon discard payoffs
   w.eval('(function(){var dd=activeDeck(); dd.cards=["Blade","Hellcow"]; touch(dd); renderAll();})()'); await sleep(20);
   assert(d.getElementById('fitshelf').hidden===false, 'R17: a two-card deck summons the fit shelf');
@@ -1911,7 +1911,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   // ================= R18: the browse rail — sort/filter without the sheet =================
   assert(d.getElementById('browsebar')!==null && d.getElementById('browsebar').closest('#buildtop')!==null, 'R18: the rail rides the sticky build header');
-  assert(d.getElementById('own-quick').closest('#browsebar')!==null, 'R18: the Owned pill moved onto the rail');
+  assert(d.querySelectorAll('#browsebar .bb-own').length===2, 'R18: Owned and Unowned pills live on the rail');
   assert(d.querySelectorAll('#browsebar .bbf[data-facet="cost"]').length===6 && d.querySelectorAll('#browsebar .bbf[data-facet="mech"]').length===5
     && d.querySelectorAll('#browsebar .bbf[data-facet="series"]').length===6, 'R18: cost, mechanic, and series chips all live on the rail');
   // one-tap filtering, live grid, flyout stays in agreement
@@ -1925,13 +1925,14 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   d.querySelector('#browsebar .bbf[data-facet="cost"][data-v="3"]').click(); await sleep(30);
   assert(!w.eval('S.filters.cost.has("3")'), 'R18: tapping again clears it');
   // the sort button cycles in place
-  assert(d.getElementById('bb-sort-label').textContent==='Energy', 'R18: sort chip names the current sort');
-  d.getElementById('bb-sort').click(); await sleep(30);
-  assert(w.eval('S.sort')==='new' && d.getElementById('bb-sort-label').textContent==='Newest', 'R18: one tap cycles Energy -> Newest');
-  d.getElementById('bb-sort').click(); await sleep(20);
-  d.getElementById('bb-sort').click(); await sleep(20);
-  d.getElementById('bb-sort').click(); await sleep(20);
-  assert(w.eval('S.sort')==='cost' && d.getElementById('bb-sort-label').textContent==='Energy', 'R18: the cycle wraps back to Energy');
+  const bbSort = d.querySelector('#browsebar .bb-sort'), bbLbl = () => d.querySelector('#browsebar .bb-sort-label').textContent;
+  assert(bbLbl()==='Energy', 'R18: sort chip names the current sort');
+  bbSort.click(); await sleep(30);
+  assert(w.eval('S.sort')==='new' && bbLbl()==='Newest', 'R18: one tap cycles Energy -> Newest');
+  bbSort.click(); await sleep(20);
+  bbSort.click(); await sleep(20);
+  bbSort.click(); await sleep(20);
+  assert(w.eval('S.sort')==='cost' && bbLbl()==='Energy', 'R18: the cycle wraps back to Energy');
   // cost dividers: Energy order reads in rows, each divider is a tap-filter
   assert(d.querySelectorAll('#cardlist .costdiv').length>=6, 'R18: Energy order breaks the grid into cost rows');
   assert(d.querySelectorAll('#cardlist .tile').length===357, 'R18: dividers never change the tile count');
@@ -1943,6 +1944,41 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   w.eval('S.sort="name"; renderBrowse();'); await sleep(20);
   assert(d.querySelectorAll('#cardlist .costdiv').length===0, 'R18: other sorts drop the dividers (they only mean something in Energy order)');
   w.eval('S.sort="cost"; renderBrowse();'); await sleep(20);
+
+  // ================= R19: Library gets its own rail, unowned filter, independent banks =================
+  assert(d.querySelectorAll('#coll-browsebar .bbf').length===17 && d.querySelectorAll('#coll-browsebar .bb-own').length===2,
+    'R19: the Library wears its own full rail');
+  // independence: a cost filter set on Build never follows you into the Library
+  d.querySelector('#browsebar .bbf[data-facet="cost"][data-v="3"]').click(); await sleep(20);
+  assert(w.eval('S.filters.cost.has("3")'), 'R19: Build takes a cost filter');
+  w.eval('setTab("collection")'); await sleep(30);
+  assert(w.eval('S.filters.cost.size')===0 && w.eval('S.filters.owned')==='', 'R19: the Library opens with its own clean filters');
+  // the Library can show only what you are missing
+  w.eval('S.owned = new Set(["Hulk"]); renderCollection();'); await sleep(20);
+  d.querySelector('#coll-browsebar .bb-own[data-own="unowned"]').click(); await sleep(30);
+  assert(w.eval('S.filters.owned')==='unowned', 'R19: the Unowned pill filters the Library');
+  assert(d.querySelector('#colllist .tile[data-d="Hulk"]')===null && d.querySelectorAll('#colllist .tile').length>0,
+    'R19: unowned view hides the cards you have and keeps the ones you want');
+  assert(w.eval('S.prefs.ownedMode.collection')==='unowned', 'R19: the Library remembers its owned mode separately');
+  d.querySelector('#coll-browsebar .bb-own[data-own="owned"]').click(); await sleep(30);
+  assert(w.eval('S.filters.owned')==='owned' && [...d.querySelectorAll('#colllist .tile')].every(t=>t.dataset.d==='Hulk'),
+    'R19: switching to Owned shows exactly the collection');
+  d.querySelector('#coll-browsebar .bb-own[data-own="owned"]').click(); await sleep(20);
+  // sort independence: Newest in the Library, Energy still on Build
+  d.querySelector('#coll-browsebar .bb-sort').click(); await sleep(20);
+  assert(w.eval('S.sort')==='new' && d.querySelector('#coll-browsebar .bb-sort-label').textContent==='Newest', 'R19: the Library cycles to Newest');
+  w.eval('setTab("cards")'); await sleep(30);
+  assert(w.eval('S.sort')==='cost' && w.eval('S.filters.cost.has("3")'), 'R19: back on Build — Energy sort and the cost filter are exactly as left');
+  w.eval('setTab("collection")'); await sleep(30);
+  assert(w.eval('S.sort')==='new', 'R19: and the Library still remembers Newest');
+  // search text swaps with the bank too
+  w.eval('S.filters.q = "wong"; renderBrowse();'); await sleep(20);
+  w.eval('setTab("cards")'); await sleep(20);
+  assert(d.getElementById('q').value==='', 'R19: Build search box is untouched by Library search');
+  w.eval('setTab("collection")'); await sleep(20);
+  assert(d.getElementById('q').value==='wong', 'R19: the Library search text is waiting where it was left');
+  // tidy up both banks for anything downstream
+  w.eval('clearAllFilters(); setSort("cost"); setTab("cards"); clearAllFilters(); setSort("cost");'); await sleep(20);
 
   assert(errors.length===0, 'R15: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
 

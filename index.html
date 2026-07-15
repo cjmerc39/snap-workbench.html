@@ -591,15 +591,19 @@ h1 .h-snap{color:var(--gold);}
 .cib::after{content:''; position:absolute; inset:-3px;} /* expands tap target to 33px without growing the visible circle */
 .viewrow{display:flex; align-items:center; justify-content:space-between; margin:0 2px 10px;}
 .viewrow #matchcount{margin:0;}
-/* R18: the browse rail — one scrollable row of one-tap sort/filter chips,
-   riding the sticky build header so it never scrolls out of reach */
-#browsebar{display:flex; gap:6px; align-items:center; overflow-x:auto; -webkit-overflow-scrolling:touch;
+/* R18/R19: the browse rail — one scrollable row of one-tap sort/filter chips.
+   The Build instance rides the sticky header; the Library instance sticks to
+   the top of the scroller on its own. */
+.browsebar{display:flex; gap:6px; align-items:center; overflow-x:auto; -webkit-overflow-scrolling:touch;
   overscroll-behavior-x:contain; scrollbar-width:none; padding:9px 2px 2px; margin:0;}
-#browsebar::-webkit-scrollbar{display:none;}
-#browsebar .chip{flex:0 0 auto; font-size:12px; padding:6px 11px;}
-#bb-sort{color:var(--iris-soft);}
-#bb-sort b{font-weight:800;}
+.browsebar::-webkit-scrollbar{display:none;}
+.browsebar .chip{flex:0 0 auto; font-size:12px; padding:6px 11px;}
+.browsebar .bb-sort{color:var(--iris-soft);}
+.browsebar .bb-sort b{font-weight:800;}
 .bb-sep{flex:0 0 1px; height:18px; background:var(--line2);}
+#coll-browsebar{position:sticky; top:0; z-index:21; margin:0 -14px 10px; padding:9px 14px 9px;
+  background:rgba(11,7,20,.9); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
+  box-shadow:0 14px 16px -14px rgba(0,0,0,.7);}
 /* cost dividers — in Energy order the grid reads in rows of a feeling: 1-drops, 2-drops… */
 .costdiv{grid-column:1/-1; display:flex; align-items:center; gap:8px; margin:8px 2px 0; cursor:pointer;
   font-family:var(--head); font-weight:800; font-size:10.5px; letter-spacing:.8px; text-transform:uppercase; color:var(--faint);}
@@ -830,8 +834,9 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .fp-chip{display:inline-flex; align-items:center; gap:6px; background:var(--raise); border-color:var(--line); color:var(--text);}
 .fp-chip .fp-x{color:var(--faint); font-weight:800; font-size:14px; line-height:1;}
 .fp-clearbtn{background:none; border-color:var(--line); color:var(--dim);}
-#fw-owned{display:block; width:100%; text-align:left; margin-bottom:10px;}
-#fw-owned .chipn{float:right; color:var(--faint);}
+.fw-ownrow{display:flex; gap:8px; margin-bottom:10px;}
+.fw-ownrow .owntoggle{flex:1; text-align:left;}
+.owntoggle .chipn{float:right; color:var(--faint);}
 .owntoggle.on .chipn{color:#0a1f16;}
 
 .fwidget{display:block; background:var(--raise); box-shadow:inset 0 0 0 1px var(--hair); border:none; border-radius:var(--r-md); margin-bottom:8px; overflow:hidden;}
@@ -1075,34 +1080,10 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
         <span id="ins-syn" class="ins-tag"></span>
       </div>
     </div>
-    <!-- R18: the browse rail — every common sort/filter is ONE tap, always in reach
-         (it rides the sticky build header), with the grid live-updating behind it.
-         The flyout remains for the long tail (power buckets, counts). -->
-    <div id="browsebar" aria-label="Sort and filter">
-      <button class="chip" id="bb-sort" title="Cycle sort">&#8645; <b id="bb-sort-label">Energy</b></button>
-      <span class="bb-sep"></span>
-      <button class="chip c-own" id="own-quick">Owned</button>
-      <span class="bb-sep"></span>
-      <button class="chip c-cost bbf" data-facet="cost" data-v="1">1-</button>
-      <button class="chip c-cost bbf" data-facet="cost" data-v="2">2</button>
-      <button class="chip c-cost bbf" data-facet="cost" data-v="3">3</button>
-      <button class="chip c-cost bbf" data-facet="cost" data-v="4">4</button>
-      <button class="chip c-cost bbf" data-facet="cost" data-v="5">5</button>
-      <button class="chip c-cost bbf" data-facet="cost" data-v="6">6+</button>
-      <span class="bb-sep"></span>
-      <button class="chip bbf" data-facet="mech" data-v="On Reveal">On Reveal</button>
-      <button class="chip bbf" data-facet="mech" data-v="Ongoing">Ongoing</button>
-      <button class="chip bbf" data-facet="mech" data-v="Discard">Discard</button>
-      <button class="chip bbf" data-facet="mech" data-v="Destroy">Destroy</button>
-      <button class="chip bbf" data-facet="mech" data-v="Move">Move</button>
-      <span class="bb-sep"></span>
-      <button class="chip bbf" data-facet="series" data-v="1">S1</button>
-      <button class="chip bbf" data-facet="series" data-v="2">S2</button>
-      <button class="chip bbf" data-facet="series" data-v="3">S3</button>
-      <button class="chip bbf" data-facet="series" data-v="4">S4</button>
-      <button class="chip bbf" data-facet="series" data-v="5">S5</button>
-      <button class="chip bbf" data-facet="series" data-v="Base">Base</button>
-    </div>
+    <!-- R18/R19: the browse rail — every common sort/filter is ONE tap, always in
+         reach (this instance rides the sticky build header; its twin sits atop the
+         Library), with the grid live-updating behind it. Markup is generated. -->
+    <div class="browsebar" id="browsebar" aria-label="Sort and filter"></div>
     </div>
     <div id="gridcol">
       <div id="artnote">Card art seems blocked in this environment, so you&rsquo;re seeing tile view. Everything else works the same.</div>
@@ -1255,6 +1236,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
         </div>
       </div>
     </div>
+    <div class="browsebar" id="coll-browsebar" aria-label="Sort and filter"></div>
     <div id="colllist"></div>
     <div id="loclist"></div>
   </section>
@@ -1403,7 +1385,7 @@ const S = {
   decks: [],
   activeId: null,
   owned: new Set(),
-  filters: { q:'', cost:new Set(), mech:new Set(), series:new Set(), power:new Set(), owned:false },
+  filters: { q:'', cost:new Set(), mech:new Set(), series:new Set(), power:new Set(), owned:'' },   // owned: '' | 'owned' | 'unowned'
   tab: 'cards',
   deckTab: 'overview',     // WP2 deck-tools sub-tab
   trayOpen: false,
@@ -2020,7 +2002,7 @@ function updateClearBtn(){
 }
 function clearAllFilters(){
   S.filters.cost.clear(); S.filters.mech.clear(); S.filters.series.clear(); S.filters.power.clear();
-  S.filters.owned = false; S.filters.q = '';
+  S.filters.owned = ''; S.filters.q = '';
   const q = $('#q'); if(q) q.value = '';
   afterFilterChange();
 }
@@ -2046,7 +2028,8 @@ function renderFilterPanel(){
   const sortHtml  = SORTS.map(s=>'<button class="chip sortchip'+(S.sort===s.k?' on':'')+'" data-sort="'+esc(s.k)+'">'+esc(s.label)+'</button>').join('');
   panel.innerHTML =
     '<div id="fp-active" class="fp-active"></div>'+
-    '<button class="chip c-own owntoggle" id="fw-owned">Owned only <span class="chipn"></span></button>'+
+    '<div class="fw-ownrow"><button class="chip c-own owntoggle" id="fw-owned">Owned only <span class="chipn"></span></button>'+
+    '<button class="chip c-own owntoggle" id="fw-unowned">Unowned only <span class="chipn"></span></button></div>'+
     widget('sort','Sort', sortHtml, 'sortrow')+
     widget('cost','Cost', facetChipHtml(costItems))+
     widget('series','Series', facetChipHtml(serItems))+
@@ -2063,10 +2046,11 @@ function facetCounts(){
     if(skip!=='series' && f.series.size && !f.series.has(c.s)) return false;
     if(skip!=='mech' && f.mech.size){ const ms=mech(c); if(![...f.mech].every(m=>ms.includes(m))) return false; }
     if(skip!=='power' && f.power.size && !f.power.has(powBucketKey(c.p))) return false;
-    if(skip!=='owned' && f.owned && !S.owned.has(c.d)) return false;
+    if(skip!=='owned' && f.owned === 'owned' && !S.owned.has(c.d)) return false;
+    if(skip!=='owned' && f.owned === 'unowned' && S.owned.has(c.d)) return false;
     return true;
   };
-  const out = { cost:{}, series:{}, mech:{}, power:{}, owned:0 };
+  const out = { cost:{}, series:{}, mech:{}, power:{}, owned:0, unowned:0 };
   ['1','2','3','4','5','6'].forEach(v=>out.cost[v]=0);
   ['1','2','3','4','5','Base'].forEach(v=>out.series[v]=0);
   ['On Reveal','Ongoing','Discard','Destroy','Move','Activate','Vanilla'].forEach(v=>out.mech[v]=0);
@@ -2076,7 +2060,7 @@ function facetCounts(){
     if(pass(c,'series')){ if(out.series[c.s]!=null) out.series[c.s]++; }
     if(pass(c,'mech')){ mech(c).forEach(m=>{ if(out.mech[m]!=null) out.mech[m]++; }); }
     if(pass(c,'power')){ out.power[powBucketKey(c.p)]++; }
-    if(pass(c,'owned') && S.owned.has(c.d)) out.owned++;
+    if(pass(c,'owned')){ if(S.owned.has(c.d)) out.owned++; else out.unowned++; }
   }
   return out;
 }
@@ -2096,7 +2080,9 @@ function updateFacetCounts(){
   };
   apply('cost', f.cost); apply('series', f.series); apply('mech', f.mech); apply('power', f.power);
   const own = $('#fw-owned');
-  if(own){ own.classList.toggle('on', f.owned); const cn=own.querySelector('.chipn'); if(cn) cn.textContent = counts.owned; }
+  if(own){ own.classList.toggle('on', f.owned === 'owned'); const cn=own.querySelector('.chipn'); if(cn) cn.textContent = counts.owned; }
+  const unown = $('#fw-unowned');
+  if(unown){ unown.classList.toggle('on', f.owned === 'unowned'); const cn=unown.querySelector('.chipn'); if(cn) cn.textContent = counts.unowned; }
   panel.querySelectorAll('#fw-sort [data-sort]').forEach(b => b.classList.toggle('on', b.dataset.sort===S.sort));
 }
 function renderActiveChips(){
@@ -2108,7 +2094,7 @@ function renderActiveChips(){
   [...f.series].forEach(v => chips.push({facet:'series', v, label: v==='Base'?'Base':'Series '+v}));
   [...f.mech].forEach(v => chips.push({facet:'mech', v, label:v}));
   [...f.power].forEach(v => chips.push({facet:'power', v, label:'Power '+powLbl(v)}));
-  if(f.owned) chips.push({facet:'owned', v:'1', label:'Owned'});
+  if(f.owned) chips.push({facet:'owned', v:'1', label: f.owned === 'unowned' ? 'Unowned' : 'Owned'});
   if(!chips.length){ wrap.innerHTML=''; return; }
   wrap.innerHTML = chips.map(c =>
     '<button class="chip fp-chip on" data-facet="'+esc(c.facet)+'" data-v="'+esc(c.v)+'">'+esc(c.label)+' <span class="fp-x">×</span></button>'
@@ -2127,7 +2113,7 @@ function toggleFacet(name){
 function renderBrowse(){ renderCards(); if(S.tab === 'collection') renderCollection(); }
 function afterFilterChange(){ renderBrowse(); updateFilterBadge(); renderActiveChips(); updateClearBtn(); }
 function removeFilter(facet, v){
-  if(facet==='owned'){ S.filters.owned = false; return; }
+  if(facet==='owned'){ S.filters.owned = ''; return; }
   const set = S.filters[facet];
   if(set && typeof set.delete === 'function') set.delete(v);
 }
@@ -2135,8 +2121,9 @@ $('#filterpanel').addEventListener('click', e => {
   const head = e.target.closest('.fw-head');
   if(head){ toggleFacet(head.closest('.fwidget').dataset.facet); return; }
   const sortBtn = e.target.closest('[data-sort]');
-  if(sortBtn){ S.sort = sortBtn.dataset.sort; renderBrowse(); return; }
-  if(e.target.closest('#fw-owned')){ setOwnedFilter(!S.filters.owned); return; }
+  if(sortBtn){ setSort(sortBtn.dataset.sort); renderBrowse(); return; }
+  if(e.target.closest('#fw-owned')){ setOwnedFilter(S.filters.owned === 'owned' ? '' : 'owned'); return; }
+  if(e.target.closest('#fw-unowned')){ setOwnedFilter(S.filters.owned === 'unowned' ? '' : 'unowned'); return; }
   if(e.target.closest('#fp-clear')){ clearAllFilters(); return; }
   const fpChip = e.target.closest('.fp-chip');
   if(fpChip){ removeFilter(fpChip.dataset.facet, fpChip.dataset.v); afterFilterChange(); return; }
@@ -2191,14 +2178,20 @@ const SORTS = [
   { k:'name',  label:'Name',   fn:(a,b)=>a.n.localeCompare(b.n) },
 ];
 S.sort = 'cost'; // DEFAULT = Energy (cost asc -> power DESC -> name A-Z)
-/* R17: Owned is one tap, not a trip into the flyout — and it remembers. The
-   flyout's "Owned only" and this pill drive the same switch. */
-function setOwnedFilter(v){
-  S.filters.owned = !!v;
-  S.prefs.ownedOnly = !!v; sSet(K.prefs, S.prefs); scheduleSync();
+/* R19: Build and Library each keep their OWN filters + sort. setTab swaps the
+   active bank in and out, so narrowing the Library never disturbs the bench. */
+S._banks = { cards: S.filters, collection: { q:'', cost:new Set(), mech:new Set(), series:new Set(), power:new Set(), owned:'' } };
+S._sorts = { cards:'cost', collection:'cost' };
+function curBank(){ return S.tab === 'collection' ? 'collection' : 'cards'; }
+function setSort(k){ S.sort = k; S._sorts[curBank()] = k; }
+/* R17/R19: Owned is one tap and tri-state — everything, only owned, or only
+   UNOWNED (the Library's shopping view). Remembered per surface. */
+function setOwnedFilter(mode){
+  S.filters.owned = mode === 'owned' || mode === 'unowned' ? mode : '';
+  S.prefs.ownedMode = Object.assign({}, S.prefs.ownedMode, { [curBank()]: S.filters.owned });
+  sSet(K.prefs, S.prefs); scheduleSync();
   afterFilterChange();
 }
-if($('#own-quick')) $('#own-quick').onclick = () => setOwnedFilter(!S.filters.owned);
 /* R18: one shared toggle for every one-tap filter surface — rail chips, cost
    dividers, curve bars. renderDeckbar rides along so the curve's selected
    rings always agree with the cost set. */
@@ -2207,15 +2200,35 @@ function toggleFacetValue(facet, v){
   if(set.has(v)) set.delete(v); else set.add(v);
   afterFilterChange(); renderDeckbar();
 }
-if($('#browsebar')) $('#browsebar').addEventListener('click', e => {
-  if(e.target.closest('#bb-sort')){
-    const i = SORTS.findIndex(s => s.k === S.sort);
-    S.sort = SORTS[(i + 1) % SORTS.length].k;
-    renderBrowse();
-    return;
-  }
-  const ch = e.target.closest('.bbf'); if(!ch) return;
-  toggleFacetValue(ch.dataset.facet, ch.dataset.v);
+/* R19: the rail is a component now — one instance rides the Build header, a
+   second sits atop the Library, each driving whichever bank is active. */
+function railHtml(){
+  const chip = (facet, v, label, cls) => '<button class="chip bbf'+(cls?' '+cls:'')+'" data-facet="'+facet+'" data-v="'+esc(v)+'">'+esc(label)+'</button>';
+  return '<button class="chip bb-sort" title="Cycle sort">&#8645; <b class="bb-sort-label">Energy</b></button>'+
+    '<span class="bb-sep"></span>'+
+    '<button class="chip c-own bb-own" data-own="owned">Owned</button>'+
+    '<button class="chip c-own bb-own" data-own="unowned">Unowned</button>'+
+    '<span class="bb-sep"></span>'+
+    [1,2,3,4,5,6].map(n => chip('cost', String(n), n===6?'6+':(n===1?'1-':String(n)), 'c-cost')).join('')+
+    '<span class="bb-sep"></span>'+
+    ['On Reveal','Ongoing','Discard','Destroy','Move'].map(v => chip('mech', v, v)).join('')+
+    '<span class="bb-sep"></span>'+
+    ['1','2','3','4','5','Base'].map(v => chip('series', v, v==='Base'?'Base':'S'+v)).join('');
+}
+document.querySelectorAll('.browsebar').forEach(bar => {
+  bar.innerHTML = railHtml();
+  bar.addEventListener('click', e => {
+    if(e.target.closest('.bb-sort')){
+      const i = SORTS.findIndex(s => s.k === S.sort);
+      setSort(SORTS[(i + 1) % SORTS.length].k);
+      renderBrowse();
+      return;
+    }
+    const own = e.target.closest('.bb-own');
+    if(own){ setOwnedFilter(S.filters.owned === own.dataset.own ? '' : own.dataset.own); return; }
+    const ch = e.target.closest('.bbf'); if(!ch) return;
+    toggleFacetValue(ch.dataset.facet, ch.dataset.v);
+  });
 });
 $('#btn-filter').onclick = () => { flyoutOpen() ? closeFlyout() : openFlyout(false); };
 $('#btn-sort').onclick   = () => { openFlyout(true); };
@@ -2260,7 +2273,8 @@ function filteredCards(){
     if(f.series.size && !f.series.has(c.s)) return false;
     if(f.mech.size){ const ms = mech(c); if(![...f.mech].every(m => ms.includes(m))) return false; }
     if(f.power.size && !f.power.has(powBucketKey(c.p))) return false;
-    if(f.owned && !S.owned.has(c.d)) return false;
+    if(f.owned === 'owned' && !S.owned.has(c.d)) return false;
+    if(f.owned === 'unowned' && S.owned.has(c.d)) return false;
     return true;
   }).slice().sort(sorter);
 }
@@ -2324,7 +2338,7 @@ function fitSuggestions(max){
   const out = [];
   for(const c of S.db){
     if(inSet.has(c.d)) continue;
-    if(S.filters.owned && !S.owned.has(c.d)) continue;
+    if(S.filters.owned === 'owned' && !S.owned.has(c.d)) continue;
     let score = 0, why = '', whyScore = 0;
     const consider = (pts, text) => { score += pts; if(pts > whyScore){ whyScore = pts; why = text; } };
     for(const { r, en, py } of posture){
@@ -2365,15 +2379,16 @@ function renderFitShelf(){
   row.onclick = e => { const f = e.target.closest('.fitcard'); if(f) toggleCard(f.dataset.d); };
 }
 function syncBrowseBar(){
-  const bar = $('#browsebar'); if(!bar) return;
-  const lbl = $('#bb-sort-label');
-  if(lbl) lbl.textContent = (SORTS.find(s => s.k === S.sort) || SORTS[0]).label;
-  bar.querySelectorAll('.bbf').forEach(ch => {
-    const set = S.filters[ch.dataset.facet];
-    ch.classList.toggle('on', !!set && set.has(ch.dataset.v));
+  const label = (SORTS.find(s => s.k === S.sort) || SORTS[0]).label;
+  document.querySelectorAll('.browsebar').forEach(bar => {
+    const lbl = bar.querySelector('.bb-sort-label');
+    if(lbl) lbl.textContent = label;
+    bar.querySelectorAll('.bbf').forEach(ch => {
+      const set = S.filters[ch.dataset.facet];
+      ch.classList.toggle('on', !!set && set.has(ch.dataset.v));
+    });
+    bar.querySelectorAll('.bb-own').forEach(b => b.classList.toggle('on', S.filters.owned === b.dataset.own));
   });
-  const oq = $('#own-quick');
-  if(oq) oq.classList.toggle('on', S.filters.owned);
 }
 function renderCards(){
   const list = $('#cardlist');
@@ -4786,6 +4801,15 @@ function setTab(t){
   S.tab = t;
   closeFlyout();
   if(t !== 'deck' && S.plannerTurn) closePlPicker(true);   // leaving the Deck tab dismisses the card picker
+  // R19: Build and Library each keep their own filters + sort — swap the active bank
+  if(S._banks){
+    const bank = t === 'collection' ? 'collection' : 'cards';
+    if(S.filters !== S._banks[bank]){
+      S.filters = S._banks[bank]; S.sort = S._sorts[bank];
+      const q = $('#q'); if(q) q.value = S.filters.q;
+      updateFilterBadge(); renderActiveChips(); updateClearBtn(); renderFilterPanel();
+    }
+  }
   document.body.classList.toggle('on-cards', t === 'cards' || t === 'collection'); // floating tool cluster on Build + Library (R13: the Library grid obeys it too)
   document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'view-'+t));
@@ -4891,7 +4915,12 @@ async function boot(){
   const prefs = await sGet(K.prefs);
   if(prefs) S.prefs = Object.assign({ density:'cmp', collOpen:false }, prefs);
   S.prefs.facetOpen = Object.assign({ sort:false, cost:true, series:false, mech:false, power:false }, S.prefs.facetOpen || {});
-  if(S.prefs.ownedOnly) S.filters.owned = true;   // the Owned pill remembers across sessions
+  // R19: owned mode remembered per surface (migrate the old boolean pref into the Build bank)
+  const om = Object.assign({ cards: S.prefs.ownedOnly ? 'owned' : '', collection:'' }, S.prefs.ownedMode || {});
+  delete S.prefs.ownedOnly;
+  S.prefs.ownedMode = om;
+  if(om.cards === 'owned' || om.cards === 'unowned') S._banks.cards.owned = om.cards;
+  if(om.collection === 'owned' || om.collection === 'unowned') S._banks.collection.owned = om.collection;
   // R5-J: restore in-app added creators (rides in the previously-unused K.creators key)
   const cr = await sGet(K.creators);
   if(cr){ S.addedCreators = cr.channels || []; S.addedCreatorDecks = cr.decks || []; }
