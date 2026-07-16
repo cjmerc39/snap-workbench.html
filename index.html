@@ -353,6 +353,13 @@ h1 .h-snap{color:var(--gold);}
 .pl-drawwarn{color:var(--warn);}
 .pl-mini-row{flex:1; min-width:0; display:flex; flex-wrap:wrap; align-content:center; gap:5px; min-height:44px;}
 .pl-mini-row .mini{width:32px; flex:0 0 32px;}
+/* a deliberately skipped turn — planned pass, not an unfinished slot */
+.pl-slot.skipped{opacity:.8;}
+.pl-skip-tag{background:none; border:1px dashed var(--line2); color:var(--faint); border-radius:10px;
+  padding:9px 12px; font-size:12px; font-weight:700; cursor:pointer;}
+.pl-pick-skip{background:var(--raise); border:none; color:var(--dim); border-radius:var(--r-pill);
+  height:34px; padding:0 10px; font-size:11.5px; font-weight:800; flex-shrink:0;}
+.pl-pick-skip:active{background:var(--gold); color:var(--iris-ink);}
 .pl-slot-add{background:none; border:1px dashed var(--line2); color:var(--faint); border-radius:10px;
   min-height:44px; width:100%; font-size:12.5px; font-weight:700; letter-spacing:.2px;}
 .pl-flags{margin-top:10px;}
@@ -385,10 +392,10 @@ h1 .h-snap{color:var(--gold);}
   padding:8px 16px calc(16px + env(safe-area-inset-bottom));
   transform:translateY(100%); transition:transform var(--dur-3) var(--ease-spring);}
 #pl-picker.on .pl-sheet{transform:translateY(0);}
-.pl-pick-head{display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:2;
+.pl-pick-head{display:flex; align-items:center; gap:7px; position:sticky; top:0; z-index:2;
   padding:2px 2px 10px; margin-bottom:6px;
   background:linear-gradient(180deg, rgba(21,16,31,.94), rgba(21,16,31,0));}
-.pl-pick-title{font-family:var(--head); font-weight:800; letter-spacing:.2px; font-size:15px; color:var(--text); min-width:58px; text-align:center;}
+.pl-pick-title{font-family:var(--head); font-weight:800; letter-spacing:.2px; font-size:15px; color:var(--text); min-width:32px; text-align:center;}
 /* R11.1: hop turns without closing the sheet */
 .pl-pick-nav{width:34px; height:34px; border-radius:50%; border:none; background:var(--raise); color:var(--text);
   font-size:19px; line-height:1; font-weight:700; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center;}
@@ -1086,6 +1093,19 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .mc-chip.spice{color:var(--faint); box-shadow:inset 0 0 0 1px rgba(255,255,255,.09); background:transparent;}
 .syn-ai-out{font-size:12.5px; line-height:1.55; color:var(--text,#eee); background:var(--glass-2); border-radius:12px;
   padding:12px; margin-bottom:8px; box-shadow:inset 0 0 0 1px rgba(170,140,255,.18); white-space:pre-wrap;}
+/* my-synergies rows (Coach tab) + the picker modal */
+#mysyns{display:flex; flex-direction:column; gap:8px; margin:6px 0 12px;}
+.msyn-row{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:12px; padding:10px;}
+.msyn-minis{display:flex; flex-wrap:wrap; gap:6px;}
+.msyn-minis .mini{width:46px; flex:0 0 46px;}
+.msyn-note{font-size:12.5px; color:var(--dim); margin-top:8px; line-height:1.45;}
+.msyn-acts{display:flex; gap:8px; margin-top:9px;}
+.msyn-acts .abtn{min-height:34px; padding:6px 14px; font-size:12px;}
+#syn-sel, #syn-matches{display:flex; flex-wrap:wrap; gap:6px; margin:8px 0;}
+#syn-sel .mini, #syn-matches .mini{width:54px; flex:0 0 54px; cursor:pointer;}
+#syn-sel .mini{box-shadow:0 0 0 2px var(--gold);}
+#syn-note{width:100%; min-height:64px; background:var(--glass-2); border:none; resize:vertical;
+  box-shadow:inset 0 0 0 1px var(--hair); border-radius:10px; color:var(--text); padding:10px; font-family:var(--body);}
 </style>
 </head>
 <body>
@@ -1263,6 +1283,13 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
     <button class="abtn primary" id="btn-ask" style="width:100%">Ask about current deck</button>
     <div id="aiout"></div>
     <div class="ainote">The coach reads your deck plus the card database in this app. It reasons well about curve, synergy, and win conditions; treat this-week meta claims with a grain of salt.</div>
+
+    <!-- user-declared synergies: combos the rules engine can't see. Fed straight into
+         the fit shelf and Complete-my-deck (fitSuggestions), synced like creators. -->
+    <div class="section-label" style="margin-top:22px">My synergies</div>
+    <div class="mnote">Know two cards that work together? Link them here — the build screen&rsquo;s &ldquo;Fits this deck&rdquo; and &ldquo;Complete my deck&rdquo; will suggest from your combos first.</div>
+    <div id="mysyns"></div>
+    <button class="abtn" id="btn-addsyn" style="width:100%">&#65291; New synergy</button>
   </section>
 
   <!-- COLLECTION -->
@@ -1334,6 +1361,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       <button class="pl-pick-nav" id="pl-next" type="button" aria-label="Next turn">&#8250;</button>
       <span class="pl-energy" id="pl-picker-energy">0/1&#9889;</span>
       <span class="pl-nudge" id="pl-nudge"></span>
+      <button class="pl-pick-skip" id="pl-pick-skip" type="button" title="Play nothing this turn on purpose">Skip</button>
       <button class="pl-pick-done" id="pl-pick-done" type="button">Done</button>
     </div>
     <div class="pl-pick" id="pl-pick-grid"></div>
@@ -1449,11 +1477,12 @@ const S = {
   creatorDecksLabel: '',   // R4 "updated" date from creator-decks.json
   addedCreators: [],       // R5-J in-app added channels [{id:'UC…', name, handle}]
   addedCreatorDecks: [],   // R5-J decks harvested from those channels (creatorDecks row shape + added:true, chId)
+  mySyns: [],              // user-declared synergies [{id, ids:[defids 2+], note}] — feed the fit engine
   syncToken: '',           // R5-I cross-device bearer token (device-local; never in a URL/log)
   syncState: 'idle',       // 'idle' | 'ok' | 'offline' | 'error'
   syncLast: 0,             // last successful sync (ms)
 };
-const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb', prefs:'snapwb-prefs', creators:'snapwb-creators', synctoken:'snapwb-synctoken', crfresh:'snapwb-crfresh' };
+const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb', prefs:'snapwb-prefs', creators:'snapwb-creators', synctoken:'snapwb-synctoken', crfresh:'snapwb-crfresh', mysyns:'snapwb-mysyns' };
 
 /* ============ UTIL ============ */
 const $ = s => document.querySelector(s);
@@ -1559,6 +1588,7 @@ function persistDecks(){ if(S.storageOK) showSaveState('saving'); sSet(K.decks, 
 function persistColl(){ sSet(K.coll, { owned:[...S.owned] }); scheduleSync(); }
 /* R5-J: in-app added creators + their harvested decks ride in K.creators (previously unused). */
 function persistCreators(){ sSet(K.creators, { channels:S.addedCreators, decks:S.addedCreatorDecks }); scheduleSync(); }
+function persistMySyns(){ sSet(K.mysyns, S.mySyns || []); scheduleSync(); }
 
 /* ============ R5-I: CROSS-DEVICE SYNC (KV via the relay) ============
    Every path is guarded by (S.syncToken && SYNC_URL) + try/catch, so with no token
@@ -1569,6 +1599,7 @@ function buildStateBlob(){
     owned:[...S.owned],
     creators:S.addedCreators||[],
     creatorDecksCache:S.addedCreatorDecks||[],
+    mySyns:S.mySyns||[],
     prefs:S.prefs };
 }
 /* R6: the serialization boundary for the sync PUT — a draft-free blob. buildStateBlob() stays
@@ -1590,16 +1621,18 @@ function mergeState(local, remote){
   // channels' decks whenever the pull arrived before the debounced push escaped the phone.
   const cdKey = x => (x.chId||'') + '|' + (x.url||'') + '|' + (x.name||'');
   const cdMap = {}; [...(remote.creatorDecksCache||[]), ...(local.creatorDecksCache||[])].forEach(x => { if(x) cdMap[cdKey(x)] = x; });
+  const msById = {}; [...(local.mySyns||[]), ...(remote.mySyns||[])].forEach(g => { if(g && g.id) msById[g.id] = g; });   // union like creators
   return { decks, activeId, owned:[...owned], creators:Object.values(crById),
-           creatorDecksCache: Object.values(cdMap), prefs };
+           creatorDecksCache: Object.values(cdMap), mySyns:Object.values(msById), prefs };
 }
 function applyStateBlob(b){
   S.decks=b.decks||[]; S.activeId=b.activeId; S.owned=new Set(b.owned||[]);
   if(b.creators) S.addedCreators=b.creators;
   if(b.creatorDecksCache) S.addedCreatorDecks=b.creatorDecksCache;
+  if(b.mySyns) S.mySyns=b.mySyns;
   healCreatorIds();   // R11.1: synced copies may still carry UC-less ids from the buggy window
   if(b.prefs) S.prefs=Object.assign(S.prefs, b.prefs);
-  persistDecks(); persistColl(); persistCreators(); sSet(K.prefs, S.prefs);
+  persistDecks(); persistColl(); persistCreators(); persistMySyns(); sSet(K.prefs, S.prefs);
 }
 let _syncT;
 function scheduleSync(){ if(!S.syncToken || !SYNC_URL) return; clearTimeout(_syncT); _syncT=setTimeout(syncPush, 2000); }
@@ -2438,6 +2471,12 @@ function fitSuggestions(max, opts){
       if(rule.partners([c], f).length) consider(8, 'feeds ' + f.n);
     }
     for(const t of tribes){ if(c.c === t.cost) consider(6, t.f.n + ' buffs it'); }
+    // user-declared synergies outrank everything inferred — you SAID these work together
+    for(const g of (S.mySyns || [])){
+      if(!g || !Array.isArray(g.ids) || g.ids.length < 2 || g.ids.indexOf(c.d) < 0) continue;
+      const have = g.ids.filter(id => inSet.has(id)).length;
+      if(have) consider(13 + 3*Math.min(have, 3), g.note ? ('your combo — ' + g.note.slice(0, 30)) : 'your combo');
+    }
     if(pairs){
       let pn = 0, best = 0, bestId = null;
       for(const id of d.cards){
@@ -3573,6 +3612,9 @@ function normLineObj(o){ o = (o && typeof o === 'object') ? o : {};
     for(const k in cs){ const v = +cs[k]; if(k && Number.isFinite(v) && v >= 0 && v <= 9) out[k] = Math.round(v); }
     if(Object.keys(out).length) L.costs = out;
   }
+  // deliberate pass on a turn ("skip T1, hold everything") — rides normalization like costs/branch
+  const sk = o.skip;
+  if(Array.isArray(sk) && sk.some(Boolean)) L.skip = [0,1,2,3,4,5].map(i => !!sk[i]);
   return L; }
 /* R11.2: what a card is EXPECTED to cost on this line — the override if set, else printed cost. */
 function costOf(id, lo){
@@ -3641,8 +3683,11 @@ function renderPlanner(){
     const rampTag = (normAdj(active.adj)[t-1] === 0 && rampAuto(line, t, d) > 0) ? ' <span class="pl-ramp" title="+1 Energy from a ramp card the prior turn">ramp</span>' : '';
     const overDraw = cum > DRAWN[t];
     // R9.5 owner fix: per-slot doom percentages removed — the row badges + inline notes carry violations
-    const minis = (cards.length ? cards.map(miniHtml).join('') : '') +
-      '<button class="pl-slot-add' + (cards.length ? ' ghost' : '') + '" type="button" aria-label="Add cards to turn ' + t + '">&#65291;' + (cards.length ? '' : ' add cards') + '</button>';
+    const skipped = !cards.length && !!(active.skip && active.skip[t-1]);   // a deliberate pass, not an unfinished slot
+    const minis = skipped
+      ? '<button class="pl-skip-tag" type="button" data-unskip aria-label="Un-skip turn ' + t + '">Skipped — tap to undo</button>'
+      : (cards.length ? cards.map(miniHtml).join('') : '') +
+        '<button class="pl-slot-add' + (cards.length ? ' ghost' : '') + '" type="button" aria-label="Add cards to turn ' + t + '">&#65291;' + (cards.length ? '' : ' add cards') + '</button>';
     const notes = flags.filter(f => f.turn === t)
       .map(f => { let m = f.msg.replace(/^T\d+:?\s*/, '');
         m = m.charAt(0).toUpperCase() + m.slice(1);
@@ -3650,7 +3695,7 @@ function renderPlanner(){
         if(f.type === 'energy' && cards.some(c => DISCOUNT_RX.test(c.a || ''))) m += ' — a card here usually costs less; tap the ⚡ to set it';
         return '<div class="pl-slot-note">' + esc(m) + '</div>'; }).join('');
     slotHtml.push(
-      '<div class="pl-slot' + (cards.length?'':' vacant') + '" data-t="' + t + '">' +
+      '<div class="pl-slot' + (cards.length?'':' vacant') + (skipped?' skipped':'') + '" data-t="' + t + '">' +
         '<span class="pl-t">' + t + '</span>' +
         '<div class="pl-mini-row">' + minis + '</div>' +
         '<div class="pl-side">' +
@@ -3723,6 +3768,10 @@ function renderPlanner(){
     slot.onclick = e => {
       const t = +slot.dataset.t;
       if(e.target.closest('[data-costs]')){ openCostSheet(t); return; }   // R11.2: ⚡ chip -> real-cost editor
+      if(e.target.closest('[data-unskip]')){   // tap the Skipped tag -> the turn is a plain vacant slot again
+        mutateActiveLine(d, lo => { if(lo.skip){ lo.skip[t-1] = false; if(!lo.skip.some(Boolean)) delete lo.skip; } });
+        renderPlanner(); renderLinePlan(); return;
+      }
       const mini = e.target.closest('.pl-mini-row .mini');
       if(mini){   // tap an assigned mini -> unassign it from this turn (of the active line)
         const id = mini.dataset.d;
@@ -3732,8 +3781,8 @@ function renderPlanner(){
       openPlPicker(t);   // tap empty area / the + -> open the card picker for this turn
     };
   });
-  const auto = $('#pl-auto'); if(auto) auto.onclick = () => { const L = autoSketchLine(sortedDeckCards(d)); mutateActiveLine(d, lo => { lo.turns = L; }); renderPlanner(); renderLinePlan(); };
-  const clr  = $('#pl-clear'); if(clr) clr.onclick = () => { mutateActiveLine(d, lo => { lo.turns = emptyLine(); }); renderPlanner(); renderLinePlan(); };
+  const auto = $('#pl-auto'); if(auto) auto.onclick = () => { const L = autoSketchLine(sortedDeckCards(d)); mutateActiveLine(d, lo => { lo.turns = L; delete lo.skip; }); renderPlanner(); renderLinePlan(); };
+  const clr  = $('#pl-clear'); if(clr) clr.onclick = () => { mutateActiveLine(d, lo => { lo.turns = emptyLine(); delete lo.skip; }); renderPlanner(); renderLinePlan(); };
 
   // R7-B: manager wiring — switch / add / rename / duplicate / delete (all meta edits: never clear done)
   box.querySelectorAll('.pl-line-chip').forEach(chip => {
@@ -3856,7 +3905,7 @@ function refreshPlPicker(){
   const active = activeLine(d);
   const spent = line[t-1].reduce((s,id) => s + costOf(id, active), 0);   // R11.2: expected costs
   const b = turnBudget(line, active.adj, t, d);
-  const title = $('#pl-picker-title'); if(title) title.textContent = 'Turn ' + t;
+  const title = $('#pl-picker-title'); if(title){ title.textContent = 'T' + t; title.setAttribute('aria-label','Turn ' + t); }   // compact — the head also holds Skip now
   const en = $('#pl-picker-energy');
   if(en){ en.textContent = spent + '/' + b + '⚡'; en.classList.toggle('over', spent > b); }
   // R7-E: energy nudge control (− / value / ＋) in the picker head — writes activeLine.adj[t-1]
@@ -4119,11 +4168,23 @@ if($('#pl-pick-grid')) $('#pl-pick-grid').onclick = e => {
   if(line[t-1].indexOf(id) >= 0){ line[t-1] = line[t-1].filter(x => x !== id); }   // already here -> toggle off
   else if(isReplayable(id, d)){ line[t-1].push(id); }   // R11.1: repeatable -> add here TOO (Kitty every turn)
   else { const cur = turnOfId(line, id); if(cur) line[cur-1] = line[cur-1].filter(x => x !== id); line[t-1].push(id); }  // move / add
-  mutateActiveLine(d, lo => { lo.turns = line; });   // write the active line + re-mirror the primary
+  mutateActiveLine(d, lo => { lo.turns = line;
+    if(line[t-1].length && lo.skip && lo.skip[t-1]){ lo.skip[t-1] = false; if(!lo.skip.some(Boolean)) delete lo.skip; } });  // a card landing here un-skips the turn
   renderPlanner();   // re-renders slot rows AND the open picker (energy + grid) in one pass
   renderLinePlan();
 };
 if($('#pl-pick-done')) $('#pl-pick-done').onclick = () => closePlPicker();
+// deliberate pass: clear the turn, flag it skipped, dismiss the sheet
+if($('#pl-pick-skip')) $('#pl-pick-skip').onclick = () => {
+  const t = S.plannerTurn; if(!t) return;
+  const d = activeDeck(); if(!d) return;
+  mutateActiveLine(d, lo => {
+    lo.turns[t-1] = [];
+    const sk = (lo.skip && lo.skip.length === 6) ? lo.skip : [false,false,false,false,false,false];
+    sk[t-1] = true; lo.skip = sk;
+  });
+  closePlPicker(); renderLinePlan();
+};
 // R11.1: hop turns inside the sheet — build the whole line in one open
 const _plHop = dir => { const t = S.plannerTurn; if(!t) return;
   const n = t + dir; if(n < 1 || n > 6) return;
@@ -4179,6 +4240,73 @@ if($('#verdictrow')) $('#verdictrow').addEventListener('click', e => {
   checkpointDeck(d, d.verdict);
   touchMeta(d); renderVerdict(); renderSaved(); renderDeckVersions();
 });
+
+/* ============ MY SYNERGIES (Coach tab) ============ */
+/* User-declared combos: {id, ids:[2+ defids], note}. The one hand-tuned signal the
+   fit engine gets — everything else it infers. Create/edit via a card-picker modal
+   (search + tap; no datalist — dead on iOS). */
+function renderMySyns(){
+  const box = $('#mysyns'); if(!box) return;
+  box.innerHTML = '';
+  const syns = S.mySyns || [];
+  syns.forEach(g => {
+    const row = el('div','msyn-row');
+    const strip = el('div','msyn-minis');
+    strip.innerHTML = (g.ids||[]).map(id => miniHtml(getCard(id) || makeStub(id))).join('');
+    row.appendChild(strip);
+    if(g.note) row.appendChild(el('div','msyn-note', g.note));
+    const acts = el('div','msyn-acts');
+    const ed = el('button','abtn subtle','Edit'); ed.type = 'button'; ed.onclick = () => openSynEditor(g);
+    const rm = el('button','abtn danger','Delete'); rm.type = 'button';
+    rm.onclick = () => { S.mySyns = (S.mySyns||[]).filter(x => x.id !== g.id); persistMySyns(); renderMySyns(); renderFitShelf(); };
+    acts.appendChild(ed); acts.appendChild(rm);
+    row.appendChild(acts);
+    box.appendChild(row);
+  });
+  if(!syns.length) box.appendChild(el('div','odds-hint','Nothing yet — link your first combo below.'));
+}
+function openSynEditor(g){
+  const editing = !!(g && g.id);
+  let sel = (g && Array.isArray(g.ids)) ? g.ids.slice() : [];
+  openModal('<h2>' + (editing ? 'Edit synergy' : 'New synergy') + '</h2>' +
+    '<div class="mnote">Pick two or more cards that work together, in any order.</div>' +
+    '<div id="syn-sel"></div>' +
+    '<div class="mrow"><input id="syn-q" class="minput" type="search" placeholder="Type a card name to add it&hellip;" autocomplete="off" autocapitalize="off" spellcheck="false"></div>' +
+    '<div id="syn-matches"></div>' +
+    '<div class="mrow"><textarea id="syn-note" maxlength="200" placeholder="How do they work together? (optional)"></textarea></div>' +
+    '<div class="mrow"><button class="abtn primary" id="syn-save">Save synergy</button><button class="abtn" id="syn-cancel">Cancel</button></div>');
+  const noteEl = $('#syn-note'); if(noteEl) noteEl.value = (g && g.note) || '';
+  const paint = () => {
+    const sb = $('#syn-sel'); if(!sb) return;
+    sb.innerHTML = sel.length
+      ? sel.map(id => miniHtml(getCard(id) || makeStub(id))).join('')
+      : '<div class="odds-hint">No cards picked yet — search below, tap to add. Tap a picked card to drop it.</div>';
+    const q = (($('#syn-q') || {}).value || '').trim().toLowerCase();
+    const mb = $('#syn-matches'); if(!mb) return;
+    mb.innerHTML = q
+      ? S.db.filter(c => !sel.includes(c.d) && c.n.toLowerCase().includes(q)).slice(0, 12).map(miniHtml).join('')
+      : '';
+  };
+  $('#syn-sel').onclick = e => { const m = e.target.closest('.mini'); if(!m) return; sel = sel.filter(x => x !== m.dataset.d); paint(); };
+  $('#syn-matches').onclick = e => {
+    const m = e.target.closest('.mini'); if(!m) return;
+    if(!sel.includes(m.dataset.d)) sel.push(m.dataset.d);
+    const q = $('#syn-q'); if(q){ q.value = ''; }   // ready for the next name; keyboard stays up
+    paint();
+  };
+  $('#syn-q').oninput = paint;
+  $('#syn-cancel').onclick = closeModal;
+  $('#syn-save').onclick = () => {
+    if(sel.length < 2){ toast('Pick at least two cards'); return; }
+    const note = (($('#syn-note') || {}).value || '').trim().slice(0, 200);
+    if(editing){ const gg = (S.mySyns||[]).find(x => x.id === g.id); if(gg){ gg.ids = sel.slice(); gg.note = note; } }
+    else { S.mySyns = S.mySyns || []; S.mySyns.push({ id: uid(), ids: sel.slice(), note }); }
+    persistMySyns(); closeModal(); renderMySyns(); renderFitShelf();
+    toast(editing ? 'Synergy updated' : 'Saved — the builder suggests from it now');
+  };
+  paint();
+}
+if($('#btn-addsyn')) $('#btn-addsyn').onclick = () => openSynEditor(null);
 
 /* ============ RENDER: DECK ZONE (build screen) ============ */
 /* R17: the insight curve is a control, not a chart — each bar is a one-tap cost
@@ -5096,7 +5224,7 @@ $('#q').addEventListener('input', e => {
 });
 
 function renderAll(){
-  renderCards(); renderDeck(); renderDeckbar(); renderSaved();
+  renderCards(); renderDeck(); renderDeckbar(); renderSaved(); renderMySyns();
   const sc = $('#saved-creator');
   if(sc && !sc.hidden) renderCreatorDecks();       // creator rows are heavy (30×12 minis) — render only while that segment is visible; the segment switch renders it otherwise
   if(S.tab === 'collection') renderCollection();   // keep the Collection grid in sync while it's the visible tab (detail sheet <-> grid)
@@ -5193,6 +5321,8 @@ async function boot(){
   // R5-J: restore in-app added creators (rides in the previously-unused K.creators key)
   const cr = await sGet(K.creators);
   if(cr){ S.addedCreators = cr.channels || []; S.addedCreatorDecks = cr.decks || []; }
+  const ms = await sGet(K.mysyns);
+  if(Array.isArray(ms)) S.mySyns = ms.filter(g => g && g.id && Array.isArray(g.ids));
   if(healCreatorIds()) persistCreators();   // R11.1: normalize UC-less ids saved by the buggy window
   refreshAddedCreators();                   // R16: quiet daily re-harvest of followed channels (never blocks boot)
   // R5-I: device-local sync token (never in a URL), then pull-and-merge remote once at boot.

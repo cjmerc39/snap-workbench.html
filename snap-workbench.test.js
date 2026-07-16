@@ -856,6 +856,21 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     'F: re-assigning a placed card MOVES it to the new turn (stays in exactly one turn)');
   d.querySelector('#pl-pick-done').click(); await sleep(20);
 
+  // --- skip a turn: deliberate pass, undo, and card-assign clears it ---
+  d.querySelector('#planner .pl-slot[data-t="3"]').click(); await sleep(20);
+  d.querySelector('#pl-pick-skip').click(); await sleep(20);
+  assert(!d.querySelector('#pl-picker').classList.contains('on'), 'skip: picking Skip dismisses the sheet');
+  assert(d.querySelector('#planner .pl-slot[data-t="3"]').classList.contains('skipped'), 'skip: the turn row shows the skipped state');
+  assert(w.eval('!!(activeLine(activeDeck()).skip||[])[2]'), 'skip: the flag rides the line object (survives normalization)');
+  d.querySelector('#planner .pl-slot[data-t="3"] [data-unskip]').click(); await sleep(20);
+  assert(!d.querySelector('#planner .pl-slot[data-t="3"]').classList.contains('skipped'), 'skip: tapping the tag un-skips the turn');
+  d.querySelector('#planner .pl-slot[data-t="3"]').click(); await sleep(20);
+  d.querySelector('#pl-pick-skip').click(); await sleep(20);
+  d.querySelector('#planner .pl-slot[data-t="3"]').click(); await sleep(20);   // reopen the picker on a skipped turn
+  d.querySelector('#pl-picker .pl-pick .mini[data-d="'+_c3id+'"]').click(); await sleep(20);
+  assert(w.eval('!(activeLine(activeDeck()).skip||[])[2]'), 'skip: assigning a card to a skipped turn clears the flag');
+  d.querySelector('#pl-pick-done').click(); await sleep(20);
+
   // ============ ROUND 7 WP1: multi-line model (A) + composer manager (B) + read view (C) ============
   // --- A1: round-6 d.line migrates lazily to one "Main line" in lines[] ---
   const _mig = w.eval('(function(){ var dd={id:"r7mig",cards:["Hulk","AntMan"],line:[["Hulk"],[],[],[],[],[]],updated:Date.now()}; var L=getLines(dd); return {len:L.length, has:L[0].turns[0].indexOf("Hulk")>=0, name:L[0].name, adj:Array.isArray(L[0].adj)&&L[0].adj.length===6, untouched:dd.lines===undefined}; })()');
@@ -2101,6 +2116,44 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   w.eval('setOwnedFilter(""); S.owned=new Set();'+
     'S.creatorDecks=window.__cd0.decks; S.creatorStats=window.__cd0.stats;'+
     'S.decks=S.decks.filter(function(x){return x.id!==S.activeId;}); S.activeId=null; renderAll(); setTab("cards");'); await sleep(20);
+
+  // ============ MY SYNERGIES: create via the picker modal, feed the fit engine, sync ============
+  w.eval('S.mySyns=[]; setTab("ai");'); await sleep(20);
+  assert(d.getElementById('mysyns')!==null && d.getElementById('btn-addsyn')!==null, 'MS: the Coach tab hosts the My-synergies section');
+  d.getElementById('btn-addsyn').click(); await sleep(20);
+  assert(d.getElementById('syn-q')!==null, 'MS: New synergy opens the picker modal');
+  const _msType = async (txt) => { const q=d.getElementById('syn-q'); q.value=txt; q.dispatchEvent(new w.window.Event('input',{bubbles:true})); await sleep(20); };
+  await _msType('wong');
+  assert(d.querySelectorAll('#syn-matches .mini').length>0, 'MS: search surfaces matching cards');
+  d.querySelector('#syn-matches .mini[data-d="Wong"]').click(); await sleep(20);
+  await _msType('odin');
+  d.querySelector('#syn-matches .mini[data-d="Odin"]').click(); await sleep(20);
+  assert(d.querySelectorAll('#syn-sel .mini').length===2, 'MS: tapped cards land in the picked strip');
+  d.getElementById('syn-note').value='Odin re-triggers Wong doubles';
+  d.getElementById('syn-save').click(); await sleep(20);
+  assert(w.eval('S.mySyns.length')===1 && w.eval('S.mySyns[0].ids.length')===2 && /Odin re-triggers/.test(w.eval('S.mySyns[0].note')), 'MS: Save records ids + note');
+  assert(d.querySelectorAll('#mysyns .msyn-row').length===1, 'MS: the saved synergy renders as a row');
+  // two-card floor enforced
+  d.getElementById('btn-addsyn').click(); await sleep(20);
+  await _msType('hulk');
+  d.querySelector('#syn-matches .mini[data-d="Hulk"]').click(); await sleep(20);
+  d.getElementById('syn-save').click(); await sleep(20);
+  assert(w.eval('S.mySyns.length')===1, 'MS: a one-card synergy refuses to save');
+  d.getElementById('syn-cancel').click(); await sleep(10);
+  // the fit engine suggests the missing member, flagged as YOUR combo
+  w.eval('(function(){ var dd={id:"msfit",name:"",cards:["Wong","Hulk","AntMan"],updated:Date.now()}; S.decks.unshift(dd); S.activeId="msfit"; })(); renderAll();'); await sleep(20);
+  const _msSugg = w.eval('fitSuggestions(20).map(s=>({d:s.c.d,why:s.why}))');
+  const _msHit = _msSugg.find(s=>s.d==='Odin');
+  assert(_msHit!==undefined && /your combo/.test(_msHit.why), 'MS: fitSuggestions offers Odin because of the declared combo ('+(_msHit?_msHit.why:'absent')+')');
+  // synced like creators: rides the blob, unions by id
+  assert(w.eval('buildStateBlob().mySyns.length')===1, 'MS: synergies ride the sync blob');
+  const _msMerged = w.eval('mergeState(buildStateBlob(), {mySyns:[{id:"remoteSyn",ids:["Hulk","Odin"],note:""}]}).mySyns.length');
+  assert(_msMerged===2, 'MS: merge unions local + remote synergies');
+  // delete from the row
+  w.eval('setTab("ai");'); await sleep(10);
+  d.querySelector('#mysyns .msyn-row .abtn.danger').click(); await sleep(20);
+  assert(w.eval('S.mySyns.length')===0 && d.querySelectorAll('#mysyns .msyn-row').length===0, 'MS: Delete removes the synergy');
+  w.eval('S.decks=S.decks.filter(function(x){return x.id!=="msfit";}); S.activeId=null; renderAll(); setTab("cards");'); await sleep(20);
 
   assert(errors.length===0, 'R15: no runtime errors during the suite'+(errors.length?' -> '+errors.join(' | '):''));
 
