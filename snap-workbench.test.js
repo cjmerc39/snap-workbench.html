@@ -1003,6 +1003,16 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   await w.eval('(async()=>{ const of=window.fetch; let cap=null; window.fetch=async(u,o)=>{ cap=o; return { ok:true, json:async()=>({content:[{type:"text",text:"ok"}]}) }; }; setTab("ai"); document.getElementById("btn-ask").click(); await new Promise(r=>setTimeout(r,60)); window.__coachCap=cap; window.fetch=of; })()');
   const _capBody = w.eval('window.__coachCap && window.__coachCap.body');
   assert(_capBody && /creator meta/i.test(_capBody), 'H: coach prompt includes the creator-meta digest block');
+  // the coach's grounding: rules primer + the FULL card pool ride as `system`
+  const _capParsed = JSON.parse(_capBody);
+  assert(typeof _capParsed.system === 'string' && /HOW MARVEL SNAP WORKS/.test(_capParsed.system), 'coach: rules primer rides in system');
+  assert(/COMPLETE CURRENT CARD POOL/.test(_capParsed.system) && _capParsed.system.includes('Hulk ['), 'coach: the whole card database is in system');
+  assert(w.eval('S.db.length') < 20 || _capParsed.system.split('\n').length > w.eval('S.db.length'), 'coach: system lists one line per card');
+  assert(typeof _capParsed.prompt === 'string' && /Current deck/.test(_capParsed.prompt), 'coach: the deck + question ride in prompt');
+  // declared synergies flow into the coach's context
+  await w.eval('(async()=>{ S.mySyns=[{id:"t1",ids:["Wong","Odin"],note:"double reveals"}]; const of=window.fetch; let cap=null; window.fetch=async(u,o)=>{ cap=o; return { ok:true, json:async()=>({content:[{type:"text",text:"ok"}]}) }; }; document.getElementById("btn-ask").click(); await new Promise(r=>setTimeout(r,60)); window.__coachCap2=cap; window.fetch=of; S.mySyns=[]; })()');
+  const _cap2 = JSON.parse(w.eval('window.__coachCap2.body'));
+  assert(/personally declared/.test(_cap2.prompt) && /Wong \+ Odin — double reveals/.test(_cap2.prompt), 'coach: user-declared combos ride in prompt');
 
   // ============ WP3 round-5: cross-device sync (I) + in-app Add-creator (J) ============
   // --- I: mergeState — newest-wins per deck, union owned/creators, never drop local ---

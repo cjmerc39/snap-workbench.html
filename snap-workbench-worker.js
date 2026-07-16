@@ -87,26 +87,59 @@ async function coach(request, env, cors) {
   if (!env.ANTHROPIC_API_KEY) return json({ error: 'ANTHROPIC_API_KEY secret not set on the worker' }, 500, cors);
   let body;
   try { body = await request.json(); } catch (e) { return json({ error: 'bad request body' }, 400, cors); }
-  const prompt = String(body && body.prompt || '').slice(0, 12000);
+  const prompt = String(body && body.prompt || '').slice(0, 16000);
+  // The app sends the stable stuff (rules primer + full card database) as `system`
+  // so it prompt-caches; the per-question stuff rides in `prompt`. Old clients that
+  // send only `prompt` still work.
+  const system = String(body && body.system || '').slice(0, 240000);
   if (!prompt) return json({ error: 'empty prompt' }, 400, cors);
 
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-api-key': env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-5',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  });
-  const data = await r.json();
-  if (!r.ok) return json({ error: (data && data.error && data.error.message) || 'api error' }, 502, cors);
-  const text = (data.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('\n').trim();
-  return json({ text }, 200, cors);
+  const payload = {
+    model: 'claude-opus-4-8',
+    max_tokens: 4000,                       // adaptive thinking + the answer share this budget
+    thinking: { type: 'adaptive' },
+    output_config: { effort: 'medium' },    // keeps latency sane on a phone; quality stays high
+    messages: [{ role: 'user', content: prompt }],
+  };
+  if (system) {
+    // cache_control: identical system prefixes across asks bill at ~0.1x and answer faster
+    payload.system = [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }];
+  }
+
+  // One attempt + one retry on transient failures (rate limit / overload / network),
+  // each with its own timeout so a hung upstream can't strand the phone forever.
+  let lastErr = 'api error';
+  for (let attempt = 0; attempt < 2; attempt++) {
+    if (attempt) await new Promise((res) => setTimeout(res, 1500));
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 55000);
+    let r, data;
+    try {
+      r = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-api-key': env.ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify(payload),
+        signal: ctrl.signal,
+      });
+      data = await r.json();
+    } catch (e) {
+      clearTimeout(timer);
+      lastErr = ctrl.signal.aborted ? 'the model took too long — try again' : 'could not reach the model';
+      continue;                             // network / timeout: retry once
+    }
+    clearTimeout(timer);
+    if (r.ok) {
+      const text = (data.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('\n').trim();
+      return json({ text }, 200, cors);
+    }
+    lastErr = (data && data.error && data.error.message) || ('api error ' + r.status);
+    if (r.status !== 429 && r.status < 500) break;   // 4xx (except 429) won't improve on retry
+  }
+  return json({ error: lastErr }, 502, cors);
 }
 
 /* ---- /sync : per-owner state store on KV (bearer-token gated) ---------------- */

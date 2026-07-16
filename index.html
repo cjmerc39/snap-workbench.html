@@ -1301,7 +1301,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
     </div>
     <button class="abtn primary" id="btn-ask" style="width:100%">Ask about current deck</button>
     <div id="aiout"></div>
-    <div class="ainote">The coach reads your deck plus the card database in this app. It reasons well about curve, synergy, and win conditions; treat this-week meta claims with a grain of salt.</div>
+    <div class="ainote">The coach gets the full current card database, the rules of Snap, your declared synergies, and this week&rsquo;s creator meta with every question &mdash; it can take up to a minute on hard questions. Treat this-week meta claims with a grain of salt.</div>
 
     <!-- user-declared synergies: combos the rules engine can't see. Fed straight into
          the fit shelf and Complete-my-deck (fitSuggestions), synced like creators. -->
@@ -3240,13 +3240,17 @@ async function coachSynergy(){
   const btn = $('#syn-ai'), out = $('#syn-ai-out');
   if(btn){ btn.disabled = true; btn.textContent = 'Analyzing…'; }
   const prompt =
-    'You are a Marvel Snap synergy analyst. Card data below is from an up-to-date database; trust it over training data.\n\n' +
     'Deck ("' + (d.name||'Deck') + '"):\n' + deckAsText() + '\n\n' +
     'Analyze ONLY synergy: (1) the strongest engines in this deck, naming the exact cards and why they chain; ' +
     '(2) tensions or anti-synergies between cards; (3) the single swap that would tighten the deck most. ' +
     'Plain text, no markdown, under 180 words, no fluff.';
   try{
-    const r = await fetch(COACH_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ prompt }) });
+    const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), 90000) : null;
+    // same cached system grounding as the main coach: rules + the full card pool
+    const r = await fetch(COACH_URL, { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ system: coachSystemText(), prompt }), signal: ctrl ? ctrl.signal : undefined })
+      .finally(() => { if(timer) clearTimeout(timer); });
     const j = await r.json();
     if(j && j.error) throw new Error(j.error);
     d.synAI = { text: (j && j.text) || '', at: new Date().toISOString().slice(0,10) };
@@ -5126,6 +5130,31 @@ function creatorMetaDigest(){
 }
 
 /* ============ AI COACH ============ */
+/* The coach's grounding, sent as the SYSTEM prompt: how Snap actually works + the
+   complete current card pool. This is the fix for "the coach doesn't understand
+   Snap" — its trained knowledge of the game is stale, so we hand it the whole
+   world instead. It's deliberately STABLE across a session (rules text + card DB)
+   so the worker can prompt-cache it: follow-up questions get faster AND cheaper.
+   Everything volatile (deck, question, meta, synergies) rides in the user turn. */
+function coachSystemText(){
+  const db = S.db.map(c => c.n + ' [' + c.c + '/' + c.p + ']' + (c.a ? ' ' + c.a : ' (no ability — raw stats)')).join('\n');
+  return 'You are a sharp, honest Marvel Snap deck-building coach inside a personal deck-builder app.\n\n' +
+    'HOW MARVEL SNAP WORKS (trust this over anything you remember):\n' +
+    '- 12-card decks, no duplicates. Games last 6 turns (sometimes 7). Energy equals the turn number: 1 on turn 1 … 6 on turn 6; unspent energy is lost.\n' +
+    '- Three locations, revealed on turns 1-3, each with its own effect that can warp the whole game. You win by having more Power than the opponent at 2 of the 3 locations. Each location holds at most 4 cards per player.\n' +
+    '- Cards are drawn one per turn from your 12 (you start with 3, so by turn N you have seen about 3+N). Consistency matters: a combo needing 3 specific cards rarely assembles.\n' +
+    '- On Reveal abilities fire once when played; Ongoing abilities persist; some cards act from hand/deck or when discarded/destroyed. Reveal order alternates with priority (whoever is winning reveals first — usually BAD for reactive cards like Shang-Chi, which wants to reveal after the target).\n' +
+    '- Players bet "cubes" by snapping; retreating early loses fewer cubes. A deck that wins big but loses often can still be a good ladder deck if you snap well — consistency and information matter.\n' +
+    '- Archetype shorthand: Destroy (sacrifice own cards for payoffs), Discard (from hand, with payoffs), Move, Bounce (return-to-hand), Ramp (extra energy early), Control/Clog (deny space), Ongoing buffs, Big decks (cheat out large cards), Zoo (wide cheap boards + buffs).\n\n' +
+    'THE COMPLETE CURRENT CARD POOL — every real, currently playable card, with [cost/power] and exact text. This is newer than your training data; when they conflict, THIS is correct. Never suggest a card that is not in this list, and never invent or misquote card text:\n\n' +
+    db + '\n\n' +
+    'COACHING STYLE:\n' +
+    '- Be specific and practical: name exact cards for cuts and adds, with costs, and say what the turn-by-turn plan becomes.\n' +
+    '- Respect the 6-turn energy reality: a "curve" isn’t aesthetic, it decides whether the deck can spend its energy every turn.\n' +
+    '- Weigh consistency: 12 cards, ~9-10 seen per game. Prefer packages of 2-3 interchangeable enablers over single-card combos.\n' +
+    '- When the user gives constraints (owned cards only, their own declared combos), treat them as hard requirements.\n' +
+    '- Plain text only, no markdown syntax. Keep answers under 220 words unless asked for more.';
+}
 const PRESETS = [
   'Critique this deck: weak slots and suggested swaps.',
   'Fill my empty slots to sharpen the game plan.',
@@ -5190,34 +5219,52 @@ $('#btn-ask').onclick = async () => {
   // R12: the user marks the week's featured location once; the coach plans around it
   const _fl = featuredLoc();
   const locBlock = _fl ? '\nThis week\'s featured location (appears in roughly half of games): ' + _fl.n + ' — ' + _fl.a : '';
+  // the user's own declared combos are the strongest signal we have — hand them over
+  const synBlock = (S.mySyns||[]).length
+    ? '\nCombos the user has personally declared (respect these):\n' + S.mySyns.map(g =>
+        '- ' + (g.ids||[]).map(id => (getCard(id)||{n:id}).n).join(' + ') + (g.note ? ' — ' + g.note : '')).join('\n')
+    : '';
+  // stable grounding (rules + full card pool) goes as SYSTEM so the worker can cache it;
+  // everything per-question rides here
+  const system = coachSystemText();
   const prompt =
-    'You are a sharp, honest Marvel Snap deck-building coach.\n' +
-    'Card data below comes from an up-to-date database and may be newer than your training; when they conflict, trust the text below.\n\n' +
     'Current deck ("'+(d.name||'Deck')+'"):\n' + deckAsText() + '\n' +
-    ownedBlock + creatorMetaBlock + locBlock + '\n\n' +
-    'Question: ' + q + '\n\n' +
-    'Answer in plain text (no markdown syntax), under 220 words. Be specific: name exact cards for cuts and adds, reference costs, and explain the game plan reasoning briefly.';
+    ownedBlock + synBlock + creatorMetaBlock + locBlock + '\n\n' +
+    'Question: ' + q;
   const askOnce = async () => {
-    if(COACH_URL){
-      const resp = await fetch(COACH_URL, {
+    // a hung connection is the #1 "coach never answered" cause on the phone — cap it
+    const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), 90000) : null;
+    try{
+      if(COACH_URL){
+        const resp = await fetch(COACH_URL, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ system, prompt }),
+          signal: ctrl ? ctrl.signal : undefined
+        });
+        const data = await resp.json();
+        if(data && data.error) throw new Error(data.error);
+        return (data && data.text) || '';
+      }
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ prompt })
+        body: JSON.stringify({ model:'claude-opus-4-8', max_tokens:4000, thinking:{type:'adaptive'},
+          output_config:{effort:'medium'}, system, messages:[{role:'user', content:prompt}] }),
+        signal: ctrl ? ctrl.signal : undefined
       });
       const data = await resp.json();
-      if(data && data.error) throw new Error(data.error);
-      return (data && data.text) || '';
+      if(!data || !Array.isArray(data.content)){
+        throw new Error(data && data.error ? data.error.message : 'unexpected response shape');
+      }
+      return data.content.filter(b => b.type==='text').map(b => b.text).join('\n').trim();
+    }catch(e){
+      if(ctrl && ctrl.signal.aborted) throw new Error('took too long to answer — usually a one-off; try again');
+      throw e;
+    }finally{
+      if(timer) clearTimeout(timer);
     }
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, messages:[{role:'user', content:prompt}] })
-    });
-    const data = await resp.json();
-    if(!data || !Array.isArray(data.content)){
-      throw new Error(data && data.error ? data.error.message : 'unexpected response shape');
-    }
-    return data.content.filter(b => b.type==='text').map(b => b.text).join('\n').trim();
   };
   try{
     let text = '';
