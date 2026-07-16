@@ -699,28 +699,32 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(_drows[0].querySelectorAll('.cr-strip .mini').length===12, 'the surviving row is the decoded one (12-card strip)');
   w.eval('S.addedCreatorDecks=[];');
 
-  // --- creator management: every pill removable; built-ins mute + restore ---
+  // --- creator management: pop-up manager; every row removable; built-ins mute + restore ---
   w.eval('S.prefs.hiddenCreators=[]; S.crFilter=null; S.crCardQ=""; S.addedCreators=[]; renderCreatorDecks();'); await sleep(20);
-  const mgPills = [...d.querySelectorAll('#creatorlist .cr-fpill')];
-  assert(mgPills.length>=4 && mgPills.every(a=>a.querySelector('.cr-fx')!==null), 'every Following pill (built-ins too) carries a remove button');
+  assert(d.querySelector('#btn-managecr')!==null && /Following · \d+ creators/.test(d.querySelector('#btn-managecr').textContent),
+    'the pane shows ONE compact manage button, not a pill wall');
+  d.querySelector('#btn-managecr').click(); await sleep(20);
+  const mgPills = [...d.querySelectorAll('#modal .cr-fpill')];
+  assert(mgPills.length>=4 && mgPills.every(a=>a.querySelector('.cr-fx')!==null), 'the manager pop-up lists every creator with a remove button');
   const sjPill = mgPills.find(a=>/Snap Judgments/.test(a.textContent));
-  assert(sjPill!==undefined, 'Snap Judgments is a built-in pill');
+  assert(sjPill!==undefined, 'Snap Judgments is a built-in row in the manager');
   sjPill.querySelector('.cr-fx').click(); await sleep(30);
   assert(w.eval('S.prefs.hiddenCreators').includes('Snap Judgments'), 'hiding a built-in lands in prefs (synced)');
-  assert(![...d.querySelectorAll('#creatorlist .cr-fpill')].some(a=>/Snap Judgments/.test(a.textContent)), 'hidden built-in leaves the strip');
-  assert([...d.querySelectorAll('#creatorlist .crow .cr-creator')].every(e=>e.textContent!=='Snap Judgments'), 'hidden creator rows leave the list');
-  const hpill = [...d.querySelectorAll('#creatorlist .cr-hpill')].find(b=>/Snap Judgments/.test(b.textContent));
-  assert(hpill!==undefined, 'a restore chip appears under the strip');
+  assert(![...d.querySelectorAll('#modal .cr-fpill')].some(a=>/Snap Judgments/.test(a.textContent)), 'hidden built-in leaves the manager list');
+  assert([...d.querySelectorAll('#creatorlist .crow .cr-creator')].every(e=>e.textContent!=='Snap Judgments'), 'hidden creator rows leave the deck list');
+  const hpill = [...d.querySelectorAll('#modal .cr-hpill')].find(b=>/Snap Judgments/.test(b.textContent));
+  assert(hpill!==undefined, 'a restore chip appears in the manager');
   hpill.click(); await sleep(30);
-  assert(w.eval('S.prefs.hiddenCreators.length')===0 && [...d.querySelectorAll('#creatorlist .cr-fpill')].some(a=>/Snap Judgments/.test(a.textContent)),
+  assert(w.eval('S.prefs.hiddenCreators.length')===0 && [...d.querySelectorAll('#modal .cr-fpill')].some(a=>/Snap Judgments/.test(a.textContent)),
     'restore chip brings the built-in back');
-  // built-in + followed channel: ONE merged pill whose × unfollows AND mutes
-  w.eval('S.addedCreators=[{id:"UCRM70o4UWSPL839M9d42xGw",name:"Snap Judgments",handle:"@snapjudgments"}]; renderCreatorDecks();'); await sleep(20);
-  const sjPills = [...d.querySelectorAll('#creatorlist .cr-fpill')].filter(a=>/Snap Judgments/.test(a.textContent));
-  assert(sjPills.length===1, 'built-in + followed channel merges to one pill (got '+sjPills.length+')');
+  // built-in + followed channel: ONE merged row whose × unfollows AND mutes
+  w.eval('closeModal(); S.addedCreators=[{id:"UCRM70o4UWSPL839M9d42xGw",name:"Snap Judgments",handle:"@snapjudgments"}]; renderCreatorDecks();'); await sleep(20);
+  d.querySelector('#btn-managecr').click(); await sleep(20);
+  const sjPills = [...d.querySelectorAll('#modal .cr-fpill')].filter(a=>/Snap Judgments/.test(a.textContent));
+  assert(sjPills.length===1, 'built-in + followed channel merges to one manager row (got '+sjPills.length+')');
   sjPills[0].querySelector('.cr-fx').click(); await sleep(30);
-  assert(w.eval('S.addedCreators.length')===0 && w.eval('S.prefs.hiddenCreators').includes('Snap Judgments'), 'merged pill × unfollows and mutes in one tap');
-  w.eval('S.prefs.hiddenCreators=[]; sSet(K.prefs, S.prefs); renderCreatorDecks();'); await sleep(20);
+  assert(w.eval('S.addedCreators.length')===0 && w.eval('S.prefs.hiddenCreators').includes('Snap Judgments'), 'merged row × unfollows and mutes in one tap');
+  w.eval('closeModal(); S.prefs.hiddenCreators=[]; sSet(K.prefs, S.prefs); renderCreatorDecks();'); await sleep(20);
 
   // --- E: the REAL shipped creator-decks.json parses + renders in-app ---
   const _realCD = JSON.parse(fs.readFileSync('creator-decks.json','utf8'));
@@ -1430,16 +1434,19 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const seenUrl = await w.eval('(async()=>{ let hit=""; const of=window.fetch; window.fetch=async(u,o)=>{ hit=String(u); return {ok:false,status:400,json:async()=>({error:"x"}),text:async()=>""}; }; await addCreator("youtube.com/@RegisKillbin"); window.fetch=of; return hit; })()');
   assert(/url=https%3A%2F%2Fyoutube\.com%2F%40RegisKillbin/.test(seenUrl), 'R10.1: missing https:// is added before asking the relay ('+seenUrl.slice(-45)+')');
 
-  // R10: Following pane — built-in creators always listed with channel links; added ones removable
+  // R10 → pop-up: the manager lists built-ins with channel links; added ones removable
   w.eval('setTab("saved"); document.querySelector("#savedseg button[data-seg=\'creator\']") && document.querySelector("#savedseg button[data-seg=\'creator\']").click(); renderCreatorDecks();'); await sleep(20);
-  const fpills = d.querySelectorAll('#creatorlist .cr-fpill');
-  assert(fpills.length>=3, 'R10: Following pane lists the built-in creators ('+fpills.length+')');
-  assert([...fpills].every(a=>/^https:\/\/www\.youtube\.com\//.test(a.href)), 'R10: every following pill links to a YouTube channel');
-  w.eval('S.addedCreators=[{id:"UCbt1SGMrWj5Q7TMXAfmTERQ",name:"RegisKillbin",handle:"@RegisKillbin"}]; S.addedCreatorDecks=[]; renderCreatorDecks();'); await sleep(20);
-  const regisPill = [...d.querySelectorAll('#creatorlist .cr-fpill')].find(a=>/RegisKillbin/.test(a.textContent));
-  assert(regisPill && /channel\/UCbt1SGMr/.test(regisPill.href) && regisPill.querySelector('.cr-fx'), 'R10: added creator pill links to the channel and has an unfollow button');
+  d.querySelector('#btn-managecr').click(); await sleep(20);
+  const fpills = d.querySelectorAll('#modal .cr-fpill');
+  assert(fpills.length>=3, 'R10: the manager lists the built-in creators ('+fpills.length+')');
+  assert([...fpills].every(a=>/^https:\/\/www\.youtube\.com\//.test(a.href)), 'R10: every manager row links to a YouTube channel');
+  w.eval('closeModal(); S.addedCreators=[{id:"UCbt1SGMrWj5Q7TMXAfmTERQ",name:"RegisKillbin",handle:"@RegisKillbin"}]; S.addedCreatorDecks=[]; renderCreatorDecks();'); await sleep(20);
+  d.querySelector('#btn-managecr').click(); await sleep(20);
+  const regisPill = [...d.querySelectorAll('#modal .cr-fpill')].find(a=>/RegisKillbin/.test(a.textContent));
+  assert(regisPill && /channel\/UCbt1SGMr/.test(regisPill.href) && regisPill.querySelector('.cr-fx'), 'R10: added creator row links to the channel and has an unfollow button');
   regisPill.querySelector('.cr-fx').click(); await sleep(20);
-  assert(w.eval('S.addedCreators.length')===0, 'R10: unfollow from the pane removes the channel');
+  assert(w.eval('S.addedCreators.length')===0, 'R10: unfollow from the manager removes the channel');
+  w.eval('closeModal();'); await sleep(10);
   // R10.2: creator strips heal fossil compressed ids and render in default Energy order
   w.eval('S.addedCreators=[{id:"UCbt1SGMrWj5Q7TMXAfmTERQ",name:"RegisKillbin",handle:"@RegisKillbin"}];'+
     'S.addedCreatorDecks=[{chId:"UCbt1SGMrWj5Q7TMXAfmTERQ",creator:"RegisKillbin",video:"vid",url:"https://youtu.be/x",published:"2026-07-10",name:"t",ids:["Hulk","Armr5","AntMan"],added:true}]; renderCreatorDecks();'); await sleep(20);
@@ -1553,10 +1560,11 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(w.eval('S.addedCreators.length')===1 && w.eval('S.addedCreators[0].id')==='UCbt1SGMrWj5Q7TMXAfmTERQ',
     'R11.1: addCreator stores the CANONICAL UC id from a real-shaped feed');
   assert(w.eval('S.addedCreatorDecks.every(d=>d.chId==="UCbt1SGMrWj5Q7TMXAfmTERQ")'), 'R11.1: harvested decks carry the same canonical id');
-  // the pane must show the new creator (the old UC-guard silently hid every real add)
-  w.eval('renderCreatorDecks()'); await sleep(20);
-  let regisPill11 = [...d.querySelectorAll('#creatorlist .cr-fpill')].find(a=>/RegisKillbin/.test(a.textContent));
-  assert(regisPill11 && /channel\/UCbt1SGMrWj5Q7TMXAfmTERQ/.test(regisPill11.href), 'R11.1: freshly-added creator is VISIBLE in Following with a working channel link');
+  // the manager must show the new creator (the old UC-guard silently hid every real add)
+  w.eval('renderCreatorDecks(); openCreatorManager();'); await sleep(20);
+  let regisPill11 = [...d.querySelectorAll('#modal .cr-fpill')].find(a=>/RegisKillbin/.test(a.textContent));
+  assert(regisPill11 && /channel\/UCbt1SGMrWj5Q7TMXAfmTERQ/.test(regisPill11.href), 'R11.1: freshly-added creator is VISIBLE in the manager with a working channel link');
+  w.eval('closeModal();'); await sleep(10);
   // healing: stored UC-less entries (saved by the buggy window, incl. synced copies) get normalized + deduped
   w.eval('S.addedCreators=[{id:"bt1SGMrWj5Q7TMXAfmTERQ",name:"RegisKillbin",handle:"https://youtube.com/@RegisKillbin"},{id:"UCbt1SGMrWj5Q7TMXAfmTERQ",name:"RegisKillbin",handle:"x"}];'+
     'S.addedCreatorDecks=[{chId:"bt1SGMrWj5Q7TMXAfmTERQ",name:"D1",url:"u1",cards:[]}]; window.__healed=healCreatorIds();');
@@ -1564,9 +1572,9 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(w.eval('S.addedCreators.length')===1 && w.eval('S.addedCreators[0].id')==='UCbt1SGMrWj5Q7TMXAfmTERQ', 'R11.1: heal dedupes the two id forms into one channel');
   assert(w.eval('S.addedCreatorDecks[0].chId')==='UCbt1SGMrWj5Q7TMXAfmTERQ', 'R11.1: heal fixes deck chIds too');
   // a malformed-id creator STILL shows (handle fallback) — never silently hidden again
-  w.eval('S.addedCreators=[{id:"weird",name:"Mystery Channel",handle:"https://youtube.com/@mystery"}]; S.addedCreatorDecks=[]; renderCreatorDecks();'); await sleep(20);
-  assert([...d.querySelectorAll('#creatorlist .cr-fpill')].some(a=>/Mystery Channel/.test(a.textContent)), 'R11.1: even a weird-id creator stays visible via its handle link');
-  w.eval('S.addedCreators=[]; S.addedCreatorDecks=[]; persistCreators(); flushSaves();');
+  w.eval('S.addedCreators=[{id:"weird",name:"Mystery Channel",handle:"https://youtube.com/@mystery"}]; S.addedCreatorDecks=[]; renderCreatorDecks(); openCreatorManager();'); await sleep(20);
+  assert([...d.querySelectorAll('#modal .cr-fpill')].some(a=>/Mystery Channel/.test(a.textContent)), 'R11.1: even a weird-id creator stays visible via its handle link');
+  w.eval('closeModal(); S.addedCreators=[]; S.addedCreatorDecks=[]; persistCreators(); flushSaves();');
   // deck rows sort newest-first so a fresh add is seen without scrolling
   w.eval('window.__oldCD=S.creatorDecks; S.creatorDecks=[{creator:"Old",published:"2026-07-01",ids:["Hulk"],url:"https://youtu.be/o"}];'+
     'S.addedCreatorDecks=[{chId:"UCbt1SGMrWj5Q7TMXAfmTERQ",creator:"New",published:"2026-07-11",ids:["Hulk"],added:true,url:"https://youtu.be/n"}]; renderCreatorDecks();'); await sleep(20);
@@ -1610,7 +1618,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   w.eval('S.plannerTurn=1; refreshPlPicker();'); await sleep(10);
   assert(d.querySelector('#pl-prev').disabled===true && d.querySelector('#pl-next').disabled===false, 'R11.1: prev disabled on T1');
   d.querySelector('#pl-next').click(); await sleep(20);
-  assert(w.eval('S.plannerTurn')===2 && /Turn 2/.test(d.querySelector('#pl-picker-title').textContent), 'R11.1: › hops the sheet to T2 without closing');
+  assert(w.eval('S.plannerTurn')===2 && /^T2$/.test(d.querySelector('#pl-picker-title').textContent.trim()), 'R11.1: › hops the sheet to T2 without closing (compact T2 title)');
   w.eval('S.plannerTurn=6; refreshPlPicker();'); await sleep(10);
   assert(d.querySelector('#pl-next').disabled===true, 'R11.1: next disabled on T6');
   w.eval('closePlPicker(true); S.decks=S.decks.filter(function(x){return x.id!=="r111pl";}); S.activeId=null; renderAll(); setTab("cards");'); await sleep(20);
@@ -1633,21 +1641,25 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     'await addCreator("youtube.com/@RegisKillbin"); window.fetch=of; })()');
   assert(w.eval('S.addedCreators.length')===1 && w.eval('S.addedCreatorDecks.every(d=>d.name!=="Old Copy")'),
     'R11.2: re-add replaces old-form entries instead of doubling them');
-  // creator filter: tap a pill -> only that creator's rows; tap again -> all
+  // creator filter: tap a manager row -> only that creator's rows (modal closes); the pane chip clears it
   w.eval('window.__oldCD2=S.creatorDecks; S.creatorDecks=[{creator:"Alexander Coccia",published:"2026-07-10",ids:["Hulk"],url:"https://youtu.be/a"},'+
     '{creator:"Coougarrr",published:"2026-07-09",ids:["Wong"],url:"https://youtu.be/b"}]; S.addedCreatorDecks=[]; S.crFilter=null; renderCreatorDecks();'); await sleep(20);
   assert(d.querySelectorAll('#creatorlist .crow').length===2, 'R11.2: unfiltered pane shows both rows');
-  const cocPill = [...d.querySelectorAll('#creatorlist .cr-fpill')].find(a=>/Alexander Coccia/.test(a.textContent));
+  d.querySelector('#btn-managecr').click(); await sleep(20);
+  const cocPill = [...d.querySelectorAll('#modal .cr-fpill')].find(a=>/Alexander Coccia/.test(a.textContent));
   cocPill.click(); await sleep(20);
-  assert(w.eval('S.crFilter')==='Alexander Coccia', 'R11.2: tapping a pill sets the filter');
+  assert(w.eval('S.crFilter')==='Alexander Coccia', 'R11.2: tapping a manager row sets the filter');
+  assert(!d.getElementById('modalwrap').classList.contains('on'), 'R11.2: picking a filter closes the manager');
   const fRows = [...d.querySelectorAll('#creatorlist .crow .cr-creator')].map(e=>e.textContent);
   assert(fRows.length===1 && fRows[0]==='Alexander Coccia', 'R11.2: filtered pane shows only that creator');
-  assert(d.querySelector('#creatorlist .cr-fpill.on')!==null, 'R11.2: the active pill is highlighted');
-  [...d.querySelectorAll('#creatorlist .cr-fpill')].find(a=>/Alexander Coccia/.test(a.textContent)).click(); await sleep(20);
-  assert(w.eval('S.crFilter')===null && d.querySelectorAll('#creatorlist .crow').length===2, 'R11.2: tapping again clears the filter');
-  assert([...d.querySelectorAll('#creatorlist .cr-fpill')].every(a=>/^https:\/\/www\.youtube\.com\//.test(a.href)||/youtube\.com/.test(a.href)),
-    'R11.2: pills keep their channel hrefs for the ↗ link');
-  w.eval('S.creatorDecks=window.__oldCD2; S.addedCreatorDecks=[]; S.addedCreators=[]; S.crFilter=null; persistCreators(); flushSaves(); renderCreatorDecks();'); await sleep(10);
+  const fchip = d.querySelector('#creatorlist .cr-filterchip');
+  assert(fchip!==null && /Alexander Coccia/.test(fchip.textContent), 'R11.2: the active filter shows as a chip in the pane');
+  fchip.click(); await sleep(20);
+  assert(w.eval('S.crFilter')===null && d.querySelectorAll('#creatorlist .crow').length===2, 'R11.2: the chip clears the filter');
+  d.querySelector('#btn-managecr').click(); await sleep(20);
+  assert([...d.querySelectorAll('#modal .cr-fpill')].every(a=>/^https:\/\/www\.youtube\.com\//.test(a.href)||/youtube\.com/.test(a.href)),
+    'R11.2: manager rows keep their channel hrefs for the ↗ link');
+  w.eval('closeModal(); S.creatorDecks=window.__oldCD2; S.addedCreatorDecks=[]; S.addedCreators=[]; S.crFilter=null; persistCreators(); flushSaves(); renderCreatorDecks();'); await sleep(10);
 
   // --- expected-cost overrides ---
   assert(w.eval('costOf("Hulk", null)')===6 && w.eval('costOf("Hulk", {costs:{Hulk:3}})')===3, 'R11.2: costOf honors the override, defaults to printed');
@@ -2133,6 +2145,23 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   d.getElementById('syn-save').click(); await sleep(20);
   assert(w.eval('S.mySyns.length')===1 && w.eval('S.mySyns[0].ids.length')===2 && /Odin re-triggers/.test(w.eval('S.mySyns[0].note')), 'MS: Save records ids + note');
   assert(d.querySelectorAll('#mysyns .msyn-row').length===1, 'MS: the saved synergy renders as a row');
+  // one-liner accordion: rows start collapsed (names + note on one line), tap opens, tap again closes
+  assert(!d.querySelector('#mysyns .msyn-row').classList.contains('open'), 'MS: rows start collapsed');
+  assert(/Wong · Odin/.test(d.querySelector('#mysyns .msyn-row .msyn-names').textContent), 'MS: the collapsed line names the linked cards');
+  d.querySelector('#mysyns .msyn-row').click(); await sleep(20);
+  assert(d.querySelector('#mysyns .msyn-row').classList.contains('open'), 'MS: tapping a row expands it');
+  d.querySelector('#mysyns .msyn-row').click(); await sleep(20);
+  assert(!d.querySelector('#mysyns .msyn-row').classList.contains('open'), 'MS: tapping again collapses it');
+  assert(/\.msyn-row\.open \.msyn-body\{display:block/.test(html), 'MS: minis + Edit/Delete only show on the open row (CSS)');
+  // search by card: the query narrows rows, a miss explains itself
+  const _msQ = async (txt) => { const q=d.getElementById('msyn-q'); q.value=txt; q.dispatchEvent(new w.window.Event('input',{bubbles:true})); await sleep(20); };
+  assert(!d.getElementById('msyn-qrow').hidden, 'MS: the search box shows once synergies exist');
+  await _msQ('wong');
+  assert(d.querySelectorAll('#mysyns .msyn-row').length===1, 'MS: searching a member card keeps the row');
+  await _msQ('zabu');
+  assert(d.querySelectorAll('#mysyns .msyn-row').length===0 && /No synergy uses/.test(d.getElementById('mysyns').textContent),
+    'MS: a non-member search empties the list with a hint');
+  await _msQ('');
   // two-card floor enforced
   d.getElementById('btn-addsyn').click(); await sleep(20);
   await _msType('hulk');

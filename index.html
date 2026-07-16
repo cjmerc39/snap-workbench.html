@@ -1008,9 +1008,18 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   box-shadow:0 0 0 1.5px rgba(170,140,255,.35); display:inline-flex; align-items:center; justify-content:center;
   font-size:9px; font-weight:800; color:#fff;}
 .syn-thumb + .syn-thumb{margin-left:-9px;}
-/* R10: Following pane */
+/* R10: Following pane — one compact manage button in the pane; the roster lives in
+   a pop-up (openCreatorManager) so 20 creators never eat the deck list. */
 .cr-follow{margin:2px 0 12px;}
-.cr-follow-strip{display:flex; flex-wrap:wrap; gap:6px;}
+.cr-manage-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+#btn-managecr{display:inline-flex; align-items:center; gap:6px;}
+.cr-filterchip{display:inline-flex; align-items:center; gap:6px; background:var(--gold); color:var(--iris-ink);
+  border:none; border-radius:999px; padding:7px 12px; font-size:12px; font-weight:800;}
+/* manager modal rows — same anatomy as the old pills (name / ↗ / count / ×), stacked */
+.crm-list{display:flex; flex-direction:column; gap:6px; margin:10px 0; max-height:48vh; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+.cr-fpill.crm{display:flex; width:100%; padding:10px 12px;}
+.cr-fpill.crm .cr-fname{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left;}
+.crm-hint{font-size:11px; color:var(--faint); margin:2px 0 6px;}
 .cr-fpill{display:inline-flex; align-items:center; gap:7px; padding:7px 10px; border-radius:999px; text-decoration:none;
   background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); color:var(--text,#eee); font-size:12px; font-weight:700;}
 .cr-fname{color:var(--iris,#b794ff);}
@@ -1021,8 +1030,8 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .cr-fgo:active{background:rgba(255,255,255,.15);}
 .cr-fn{font-family:var(--head); font-size:11px; color:var(--gold);}
 .cr-fx{background:transparent; border:none; color:var(--faint); font-size:15px; line-height:1; padding:0 0 0 2px;}
-/* muted built-ins: a quiet one-tap-restore row under the Following strip */
-.cr-hiddenrow{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:8px;}
+/* muted built-ins: a quiet restore row inside the creator manager pop-up */
+.cr-hiddenrow{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:10px;}
 .cr-hidden-lab{font-size:10px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; color:var(--faint);}
 .cr-hpill{background:transparent; border:1px dashed var(--line2); color:var(--faint);
   border-radius:999px; padding:5px 10px; font-size:12px;}
@@ -1093,9 +1102,19 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .mc-chip.spice{color:var(--faint); box-shadow:inset 0 0 0 1px rgba(255,255,255,.09); background:transparent;}
 .syn-ai-out{font-size:12.5px; line-height:1.55; color:var(--text,#eee); background:var(--glass-2); border-radius:12px;
   padding:12px; margin-bottom:8px; box-shadow:inset 0 0 0 1px rgba(170,140,255,.18); white-space:pre-wrap;}
-/* my-synergies rows (Coach tab) + the picker modal */
+/* my-synergies rows (Coach tab) + the picker modal — every row is a ONE-LINER
+   (card names + note, ellipsized); tap it open for the minis, full note, Edit/Delete */
 #mysyns{display:flex; flex-direction:column; gap:8px; margin:6px 0 12px;}
-.msyn-row{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:12px; padding:10px;}
+.msyn-row{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:12px; padding:10px 12px; cursor:pointer;}
+.msyn-row.open{box-shadow:inset 0 0 0 1px var(--line2);}
+.msyn-line{display:flex; align-items:baseline; gap:8px; min-width:0;}
+.msyn-names{font-size:12.5px; font-weight:800; color:var(--iris-soft,#b794ff);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex-shrink:0; max-width:62%;}
+.msyn-note1{flex:1; min-width:0; font-size:12px; color:var(--faint);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.msyn-row.open .msyn-line{display:none;}
+.msyn-body{display:none;}
+.msyn-row.open .msyn-body{display:block;}
 .msyn-minis{display:flex; flex-wrap:wrap; gap:6px;}
 .msyn-minis .mini{width:46px; flex:0 0 46px;}
 .msyn-note{font-size:12.5px; color:var(--dim); margin-top:8px; line-height:1.45;}
@@ -1288,6 +1307,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
          the fit shelf and Complete-my-deck (fitSuggestions), synced like creators. -->
     <div class="section-label" style="margin-top:22px">My synergies</div>
     <div class="mnote">Know two cards that work together? Link them here — the build screen&rsquo;s &ldquo;Fits this deck&rdquo; and &ldquo;Complete my deck&rdquo; will suggest from your combos first.</div>
+    <div class="mrow" id="msyn-qrow" hidden><input id="msyn-q" class="minput" type="search" placeholder="Find a synergy by card&hellip;" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
     <div id="mysyns"></div>
     <button class="abtn" id="btn-addsyn" style="width:100%">&#65291; New synergy</button>
   </section>
@@ -1478,6 +1498,8 @@ const S = {
   addedCreators: [],       // R5-J in-app added channels [{id:'UC…', name, handle}]
   addedCreatorDecks: [],   // R5-J decks harvested from those channels (creatorDecks row shape + added:true, chId)
   mySyns: [],              // user-declared synergies [{id, ids:[defids 2+], note}] — feed the fit engine
+  synOpen: null,           // which My-synergies row is expanded (session only, one at a time)
+  synQ: '',                // My-synergies card search (session only)
   syncToken: '',           // R5-I cross-device bearer token (device-local; never in a URL/log)
   syncState: 'idle',       // 'idle' | 'ok' | 'offline' | 'error'
   syncLast: 0,             // last successful sync (ms)
@@ -4248,22 +4270,36 @@ if($('#verdictrow')) $('#verdictrow').addEventListener('click', e => {
 function renderMySyns(){
   const box = $('#mysyns'); if(!box) return;
   box.innerHTML = '';
-  const syns = S.mySyns || [];
+  const nameOf = id => ((getCard(id) || makeStub(id)).n || id);
+  const q = (S.synQ || '').trim().toLowerCase();
+  const qrow = $('#msyn-qrow'); if(qrow) qrow.hidden = !(S.mySyns||[]).length;
+  const syns = (S.mySyns || []).filter(g => !q ||
+    (g.ids||[]).some(id => nameOf(id).toLowerCase().includes(q)) || (g.note||'').toLowerCase().includes(q));
   syns.forEach(g => {
-    const row = el('div','msyn-row');
+    // one-liner rows (names + note, ellipsized) — tap open for minis, full note, Edit/Delete
+    const row = el('div','msyn-row' + (S.synOpen === g.id ? ' open' : ''));
+    const line = el('div','msyn-line');
+    line.innerHTML = '<b class="msyn-names">' + esc((g.ids||[]).map(nameOf).join(' · ')) + '</b>' +
+      (g.note ? '<span class="msyn-note1">' + esc(g.note) + '</span>' : '');
+    row.appendChild(line);
+    const body = el('div','msyn-body');
     const strip = el('div','msyn-minis');
     strip.innerHTML = (g.ids||[]).map(id => miniHtml(getCard(id) || makeStub(id))).join('');
-    row.appendChild(strip);
-    if(g.note) row.appendChild(el('div','msyn-note', g.note));
+    body.appendChild(strip);
+    if(g.note) body.appendChild(el('div','msyn-note', g.note));
     const acts = el('div','msyn-acts');
-    const ed = el('button','abtn subtle','Edit'); ed.type = 'button'; ed.onclick = () => openSynEditor(g);
+    const ed = el('button','abtn subtle','Edit'); ed.type = 'button';
+    ed.onclick = ev => { ev.stopPropagation(); openSynEditor(g); };
     const rm = el('button','abtn danger','Delete'); rm.type = 'button';
-    rm.onclick = () => { S.mySyns = (S.mySyns||[]).filter(x => x.id !== g.id); persistMySyns(); renderMySyns(); renderFitShelf(); };
+    rm.onclick = ev => { ev.stopPropagation(); S.mySyns = (S.mySyns||[]).filter(x => x.id !== g.id); persistMySyns(); renderMySyns(); renderFitShelf(); };
     acts.appendChild(ed); acts.appendChild(rm);
-    row.appendChild(acts);
+    body.appendChild(acts);
+    row.appendChild(body);
+    row.onclick = () => { S.synOpen = (S.synOpen === g.id) ? null : g.id; renderMySyns(); };
     box.appendChild(row);
   });
-  if(!syns.length) box.appendChild(el('div','odds-hint','Nothing yet — link your first combo below.'));
+  if(!(S.mySyns||[]).length) box.appendChild(el('div','odds-hint','Nothing yet — link your first combo below.'));
+  else if(!syns.length) box.appendChild(el('div','odds-hint','No synergy uses a card matching “' + (S.synQ||'').trim() + '”.'));
 }
 function openSynEditor(g){
   const editing = !!(g && g.id);
@@ -4307,6 +4343,8 @@ function openSynEditor(g){
   paint();
 }
 if($('#btn-addsyn')) $('#btn-addsyn').onclick = () => openSynEditor(null);
+// the input lives outside #mysyns, so the caret survives every rerender untouched
+if($('#msyn-q')) $('#msyn-q').addEventListener('input', e => { S.synQ = e.target.value; renderMySyns(); });
 
 /* ============ RENDER: DECK ZONE (build screen) ============ */
 /* R17: the insight curve is a control, not a chart — each bar is a one-tap cost
@@ -4523,6 +4561,80 @@ const BUILTIN_CREATORS = [
   { name:'Unfitparrot',      url:'https://www.youtube.com/@Unfitparrot' },
   { name:'Snap Judgments',   url:'https://www.youtube.com/channel/UCRM70o4UWSPL839M9d42xGw' },
 ];
+/* one entry per creator NAME — a channel that's both built-in and followed in-app
+   (Snap Judgments) merges instead of appearing twice */
+function creatorRoster(){
+  const roster = [], byName = {};
+  BUILTIN_CREATORS.forEach(b => { const r = { name:b.name, url:b.url, builtin:true, addedId:null }; byName[r.name] = r; roster.push(r); });
+  (S.addedCreators||[]).forEach(c => {
+    // R11.1: NEVER silently hide a followed channel — this exact guard ate every new add
+    // (YouTube RSS ids arrive without the UC prefix). Malformed id -> fall back to the handle.
+    const id = normChannelId(c.id);
+    const href = /^UC[\w-]{22}$/.test(id) ? 'https://www.youtube.com/channel/' + id
+      : (/^https?:\/\//i.test(c.handle||'') ? c.handle : 'https://www.youtube.com/' + String(c.handle||'').replace(/^\/+/,''));
+    const nm = c.name || 'Creator';
+    if(byName[nm]){ byName[nm].addedId = c.id; return; }
+    const r = { name:nm, url:href, builtin:false, addedId:c.id };
+    byName[nm] = r; roster.push(r);
+  });
+  return roster;
+}
+/* the creator manager pop-up: filter / open channel / unfollow / hide / restore / add.
+   Row anatomy matches the old pills (name · ↗ · count · ×), stacked in a sheet. */
+function openCreatorManager(){
+  const hidden = new Set((S.prefs && S.prefs.hiddenCreators) || []);
+  const counts = {};
+  S.creatorDecks.concat(S.addedCreatorDecks||[]).forEach(cd => { if(cd && cd.creator) counts[cd.creator] = (counts[cd.creator]||0) + 1; });
+  openModal('<h2>Creators</h2>' +
+    '<div class="crm-hint">Tap a name to see only their decks &middot; &#8599; opens the channel &middot; &times; removes (built-ins land in Hidden, restorable)</div>' +
+    '<div class="crm-list" id="crm-list"></div>' +
+    (hidden.size ? '<div class="cr-hiddenrow" id="crm-hidden"><span class="cr-hidden-lab">Hidden</span></div>' : '') +
+    '<div class="mrow"><button class="abtn primary" id="crm-add">&#65291; Add creator</button><button class="abtn" id="crm-close">Close</button></div>');
+  const list = $('#crm-list');
+  creatorRoster().filter(r => !hidden.has(r.name)).forEach(r => {
+    const a = document.createElement('a');
+    a.className = 'cr-fpill crm' + (S.crFilter === r.name ? ' on' : '');
+    a.href = r.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.innerHTML = '<span class="cr-fname">' + esc(r.name) + '</span><span class="cr-fgo" title="Open channel">↗</span><b class="cr-fn">' + (counts[r.name] || 0) + '</b>';
+    a.onclick = ev => {
+      if(ev.target.closest('.cr-fx')) return;                    // remove/hide handles itself
+      ev.preventDefault();
+      if(ev.target.closest('.cr-fgo')){ try{ window.open(a.href, '_blank', 'noopener'); }catch(e){} return; }
+      S.crFilter = (S.crFilter === r.name) ? null : r.name;
+      closeModal(); renderCreatorDecks();
+    };
+    const x = document.createElement('button');
+    x.className = 'cr-fx'; x.type = 'button'; x.textContent = '×';
+    x.setAttribute('aria-label', (r.builtin ? 'Hide ' : 'Unfollow ') + r.name);
+    x.onclick = ev => { ev.preventDefault(); ev.stopPropagation();
+      if(r.addedId){
+        S.addedCreators = S.addedCreators.filter(c => c.id !== r.addedId);
+        S.addedCreatorDecks = S.addedCreatorDecks.filter(d => d.chId !== r.addedId);
+        persistCreators();
+      }
+      if(r.builtin){
+        S.prefs.hiddenCreators = [...new Set([...(S.prefs.hiddenCreators || []), r.name])];
+        sSet(K.prefs, S.prefs); scheduleSync();
+      }
+      if(S.crFilter === r.name) S.crFilter = null;
+      renderCreatorDecks(); openCreatorManager();                // refresh the sheet in place
+    };
+    a.appendChild(x);
+    list.appendChild(a);
+  });
+  const hs = $('#crm-hidden');
+  if(hs) [...hidden].forEach(nm => {
+    const b = el('button','cr-hpill', nm + ' +');
+    b.type = 'button'; b.setAttribute('aria-label','Show ' + nm + ' again');
+    b.onclick = () => {
+      S.prefs.hiddenCreators = (S.prefs.hiddenCreators || []).filter(x => x !== nm);
+      sSet(K.prefs, S.prefs); scheduleSync(); renderCreatorDecks(); openCreatorManager();
+    };
+    hs.appendChild(b);
+  });
+  const ad = $('#crm-add'); if(ad) ad.onclick = () => openAddCreator();
+  const cl = $('#crm-close'); if(cl) cl.onclick = closeModal;
+}
 function renderCreatorDecks(){
   refreshAddedCreators(); // fire-and-forget; TTL + busy guard make this a no-op except ~once a day
   const wrap = $('#creatorlist'); if(!wrap) return;
@@ -4549,78 +4661,22 @@ function renderCreatorDecks(){
   // outright. Both routes hang off the same pill ×.
   const hidden = new Set((S.prefs && S.prefs.hiddenCreators) || []);
   all = all.filter(cd => !hidden.has(cd.creator));
-  // R10: Following pane — everyone whose decks land here, each linking to their channel
-  const fstrip = el('div','cr-follow-strip');
-  // R11.2: a pill is now a FILTER (tap = only that creator's decks, tap again = all);
-  // the ↗ inside it still opens the channel. Links keep their href for middle-click/tests.
-  const fpill = (name, url, count, r) => {
-    const a = document.createElement('a');
-    a.className = 'cr-fpill' + (S.crFilter === name ? ' on' : '');
-    a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
-    a.innerHTML = '<span class="cr-fname">' + esc(name) + '</span><span class="cr-fgo" title="Open channel">↗</span><b class="cr-fn">' + count + '</b>';
-    a.onclick = ev => {
-      if(ev.target.closest('.cr-fx')) return;                    // remove/hide handles itself
-      ev.preventDefault();
-      if(ev.target.closest('.cr-fgo')){ try{ window.open(a.href, '_blank', 'noopener'); }catch(e){} return; }
-      S.crFilter = (S.crFilter === name) ? null : name;
-      renderCreatorDecks();
-    };
-    // every pill is removable: added channels unfollow, built-ins mute (restorable below)
-    const x = document.createElement('button');
-    x.className = 'cr-fx'; x.type = 'button'; x.textContent = '×';
-    x.setAttribute('aria-label', (r.builtin ? 'Hide ' : 'Unfollow ') + name);
-    x.onclick = ev => { ev.preventDefault(); ev.stopPropagation();
-      if(r.addedId){
-        S.addedCreators = S.addedCreators.filter(c => c.id !== r.addedId);
-        S.addedCreatorDecks = S.addedCreatorDecks.filter(d => d.chId !== r.addedId);
-        persistCreators();
-      }
-      if(r.builtin){
-        S.prefs.hiddenCreators = [...new Set([...(S.prefs.hiddenCreators || []), name])];
-        sSet(K.prefs, S.prefs); scheduleSync();
-      }
-      if(S.crFilter === name) S.crFilter = null;
-      renderCreatorDecks(); };
-    a.appendChild(x);
-    return a;
-  };
-  // one pill per creator — a channel that's both built-in AND followed in-app
-  // (Snap Judgments) merges instead of appearing twice
-  const roster = [], rosterByName = {};
-  BUILTIN_CREATORS.forEach(b => {
-    const r = { name:b.name, url:b.url, builtin:true, addedId:null };
-    rosterByName[r.name] = r; roster.push(r);
-  });
-  (S.addedCreators||[]).forEach(c => {
-    // R11.1: NEVER silently hide a followed channel — this exact guard ate every new add
-    // (YouTube RSS ids arrive without the UC prefix). Malformed id -> fall back to the handle.
-    const id = normChannelId(c.id);
-    const href = /^UC[\w-]{22}$/.test(id) ? 'https://www.youtube.com/channel/' + id
-      : (/^https?:\/\//i.test(c.handle||'') ? c.handle : 'https://www.youtube.com/' + String(c.handle||'').replace(/^\/+/,''));
-    const nm = c.name || 'Creator';
-    if(rosterByName[nm]){ rosterByName[nm].addedId = c.id; return; }
-    const r = { name:nm, url:href, builtin:false, addedId:c.id };
-    rosterByName[nm] = r; roster.push(r);
-  });
-  roster.filter(r => !hidden.has(r.name)).forEach(r =>
-    fstrip.appendChild(fpill(r.name, r.url, all.filter(x => x.creator === r.name).length, r)));
+  // R10 → pop-up: the pane keeps ONE compact row (manage button + active-filter chip);
+  // the full roster lives in openCreatorManager() so 20 creators never eat the deck list.
   const fsec = el('div','cr-follow');
-  fsec.appendChild(el('div','syn-sec', S.crFilter ? 'Following · showing ' + S.crFilter + ' — tap the pill again for all' : 'Following · tap a name to filter · × removes'));
-  fsec.appendChild(fstrip);
-  if(hidden.size){                                   // muted built-ins come back with one tap
-    const hs = el('div','cr-hiddenrow');
-    hs.appendChild(el('span','cr-hidden-lab','Hidden'));
-    [...hidden].forEach(nm => {
-      const b = el('button','cr-hpill', nm + ' +');
-      b.type = 'button'; b.setAttribute('aria-label','Show ' + nm + ' again');
-      b.onclick = () => {
-        S.prefs.hiddenCreators = (S.prefs.hiddenCreators || []).filter(x => x !== nm);
-        sSet(K.prefs, S.prefs); scheduleSync(); renderCreatorDecks();
-      };
-      hs.appendChild(b);
-    });
-    fsec.appendChild(hs);
+  const mrow = el('div','cr-manage-row');
+  const visN = creatorRoster().filter(r => !hidden.has(r.name)).length;
+  const mbtn = el('button','abtn','Following · ' + visN + ' creator' + (visN === 1 ? '' : 's'));
+  mbtn.id = 'btn-managecr'; mbtn.type = 'button'; mbtn.setAttribute('aria-haspopup','dialog');
+  mbtn.onclick = openCreatorManager;
+  mrow.appendChild(mbtn);
+  if(S.crFilter){                                    // the active filter stays visible + clearable in the pane
+    const fc = el('button','cr-filterchip','showing ' + S.crFilter + ' ×');
+    fc.type = 'button'; fc.setAttribute('aria-label','Show all creators again');
+    fc.onclick = () => { S.crFilter = null; renderCreatorDecks(); };
+    mrow.appendChild(fc);
   }
+  fsec.appendChild(mrow);
   wrap.appendChild(fsec);
   // R14: field-level trending sits above the deck rows — it reads the 30-day ledger,
   // not the display decks, so it renders even while the 14-day window is empty.
