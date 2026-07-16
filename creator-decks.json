@@ -1,6 +1,28 @@
 {
-  "updated": "2026-07-15",
+  "updated": "2026-07-16",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "Kang has returned to CONQUER your way to Infinite! - Marvel Snap Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=WkraLILUN5I",
+      "published": "2026-07-15",
+      "name": "MCU Villains",
+      "ids": [
+        "CosmicGhostRider",
+        "GambitHorseman",
+        "InfinityUltron",
+        "IronPatriot",
+        "Kang",
+        "KingEitri",
+        "LunaSnow",
+        "Quinjet",
+        "ShadowKing",
+        "ShangChi",
+        "TechnoOrganicVirus",
+        "Valentina"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/CosmicGhostRider-GambitHorseman-InfinityUltron-IronPatriot-Kang-KingEitri-LunaSnow-Quinjet-ShadowKing-ShangChi-TechnoOrganicVirus-Valentina_MCU%20Villains"
+    },
     {
       "creator": "Unfitparrot",
       "video": "Bounce is now a CLIMBING DECK!! Boomerang supercharges bounce! - Marvel Snap Deck Highlight",
@@ -856,28 +878,6 @@
         "WilsonFisk"
       ],
       "zone": "https://marvelsnapzone.com/decks/tarantupergiant/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Tarantula fits PERFECTLY in this OP Deck, and Tombstone has a SICK COMBO! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=LZZ-psTBygE",
-      "published": "2026-07-07",
-      "name": "Cougarrr",
-      "ids": [
-        "Deadpool",
-        "Headpool",
-        "X23",
-        "Agony",
-        "Carnage",
-        "Tombstone",
-        "Magus",
-        "Killmonger",
-        "Muse",
-        "Venom",
-        "Juggernaut",
-        "Death"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/cougarrrnjljwd9"
     }
   ]
 }
