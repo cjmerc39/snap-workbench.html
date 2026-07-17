@@ -1014,6 +1014,29 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const _cap2 = JSON.parse(w.eval('window.__coachCap2.body'));
   assert(/personally declared/.test(_cap2.prompt) && /Wong \+ Odin — double reveals/.test(_cap2.prompt), 'coach: user-declared combos ride in prompt');
 
+  // ============ OTA balance history (card-changes.json) ============
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>({updated:"2026-07-16",changes:['+
+    '{at:"2026-07-16",d:"Hulk",n:"Hulk",ch:[{k:"p",from:12,to:11}]},'+
+    '{at:"2026-07-16",d:"Wong",n:"Wong",ch:[{k:"a",from:"old text",to:"new text"}]},'+
+    '{at:"2026-07-10",d:"Hulk",n:"Hulk",ch:[{k:"c",from:6,to:5}]}'+
+    ']})}); window.__cch=await loadCardChanges(); window.fetch=of; })()');
+  assert(w.eval('window.__cch')===true && w.eval('S.cardChanges.length')===3, 'OTA: loadCardChanges ingests the ledger');
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>({whatever:1})}); window.__cchB=await loadCardChanges(); window.fetch=of; })()');
+  assert(w.eval('window.__cchB')===false && w.eval('S.cardChanges.length')===3, 'OTA: malformed ledger is ignored, state kept');
+  w.eval('renderOtaHistory()'); await sleep(20);
+  assert(d.querySelectorAll('#otalist .ota-row').length===3, 'OTA: Library renders one row per change');
+  assert(d.querySelectorAll('#otalist .ota-date').length===2, 'OTA: rows group under their patch date');
+  assert(/Power 12 → 11/.test(d.querySelector('#otalist .ota-row .ota-txt span').textContent), 'OTA: stat changes read as words');
+  d.querySelector('#otalist .ota-row').click(); await sleep(20);
+  assert(d.getElementById('modalwrap').classList.contains('on') && /Balance history/.test(d.getElementById('modal').textContent)
+    && /Power 12 → 11/.test(d.getElementById('modal').textContent) && /Cost 6 → 5/.test(d.getElementById('modal').textContent),
+    'OTA: tapping a row opens the card sheet with that card’s full history');
+  w.eval('closeModal()');
+  assert(/RECENT BALANCE CHANGES/.test(w.eval('coachSystemText()')) && /Hulk — Power 12 → 11/.test(w.eval('coachSystemText()')),
+    'OTA: the coach hears about recent changes');
+  w.eval('S.cardChanges=[]; renderOtaHistory();'); await sleep(10);
+  assert(d.getElementById('otalist').innerHTML==='' && !/RECENT BALANCE CHANGES/.test(w.eval('coachSystemText()')), 'OTA: empty ledger hides the section + coach block');
+
   // ============ WP3 round-5: cross-device sync (I) + in-app Add-creator (J) ============
   // --- I: mergeState — newest-wins per deck, union owned/creators, never drop local ---
   const _local = { v:1, updatedAt:1000,

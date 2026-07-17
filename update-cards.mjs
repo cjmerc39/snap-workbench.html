@@ -71,7 +71,14 @@ if (process.argv.includes(`--selfcheck`)) {
     if (!Array.isArray(arr) || !arr.length) { console.error(`selfcheck FAIL: empty link list for`, k); ok = false; }
     for (const id of (arr || [])) if (!tokIds.has(id)) { console.error(`selfcheck FAIL: link token`, id, `(from`, k, `) not in TOKENS`); ok = false; }
   }
-  console.log(ok ? `selfcheck OK (${TOKENS.length} tokens, ${Object.keys(LINKS).length} producers)` : `selfcheck FAILED`);
+  // OTA ledger diff: real change detected, whitespace-only text flap ignored, new card ignored
+  const _p = [{ n: `A`, d: `A1`, c: 3, p: 5, a: `On Reveal:  gain +2.`, s: `4` }, { n: `B`, d: `B1`, c: 2, p: 2, a: ``, s: `3` }];
+  const _n = [{ n: `A`, d: `A1`, c: 2, p: 5, a: `On Reveal: gain +2.`, s: `4` }, { n: `B`, d: `B1`, c: 2, p: 2, a: ``, s: `3` }, { n: `C`, d: `C1`, c: 1, p: 1, a: `x`, s: `5` }];
+  const _dx = diffCards(_p, _n);
+  if (!(_dx.length === 1 && _dx[0].d === `A1` && _dx[0].ch.length === 1 && _dx[0].ch[0].k === `c` && _dx[0].ch[0].from === 3 && _dx[0].ch[0].to === 2)) {
+    console.error(`selfcheck FAIL: diffCards wrong ->`, JSON.stringify(_dx)); ok = false;
+  }
+  console.log(ok ? `selfcheck OK (${TOKENS.length} tokens, ${Object.keys(LINKS).length} producers, OTA diff sane)` : `selfcheck FAILED`);
   process.exit(ok ? 0 : 1);
 }
 
@@ -106,14 +113,37 @@ console.log(`schedule: dates for`, Object.keys(dates).length, `card ids`);
 // ---- memory: anything previously published stays published ----
 let prevIds = new Set();
 let prevTokenCount = 0;
+let prevCards = [];  // full previous card objects — the OTA ledger diffs against these
 const prevR = {};   // defid -> 'YYYY-MM-DD': release dates persist across runs (seeded once by backfill-dates.mjs)
 try {
   const prev = JSON.parse(fs.readFileSync(`cards.json`, `utf8`));
-  prevIds = new Set((prev.cards || []).map(x => x.d));
-  for (const x of prev.cards || []) if (x.r) prevR[x.d] = x.r;
+  prevCards = prev.cards || [];
+  prevIds = new Set(prevCards.map(x => x.d));
+  for (const x of prevCards) if (x.r) prevR[x.d] = x.r;
   prevTokenCount = Array.isArray(prev.tokens) ? prev.tokens.length : 0;
   console.log(`memory: `, prevIds.size, `cards (`, Object.keys(prevR).length, `dated) +`, prevTokenCount, `tokens in previous output`);
 } catch (e) { console.log(`memory: no previous cards.json (first run)`); }
+
+// ---- OTA ledger: what changed on cards that existed yesterday (cost/power/text/series) ----
+// Snap balance-patches cards over-the-air constantly; the nightly rewrite silently absorbed
+// them. diffCards makes each absorption visible so the app can show a running history.
+function diffCards(prevList, nextList) {
+  const pm = new Map(prevList.map((c) => [c.d, c]));
+  const norm = (s) => String(s || ``).replace(/\s+/g, ` `).trim();
+  const out = [];
+  for (const c of nextList) {
+    const p = pm.get(c.d);
+    if (!p) continue;                                  // brand-new card = a release, not a change
+    const ch = [];
+    if (+p.c !== +c.c) ch.push({ k: `c`, from: +p.c, to: +c.c });
+    if (+p.p !== +c.p) ch.push({ k: `p`, from: +p.p, to: +c.p });
+    if (norm(p.a) !== norm(c.a)) ch.push({ k: `a`, from: norm(p.a), to: norm(c.a) });
+    if (String(p.s || ``) !== String(c.s || ``) && String(p.s || ``) !== `?`)
+      ch.push({ k: `s`, from: String(p.s), to: String(c.s) });
+    if (ch.length) out.push({ d: c.d, n: c.n, ch });
+  }
+  return out;
+}
 
 // ---- source 1: the feed ----
 const r = await fetch(FEED, UA);
@@ -239,6 +269,22 @@ if (outLocs.length < 50) {
 
 fs.writeFileSync(`cards.json`, JSON.stringify({ updated: new Date().toISOString().slice(0, 10), cards: out, tokens: outTokens, links: LINKS, locations: outLocs }));
 console.log(`wrote`, out.length, `cards +`, outTokens.length, `tokens /`, Object.keys(LINKS).length, `producers +`, outLocs.length, `locations`);
+
+// ---- OTA ledger write: prepend today's diffs to card-changes.json (capped) ----
+{
+  const CHOUT = `card-changes.json`;
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const fresh = prevCards.length ? diffCards(prevCards, out) : [];
+  let ledger = [];
+  try { ledger = JSON.parse(fs.readFileSync(CHOUT, `utf8`)).changes || []; } catch (e) { /* first run */ }
+  // same card re-diffed on a re-run today: replace today's entry instead of duplicating
+  const freshIds = new Set(fresh.map((x) => x.d));
+  ledger = ledger.filter((x) => !(x.at === todayIso && freshIds.has(x.d)));
+  ledger = fresh.map((x) => ({ at: todayIso, ...x })).concat(ledger).slice(0, 400);
+  fs.writeFileSync(CHOUT, JSON.stringify({ updated: todayIso, changes: ledger }));
+  console.log(`OTA ledger:`, fresh.length, `card change(s) this run;`, ledger.length, `entries kept`);
+  if (fresh.length) console.log(`  changed:`, fresh.map((x) => x.n + ` (` + x.ch.map((c) => c.k).join(``) + `)`).join(`, `));
+}
 console.log(`EVENT-RELEASED via schedule:`, recent.length ? recent.join(`, `) : `(none)`);
 console.log(`KEPT via seed/memory:`, kept.length ? kept.join(`, `) : `(none)`);
 console.log(`FUTURE (auto-include on their day):`, future.length ? future.join(`, `) : `(none)`);
