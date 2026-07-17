@@ -478,7 +478,20 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   w.eval('setTab("collection")'); await sleep(20);
   assert(d.querySelector('#view-collection').classList.contains('on'), 'collection view activates on setTab');
   assert(!d.querySelector('#view-cards').classList.contains('on'), 'build view is hidden while on collection');
-  assert(d.body.classList.contains('on-cards'), 'R13: floating tool cluster stays available on the Library tab');
+  // Library hub: home page with three doors; the sticky back bar navigates
+  w.eval('setLibPage("home")'); await sleep(10);
+  assert(d.getElementById('lib-home').classList.contains('on') && d.getElementById('lib-back').hidden, 'LIB: hub home shows the doors, back bar hidden');
+  assert(d.querySelectorAll('#lib-home [data-libgo]').length===3, 'LIB: Cards / Locations / Balance doors present');
+  assert(!d.body.classList.contains('on-cards'), 'LIB: tool cluster hidden on the hub (it targets the card grid)');
+  d.querySelector('#lib-home [data-libgo="cards"]').click(); await sleep(10);
+  assert(d.getElementById('lib-cards').classList.contains('on') && !d.getElementById('lib-home').classList.contains('on'), 'LIB: Cards door opens the cards pane');
+  assert(!d.getElementById('lib-back').hidden && /Cards/.test(d.getElementById('lib-title').textContent), 'LIB: back bar visible with the page title');
+  assert(d.body.classList.contains('on-cards'), 'R13: floating tool cluster available on the Library Cards page');
+  d.getElementById('btn-libback').click(); await sleep(10);
+  assert(d.getElementById('lib-home').classList.contains('on') && d.getElementById('lib-back').hidden, 'LIB: back returns to the hub');
+  d.querySelector('#lib-home [data-libgo="ota"]').click(); await sleep(10);
+  assert(d.getElementById('lib-ota').classList.contains('on') && /Balance changes/.test(d.getElementById('lib-title').textContent), 'LIB: Balance door opens the history pane');
+  w.eval('setLibPage("cards")'); await sleep(10);
   w.eval('setTab("deck")'); await sleep(10);
   assert(!d.body.classList.contains('on-cards'), 'floating tool cluster is gated OFF elsewhere (Deck tab)');
   w.eval('setTab("collection")'); await sleep(10);
@@ -1035,7 +1048,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(/RECENT BALANCE CHANGES/.test(w.eval('coachSystemText()')) && /Hulk — Power 12 → 11/.test(w.eval('coachSystemText()')),
     'OTA: the coach hears about recent changes');
   w.eval('S.cardChanges=[]; renderOtaHistory();'); await sleep(10);
-  assert(d.getElementById('otalist').innerHTML==='' && !/RECENT BALANCE CHANGES/.test(w.eval('coachSystemText()')), 'OTA: empty ledger hides the section + coach block');
+  assert(/No balance changes recorded yet/.test(d.getElementById('otalist').textContent) && !/RECENT BALANCE CHANGES/.test(w.eval('coachSystemText()')),
+    'OTA: empty ledger shows the starts-now hint + no coach block');
 
   // ============ WP3 round-5: cross-device sync (I) + in-app Add-creator (J) ============
   // --- I: mergeState — newest-wins per deck, union owned/creators, never drop local ---
@@ -1844,8 +1858,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   // --- B: the Library grid obeys the global search/sort/filter cluster ---
   w.eval('S.db=DB_BASE.slice(); indexDb(); applyTokenData();');   // earlier intake mocks left an 80-card db behind
-  w.eval('S.sort="cost"; clearAllFilters(); setTab("collection");'); await sleep(20);
-  assert(d.body.classList.contains('on-cards'), 'R13-B: search/sort/filter cluster is available on Library');
+  w.eval('S.sort="cost"; clearAllFilters(); setTab("collection"); setLibPage("cards");'); await sleep(20);
+  assert(d.body.classList.contains('on-cards'), 'R13-B: search/sort/filter cluster is available on Library’s Cards page');
   const libAll = d.querySelectorAll('#colllist .tile').length;
   assert(libAll===w.eval('S.db.length'), 'R13-B: unfiltered Library shows the whole db ('+libAll+')');
   w.eval('S.filters.q="hulk"; renderCollection();'); await sleep(20);
