@@ -184,6 +184,18 @@ const baseIds = new Set(raw.filter(x => {
 const hasBase = id => { for (const b of baseIds) if (b !== id && id.startsWith(b)) return true; return false; };
 const droppedDupes = [];
 
+// ---- datamines: unreleased cards ride cards.json under an additive `upcoming` key ----
+// (scheduled ones carry their release date; the rest are datamined with no date yet).
+// They NEVER enter cards[] — the app keeps them out of decks and the coach's pool.
+const tokenIds = new Set(TOKENS.map((t) => t.d));
+const upcomingOut = [];
+const slimUp = (c, relMsVal) => {
+  const u = { n: strip(c.name), d: c.carddefid, c: +c.cost || 0, p: +c.power || 0, a: strip(c.ability) };
+  if (c.art && /^https?:\/\//.test(c.art)) u.i = String(c.art);
+  if (relMsVal) u.rel = isoDay(relMsVal);
+  return u;
+};
+
 for (const c of raw) {
   if (c.type !== `Character`) continue;
   const name = strip(c.name);
@@ -201,14 +213,23 @@ for (const c of raw) {
     continue;
   }
   const rel = dates[c.carddefid] || 0;
-  if (!rel) { unscheduled++; continue; }       // tokens and never-scheduled entries
+  if (!rel) {
+    unscheduled++;
+    // datamined: unreleased, unscheduled, not a token, and carries real leaked text
+    if (!tokenIds.has(c.carddefid) && strip(c.ability)) upcomingOut.push(slimUp(c, 0));
+    continue;
+  }
   if (rel <= nowMs + 12 * 3600000) {
     out.push(slim(c));
     recent.push(name + ` (` + new Date(rel).toISOString().slice(0, 10) + `)`);
   } else {
     future.push(name + ` (` + new Date(rel).toISOString().slice(0, 10) + `)`);
+    upcomingOut.push(slimUp(c, rel));
   }
 }
+// scheduled first (soonest release on top), then datamined A-Z; capped to keep the json lean
+upcomingOut.sort((a, b) => (a.rel && b.rel) ? a.rel.localeCompare(b.rel) : (a.rel ? -1 : b.rel ? 1 : a.n.localeCompare(b.n)));
+const upcomingFinal = upcomingOut.slice(0, 80);
 for (const id of SEED) if (!seen.has(id)) console.log(`SEED MISS >>> no feed entry for`, id, `(check the defid with Claude)`);
 console.log(`mode-dupe variants dropped (base card exists):`, droppedDupes.length);
 
@@ -267,8 +288,8 @@ if (outLocs.length < 50) {
   } catch (e) {}
 }
 
-fs.writeFileSync(`cards.json`, JSON.stringify({ updated: new Date().toISOString().slice(0, 10), cards: out, tokens: outTokens, links: LINKS, locations: outLocs }));
-console.log(`wrote`, out.length, `cards +`, outTokens.length, `tokens /`, Object.keys(LINKS).length, `producers +`, outLocs.length, `locations`);
+fs.writeFileSync(`cards.json`, JSON.stringify({ updated: new Date().toISOString().slice(0, 10), cards: out, tokens: outTokens, links: LINKS, locations: outLocs, upcoming: upcomingFinal }));
+console.log(`wrote`, out.length, `cards +`, outTokens.length, `tokens /`, Object.keys(LINKS).length, `producers +`, outLocs.length, `locations +`, upcomingFinal.length, `upcoming (` + upcomingFinal.filter(u => u.rel).length + ` scheduled)`);
 
 // ---- OTA ledger write: prepend today's diffs to card-changes.json (capped) ----
 {

@@ -481,7 +481,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   // Library hub: home page with three doors; the sticky back bar navigates
   w.eval('setLibPage("home")'); await sleep(10);
   assert(d.getElementById('lib-home').classList.contains('on') && d.getElementById('lib-back').hidden, 'LIB: hub home shows the doors, back bar hidden');
-  assert(d.querySelectorAll('#lib-home [data-libgo]').length===3, 'LIB: Cards / Locations / Balance doors present');
+  assert(d.querySelectorAll('#lib-home [data-libgo]').length===5, 'LIB: Cards / Locations / Balance / Data mines / Tokens doors present');
   assert(!d.body.classList.contains('on-cards'), 'LIB: tool cluster hidden on the hub (it targets the card grid)');
   d.querySelector('#lib-home [data-libgo="cards"]').click(); await sleep(10);
   assert(d.getElementById('lib-cards').classList.contains('on') && !d.getElementById('lib-home').classList.contains('on'), 'LIB: Cards door opens the cards pane');
@@ -491,6 +491,23 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.getElementById('lib-home').classList.contains('on') && d.getElementById('lib-back').hidden, 'LIB: back returns to the hub');
   d.querySelector('#lib-home [data-libgo="ota"]').click(); await sleep(10);
   assert(d.getElementById('lib-ota').classList.contains('on') && /Balance changes/.test(d.getElementById('lib-title').textContent), 'LIB: Balance door opens the history pane');
+  // Data mines: scheduled + datamined sections, read-only sheet, never enters the deck pool
+  w.eval('S.upcoming=[{n:"Future Man",d:"FutureMan1",c:4,p:6,a:"On Reveal: test.",i:"",rel:"2026-08-01"},{n:"Leak Guy",d:"LeakGuy1",c:2,p:3,a:"Ongoing: leak.",i:"",rel:""}]; setLibPage("upc");'); await sleep(20);
+  assert(d.getElementById('lib-upc').classList.contains('on') && /Data mines/.test(d.getElementById('lib-title').textContent), 'LIB: Data mines door opens');
+  assert(d.querySelectorAll('#upclist .upc-row').length===2 && /Scheduled releases/.test(d.getElementById('upclist').textContent)
+    && /Datamined — no date yet/.test(d.getElementById('upclist').textContent), 'LIB: upcoming splits scheduled vs datamined');
+  d.querySelector('#upclist .upc-row').click(); await sleep(20);
+  assert(/2026-08-01/.test(d.getElementById('modal').textContent) && d.querySelector('#modal #sh-add')===null,
+    'LIB: upcoming sheet is read-only (no Add-to-deck) and shows the date');
+  w.eval('closeModal()');
+  assert(w.eval('S.db.some(c=>c.d==="FutureMan1")')===false, 'LIB: datamined cards never enter the playable pool');
+  // Tokens & summons: every curated token renders with its makers
+  w.eval('setLibPage("tok")'); await sleep(20);
+  assert(d.querySelectorAll('#toklist .tok-row').length===w.eval('Object.keys(S.tokens).length'), 'LIB: tokens page lists every created card');
+  assert(/Created by Thanos/.test(d.getElementById('toklist').textContent), 'LIB: tokens name their makers (stones -> Thanos)');
+  d.querySelector('#toklist .tok-row').click(); await sleep(20);
+  assert(d.getElementById('modalwrap').classList.contains('on') && /Token/.test(d.getElementById('modal').textContent), 'LIB: tapping a token opens its read-only sheet');
+  w.eval('closeModal(); S.upcoming=[];');
   w.eval('setLibPage("cards")'); await sleep(10);
   w.eval('setTab("deck")'); await sleep(10);
   assert(!d.body.classList.contains('on-cards'), 'floating tool cluster is gated OFF elsewhere (Deck tab)');

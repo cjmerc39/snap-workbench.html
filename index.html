@@ -1102,6 +1102,11 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   font-size:13px; font-weight:800; flex-shrink:0;}
 #btn-libback:active{background:var(--gold); color:var(--iris-ink);}
 #lib-title{font-family:var(--head); font-weight:800; font-size:13px; letter-spacing:.4px; color:var(--dim);}
+/* Data mines + tokens pages reuse the .ota-row anatomy */
+.upc-stats{color:var(--gold); font-weight:800; font-size:11px;}
+.upc-date{color:var(--iris-soft,#b794ff); font-weight:800; font-size:10.5px; background:rgba(170,140,255,.12);
+  border-radius:6px; padding:1px 6px; margin-left:4px;}
+#upclist .ota-txt span, #toklist .ota-txt span{overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;}
 /* OTA balance history (Library) + per-card history on the sheet */
 #otalist{margin-top:4px;}
 .ota-date{font-family:var(--head); font-weight:800; letter-spacing:.6px; font-size:11px; text-transform:uppercase;
@@ -1367,6 +1372,16 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
         <span class="lib-txt"><b>Balance changes</b><span id="lib-sub-ota">Running history of Snap&rsquo;s OTA patches</span></span>
         <span class="lib-chev">&#8250;</span>
       </button>
+      <button class="lib-btn" data-libgo="upc">
+        <span class="lib-ic">&#9935;</span>
+        <span class="lib-txt"><b>Data mines</b><span id="lib-sub-upc">Unreleased cards — scheduled and datamined</span></span>
+        <span class="lib-chev">&#8250;</span>
+      </button>
+      <button class="lib-btn" data-libgo="tok">
+        <span class="lib-ic">&#11046;</span>
+        <span class="lib-txt"><b>Tokens &amp; summons</b><span id="lib-sub-tok">What created cards actually do, and who makes them</span></span>
+        <span class="lib-chev">&#8250;</span>
+      </button>
     </div>
     <div id="lib-back" hidden>
       <button id="btn-libback" type="button" aria-label="Back to Library">&#8249; Library</button>
@@ -1395,6 +1410,12 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
     <div id="lib-ota" class="lib-pane">
       <!-- OTA balance history (card-changes.json, written by the nightly updater) -->
       <div id="otalist"></div>
+    </div>
+    <div id="lib-upc" class="lib-pane">
+      <div id="upclist"></div>
+    </div>
+    <div id="lib-tok" class="lib-pane">
+      <div id="toklist"></div>
     </div>
   </section>
 </main>
@@ -1565,7 +1586,8 @@ const S = {
   addedCreatorDecks: [],   // R5-J decks harvested from those channels (creatorDecks row shape + added:true, chId)
   mySyns: [],              // user-declared synergies [{id, ids:[defids 2+], note}] — feed the fit engine
   cardChanges: [],         // OTA balance history from card-changes.json [{at, d, n, ch:[{k,from,to}]}]
-  libPage: 'home',         // Library hub page: 'home' | 'cards' | 'locs' | 'ota' (session only)
+  libPage: 'home',         // Library hub page: 'home' | 'cards' | 'locs' | 'ota' | 'upc' | 'tok' (session only)
+  upcoming: [],            // datamined/scheduled unreleased cards from cards.json {n,d,c,p,a,i?,rel?}
   synOpen: null,           // which My-synergies row is expanded (session only, one at a time)
   synQ: '',                // My-synergies card search (session only)
   syncToken: '',           // R5-I cross-device bearer token (device-local; never in a URL/log)
@@ -5432,6 +5454,9 @@ async function loadSiteData(){
     // R12: additive locations intake — absent/garbage -> [] and the whole feature stays hidden
     S.locations = (Array.isArray(j.locations) ? j.locations : []).filter(l => l && l.d && l.n)
       .map(l => ({ n:String(l.n), d:String(l.d), a:String(l.a||''), r:String(l.r||''), i:(l.i && /^https?:\/\//.test(l.i)) ? String(l.i) : '' }));
+    S.upcoming = (Array.isArray(j.upcoming) ? j.upcoming : []).filter(u => u && u.d && u.n)
+      .map(u => ({ n:String(u.n), d:String(u.d), c:+u.c||0, p:+u.p||0, a:String(u.a||''),
+        i:(u.i && /^https?:\/\//.test(u.i)) ? String(u.i) : '', rel:(u.rel && /^\d{4}-\d{2}-\d{2}$/.test(String(u.rel))) ? String(u.rel) : '' }));
     return true;
   }catch(e){ return false; }
 }
@@ -5458,22 +5483,78 @@ async function loadCreatorDecks(){
    sticky so it never scrolls away. Panes are CSS-toggled — everything stays in the
    DOM so the existing render paths (collection grid, locations, OTA) are untouched. */
 function setLibPage(p){
-  S.libPage = ['cards','locs','ota'].indexOf(p) >= 0 ? p : 'home';
-  const map = { home:'lib-home', cards:'lib-cards', locs:'lib-locs', ota:'lib-ota' };
+  S.libPage = ['cards','locs','ota','upc','tok'].indexOf(p) >= 0 ? p : 'home';
+  const map = { home:'lib-home', cards:'lib-cards', locs:'lib-locs', ota:'lib-ota', upc:'lib-upc', tok:'lib-tok' };
+  const titles = { cards:'Cards', locs:'Locations', ota:'Balance changes', upc:'Data mines', tok:'Tokens & summons' };
   document.querySelectorAll('#view-collection .lib-pane').forEach(el2 =>
     el2.classList.toggle('on', el2.id === map[S.libPage]));
   const bb = $('#lib-back'); if(bb) bb.hidden = S.libPage === 'home';
-  const tt = $('#lib-title');
-  if(tt) tt.textContent = S.libPage === 'cards' ? 'Cards' : S.libPage === 'locs' ? 'Locations' : S.libPage === 'ota' ? 'Balance changes' : '';
+  const tt = $('#lib-title'); if(tt) tt.textContent = titles[S.libPage] || '';
   // the floating search/sort/filter cluster targets the card grid — only offer it there
   document.body.classList.toggle('on-cards', S.tab === 'cards' || (S.tab === 'collection' && S.libPage === 'cards'));
   if(S.libPage === 'home') renderLibHome();
+  if(S.libPage === 'upc') renderUpcoming();
+  if(S.libPage === 'tok') renderTokensPage();
   const sc = document.querySelector('main'); if(sc) sc.scrollTop = 0;
 }
 function renderLibHome(){
   const sc = $('#lib-sub-cards'); if(sc) sc.textContent = S.db.length + ' cards · ' + S.owned.size + ' owned';
   const sl = $('#lib-sub-locs'); if(sl && S.locations.length) sl.textContent = S.locations.length + ' locations, searchable';
   const so = $('#lib-sub-ota'); if(so && S.cardChanges.length) so.textContent = S.cardChanges.length + ' change' + (S.cardChanges.length === 1 ? '' : 's') + ' on record';
+  const su = $('#lib-sub-upc');
+  if(su && S.upcoming.length){
+    const sch = S.upcoming.filter(u => u.rel).length;
+    su.textContent = sch + ' scheduled · ' + (S.upcoming.length - sch) + ' datamined';
+  }
+  const st = $('#lib-sub-tok'); if(st){ const n = Object.keys(S.tokens||{}).length; if(n) st.textContent = n + ' created cards, decoded'; }
+}
+/* Data mines: scheduled releases (dated, soonest first) then datamined leaks. Read-only —
+   these cards are NOT in S.db, so they can't sneak into decks or the coach's pool. */
+function renderUpcoming(){
+  const box = $('#upclist'); if(!box) return;
+  if(!S.upcoming.length){
+    box.innerHTML = '<div class="odds-hint">Nothing datamined right now — this refreshes nightly with the card database.</div>';
+    return;
+  }
+  const sched = S.upcoming.filter(u => u.rel), mined = S.upcoming.filter(u => !u.rel);
+  const row = u =>
+    '<div class="ota-row upc-row" data-d="' + esc(u.d) + '">' +
+      (u.i ? '<span class="syn-thumb" style="background-image:url(&quot;' + esc(u.i) + '&quot;)"></span>' : '<span class="syn-thumb noart">' + esc(initials(u)) + '</span>') +
+      '<div class="ota-txt"><b>' + esc(u.n) + ' <span class="upc-stats">[' + u.c + '/' + u.p + ']</span>' +
+      (u.rel ? ' <span class="upc-date">' + esc(u.rel) + '</span>' : '') + '</b>' +
+      '<span>' + esc(u.a || 'No ability text datamined yet') + '</span></div></div>';
+  box.innerHTML =
+    '<div class="mnote">Straight from the game files via the nightly update. Stats and text often change before launch — nothing here counts toward decks yet.</div>' +
+    (sched.length ? '<div class="coll-section">Scheduled releases <span class="cs-n">' + sched.length + '</span></div>' + sched.map(row).join('') : '') +
+    (mined.length ? '<div class="coll-section">Datamined — no date yet <span class="cs-n">' + mined.length + '</span></div>' + mined.map(row).join('') : '');
+  box.onclick = e => { const r = e.target.closest('.upc-row'); if(r) openUpcomingSheet(r.dataset.d); };
+}
+function openUpcomingSheet(defid){
+  const u = (S.upcoming||[]).find(x => x.d === defid); if(!u) return;
+  openModal(
+    '<div class="sheetart' + (u.i ? '' : ' noart') + '" style="' + tileGrad(u) + '">' +
+      (u.i ? '<img src="' + esc(u.i) + '" alt="" onerror="this.parentElement.classList.add(\'noart\')">' : '') +
+      '<span class="sinit">' + esc(initials(u)) + '</span></div>' +
+    '<div class="sheethead"><span class="bignum bc">' + u.c + '</span><span class="sname">' + esc(u.n) + '</span><span class="bignum bp">' + u.p + '</span></div>' +
+    '<div class="sheetab">' + (u.a ? esc(u.a) : 'No ability text datamined yet.') + '</div>' +
+    '<div class="mnote">' + (u.rel ? 'Scheduled release: ' + esc(u.rel) : 'Datamined — no release date yet') + ' &middot; unreleased cards can change before launch</div>'
+  );
+}
+/* Tokens & summons: the created-cards the game never explains — each with its makers */
+function renderTokensPage(){
+  const box = $('#toklist'); if(!box) return;
+  const toks = Object.values(S.tokens || {});
+  if(!toks.length){ box.innerHTML = '<div class="odds-hint">No token data in this database snapshot.</div>'; return; }
+  const makers = {};   // token id -> [producer names]
+  for(const pid in (S.tokenLinks || {}))
+    (S.tokenLinks[pid] || []).forEach(tid => { (makers[tid] = makers[tid] || []).push((getCard(pid) || { n: pid }).n); });
+  box.innerHTML =
+    '<div class="mnote">Cards created in play — they never count as one of your 12, but they show up on play lines.</div>' +
+    toks.slice().sort((a,b) => a.n.localeCompare(b.n)).map(t =>
+      '<div class="ota-row tok-row" data-d="' + esc(t.d) + '">' + synThumb(t.d) +
+      '<div class="ota-txt"><b>' + esc(t.n) + ' <span class="upc-stats">[' + t.c + '/' + t.p + ']</span></b>' +
+      '<span>' + esc((makers[t.d] && makers[t.d].length ? 'Created by ' + makers[t.d].join(', ') : 'Created in play')) + '</span></div></div>').join('');
+  box.onclick = e => { const r = e.target.closest('.tok-row'); if(r) openCardSheet(r.dataset.d); };
 }
 document.querySelectorAll('#lib-home [data-libgo]').forEach(b => b.onclick = () => setLibPage(b.dataset.libgo));
 if($('#btn-libback')) $('#btn-libback').onclick = () => setLibPage('home');
