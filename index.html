@@ -1114,6 +1114,13 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .arc-grid{display:flex; flex-wrap:wrap; gap:6px;}
 .arc-grid .mini{width:52px; flex:0 0 52px; cursor:pointer;}
 .mini.unowned{filter:grayscale(.8) brightness(.55);}
+/* flex slots wear a small gold flag (deck zone, bench strip, hero grid, swap sheet) */
+.mini.flexed::before{content:'\2691'; position:absolute; top:2px; left:3px; z-index:3;
+  font-size:11px; color:var(--gold); text-shadow:0 1px 3px rgba(0,0,0,.9);}
+/* edit/delete chips on a custom archetype's section header */
+.arc-edit{background:var(--raise); border:none; color:var(--dim); border-radius:999px;
+  padding:3px 10px; font-size:10.5px; font-weight:800; margin-left:6px; text-transform:none; letter-spacing:0;}
+.arc-edit.danger{color:#ffb08d;}
 /* season countdown heroes */
 .ssn-hero{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:14px;
   padding:14px; margin-bottom:10px; display:flex; flex-direction:column; gap:3px;}
@@ -1648,6 +1655,7 @@ const S = {
   addedCreators: [],       // R5-J in-app added channels [{id:'UC…', name, handle}]
   addedCreatorDecks: [],   // R5-J decks harvested from those channels (creatorDecks row shape + added:true, chId)
   mySyns: [],              // user-declared synergies [{id, ids:[defids 2+], note}] — feed the fit engine
+  myArches: [],            // user-shaped archetypes [{id, name, ids:[defids 2+], note}] — guide + fit engine
   cardChanges: [],         // OTA balance history from card-changes.json [{at, d, n, ch:[{k,from,to}]}]
   libPage: 'home',         // Library hub page: home|cards|locs|ota|upc|tok|arc|ssn|var (session only)
   upcoming: [],            // datamined/scheduled unreleased cards from cards.json {n,d,c,p,a,i?,rel?}
@@ -1659,7 +1667,7 @@ const S = {
   syncState: 'idle',       // 'idle' | 'ok' | 'offline' | 'error'
   syncLast: 0,             // last successful sync (ms)
 };
-const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb', prefs:'snapwb-prefs', creators:'snapwb-creators', synctoken:'snapwb-synctoken', crfresh:'snapwb-crfresh', mysyns:'snapwb-mysyns' };
+const K = { decks:'snapwb-decks', coll:'snapwb-collection', db:'snapwb-carddb', prefs:'snapwb-prefs', creators:'snapwb-creators', synctoken:'snapwb-synctoken', crfresh:'snapwb-crfresh', mysyns:'snapwb-mysyns', myarches:'snapwb-myarches' };
 
 /* ============ UTIL ============ */
 const $ = s => document.querySelector(s);
@@ -1766,6 +1774,7 @@ function persistColl(){ sSet(K.coll, { owned:[...S.owned] }); scheduleSync(); }
 /* R5-J: in-app added creators + their harvested decks ride in K.creators (previously unused). */
 function persistCreators(){ sSet(K.creators, { channels:S.addedCreators, decks:S.addedCreatorDecks }); scheduleSync(); }
 function persistMySyns(){ sSet(K.mysyns, S.mySyns || []); scheduleSync(); }
+function persistMyArches(){ sSet(K.myarches, S.myArches || []); scheduleSync(); }
 
 /* ============ R5-I: CROSS-DEVICE SYNC (KV via the relay) ============
    Every path is guarded by (S.syncToken && SYNC_URL) + try/catch, so with no token
@@ -1777,6 +1786,7 @@ function buildStateBlob(){
     creators:S.addedCreators||[],
     creatorDecksCache:S.addedCreatorDecks||[],
     mySyns:S.mySyns||[],
+    myArches:S.myArches||[],
     prefs:S.prefs };
 }
 /* R6: the serialization boundary for the sync PUT — a draft-free blob. buildStateBlob() stays
@@ -1799,17 +1809,19 @@ function mergeState(local, remote){
   const cdKey = x => (x.chId||'') + '|' + (x.url||'') + '|' + (x.name||'');
   const cdMap = {}; [...(remote.creatorDecksCache||[]), ...(local.creatorDecksCache||[])].forEach(x => { if(x) cdMap[cdKey(x)] = x; });
   const msById = {}; [...(local.mySyns||[]), ...(remote.mySyns||[])].forEach(g => { if(g && g.id) msById[g.id] = g; });   // union like creators
+  const maById = {}; [...(local.myArches||[]), ...(remote.myArches||[])].forEach(g => { if(g && g.id) maById[g.id] = g; });
   return { decks, activeId, owned:[...owned], creators:Object.values(crById),
-           creatorDecksCache: Object.values(cdMap), mySyns:Object.values(msById), prefs };
+           creatorDecksCache: Object.values(cdMap), mySyns:Object.values(msById), myArches:Object.values(maById), prefs };
 }
 function applyStateBlob(b){
   S.decks=b.decks||[]; S.activeId=b.activeId; S.owned=new Set(b.owned||[]);
   if(b.creators) S.addedCreators=b.creators;
   if(b.creatorDecksCache) S.addedCreatorDecks=b.creatorDecksCache;
   if(b.mySyns) S.mySyns=b.mySyns;
+  if(b.myArches) S.myArches=b.myArches;
   healCreatorIds();   // R11.1: synced copies may still carry UC-less ids from the buggy window
   if(b.prefs) S.prefs=Object.assign(S.prefs, b.prefs);
-  persistDecks(); persistColl(); persistCreators(); persistMySyns(); sSet(K.prefs, S.prefs);
+  persistDecks(); persistColl(); persistCreators(); persistMySyns(); persistMyArches(); sSet(K.prefs, S.prefs);
 }
 let _syncT;
 function scheduleSync(){ if(!S.syncToken || !SYNC_URL) return; clearTimeout(_syncT); _syncT=setTimeout(syncPush, 2000); }
@@ -1954,7 +1966,7 @@ function inDeck(defid){ const d=activeDeck(); return !!d && d.cards.includes(def
 function toggleCard(defid){
   const d = ensureDraft();
   const i = d.cards.indexOf(defid);
-  if(i >= 0){ d.cards.splice(i,1); }
+  if(i >= 0){ d.cards.splice(i,1); if(Array.isArray(d.flex)) d.flex = d.flex.filter(x => x !== defid); }
   else {
     /* R7 review fix: tokens are created in play — never one of the 12. Block ADD only
        (removal above still works, so a deck corrupted before this guard can be healed). */
@@ -2654,6 +2666,12 @@ function fitSuggestions(max, opts){
       const have = g.ids.filter(id => inSet.has(id)).length;
       if(have) consider(13 + 3*Math.min(have, 3), g.note ? ('your combo — ' + g.note.slice(0, 30)) : 'your combo');
     }
+    // your shaped archetypes: 2+ members already in the deck -> offer the rest
+    for(const g of (S.myArches || [])){
+      if(!g || !Array.isArray(g.ids) || g.ids.indexOf(c.d) < 0) continue;
+      const have = g.ids.filter(id => inSet.has(id)).length;
+      if(have >= 2) consider(10 + 2*Math.min(have, 4), 'your ' + (g.name || 'archetype'));
+    }
     if(pairs){
       let pn = 0, best = 0, bestId = null;
       for(const id of d.cards){
@@ -2696,11 +2714,13 @@ function renderFitShelf(){
 function openSwapSheet(candId){
   const d = activeDeck(); const cand = getCard(candId);
   if(!d || !cand || d.cards.length < 12) return;
+  const flex = new Set(Array.isArray(d.flex) ? d.flex : []);
   const rows = sortedDeckCards(d).slice()
-    .sort((a,b) => Math.abs(a.c-cand.c) - Math.abs(b.c-cand.c) || (a.c-b.c) || a.n.localeCompare(b.n));
+    .sort((a,b) => (flex.has(b.d)?1:0) - (flex.has(a.d)?1:0)   // your declared flex slots lead the line-up
+      || Math.abs(a.c-cand.c) - Math.abs(b.c-cand.c) || (a.c-b.c) || a.n.localeCompare(b.n));
   openModal('<h2>Swap in ' + esc(cand.n) + '</h2>'+
-    '<div class="mnote">for&hellip; (closest costs first)</div>'+
-    '<div class="minigrid swapgrid">' + rows.map(miniHtml).join('') + '</div>'+
+    '<div class="mnote">for&hellip; (' + (flex.size ? 'your flex slots first, then closest costs' : 'closest costs first') + ')</div>'+
+    '<div class="minigrid swapgrid">' + rows.map(c => { const h = miniHtml(c); return flex.has(c.d) ? h.replace('class="mini', 'class="mini flexed') : h; }).join('') + '</div>'+
     '<div class="mrow"><button class="abtn subtle" onclick="closeModal()">Never mind</button></div>');
   const grid = document.querySelector('#modal .swapgrid');
   if(grid) grid.onclick = e => {
@@ -2851,7 +2871,13 @@ function openCardSheet(defid){
         '<div class="mrow">'+
           '<button class="abtn'+(own?'':' subtle')+'" id="sh-own">'+(own?'&#10003; Owned':'Mark owned')+'</button>'+
           '<button class="abtn '+(inD?'danger':'primary')+'" id="sh-add">'+(inD?'Remove from deck':'Add to deck')+'</button>'+
-        '</div>')
+        '</div>'+
+        // flex marking: only meaningful for a card that's currently in the deck
+        (inD ? (function(){
+          const dd = activeDeck(); const isFlex = !!(dd && Array.isArray(dd.flex) && dd.flex.indexOf(defid) >= 0);
+          return '<div class="mrow"><button class="abtn'+(isFlex?'':' subtle')+'" id="sh-flex">'+(isFlex?'&#9873; Flex slot &#10003;':'&#9873; Mark as flex slot')+'</button></div>'+
+            '<div class="mnote" style="margin-top:4px">Flex slots are your swappable cards &mdash; the coach and swap ideas target them first.</div>';
+        })() : ''))
   );
   const shAdd = $('#sh-add'), shOwn = $('#sh-own');
   if(shAdd) shAdd.onclick = () => { closeModal(); toggleCard(defid); };
@@ -2859,6 +2885,15 @@ function openCardSheet(defid){
     own ? S.owned.delete(defid) : S.owned.add(defid);
     buzz();
     persistColl(); renderAll(); openCardSheet(defid);
+  };
+  const shFlex = $('#sh-flex');
+  if(shFlex) shFlex.onclick = () => {
+    const dd = activeDeck(); if(!dd) return;
+    dd.flex = Array.isArray(dd.flex) ? dd.flex : [];
+    const j = dd.flex.indexOf(defid);
+    if(j >= 0) dd.flex.splice(j, 1); else dd.flex.push(defid);
+    buzz(); touchMeta(dd);   // meta edit: flex marking must not un-complete a done deck
+    renderAll(); openCardSheet(defid);
   };
 }
 
@@ -4199,6 +4234,9 @@ function renderDeck(){
   let html = cards.map(c => { const h = miniHtml(c); return keyset.has(c.d) ? h.replace('class="mini', 'class="mini keycard') : h; }).join('');
   for(let i=cards.length; i<12; i++) html += '<div class="mini empty">+</div>';
   dl.innerHTML = html;
+  (Array.isArray(d.flex) ? d.flex : []).forEach(id => {
+    const m = dl.querySelector('.mini[data-d="' + id + '"]'); if(m) m.classList.add('flexed');
+  });
   dl.onclick = e => {
     const m = e.target.closest('.mini'); if(!m) return;
     if(m.classList.contains('empty')){ setTab('cards'); return; }
@@ -4585,6 +4623,11 @@ function renderDeckbar(){ // kept name; now renders the pinned zone + header
   for(let i=cards.length; i<12; i++) html += '<div class="mini empty">+</div>';
   dz.innerHTML = html;
   syncDecktray(html);
+  // flex slots wear their flag in the build zone + bench strip
+  (Array.isArray(d.flex) ? d.flex : []).forEach(id => {
+    const a = dz.querySelector('.mini[data-d="' + id + '"]'); if(a) a.classList.add('flexed');
+    const b = document.querySelector('#dt .mini[data-d="' + id + '"]'); if(b) b.classList.add('flexed');
+  });
   if(S._pop){ // the card that just landed pops into place
     const pm = dz.querySelector('.mini[data-d="'+S._pop+'"]');
     if(pm) pm.classList.add('pop');
@@ -5341,8 +5384,10 @@ function deckAsText(){
   const d = activeDeck();
   if(!d) return '(no deck on the bench)';
   if(!d.cards.length) return '(deck is currently empty)';
+  const flex = new Set(Array.isArray(d.flex) ? d.flex : []);
   return sortedDeckCards(d).map(c =>
-    c.c+'-cost '+c.p+'-power '+c.n+(c.stub ? ' (card text unknown locally)' : (c.a ? ': '+c.a : ': no ability'))
+    c.c+'-cost '+c.p+'-power '+c.n+(flex.has(c.d) ? ' [FLEX SLOT — the user is happy to swap this]' : '')+
+    (c.stub ? ' (card text unknown locally)' : (c.a ? ': '+c.a : ': no ability'))
   ).join('\n') + gamePlanText(d);
 }
 /* R7-C: append the planned game-plan (all non-empty lines) so shared/coach text carries the play line. */
@@ -5687,6 +5732,15 @@ function renderArchetypes(){
     return h;
   }).join('') + '</div>';
   const ownTag = list => hasColl ? ' <span class="cs-n">you own ' + list.filter(c => S.owned.has(c.d)).length + '/' + list.length + '</span>' : ' <span class="cs-n">' + list.length + '</span>';
+  // YOUR archetypes first — the game has far more archetypes than any rules engine
+  // can know (Heimdall Move, Darkhawk, Hela…), so the list is yours to shape.
+  const mine = (S.myArches||[]).map(g => {
+    const cards = (g.ids||[]).map(id => getCard(id)).filter(Boolean);
+    return '<div class="coll-section">' + esc(g.name) + ownTag(cards) +
+      ' <button class="arc-edit" data-arcedit="' + esc(g.id) + '" type="button">Edit</button>' +
+      ' <button class="arc-edit danger" data-arcdel="' + esc(g.id) + '" type="button">Delete</button></div>' +
+      (g.note ? '<div class="arc-hint">' + esc(g.note) + '</div>' : '') + grid(cards);
+  }).join('');
   const sections = GUIDE_ARCHES.map(g => {
     let label, hint, groups;
     if(g.key){
@@ -5703,8 +5757,62 @@ function renderArchetypes(){
       (hint ? '<div class="arc-hint">' + esc(hint) + '</div>' : '') + parts;
   }).join('');
   box.innerHTML =
-    '<div class="mnote">Auto-classified from live card text — imperfect by nature, but always current. ' + (hasColl ? 'Cards you don&rsquo;t own are dimmed.' : '') + '</div>' + sections;
-  box.onclick = e => { const m = e.target.closest('.mini'); if(m) openCardSheet(m.dataset.d); };
+    '<div class="mnote">Your own archetypes come first — shape them freely; the builder&rsquo;s suggestions learn from them. Below, auto-classified groups from live card text' + (hasColl ? '; cards you don&rsquo;t own are dimmed' : '') + '.</div>' +
+    '<button class="abtn" id="btn-addarch" style="width:100%; margin-bottom:6px">&#65291; New archetype</button>' +
+    mine + sections;
+  const ab = $('#btn-addarch'); if(ab) ab.onclick = () => openArchEditor(null);
+  box.onclick = e => {
+    const ed = e.target.closest('[data-arcedit]');
+    if(ed){ const g = (S.myArches||[]).find(x => x.id === ed.dataset.arcedit); if(g) openArchEditor(g); return; }
+    const del = e.target.closest('[data-arcdel]');
+    if(del){ S.myArches = (S.myArches||[]).filter(x => x.id !== del.dataset.arcdel); persistMyArches(); renderArchetypes(); renderFitShelf(); return; }
+    const m = e.target.closest('.mini'); if(m) openCardSheet(m.dataset.d);
+  };
+}
+/* create/edit a user archetype — same search-and-tap picker as My Synergies, plus a name */
+function openArchEditor(g){
+  const editing = !!(g && g.id);
+  let sel = (g && Array.isArray(g.ids)) ? g.ids.slice() : [];
+  openModal('<h2>' + (editing ? 'Edit archetype' : 'New archetype') + '</h2>' +
+    '<div class="mrow"><input id="arch-name" class="minput" type="text" maxlength="40" placeholder="Archetype name (e.g. Heimdall Move)" autocomplete="off"></div>' +
+    '<div id="syn-sel"></div>' +
+    '<div class="mrow"><input id="syn-q" class="minput" type="search" placeholder="Type a card name to add it&hellip;" autocomplete="off" autocapitalize="off" spellcheck="false"></div>' +
+    '<div id="syn-matches"></div>' +
+    '<div class="mrow"><textarea id="syn-note" maxlength="200" placeholder="How does it play? (optional)"></textarea></div>' +
+    '<div class="mrow"><button class="abtn primary" id="arch-save">Save archetype</button><button class="abtn" id="arch-cancel">Cancel</button></div>');
+  const nameEl = $('#arch-name'); if(nameEl) nameEl.value = (g && g.name) || '';
+  const noteEl = $('#syn-note'); if(noteEl) noteEl.value = (g && g.note) || '';
+  const paint = () => {
+    const sb = $('#syn-sel'); if(!sb) return;
+    sb.innerHTML = sel.length
+      ? sel.map(id => miniHtml(getCard(id) || makeStub(id))).join('')
+      : '<div class="odds-hint">No cards yet — search below, tap to add. Tap a picked card to drop it.</div>';
+    const q = (($('#syn-q') || {}).value || '').trim().toLowerCase();
+    const mb = $('#syn-matches'); if(!mb) return;
+    mb.innerHTML = q
+      ? S.db.filter(c => !sel.includes(c.d) && c.n.toLowerCase().includes(q)).slice(0, 12).map(miniHtml).join('')
+      : '';
+  };
+  $('#syn-sel').onclick = e => { const m = e.target.closest('.mini'); if(!m) return; sel = sel.filter(x => x !== m.dataset.d); paint(); };
+  $('#syn-matches').onclick = e => {
+    const m = e.target.closest('.mini'); if(!m) return;
+    if(!sel.includes(m.dataset.d)) sel.push(m.dataset.d);
+    const q = $('#syn-q'); if(q) q.value = '';
+    paint();
+  };
+  $('#syn-q').oninput = paint;
+  $('#arch-cancel').onclick = closeModal;
+  $('#arch-save').onclick = () => {
+    const name = (($('#arch-name') || {}).value || '').trim().slice(0, 40);
+    if(!name){ toast('Give it a name first'); return; }
+    if(sel.length < 2){ toast('Pick at least two cards'); return; }
+    const note = (($('#syn-note') || {}).value || '').trim().slice(0, 200);
+    if(editing){ const gg = (S.myArches||[]).find(x => x.id === g.id); if(gg){ gg.name = name; gg.ids = sel.slice(); gg.note = note; } }
+    else { S.myArches = S.myArches || []; S.myArches.push({ id: uid(), name, ids: sel.slice(), note }); }
+    persistMyArches(); closeModal(); renderArchetypes(); renderFitShelf();
+    toast(editing ? 'Archetype updated' : 'Saved — the builder suggests from it now');
+  };
+  paint();
 }
 
 /* ============ SEASON COUNTDOWN ============ */
@@ -5918,6 +6026,8 @@ async function boot(){
   if(cr){ S.addedCreators = cr.channels || []; S.addedCreatorDecks = cr.decks || []; }
   const ms = await sGet(K.mysyns);
   if(Array.isArray(ms)) S.mySyns = ms.filter(g => g && g.id && Array.isArray(g.ids));
+  const ma = await sGet(K.myarches);
+  if(Array.isArray(ma)) S.myArches = ma.filter(g => g && g.id && g.name && Array.isArray(g.ids));
   if(healCreatorIds()) persistCreators();   // R11.1: normalize UC-less ids saved by the buggy window
   refreshAddedCreators();                   // R16: quiet daily re-harvest of followed channels (never blocks boot)
   // R5-I: device-local sync token (never in a URL), then pull-and-merge remote once at boot.

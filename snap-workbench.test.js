@@ -544,7 +544,45 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.querySelectorAll('#modal .var-fig').length===1 && /Dan Hipp/.test(d.getElementById('modal').textContent),
     'LIB: tapping a card opens its gallery with artist credits');
   w.eval('closeModal(); S.variants=null; S.varQ=""; document.getElementById("var-q").value="";');
-  w.eval('setLibPage("cards")'); await sleep(10);
+  // My archetypes: create via the editor, renders first in the guide, feeds the fit engine
+  w.eval('S.myArches=[]; setLibPage("arc");'); await sleep(20);
+  d.getElementById('btn-addarch').click(); await sleep(20);
+  assert(d.getElementById('arch-name')!==null, 'ARCH: New archetype opens the editor with a name field');
+  const _arcType = async (txt) => { const q=d.getElementById('syn-q'); q.value=txt; q.dispatchEvent(new w.window.Event('input',{bubbles:true})); await sleep(20); };
+  d.getElementById('arch-name').value='Wong Ball';
+  await _arcType('wong'); d.querySelector('#syn-matches .mini[data-d="Wong"]').click(); await sleep(20);
+  await _arcType('odin'); d.querySelector('#syn-matches .mini[data-d="Odin"]').click(); await sleep(20);
+  await _arcType('black panther'); d.querySelector('#syn-matches .mini[data-d="BlackPanther"]').click(); await sleep(20);
+  d.getElementById('syn-note').value='Double On Reveals, Panther gets huge.';
+  d.getElementById('arch-save').click(); await sleep(30);
+  assert(w.eval('S.myArches.length')===1 && w.eval('S.myArches[0].name')==='Wong Ball' && w.eval('S.myArches[0].ids.length')===3, 'ARCH: Save records name + cards + note');
+  assert(/Wong Ball/.test(d.getElementById('arclist').textContent) && /Double On Reveals/.test(d.getElementById('arclist').textContent),
+    'ARCH: the custom archetype renders at the top of the guide');
+  assert(d.querySelector('#arclist [data-arcedit]')!==null && d.querySelector('#arclist [data-arcdel]')!==null, 'ARCH: custom sections carry Edit + Delete');
+  // fit engine: 2 members in deck -> the third is suggested as "your Wong Ball"
+  w.eval('(function(){ var dd={id:"arcfit",name:"",cards:["Wong","Odin","Hulk"],updated:Date.now()}; S.decks.unshift(dd); S.activeId="arcfit"; })(); renderAll();'); await sleep(20);
+  const _arcSugg = w.eval('fitSuggestions(20).map(s=>({d:s.c.d,why:s.why}))').find(s=>s.d==='BlackPanther');
+  assert(_arcSugg!==undefined && /your Wong Ball/.test(_arcSugg.why), 'ARCH: fitSuggestions offers the missing member as "your Wong Ball"');
+  assert(w.eval('buildStateBlob().myArches.length')===1, 'ARCH: archetypes ride the sync blob');
+  // flex slots: sheet toggle, badges, swap-order priority, coach text
+  w.eval('setTab("deck"); openCardSheet("Hulk");'); await sleep(20);
+  assert(d.querySelector('#modal #sh-flex')!==null, 'FLEX: in-deck card sheet offers the flex toggle');
+  d.querySelector('#modal #sh-flex').click(); await sleep(30);
+  assert(w.eval('(activeDeck().flex||[]).indexOf("Hulk")')>=0, 'FLEX: toggling marks the card as flex on the deck');
+  assert(/Flex slot ✓/.test(d.querySelector('#modal #sh-flex').textContent), 'FLEX: the sheet reflects the flex state');
+  w.eval('closeModal(); renderAll();'); await sleep(20);
+  assert(d.querySelector('#decklist .mini[data-d="Hulk"]').classList.contains('flexed'), 'FLEX: the hero grid badges the flex card');
+  assert(d.querySelector('#dz .mini[data-d="Hulk"]').classList.contains('flexed') && d.querySelector('#dt .mini[data-d="Hulk"]').classList.contains('flexed'),
+    'FLEX: build zone + bench strip badge it too');
+  assert(/\[FLEX SLOT/.test(w.eval('deckAsText()')), 'FLEX: the coach is told which cards are flex');
+  w.eval('(function(){ var dd=activeDeck(); dd.cards=dd.cards.concat(S.db.filter(function(c){return dd.cards.indexOf(c.d)<0;}).slice(0,9).map(function(c){return c.d;})); touch(dd); })(); renderAll();'); await sleep(20);
+  w.eval('openSwapSheet(S.db.filter(function(c){return activeDeck().cards.indexOf(c.d)<0;})[0].d);'); await sleep(20);
+  assert(d.querySelector('#modal .swapgrid .mini').dataset.d==='Hulk' && /flex slots first/.test(d.getElementById('modal').textContent),
+    'FLEX: the swap sheet leads with flex slots');
+  w.eval('closeModal(); (activeDeck().flex||[]).length=0; toggleCard("Hulk");'); await sleep(20);
+  assert(w.eval('(activeDeck().flex||[]).indexOf("Hulk")')<0, 'FLEX: removing a card clears its flex mark');
+  w.eval('S.decks=S.decks.filter(function(x){return x.id!=="arcfit";}); S.activeId=null; S.myArches=[]; renderAll();'); await sleep(10);
+  w.eval('setTab("collection"); setLibPage("cards")'); await sleep(10);
   w.eval('setTab("deck")'); await sleep(10);
   assert(!d.body.classList.contains('on-cards'), 'floating tool cluster is gated OFF elsewhere (Deck tab)');
   w.eval('setTab("collection")'); await sleep(10);
