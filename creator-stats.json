@@ -1201,8 +1201,8 @@
     "Magik",
     "EsmeCuckoo",
     "Wong",
-    "MotherAskani",
     "Stick",
+    "MotherAskani",
     "SymbioteSpiderMan",
     "BlackPanther",
     "ArnimZola",
@@ -1241,8 +1241,8 @@
     "Mercury",
     "Prodigy",
     "ElsaBloodstone",
-    "MotherAskani",
-    "WolverineHorseman"
+    "WolverineHorseman",
+    "MotherAskani"
    ]
   },
   {
@@ -1358,9 +1358,9 @@
    "published": "2026-07-11",
    "ids": [
     "Wasp",
-    "LadyBullseye",
     "GrandMaster",
     "KateBishop",
+    "LadyBullseye",
     "Scorpion",
     "WerewolfByNight",
     "Prowler",
@@ -1432,11 +1432,11 @@
     "MajesticWingbeat",
     "Batroc",
     "SpiderManBrandNewDay",
+    "LukeCage",
     "Kraven",
     "SamWilson",
     "ScarletWitch",
     "Silk",
-    "LukeCage",
     "HydraStomper",
     "MotherAskani",
     "IronMan",
@@ -1521,11 +1521,11 @@
    "ids": [
     "Dazzler",
     "EzekielSims",
+    "LukeCage",
     "GrandMaster",
     "Lizard",
     "Maximus",
     "Cerebro",
-    "LukeCage",
     "Crystal",
     "LunaSnow",
     "Malekith",
