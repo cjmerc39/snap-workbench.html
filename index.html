@@ -1108,8 +1108,23 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   border-radius:6px; padding:1px 6px; margin-left:4px;}
 #upclist .ota-txt span, #toklist .ota-txt span{overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;}
 .tok-makers{color:var(--iris-soft,#b794ff) !important; font-size:10.5px !important;}
-/* archetype guide */
-.arc-hint{font-size:12px; color:var(--dim); margin:2px 2px 8px; line-height:1.45;}
+/* archetype guide — an accordion of compact header rows, one open at a time */
+.arc-chips{display:flex; flex-wrap:wrap; gap:6px; margin:2px 0 10px;}
+.arc-chip{background:var(--raise); border:none; color:var(--dim); border-radius:999px;
+  padding:5px 11px; font-size:11px; font-weight:800;}
+.arc-chip.mine{color:var(--gold);}
+.arc-chip:active{background:var(--gold); color:var(--iris-ink);}
+.arc-acc{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:12px;
+  margin-bottom:6px; overflow:hidden;}
+.arc-acc.open{box-shadow:inset 0 0 0 1px rgba(170,140,255,.35);}
+.arc-head{display:flex; align-items:center; gap:10px; padding:10px 12px; cursor:pointer;}
+.arc-ht{flex:1; min-width:0;}
+.arc-ht b{font-size:13.5px;}
+.arc-oneline{font-size:11.5px; color:var(--dim); margin-top:2px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.arc-chev{color:var(--faint); font-size:12px; flex-shrink:0; transition:transform .15s;}
+.arc-acc.open .arc-chev{transform:rotate(180deg);}
+.arc-body{padding:0 12px 12px;}
 .arc-sub{font-size:11px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--faint); margin:10px 2px 6px;}
 .arc-grid{display:flex; flex-wrap:wrap; gap:6px;}
 .arc-grid .mini{width:52px; flex:0 0 52px; cursor:pointer;}
@@ -5723,8 +5738,32 @@ const GUIDE_ARCHES = [
       { name:'Hand-size payoffs', match: c => /for each (other )?card in your hand|if your hand is full|enters your hand/i.test(c.a||'') },
     ]},
 ];
-function renderArchetypes(){
-  const box = $('#arclist'); if(!box) return;
+/* The guide is an accordion: every archetype (yours first) collapses to a compact
+   header row — name, one-line hint, owned count — and only one opens at a time.
+   Card grids are built lazily on first open; chips at the top jump to any section. */
+function arcSections(){
+  // YOUR archetypes first — the game has far more archetypes than any rules engine
+  // can know (Heimdall Move, Darkhawk, Hela…), so the list is yours to shape.
+  const secs = (S.myArches||[]).map(g => {
+    const cards = (g.ids||[]).map(id => getCard(id)).filter(Boolean);
+    return { key:'my-' + g.id, label:g.name, hint:g.note || '', mine:g, groups:[{ name:'', list:cards }], all:cards };
+  });
+  GUIDE_ARCHES.forEach((g, i) => {
+    let label, hint, groups;
+    if(g.key){
+      const rule = SYNERGY_RULES.find(r => r.key === g.key); if(!rule) return;
+      label = rule.label; hint = rule.hint;
+      groups = [ { name:'Enablers', match: rule.isEnabler }, { name:'Payoffs', match: rule.isPayoff } ];
+    } else { label = g.label; hint = g.hint; groups = g.groups; }
+    const filled = groups.map(gr => ({ name:gr.name, list:S.db.filter(gr.match) })).filter(x => x.list.length);
+    if(!filled.length) return;
+    const seen = new Set(), all = [];
+    filled.forEach(x => x.list.forEach(c => { if(!seen.has(c.d)){ seen.add(c.d); all.push(c); } }));
+    secs.push({ key:'g' + i, label, hint:hint || '', groups:filled, all });
+  });
+  return secs;
+}
+function arcBodyHtml(s){
   const hasColl = S.owned.size > 0;
   const grid = list => '<div class="arc-grid">' + list.slice().sort(SORTS[0].fn).map(c => {
     let h = miniHtml(c);
@@ -5732,41 +5771,58 @@ function renderArchetypes(){
     return h;
   }).join('') + '</div>';
   const ownTag = list => hasColl ? ' <span class="cs-n">you own ' + list.filter(c => S.owned.has(c.d)).length + '/' + list.length + '</span>' : ' <span class="cs-n">' + list.length + '</span>';
-  // YOUR archetypes first — the game has far more archetypes than any rules engine
-  // can know (Heimdall Move, Darkhawk, Hela…), so the list is yours to shape.
-  const mine = (S.myArches||[]).map(g => {
-    const cards = (g.ids||[]).map(id => getCard(id)).filter(Boolean);
-    return '<div class="coll-section">' + esc(g.name) + ownTag(cards) +
-      ' <button class="arc-edit" data-arcedit="' + esc(g.id) + '" type="button">Edit</button>' +
-      ' <button class="arc-edit danger" data-arcdel="' + esc(g.id) + '" type="button">Delete</button></div>' +
-      (g.note ? '<div class="arc-hint">' + esc(g.note) + '</div>' : '') + grid(cards);
-  }).join('');
-  const sections = GUIDE_ARCHES.map(g => {
-    let label, hint, groups;
-    if(g.key){
-      const rule = SYNERGY_RULES.find(r => r.key === g.key); if(!rule) return '';
-      label = rule.label; hint = rule.hint;
-      groups = [ { name:'Enablers', match: rule.isEnabler }, { name:'Payoffs', match: rule.isPayoff } ];
-    } else { label = g.label; hint = g.hint; groups = g.groups; }
-    const parts = groups.map(gr => {
-      const list = S.db.filter(gr.match);
-      return list.length ? '<div class="arc-sub">' + esc(gr.name) + ownTag(list) + '</div>' + grid(list) : '';
-    }).join('');
-    if(!parts) return '';
-    return '<div class="coll-section">' + esc(label) + '</div>' +
-      (hint ? '<div class="arc-hint">' + esc(hint) + '</div>' : '') + parts;
-  }).join('');
+  return s.groups.map(gr =>
+    (gr.name ? '<div class="arc-sub">' + esc(gr.name) + ownTag(gr.list) + '</div>' : '') + grid(gr.list)).join('');
+}
+function renderArchetypes(){
+  const box = $('#arclist'); if(!box) return;
+  const hasColl = S.owned.size > 0;
+  const secs = arcSections();
+  if(S.arcOpen && !secs.some(s => s.key === S.arcOpen)) S.arcOpen = null;
+  const count = s => hasColl ? 'you own ' + s.all.filter(c => S.owned.has(c.d)).length + '/' + s.all.length : s.all.length + ' cards';
   box.innerHTML =
-    '<div class="mnote">Your own archetypes come first — shape them freely; the builder&rsquo;s suggestions learn from them. Below, auto-classified groups from live card text' + (hasColl ? '; cards you don&rsquo;t own are dimmed' : '') + '.</div>' +
-    '<button class="abtn" id="btn-addarch" style="width:100%; margin-bottom:6px">&#65291; New archetype</button>' +
-    mine + sections;
+    '<div class="mnote">Tap an archetype to open it' + (hasColl ? ' — cards you don&rsquo;t own are dimmed' : '') + '. Your own archetypes come first; the builder&rsquo;s suggestions learn from them.</div>' +
+    '<button class="abtn" id="btn-addarch" style="width:100%; margin-bottom:8px">&#65291; New archetype</button>' +
+    '<div class="arc-chips">' + secs.map(s =>
+      '<button class="arc-chip' + (s.mine ? ' mine' : '') + '" type="button" data-arcjump="' + esc(s.key) + '">' + esc(s.label) + '</button>').join('') + '</div>' +
+    secs.map(s =>
+      '<div class="arc-acc" data-arckey="' + esc(s.key) + '"><div class="arc-head">' +
+        '<div class="arc-ht"><b>' + esc(s.label) + '</b> <span class="cs-n">' + count(s) + '</span>' +
+          (s.mine ? ' <button class="arc-edit" data-arcedit="' + esc(s.mine.id) + '" type="button">Edit</button>' +
+                    '<button class="arc-edit danger" data-arcdel="' + esc(s.mine.id) + '" type="button">Delete</button>' : '') +
+          (s.hint ? '<div class="arc-oneline">' + esc(s.hint) + '</div>' : '') + '</div>' +
+        '<span class="arc-chev">&#9662;</span></div>' +
+      '<div class="arc-body" hidden></div></div>').join('');
+  const openSec = key => {
+    const cur = box.querySelector('.arc-acc.open');
+    if(cur){ cur.classList.remove('open'); cur.querySelector('.arc-body').hidden = true; }
+    const acc = box.querySelector('.arc-acc[data-arckey="' + key + '"]'); if(!acc){ S.arcOpen = null; return null; }
+    const body = acc.querySelector('.arc-body');
+    if(!body.innerHTML){ const s = secs.find(x => x.key === key); if(s) body.innerHTML = arcBodyHtml(s); }
+    acc.classList.add('open'); body.hidden = false; S.arcOpen = key;
+    return acc;
+  };
+  if(S.arcOpen) openSec(S.arcOpen);
   const ab = $('#btn-addarch'); if(ab) ab.onclick = () => openArchEditor(null);
   box.onclick = e => {
     const ed = e.target.closest('[data-arcedit]');
     if(ed){ const g = (S.myArches||[]).find(x => x.id === ed.dataset.arcedit); if(g) openArchEditor(g); return; }
     const del = e.target.closest('[data-arcdel]');
     if(del){ S.myArches = (S.myArches||[]).filter(x => x.id !== del.dataset.arcdel); persistMyArches(); renderArchetypes(); renderFitShelf(); return; }
-    const m = e.target.closest('.mini'); if(m) openCardSheet(m.dataset.d);
+    const m = e.target.closest('.mini');
+    if(m){ openCardSheet(m.dataset.d); return; }
+    const chip = e.target.closest('[data-arcjump]');
+    if(chip){
+      const acc = openSec(chip.dataset.arcjump);
+      if(acc && acc.scrollIntoView) try{ acc.scrollIntoView({ block:'start', behavior:'smooth' }); }catch(err){}
+      return;
+    }
+    const hd = e.target.closest('.arc-head');
+    if(hd){
+      const acc = hd.closest('.arc-acc');
+      if(acc.classList.contains('open')){ acc.classList.remove('open'); acc.querySelector('.arc-body').hidden = true; S.arcOpen = null; }
+      else openSec(acc.dataset.arckey);
+    }
   };
 }
 /* create/edit a user archetype — same search-and-tap picker as My Synergies, plus a name */
@@ -5807,8 +5863,8 @@ function openArchEditor(g){
     if(!name){ toast('Give it a name first'); return; }
     if(sel.length < 2){ toast('Pick at least two cards'); return; }
     const note = (($('#syn-note') || {}).value || '').trim().slice(0, 200);
-    if(editing){ const gg = (S.myArches||[]).find(x => x.id === g.id); if(gg){ gg.name = name; gg.ids = sel.slice(); gg.note = note; } }
-    else { S.myArches = S.myArches || []; S.myArches.push({ id: uid(), name, ids: sel.slice(), note }); }
+    if(editing){ const gg = (S.myArches||[]).find(x => x.id === g.id); if(gg){ gg.name = name; gg.ids = sel.slice(); gg.note = note; } S.arcOpen = 'my-' + g.id; }
+    else { const nid = uid(); S.myArches = S.myArches || []; S.myArches.push({ id: nid, name, ids: sel.slice(), note }); S.arcOpen = 'my-' + nid; }
     persistMyArches(); closeModal(); renderArchetypes(); renderFitShelf();
     toast(editing ? 'Archetype updated' : 'Saved — the builder suggests from it now');
   };
@@ -5885,16 +5941,44 @@ function renderVariants(){
   const q = (S.varQ||'').trim().toLowerCase();
   const entries = S.db.filter(c => S.variants[c.d] && S.variants[c.d].length && (!q || c.n.toLowerCase().includes(q)));
   entries.sort((a,b) => S.variants[b.d].length - S.variants[a.d].length || a.n.localeCompare(b.n));
-  const shown = entries.slice(0, 60);
+  // ALL cards render — in batches, so a phone never builds ~466 tiles in one go.
+  // A sentinel below the grid pulls in the next batch as it nears the viewport.
+  if(varIO){ varIO.disconnect(); varIO = null; }
+  S.varList = entries; S.varN = 0;
   box.innerHTML =
     '<div class="mnote">' + (q
       ? entries.length + ' card' + (entries.length === 1 ? ' matches' : 's match') + ' — tap one for its full gallery.'
-      : 'Most-dressed cards first — search to find any card, tap one for its full gallery.') + '</div>' +
-    '<div class="var-grid">' + shown.map(c =>
-      '<div class="var-cell" data-d="' + esc(c.d) + '">' + miniHtml(c) +
-      '<span class="var-n">' + S.variants[c.d].length + '</span></div>').join('') + '</div>' +
-    (entries.length > shown.length ? '<div class="odds-hint">' + (entries.length - shown.length) + ' more — narrow with search.</div>' : '');
+      : 'All ' + entries.length + ' cards with variant art, most-dressed first — tap one for its full gallery.') + '</div>' +
+    '<div class="var-grid"></div><div class="var-more" hidden></div>';
+  varAppend();
+  const sent = box.querySelector('.var-more');
+  if(sent && S.varN < entries.length){
+    sent.hidden = false;
+    if(typeof IntersectionObserver !== 'undefined'){
+      sent.innerHTML = '<div class="odds-hint">Loading more&hellip;</div>';
+      varIO = new IntersectionObserver(es => { if(es.some(x => x.isIntersecting)) varAppend(); }, { rootMargin:'900px' });
+      varIO.observe(sent);
+    }else{
+      sent.innerHTML = '<button class="abtn" id="var-morebtn" type="button" style="width:100%">Show more</button>';
+      const mb = sent.querySelector('#var-morebtn'); if(mb) mb.onclick = varAppend;
+    }
+  }
   box.onclick = e => { const cell = e.target.closest('.var-cell'); if(cell) openVariantsSheet(cell.dataset.d); };
+}
+const VAR_BATCH = 60;
+let varIO = null;
+function varAppend(){
+  const box = $('#varlist'); const grid = box && box.querySelector('.var-grid'); if(!grid) return;
+  const next = (S.varList||[]).slice(S.varN, S.varN + VAR_BATCH);
+  S.varN += next.length;
+  grid.insertAdjacentHTML('beforeend', next.map(c =>
+    '<div class="var-cell" data-d="' + esc(c.d) + '">' + miniHtml(c) +
+    '<span class="var-n">' + S.variants[c.d].length + '</span></div>').join(''));
+  if(S.varN >= (S.varList||[]).length){
+    const sent = box.querySelector('.var-more');
+    if(sent){ sent.hidden = true; sent.innerHTML = ''; }
+    if(varIO){ varIO.disconnect(); varIO = null; }
+  }
 }
 function openVariantsSheet(defid){
   const c = getCard(defid) || makeStub(defid);

@@ -517,14 +517,29 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const mRow = [...d.querySelectorAll('#toklist .tok-row')].find(r=>r.dataset.d==='Mjolnir');
   assert(mRow!==undefined && /Created by Thor/.test(mRow.textContent) && !/Thor \(location\)/.test(mRow.textContent), 'LIB: card makers carry no location tag');
   w.eval('applyTokenData(TOKEN_SEED.tokens, TOKEN_SEED.links); S.upcoming=[];');
-  // Archetype guide: every section groups real cards; owned dimming applies
+  // Archetype guide: accordion — compact headers + jump chips; grids only when opened
   // (an earlier test swapped in a textless fake db — restore the real one first)
-  w.eval('S.db=DB_BASE.slice(); indexDb(); S.owned.add("Wong"); setLibPage("arc");'); await sleep(30);
+  w.eval('S.db=DB_BASE.slice(); indexDb(); S.owned.add("Wong"); S.arcOpen=null; setLibPage("arc");'); await sleep(30);
   assert(/Destroy/.test(d.getElementById('arclist').textContent) && /Bounce/.test(d.getElementById('arclist').textContent)
     && /Ramp/.test(d.getElementById('arclist').textContent), 'LIB: archetype guide renders rule-based and guide-only sections');
-  assert(d.querySelectorAll('#arclist .mini').length>20, 'LIB: archetype sections are populated from the live pool');
+  const _arcN = d.querySelectorAll('#arclist .arc-acc').length;
+  assert(_arcN>=13, 'LIB: every archetype gets a compact header row ('+_arcN+' sections)');
+  assert(d.querySelectorAll('#arclist .arc-chip').length===_arcN, 'LIB: jump chips mirror the section list 1:1');
+  assert(d.querySelectorAll('#arclist .mini').length===0, 'LIB: guide starts fully collapsed — no card grids in the DOM');
+  const _arcSec = lbl => [...d.querySelectorAll('#arclist .arc-acc')].find(a=>a.querySelector('.arc-ht b').textContent===lbl);
+  _arcSec('Destroy').querySelector('.arc-head').click(); await sleep(20);
+  assert(_arcSec('Destroy').classList.contains('open') && _arcSec('Destroy').querySelectorAll('.mini').length>5,
+    'LIB: tapping a header expands its card grid');
   assert(d.querySelectorAll('#arclist .mini.unowned').length>0, 'LIB: unowned cards are dimmed in the guide');
-  w.eval('S.owned.delete("Wong");');
+  _arcSec('Bounce').querySelector('.arc-head').click(); await sleep(20);
+  assert(_arcSec('Bounce').classList.contains('open') && !_arcSec('Destroy').classList.contains('open')
+    && d.querySelectorAll('#arclist .arc-acc.open').length===1, 'LIB: only one section stays open at a time');
+  d.querySelector('#arclist .arc-chip:last-child').click(); await sleep(20);
+  assert(d.querySelector('#arclist .arc-acc:last-child').classList.contains('open')
+    && d.querySelectorAll('#arclist .arc-acc.open').length===1, 'LIB: a jump chip opens exactly its section');
+  d.querySelector('#arclist .arc-acc.open .arc-head').click(); await sleep(20);
+  assert(d.querySelectorAll('#arclist .arc-acc.open').length===0, 'LIB: tapping an open header collapses it again');
+  w.eval('S.owned.delete("Wong"); S.arcOpen=null;');
   // Season countdown: next drop + season detection from branded suffixes
   w.eval('S.upcoming=[{n:"Test Guy",d:"TG1",c:1,p:1,a:"",i:"",rel:"2099-01-05"},'+
     '{n:"A Frost Giants",d:"FG1",c:2,p:2,a:"",i:"",rel:"2099-02-02"},{n:"B Frost Giants",d:"FG2",c:3,p:3,a:"",i:"",rel:"2099-02-09"},'+
@@ -544,6 +559,23 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.querySelectorAll('#modal .var-fig').length===1 && /Dan Hipp/.test(d.getElementById('modal').textContent),
     'LIB: tapping a card opens its gallery with artist credits');
   w.eval('closeModal(); S.variants=null; S.varQ=""; document.getElementById("var-q").value="";');
+  // Variant gallery v2: ALL cards queue up, rendered in batches from a sentinel
+  await w.eval('(async()=>{ const of=window.fetch; const big={}; S.db.slice(0,150).forEach((c,i)=>{ big[c.d]=Array.from({length:(i%4)+1},(_,k)=>({a:"https://x/"+c.d+"/"+k+".webp"})); }); window.fetch=async()=>({ok:true,json:async()=>big}); S.variants=null; setLibPage("var"); await new Promise(r=>setTimeout(r,60)); window.fetch=of; })()');
+  assert(w.eval('S.varList.length')===150, 'VAR: every card with art is queued — no top-60 cap');
+  assert(d.querySelectorAll('#varlist .var-cell').length===60, 'VAR: only the first batch of 60 is in the DOM at load');
+  assert(/All 150 cards/.test(d.getElementById('varlist').textContent), 'VAR: the note says the whole gallery is here');
+  const _vmore = d.querySelector('#varlist #var-morebtn');
+  assert(_vmore!==null, 'VAR: without IntersectionObserver a Show-more button stands in for the sentinel');
+  _vmore.click(); await sleep(10);
+  assert(d.querySelectorAll('#varlist .var-cell').length===120, 'VAR: pulling the sentinel appends the next batch');
+  w.eval('varAppend()'); await sleep(10);
+  assert(d.querySelectorAll('#varlist .var-cell').length===150, 'VAR: the last batch completes the gallery');
+  assert(d.querySelector('#varlist .var-more').hidden===true, 'VAR: the sentinel retires once everything is shown');
+  const _vnm = w.eval('S.varList[0].n');
+  const _vq2 = d.getElementById('var-q'); _vq2.value=_vnm.toLowerCase(); _vq2.dispatchEvent(new w.window.Event('input',{bubbles:true})); await sleep(20);
+  assert(d.querySelectorAll('#varlist .var-cell').length>=1 && d.querySelectorAll('#varlist .var-cell').length<150
+    && w.eval('S.varN')===d.querySelectorAll('#varlist .var-cell').length, 'VAR: search re-renders from batch one');
+  w.eval('S.variants=null; S.varQ=""; document.getElementById("var-q").value="";');
   // My archetypes: create via the editor, renders first in the guide, feeds the fit engine
   w.eval('S.myArches=[]; setLibPage("arc");'); await sleep(20);
   d.getElementById('btn-addarch').click(); await sleep(20);
@@ -559,6 +591,9 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(/Wong Ball/.test(d.getElementById('arclist').textContent) && /Double On Reveals/.test(d.getElementById('arclist').textContent),
     'ARCH: the custom archetype renders at the top of the guide');
   assert(d.querySelector('#arclist [data-arcedit]')!==null && d.querySelector('#arclist [data-arcdel]')!==null, 'ARCH: custom sections carry Edit + Delete');
+  assert(d.querySelector('#arclist .arc-acc').dataset.arckey.indexOf('my-')===0
+    && d.querySelector('#arclist .arc-acc .arc-ht b').textContent==='Wong Ball', 'ARCH: the custom archetype is the first accordion section');
+  assert(d.querySelector('#arclist .arc-acc.open .mini[data-d="Wong"]')!==null, 'ARCH: a freshly saved archetype opens with its cards showing');
   // fit engine: 2 members in deck -> the third is suggested as "your Wong Ball"
   w.eval('(function(){ var dd={id:"arcfit",name:"",cards:["Wong","Odin","Hulk"],updated:Date.now()}; S.decks.unshift(dd); S.activeId="arcfit"; })(); renderAll();'); await sleep(20);
   const _arcSugg = w.eval('fitSuggestions(20).map(s=>({d:s.c.d,why:s.why}))').find(s=>s.d==='BlackPanther');
