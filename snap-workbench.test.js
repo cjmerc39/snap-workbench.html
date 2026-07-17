@@ -507,7 +507,16 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(/Created by Thanos/.test(d.getElementById('toklist').textContent), 'LIB: tokens name their makers (stones -> Thanos)');
   d.querySelector('#toklist .tok-row').click(); await sleep(20);
   assert(d.getElementById('modalwrap').classList.contains('on') && /Token/.test(d.getElementById('modal').textContent), 'LIB: tapping a token opens its read-only sheet');
-  w.eval('closeModal(); S.upcoming=[];');
+  w.eval('closeModal();');
+  // makers map from cards.json: abilities render on rows, locations named as makers
+  w.eval('applyTokenData(Object.values(S.tokens).concat([{n:"Vibranium",d:"Vibranium",c:1,p:4,a:"Ongoing: indestructible."}]), S.tokenLinks,'+
+    '{Vibranium:[{n:"Vibranium Mines",loc:true},{n:"Destroyed Mansion",loc:true}], Mjolnir:[{n:"Thor",loc:false}]}); setLibPage("tok");'); await sleep(20);
+  const vRow = [...d.querySelectorAll('#toklist .tok-row')].find(r=>r.dataset.d==='Vibranium');
+  assert(vRow!==undefined && /Ongoing: indestructible/.test(vRow.textContent), 'LIB: token abilities render on the row');
+  assert(/Created by Vibranium Mines \(location\), Destroyed Mansion \(location\)/.test(vRow.textContent), 'LIB: location makers are named (Vibranium <= Vibranium Mines)');
+  const mRow = [...d.querySelectorAll('#toklist .tok-row')].find(r=>r.dataset.d==='Mjolnir');
+  assert(mRow!==undefined && /Created by Thor/.test(mRow.textContent) && !/Thor \(location\)/.test(mRow.textContent), 'LIB: card makers carry no location tag');
+  w.eval('applyTokenData(TOKEN_SEED.tokens, TOKEN_SEED.links); S.upcoming=[];');
   w.eval('setLibPage("cards")'); await sleep(10);
   w.eval('setTab("deck")'); await sleep(10);
   assert(!d.body.classList.contains('on-cards'), 'floating tool cluster is gated OFF elsewhere (Deck tab)');

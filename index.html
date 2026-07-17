@@ -1107,6 +1107,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .upc-date{color:var(--iris-soft,#b794ff); font-weight:800; font-size:10.5px; background:rgba(170,140,255,.12);
   border-radius:6px; padding:1px 6px; margin-left:4px;}
 #upclist .ota-txt span, #toklist .ota-txt span{overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;}
+.tok-makers{color:var(--iris-soft,#b794ff) !important; font-size:10.5px !important;}
 /* OTA balance history (Library) + per-card history on the sheet */
 #otalist{margin-top:4px;}
 .ota-date{font-family:var(--head); font-weight:800; letter-spacing:.6px; font-size:11px; text-transform:uppercase;
@@ -1549,7 +1550,7 @@ function sanitizeLinks(links){
   return out;
 }
 /* intake from cards.json (or the seed). Non-fatal + tolerant: bad/empty tokens -> seed fallback. */
-function applyTokenData(tokens, links){
+function applyTokenData(tokens, links, makers){
   if(Array.isArray(tokens) && tokens.length){
     S.tokens = buildTokenMap(tokens);
     S.tokenLinks = sanitizeLinks(links);
@@ -1557,12 +1558,22 @@ function applyTokenData(tokens, links){
     S.tokens = buildTokenMap(TOKEN_SEED.tokens);
     S.tokenLinks = sanitizeLinks(TOKEN_SEED.links);
   }
+  // who creates each token — cards AND locations (Vibranium <= Vibranium Mines)
+  S.tokenMakers = {};
+  if(makers && typeof makers === 'object' && !Array.isArray(makers)){
+    for(const k in makers){
+      if(!Array.isArray(makers[k])) continue;
+      const a = makers[k].filter(m => m && typeof m.n === 'string' && m.n).map(m => ({ n:String(m.n), loc:!!m.loc }));
+      if(a.length) S.tokenMakers[k] = a;
+    }
+  }
 }
 
 /* ============ STATE ============ */
 const S = {
   tokens: buildTokenMap(TOKEN_SEED.tokens),       // R7-D: id -> token def (token:true). Seeded now; cards.json overrides at boot.
   tokenLinks: sanitizeLinks(TOKEN_SEED.links),    // R7-D: producer id -> [token id]
+  tokenMakers: {},                                // token id -> [{n, loc}] — who creates it (cards AND locations)
   locations: [],                                  // R12: {n,d,a,r,i} from cards.json; empty -> feature hidden
   db: DB_BASE.slice(),
   dbLabel: DB_BASE_LABEL,
@@ -5450,7 +5461,7 @@ async function loadSiteData(){
     S.db = cards;
     S.dbLabel = 'auto-updated' + (j.updated ? ' ' + j.updated : '');
     S.siteData = true;
-    applyTokenData(j.tokens, j.links);   // R7-D: additive token intake — non-fatal; missing/garbage -> TOKEN_SEED
+    applyTokenData(j.tokens, j.links, j.madeBy);   // R7-D: additive token intake — non-fatal; missing/garbage -> TOKEN_SEED
     // R12: additive locations intake — absent/garbage -> [] and the whole feature stays hidden
     S.locations = (Array.isArray(j.locations) ? j.locations : []).filter(l => l && l.d && l.n)
       .map(l => ({ n:String(l.n), d:String(l.d), a:String(l.a||''), r:String(l.r||''), i:(l.i && /^https?:\/\//.test(l.i)) ? String(l.i) : '' }));
@@ -5545,15 +5556,21 @@ function renderTokensPage(){
   const box = $('#toklist'); if(!box) return;
   const toks = Object.values(S.tokens || {});
   if(!toks.length){ box.innerHTML = '<div class="odds-hint">No token data in this database snapshot.</div>'; return; }
-  const makers = {};   // token id -> [producer names]
+  const fallback = {};   // no makers map (seed data) -> reverse the play-line links
   for(const pid in (S.tokenLinks || {}))
-    (S.tokenLinks[pid] || []).forEach(tid => { (makers[tid] = makers[tid] || []).push((getCard(pid) || { n: pid }).n); });
+    (S.tokenLinks[pid] || []).forEach(tid => { (fallback[tid] = fallback[tid] || []).push({ n:(getCard(pid) || { n: pid }).n, loc:false }); });
+  const makerText = t => {
+    const ms = (S.tokenMakers && S.tokenMakers[t.d]) || fallback[t.d] || [];
+    if(!ms.length) return 'Created in play';
+    return 'Created by ' + ms.map(m => m.n + (m.loc ? ' (location)' : '')).join(', ');
+  };
   box.innerHTML =
-    '<div class="mnote">Cards created in play — they never count as one of your 12, but they show up on play lines.</div>' +
+    '<div class="mnote">Cards created in play — by other cards or by locations. They never count as one of your 12.</div>' +
     toks.slice().sort((a,b) => a.n.localeCompare(b.n)).map(t =>
       '<div class="ota-row tok-row" data-d="' + esc(t.d) + '">' + synThumb(t.d) +
       '<div class="ota-txt"><b>' + esc(t.n) + ' <span class="upc-stats">[' + t.c + '/' + t.p + ']</span></b>' +
-      '<span>' + esc((makers[t.d] && makers[t.d].length ? 'Created by ' + makers[t.d].join(', ') : 'Created in play')) + '</span></div></div>').join('');
+      (t.a ? '<span>' + esc(t.a) + '</span>' : '') +
+      '<span class="tok-makers">' + esc(makerText(t)) + '</span></div></div>').join('');
   box.onclick = e => { const r = e.target.closest('.tok-row'); if(r) openCardSheet(r.dataset.d); };
 }
 document.querySelectorAll('#lib-home [data-libgo]').forEach(b => b.onclick = () => setLibPage(b.dataset.libgo));

@@ -239,10 +239,15 @@ out.sort((a, b) => (a.c - b.c) || a.n.localeCompare(b.n));
 // ---- R7: enrich tokens with feed art + advisory drift scan (curated table stays the source of truth) ----
 const feedById = {};
 for (const c of raw) if (c.carddefid) feedById[c.carddefid] = c;
+const cleanAb = (s) => { const a = strip(s); return (!a || a === `!none`) ? `` : a; };   // feed uses "!none" for blank
 const outTokens = TOKENS.map(t => {
   const f = feedById[t.d];
   const tok = { n: t.n, d: t.d, c: +t.c || 0, p: +t.p || 0, a: t.a || `` };
-  if (f && f.art && /^https?:\/\//.test(f.art)) tok.i = String(f.art);   // nicer chips when the token has real art
+  if (f) {
+    if (f.art && /^https?:\/\//.test(f.art)) tok.i = String(f.art);      // nicer chips when the token has real art
+    const ab = cleanAb(f.ability);
+    if (ab) tok.a = ab;                                                  // tokens have REAL abilities (stones, arrows, Mjolnir…)
+  }
   return tok;
 });
 const missingArt = outTokens.filter(t => !t.i).map(t => t.d);
@@ -259,9 +264,10 @@ for (const [pid, toks] of Object.entries(LINKS)) {
   });
   if (!hit) console.log(`LINK DRIFT >>> `, pid, `ability no longer mentions its token(s):`, toks.join(`,`));
 }
-// token sanity floor (mirror the 200-card floor): refuse to shrink the curated table under a bad edit.
+// token sanity floor (mirror the 200-card floor): refuse to shrink the shipped token set
+// under a bad edit. Checked at write time (below) against curated + codex combined,
+// because prevTokenCount includes the auto-discovered codex entries too.
 const tokenFloor = Math.max(15, prevTokenCount);
-if (outTokens.length < tokenFloor) { console.error(`token sanity check failed: only`, outTokens.length, `tokens (<`, tokenFloor, `), not writing`); process.exit(1); }
 
 // ---- R12: locations (additive key on cards.json; the app hides the feature when absent) ----
 const LOC_FEED = `https://marvelsnapzone.com/getinfo/?searchtype=locations&searchcardstype=true`;
@@ -288,7 +294,56 @@ if (outLocs.length < 50) {
   } catch (e) {}
 }
 
-fs.writeFileSync(`cards.json`, JSON.stringify({ updated: new Date().toISOString().slice(0, 10), cards: out, tokens: outTokens, links: LINKS, locations: outLocs, upcoming: upcomingFinal }));
+// ---- created-cards codex: auto-discover tokens/summons beyond the curated table ----
+// Any unreleased entry whose NAME appears in a released card's or location's text is a
+// created card (Vibranium <= Vibranium Mines, Symbiote <= Klyntar, Winter Soldier <= Bucky…).
+// Display-only: these never join LINKS, so the play-line's owner-playable list is untouched.
+const madeBy = {};                    // token defid -> [{n, loc:true?}] — who creates it
+const codexTokens = [];
+{
+  const nameRe = (nm) => new RegExp(`\\b` + nm.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`) + `\\b`, `i`);
+  const releasedChars = raw.filter((c) => c.type === `Character` && c.status === `released`);
+  const curatedIds = new Set(TOKENS.map((t) => t.d));
+  // makers for the CURATED tokens: cards from LINKS + locations that name them
+  for (const [pid, toks] of Object.entries(LINKS)) {
+    const pf = feedById[pid];
+    for (const tid of toks) (madeBy[tid] = madeBy[tid] || []).push({ n: pf ? strip(pf.name) : pid });
+  }
+  for (const t of TOKENS) {
+    const re = nameRe(t.n);
+    for (const l of outLocs) if (re.test(l.a)) (madeBy[t.d] = madeBy[t.d] || []).push({ n: l.n, loc: true });
+  }
+  // discovery pass over everything else that's unreleased
+  for (const u of raw) {
+    if (u.type !== `Character` || u.status === `released` || !u.carddefid || curatedIds.has(u.carddefid)) continue;
+    const nm = strip(u.name);
+    if (nm.length < 3 || nm.includes(` - `) || nm.endsWith(` Champion`)) continue;
+    const re = nameRe(nm);
+    const makers = [];
+    for (const c of releasedChars) if (re.test(strip(c.ability))) makers.push({ n: strip(c.name) });
+    for (const l of outLocs) if (re.test(l.a)) makers.push({ n: l.n, loc: true });
+    if (!makers.length) continue;
+    const tok = { n: nm, d: u.carddefid, c: +u.cost || 0, p: +u.power || 0, a: cleanAb(u.ability) };
+    if (u.art && /^https?:\/\//.test(u.art)) tok.i = String(u.art);
+    codexTokens.push(tok);
+    madeBy[u.carddefid] = makers;
+  }
+  // dedupe maker names per token
+  for (const k in madeBy) {
+    const seen2 = new Set();
+    madeBy[k] = madeBy[k].filter((m) => { const key = (m.loc ? `L:` : `C:`) + m.n; if (seen2.has(key)) return false; seen2.add(key); return true; });
+  }
+  console.log(`codex: +`, codexTokens.length, `auto-discovered created cards (`, codexTokens.map((t) => t.n).join(`, `), `)`);
+}
+if (outTokens.length + codexTokens.length < tokenFloor) {
+  console.error(`token sanity check failed: only`, outTokens.length + codexTokens.length, `tokens (<`, tokenFloor, `), not writing`);
+  process.exit(1);
+}
+// a discovered created-card is a token, not an upcoming release — keep it off the Data mines page
+const codexIds = new Set(codexTokens.map((t) => t.d));
+const upcomingClean = upcomingFinal.filter((u) => !codexIds.has(u.d));
+
+fs.writeFileSync(`cards.json`, JSON.stringify({ updated: new Date().toISOString().slice(0, 10), cards: out, tokens: outTokens.concat(codexTokens), links: LINKS, madeBy, locations: outLocs, upcoming: upcomingClean }));
 console.log(`wrote`, out.length, `cards +`, outTokens.length, `tokens /`, Object.keys(LINKS).length, `producers +`, outLocs.length, `locations +`, upcomingFinal.length, `upcoming (` + upcomingFinal.filter(u => u.rel).length + ` scheduled)`);
 
 // ---- OTA ledger write: prepend today's diffs to card-changes.json (capped) ----
