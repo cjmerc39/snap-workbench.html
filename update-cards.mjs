@@ -354,12 +354,18 @@ console.log(`wrote`, out.length, `cards +`, outTokens.length, `tokens /`, Object
   let vTotal = 0;
   for (const c of raw) {
     if (c.type !== `Character` || c.status !== `released` || !shippedIds.has(c.carddefid) || !Array.isArray(c.variants)) continue;
+    // keep EVERY variant with real art — the feed's per-variant status lags weeks behind
+    // the game, so filtering on it silently dropped hundreds of live variants. Released
+    // art sorts first; the rest is tagged u:1 so the gallery can label it "datamined".
+    const isRel = (v) => String(v.status || ``).toLowerCase() === `released`;
     const vs = c.variants
-      .filter((v) => v && v.art && /^https?:\/\//.test(v.art) && String(v.status || ``).toLowerCase() === `released`)
+      .filter((v) => v && v.art && /^https?:\/\//.test(v.art))
+      .sort((x, y) => (isRel(x) ? 0 : 1) - (isRel(y) ? 0 : 1))
       .map((v) => {
         const e = { a: String(v.art) };
         const by = strip(v.sketcher || ``) || strip(v.colorist || ``);
         if (by) e.by = by;
+        if (!isRel(v)) e.u = 1;
         return e;
       });
     if (vs.length) { vout[c.carddefid] = vs; vTotal += vs.length; }

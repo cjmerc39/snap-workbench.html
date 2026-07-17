@@ -1157,6 +1157,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .var-fig img{width:100%; border-radius:12px; display:block; background:var(--card); aspect-ratio:33/44; object-fit:cover;}
 .var-fig figcaption{font-size:10.5px; color:var(--faint); margin-top:3px; text-align:center;
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.var-fig .dm{color:var(--iris-soft,#b794ff); font-weight:800;}
 /* OTA balance history (Library) + per-card history on the sheet */
 #otalist{margin-top:4px;}
 .ota-date{font-family:var(--head); font-weight:800; letter-spacing:.6px; font-size:11px; text-transform:uppercase;
@@ -5987,7 +5988,9 @@ function openVariantsSheet(defid){
     '<h2>' + esc(c.n) + ' <span class="cs-n">' + vs.length + ' variant' + (vs.length === 1 ? '' : 's') + '</span></h2>' +
     '<div class="var-sheet">' + vs.map(v =>
       '<figure class="var-fig"><img loading="lazy" decoding="async" src="' + esc(v.a) + '" alt="">' +
-      (v.by ? '<figcaption>' + esc(v.by) + '</figcaption>' : '') + '</figure>').join('') + '</div>');
+      (v.by || v.u ? '<figcaption>' + esc(v.by || '') +
+        (v.u ? (v.by ? ' &middot; ' : '') + '<span class="dm">datamined</span>' : '') + '</figcaption>' : '') +
+      '</figure>').join('') + '</div>');
 }
 if($('#var-q')) $('#var-q').addEventListener('input', e => { S.varQ = e.target.value; renderVariants(); });
 

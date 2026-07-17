@@ -549,15 +549,17 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.querySelectorAll('#ssnlist .upc-row').length===4, 'LIB: the release timeline lists every scheduled card');
   w.eval('S.upcoming=[];');
   // Variant gallery: lazy load, search, per-card sheet with artist credits
-  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>({Wong:[{a:"https://x/1.webp",by:"Artgerm"},{a:"https://x/2.webp"}],Hulk:[{a:"https://x/3.webp",by:"Dan Hipp"}]})}); S.variants=null; setLibPage("var"); await new Promise(r=>setTimeout(r,50)); window.fetch=of; })()');
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>({Wong:[{a:"https://x/1.webp",by:"Artgerm"},{a:"https://x/2.webp"}],Hulk:[{a:"https://x/3.webp",by:"Dan Hipp"},{a:"https://x/4.webp",u:1}]})}); S.variants=null; setLibPage("var"); await new Promise(r=>setTimeout(r,50)); window.fetch=of; })()');
   assert(w.eval('S.variants && Object.keys(S.variants).length')===2, 'LIB: variants.json lazy-loads on first open');
   assert(d.querySelectorAll('#varlist .var-cell').length===2 && /2/.test(d.querySelector('#varlist .var-cell .var-n').textContent),
     'LIB: gallery shows one cell per card with its variant count');
   const _vq = d.getElementById('var-q'); _vq.value='hulk'; _vq.dispatchEvent(new w.window.Event('input',{bubbles:true})); await sleep(20);
   assert(d.querySelectorAll('#varlist .var-cell').length===1, 'LIB: gallery search narrows to matching cards');
   d.querySelector('#varlist .var-cell').click(); await sleep(20);
-  assert(d.querySelectorAll('#modal .var-fig').length===1 && /Dan Hipp/.test(d.getElementById('modal').textContent),
+  assert(d.querySelectorAll('#modal .var-fig').length===2 && /Dan Hipp/.test(d.getElementById('modal').textContent),
     'LIB: tapping a card opens its gallery with artist credits');
+  assert(d.querySelectorAll('#modal .var-fig .dm').length===1 && /datamined/.test(d.querySelector('#modal').textContent),
+    'LIB: not-yet-released variant art wears a datamined tag');
   w.eval('closeModal(); S.variants=null; S.varQ=""; document.getElementById("var-q").value="";');
   // Variant gallery v2: ALL cards queue up, rendered in batches from a sentinel
   await w.eval('(async()=>{ const of=window.fetch; const big={}; S.db.slice(0,150).forEach((c,i)=>{ big[c.d]=Array.from({length:(i%4)+1},(_,k)=>({a:"https://x/"+c.d+"/"+k+".webp"})); }); window.fetch=async()=>({ok:true,json:async()=>big}); S.variants=null; setLibPage("var"); await new Promise(r=>setTimeout(r,60)); window.fetch=of; })()');
