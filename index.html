@@ -5632,15 +5632,50 @@ const GUIDE_ARCHES = [
       { name:'Bouncers', match: c => /return[^.]{0,50}\bhand\b/i.test(c.a||'') },
       { name:'Loves being replayed', match: c => /(when|after|each time)[^.]{0,40}(returned|enters your hand|you play this)/i.test(c.a||'') || /costs? 1 less (each time|for each)/i.test(c.a||'') },
     ]},
-  { label:'Ramp & Big', hint:'Generate extra Energy early, then land your finishers a turn ahead.',
+  { label:'On Reveal', hint:'Double and re-trigger On Reveal effects for exponential value.',
+    groups:[
+      { name:'Re-triggers & doublers', match: c => /on reveal[^.]{0,60}(repeat|twice|again)|repeat the on reveal/i.test(c.a||'') },
+      { name:'Big On Reveal payoffs (5+)', match: c => /^on reveal/i.test(c.a||'') && c.c >= 5 },
+    ]},
+  { label:'Ongoing', hint:'Stack persistent effects, then multiply or copy them.',
+    groups:[
+      { name:'Doublers & copiers', match: c => /ongoing (abilities|effects)[^.]{0,40}(twice|double)|double the ongoing|cop(y|ies) the text/i.test(c.a||'') },
+      { name:'Strong Ongoing effects (4+)', match: c => /^ongoing/i.test(c.a||'') && c.c >= 4 },
+    ]},
+  { label:'Ramp & Big', hint:'Generate extra Energy — or cheat expensive cards out early.',
     groups:[
       { name:'Energy sources', match: c => /extra energy|energy next turn|\+1 energy|max energy|get \+\d energy/i.test(c.a||'') },
+      { name:'Cheat-out engines', match: c => /(add|play)s? the top card of your deck|swap it with (a card|one) from your deck|from your deck to (this|a|each) location/i.test(c.a||'') },
       { name:'Expensive payoffs (6+)', match: c => c.c >= 6 },
     ]},
-  { label:'Wide boards', hint:'Flood cheap bodies, then multiply them with team-wide buffs.',
+  { label:'Wide boards (Zoo)', hint:'Flood cheap bodies, then multiply them with team-wide buffs.',
     groups:[
       { name:'Team buffs', match: c => /ongoing:[^.]{0,60}your (other )?(cards|1-cost)/i.test(c.a||'') || /give your other cards/i.test(c.a||'') },
       { name:'Cheap bodies (1-cost)', match: c => c.c <= 1 && !c.token },
+    ]},
+  { label:'Clog & junk', hint:'Fill the enemy side with garbage, then punish crowded locations.',
+    groups:[
+      { name:'Junk dealers', match: c => /(opponent|enemy)('s)? (side|hand|deck|location)/i.test(c.a||'') && /\b(add|adds|shuffle|gains?|fill)\b/i.test(c.a||'') },
+      { name:'Punishers', match: c => /for each enemy card|enemy (side|location)[^.]{0,25}full|switch(es)? sides/i.test(c.a||'') },
+    ]},
+  { label:'Affliction', hint:'Shrink enemy Power, then feast on negative-Power cards.',
+    groups:[
+      { name:'Afflictors', match: c => /afflict/i.test(c.a||'') || /(enemy|opponent)[^.]{0,40}-\d Power/i.test(c.a||'') },
+      { name:'Negative-Power payoffs', match: c => /negative power|less than 0|below 0|0 or less/i.test(c.a||'') },
+    ]},
+  { label:'Vanilla (Patriot)', hint:'Cards with no abilities hit far above their statline once buffed.',
+    groups:[
+      { name:'Payoffs', match: c => /no abilit/i.test(c.a||'') },
+      { name:'Vanilla bodies', match: c => !(c.a||'').trim() && !c.token },
+    ]},
+  { label:'Cost tribes', hint:'Payoffs that buff every card of one cost — Ka-Zar’s 1s, Surfer’s 3s.',
+    groups:[
+      { name:'Tribal payoffs', match: c => /your (other )?\d-cost/i.test(c.a||'') },
+    ]},
+  { label:'Hand & deck buffs', hint:'Grow cards before they’re played, or reward a full hand.',
+    groups:[
+      { name:'Buffers', match: c => /in your (hand|deck)[^.]{0,30}\+\d|\+\d Power[^.]{0,40}in your (hand|deck)|next card you play/i.test(c.a||'') },
+      { name:'Hand-size payoffs', match: c => /for each (other )?card in your hand|if your hand is full|enters your hand/i.test(c.a||'') },
     ]},
 ];
 function renderArchetypes(){
