@@ -1108,6 +1108,33 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   border-radius:6px; padding:1px 6px; margin-left:4px;}
 #upclist .ota-txt span, #toklist .ota-txt span{overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;}
 .tok-makers{color:var(--iris-soft,#b794ff) !important; font-size:10.5px !important;}
+/* archetype guide */
+.arc-hint{font-size:12px; color:var(--dim); margin:2px 2px 8px; line-height:1.45;}
+.arc-sub{font-size:11px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--faint); margin:10px 2px 6px;}
+.arc-grid{display:flex; flex-wrap:wrap; gap:6px;}
+.arc-grid .mini{width:52px; flex:0 0 52px; cursor:pointer;}
+.mini.unowned{filter:grayscale(.8) brightness(.55);}
+/* season countdown heroes */
+.ssn-hero{background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair); border-radius:14px;
+  padding:14px; margin-bottom:10px; display:flex; flex-direction:column; gap:3px;}
+.ssn-hero.season{box-shadow:inset 0 0 0 1px rgba(170,140,255,.35);}
+.ssn-lab{font-size:10px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; color:var(--faint);}
+.ssn-hero b{font-size:17px;}
+.ssn-days{font-family:var(--head); font-weight:800; font-size:14px; color:var(--gold);}
+.ssn-date{font-size:11px; color:var(--dim);}
+/* variant gallery */
+.var-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:8px;}
+@media (min-width:640px){ .var-grid{grid-template-columns:repeat(6,1fr);} }
+.var-cell{position:relative; cursor:pointer;}
+.var-cell .mini{width:100%;}
+.var-n{position:absolute; top:-5px; right:-4px; z-index:2; background:var(--gold); color:var(--iris-ink);
+  font-size:10px; font-weight:800; border-radius:999px; min-width:17px; height:17px; line-height:17px;
+  text-align:center; padding:0 4px; box-shadow:0 0 0 2px rgba(11,7,20,.9);}
+.var-sheet{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px;}
+.var-fig{margin:0;}
+.var-fig img{width:100%; border-radius:12px; display:block; background:var(--card); aspect-ratio:33/44; object-fit:cover;}
+.var-fig figcaption{font-size:10.5px; color:var(--faint); margin-top:3px; text-align:center;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 /* OTA balance history (Library) + per-card history on the sheet */
 #otalist{margin-top:4px;}
 .ota-date{font-family:var(--head); font-weight:800; letter-spacing:.6px; font-size:11px; text-transform:uppercase;
@@ -1383,6 +1410,21 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
         <span class="lib-txt"><b>Tokens &amp; summons</b><span id="lib-sub-tok">What created cards actually do, and who makes them</span></span>
         <span class="lib-chev">&#8250;</span>
       </button>
+      <button class="lib-btn" data-libgo="arc">
+        <span class="lib-ic">&#129513;</span>
+        <span class="lib-txt"><b>Archetype guide</b><span id="lib-sub-arc">Every archetype&rsquo;s enablers and payoffs, from the live pool</span></span>
+        <span class="lib-chev">&#8250;</span>
+      </button>
+      <button class="lib-btn" data-libgo="ssn">
+        <span class="lib-ic">&#128197;</span>
+        <span class="lib-txt"><b>Season countdown</b><span id="lib-sub-ssn">What drops next, and when the season flips</span></span>
+        <span class="lib-chev">&#8250;</span>
+      </button>
+      <button class="lib-btn" data-libgo="var">
+        <span class="lib-ic">&#127912;</span>
+        <span class="lib-txt"><b>Variant art</b><span id="lib-sub-var">Every variant with its artist</span></span>
+        <span class="lib-chev">&#8250;</span>
+      </button>
     </div>
     <div id="lib-back" hidden>
       <button id="btn-libback" type="button" aria-label="Back to Library">&#8249; Library</button>
@@ -1417,6 +1459,16 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
     </div>
     <div id="lib-tok" class="lib-pane">
       <div id="toklist"></div>
+    </div>
+    <div id="lib-arc" class="lib-pane">
+      <div id="arclist"></div>
+    </div>
+    <div id="lib-ssn" class="lib-pane">
+      <div id="ssnlist"></div>
+    </div>
+    <div id="lib-var" class="lib-pane">
+      <div class="mrow"><input id="var-q" class="minput" type="search" placeholder="Search a card&hellip;" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+      <div id="varlist"></div>
     </div>
   </section>
 </main>
@@ -1597,8 +1649,10 @@ const S = {
   addedCreatorDecks: [],   // R5-J decks harvested from those channels (creatorDecks row shape + added:true, chId)
   mySyns: [],              // user-declared synergies [{id, ids:[defids 2+], note}] — feed the fit engine
   cardChanges: [],         // OTA balance history from card-changes.json [{at, d, n, ch:[{k,from,to}]}]
-  libPage: 'home',         // Library hub page: 'home' | 'cards' | 'locs' | 'ota' | 'upc' | 'tok' (session only)
+  libPage: 'home',         // Library hub page: home|cards|locs|ota|upc|tok|arc|ssn|var (session only)
   upcoming: [],            // datamined/scheduled unreleased cards from cards.json {n,d,c,p,a,i?,rel?}
+  variants: null,          // lazy variants.json {defid:[{a,by?}]} — loaded on first Variant-art open
+  varQ: '',                // variant gallery search (session only)
   synOpen: null,           // which My-synergies row is expanded (session only, one at a time)
   synQ: '',                // My-synergies card search (session only)
   syncToken: '',           // R5-I cross-device bearer token (device-local; never in a URL/log)
@@ -5494,9 +5548,9 @@ async function loadCreatorDecks(){
    sticky so it never scrolls away. Panes are CSS-toggled — everything stays in the
    DOM so the existing render paths (collection grid, locations, OTA) are untouched. */
 function setLibPage(p){
-  S.libPage = ['cards','locs','ota','upc','tok'].indexOf(p) >= 0 ? p : 'home';
-  const map = { home:'lib-home', cards:'lib-cards', locs:'lib-locs', ota:'lib-ota', upc:'lib-upc', tok:'lib-tok' };
-  const titles = { cards:'Cards', locs:'Locations', ota:'Balance changes', upc:'Data mines', tok:'Tokens & summons' };
+  S.libPage = ['cards','locs','ota','upc','tok','arc','ssn','var'].indexOf(p) >= 0 ? p : 'home';
+  const map = { home:'lib-home', cards:'lib-cards', locs:'lib-locs', ota:'lib-ota', upc:'lib-upc', tok:'lib-tok', arc:'lib-arc', ssn:'lib-ssn', var:'lib-var' };
+  const titles = { cards:'Cards', locs:'Locations', ota:'Balance changes', upc:'Data mines', tok:'Tokens & summons', arc:'Archetype guide', ssn:'Season countdown', var:'Variant art' };
   document.querySelectorAll('#view-collection .lib-pane').forEach(el2 =>
     el2.classList.toggle('on', el2.id === map[S.libPage]));
   const bb = $('#lib-back'); if(bb) bb.hidden = S.libPage === 'home';
@@ -5506,6 +5560,9 @@ function setLibPage(p){
   if(S.libPage === 'home') renderLibHome();
   if(S.libPage === 'upc') renderUpcoming();
   if(S.libPage === 'tok') renderTokensPage();
+  if(S.libPage === 'arc') renderArchetypes();
+  if(S.libPage === 'ssn') renderSeason();
+  if(S.libPage === 'var') renderVariants();
   const sc = document.querySelector('main'); if(sc) sc.scrollTop = 0;
 }
 function renderLibHome(){
@@ -5518,6 +5575,25 @@ function renderLibHome(){
     su.textContent = sch + ' scheduled · ' + (S.upcoming.length - sch) + ' datamined';
   }
   const st = $('#lib-sub-tok'); if(st){ const n = Object.keys(S.tokens||{}).length; if(n) st.textContent = n + ' created cards, decoded'; }
+  const sa = $('#lib-sub-arc'); if(sa) sa.textContent = GUIDE_ARCHES.length + ' archetypes — enablers and payoffs from the live pool';
+  const ss = $('#lib-sub-ssn');
+  if(ss){
+    const info = seasonInfo();
+    if(info){
+      const dd = Math.ceil((Date.parse(info.sched[0].rel) - Date.now()) / 86400000);
+      ss.textContent = 'Next drop: ' + info.sched[0].n + (dd <= 0 ? ' today' : dd === 1 ? ' tomorrow' : ' in ' + dd + ' days');
+    }
+  }
+  const sv = $('#lib-sub-var');
+  if(sv && S.variants){ const n = Object.values(S.variants).reduce((s,a) => s + a.length, 0); if(n) sv.textContent = n + ' art pieces with artist credits'; }
+}
+/* one unreleased-card row — shared by Data mines and the Season timeline */
+function upcRow(u, withDate){
+  return '<div class="ota-row upc-row" data-d="' + esc(u.d) + '">' +
+    (u.i ? '<span class="syn-thumb" style="background-image:url(&quot;' + esc(u.i) + '&quot;)"></span>' : '<span class="syn-thumb noart">' + esc(initials(u)) + '</span>') +
+    '<div class="ota-txt"><b>' + esc(u.n) + ' <span class="upc-stats">[' + u.c + '/' + u.p + ']</span>' +
+    (withDate && u.rel ? ' <span class="upc-date">' + esc(u.rel) + '</span>' : '') + '</b>' +
+    '<span>' + esc(u.a || 'No ability text datamined yet') + '</span></div></div>';
 }
 /* Data mines: scheduled releases (dated, soonest first) then datamined leaks. Read-only —
    these cards are NOT in S.db, so they can't sneak into decks or the coach's pool. */
@@ -5528,12 +5604,7 @@ function renderUpcoming(){
     return;
   }
   const sched = S.upcoming.filter(u => u.rel), mined = S.upcoming.filter(u => !u.rel);
-  const row = u =>
-    '<div class="ota-row upc-row" data-d="' + esc(u.d) + '">' +
-      (u.i ? '<span class="syn-thumb" style="background-image:url(&quot;' + esc(u.i) + '&quot;)"></span>' : '<span class="syn-thumb noart">' + esc(initials(u)) + '</span>') +
-      '<div class="ota-txt"><b>' + esc(u.n) + ' <span class="upc-stats">[' + u.c + '/' + u.p + ']</span>' +
-      (u.rel ? ' <span class="upc-date">' + esc(u.rel) + '</span>' : '') + '</b>' +
-      '<span>' + esc(u.a || 'No ability text datamined yet') + '</span></div></div>';
+  const row = u => upcRow(u, true);
   box.innerHTML =
     '<div class="mnote">Straight from the game files via the nightly update. Stats and text often change before launch — nothing here counts toward decks yet.</div>' +
     (sched.length ? '<div class="coll-section">Scheduled releases <span class="cs-n">' + sched.length + '</span></div>' + sched.map(row).join('') : '') +
@@ -5551,6 +5622,148 @@ function openUpcomingSheet(defid){
     '<div class="mnote">' + (u.rel ? 'Scheduled release: ' + esc(u.rel) : 'Datamined — no release date yet') + ' &middot; unreleased cards can change before launch</div>'
   );
 }
+/* ============ ARCHETYPE GUIDE (display-only card groups) ============ */
+/* The 3 shared SYNERGY_RULES plus guide-only archetypes. These matchers NEVER feed the
+   fit engine or deck analysis — imperfect regexes are fine for a browsing guide. */
+const GUIDE_ARCHES = [
+  { key:'destroy', hint:null }, { key:'discard', hint:null }, { key:'move', hint:null },   // resolved from SYNERGY_RULES
+  { label:'Bounce', hint:'Return your own cheap cards to hand and replay them for value.',
+    groups:[
+      { name:'Bouncers', match: c => /return[^.]{0,50}\bhand\b/i.test(c.a||'') },
+      { name:'Loves being replayed', match: c => /(when|after|each time)[^.]{0,40}(returned|enters your hand|you play this)/i.test(c.a||'') || /costs? 1 less (each time|for each)/i.test(c.a||'') },
+    ]},
+  { label:'Ramp & Big', hint:'Generate extra Energy early, then land your finishers a turn ahead.',
+    groups:[
+      { name:'Energy sources', match: c => /extra energy|energy next turn|\+1 energy|max energy|get \+\d energy/i.test(c.a||'') },
+      { name:'Expensive payoffs (6+)', match: c => c.c >= 6 },
+    ]},
+  { label:'Wide boards', hint:'Flood cheap bodies, then multiply them with team-wide buffs.',
+    groups:[
+      { name:'Team buffs', match: c => /ongoing:[^.]{0,60}your (other )?(cards|1-cost)/i.test(c.a||'') || /give your other cards/i.test(c.a||'') },
+      { name:'Cheap bodies (1-cost)', match: c => c.c <= 1 && !c.token },
+    ]},
+];
+function renderArchetypes(){
+  const box = $('#arclist'); if(!box) return;
+  const hasColl = S.owned.size > 0;
+  const grid = list => '<div class="arc-grid">' + list.slice().sort(SORTS[0].fn).map(c => {
+    let h = miniHtml(c);
+    if(hasColl && !S.owned.has(c.d)) h = h.replace('class="mini', 'class="mini unowned');
+    return h;
+  }).join('') + '</div>';
+  const ownTag = list => hasColl ? ' <span class="cs-n">you own ' + list.filter(c => S.owned.has(c.d)).length + '/' + list.length + '</span>' : ' <span class="cs-n">' + list.length + '</span>';
+  const sections = GUIDE_ARCHES.map(g => {
+    let label, hint, groups;
+    if(g.key){
+      const rule = SYNERGY_RULES.find(r => r.key === g.key); if(!rule) return '';
+      label = rule.label; hint = rule.hint;
+      groups = [ { name:'Enablers', match: rule.isEnabler }, { name:'Payoffs', match: rule.isPayoff } ];
+    } else { label = g.label; hint = g.hint; groups = g.groups; }
+    const parts = groups.map(gr => {
+      const list = S.db.filter(gr.match);
+      return list.length ? '<div class="arc-sub">' + esc(gr.name) + ownTag(list) + '</div>' + grid(list) : '';
+    }).join('');
+    if(!parts) return '';
+    return '<div class="coll-section">' + esc(label) + '</div>' +
+      (hint ? '<div class="arc-hint">' + esc(hint) + '</div>' : '') + parts;
+  }).join('');
+  box.innerHTML =
+    '<div class="mnote">Auto-classified from live card text — imperfect by nature, but always current. ' + (hasColl ? 'Cards you don&rsquo;t own are dimmed.' : '') + '</div>' + sections;
+  box.onclick = e => { const m = e.target.closest('.mini'); if(m) openCardSheet(m.dataset.d); };
+}
+
+/* ============ SEASON COUNTDOWN ============ */
+/* Season detection is data-driven: scheduled names sharing a trailing brand phrase
+   ("… Fractured Frontier") mark the next season; the earliest such date is its start. */
+function seasonInfo(){
+  const sched = (S.upcoming||[]).filter(u => u.rel).slice().sort((a,b) => a.rel.localeCompare(b.rel));
+  if(!sched.length) return null;
+  const phrase = {};
+  sched.forEach(u => {
+    const w = u.n.split(' ');
+    for(let k = 2; k <= 3; k++) if(w.length > k) phrase[w.slice(-k).join(' ')] = (phrase[w.slice(-k).join(' ')]||0) + 1;
+  });
+  const best = Object.entries(phrase).filter(x => x[1] >= 3).sort((a,b) => b[1]-a[1] || b[0].length-a[0].length)[0];
+  let season = null;
+  if(best){
+    const first = sched.find(u => u.n.endsWith(best[0]));
+    if(first) season = { name: best[0], at: first.rel, count: best[1] };
+  }
+  return { sched, season };
+}
+function renderSeason(){
+  const box = $('#ssnlist'); if(!box) return;
+  const info = seasonInfo();
+  if(!info){ box.innerHTML = '<div class="odds-hint">No scheduled releases in the data right now — check back after the nightly update.</div>'; return; }
+  const days = iso => Math.ceil((Date.parse(iso) - Date.now()) / 86400000);
+  const dtxt = n => n <= 0 ? 'today' : n === 1 ? 'tomorrow' : 'in ' + n + ' days';
+  const next = info.sched[0];
+  let html =
+    '<div class="ssn-hero"><div class="ssn-lab">Next card drop</div><b>' + esc(next.n) + '</b>' +
+    '<span class="ssn-days">' + dtxt(days(next.rel)) + '</span><span class="ssn-date">' + esc(next.rel) + '</span></div>';
+  if(info.season) html +=
+    '<div class="ssn-hero season"><div class="ssn-lab">Next season</div><b>' + esc(info.season.name) + '</b>' +
+    '<span class="ssn-days">' + dtxt(days(info.season.at)) + '</span>' +
+    '<span class="ssn-date">first of ' + info.season.count + ' known cards lands ' + esc(info.season.at) + '</span></div>';
+  let last = null;
+  html += '<div class="coll-section">Release timeline</div>' + info.sched.map(u => {
+    const head = u.rel !== last ? '<div class="ota-date">' + esc(u.rel) + ' · ' + dtxt(days(u.rel)) + '</div>' : '';
+    last = u.rel;
+    return head + upcRow(u, false);
+  }).join('');
+  box.innerHTML = html;
+  box.onclick = e => { const r = e.target.closest('.upc-row'); if(r) openUpcomingSheet(r.dataset.d); };
+}
+
+/* ============ VARIANT ART GALLERY ============ */
+/* variants.json is ~500KB, so it loads lazily the first time this page opens. */
+async function ensureVariants(){
+  if(S.variants) return true;
+  try{
+    const r = await fetch('./variants.json');
+    if(!r.ok) return false;
+    const j = await r.json();
+    if(!j || typeof j !== 'object') return false;
+    S.variants = j;
+    return true;
+  }catch(e){ return false; }
+}
+function renderVariants(){
+  const box = $('#varlist'); if(!box) return;
+  if(!S.variants){
+    box.innerHTML = '<div class="odds-hint">Loading variant art&hellip;</div>';
+    ensureVariants().then(ok => {
+      if(S.libPage !== 'var') return;   // user already navigated away
+      if(!ok){ box.innerHTML = '<div class="odds-hint">Variant data isn&rsquo;t available yet — it ships with the nightly update.</div>'; return; }
+      renderVariants();
+    });
+    return;
+  }
+  const q = (S.varQ||'').trim().toLowerCase();
+  const entries = S.db.filter(c => S.variants[c.d] && S.variants[c.d].length && (!q || c.n.toLowerCase().includes(q)));
+  entries.sort((a,b) => S.variants[b.d].length - S.variants[a.d].length || a.n.localeCompare(b.n));
+  const shown = entries.slice(0, 60);
+  box.innerHTML =
+    '<div class="mnote">' + (q
+      ? entries.length + ' card' + (entries.length === 1 ? ' matches' : 's match') + ' — tap one for its full gallery.'
+      : 'Most-dressed cards first — search to find any card, tap one for its full gallery.') + '</div>' +
+    '<div class="var-grid">' + shown.map(c =>
+      '<div class="var-cell" data-d="' + esc(c.d) + '">' + miniHtml(c) +
+      '<span class="var-n">' + S.variants[c.d].length + '</span></div>').join('') + '</div>' +
+    (entries.length > shown.length ? '<div class="odds-hint">' + (entries.length - shown.length) + ' more — narrow with search.</div>' : '');
+  box.onclick = e => { const cell = e.target.closest('.var-cell'); if(cell) openVariantsSheet(cell.dataset.d); };
+}
+function openVariantsSheet(defid){
+  const c = getCard(defid) || makeStub(defid);
+  const vs = (S.variants && S.variants[defid]) || [];
+  openModal(
+    '<h2>' + esc(c.n) + ' <span class="cs-n">' + vs.length + ' variant' + (vs.length === 1 ? '' : 's') + '</span></h2>' +
+    '<div class="var-sheet">' + vs.map(v =>
+      '<figure class="var-fig"><img loading="lazy" decoding="async" src="' + esc(v.a) + '" alt="">' +
+      (v.by ? '<figcaption>' + esc(v.by) + '</figcaption>' : '') + '</figure>').join('') + '</div>');
+}
+if($('#var-q')) $('#var-q').addEventListener('input', e => { S.varQ = e.target.value; renderVariants(); });
+
 /* Tokens & summons: the created-cards the game never explains — each with its makers */
 function renderTokensPage(){
   const box = $('#toklist'); if(!box) return;

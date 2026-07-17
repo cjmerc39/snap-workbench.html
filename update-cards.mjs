@@ -346,6 +346,30 @@ const upcomingClean = upcomingFinal.filter((u) => !codexIds.has(u.d));
 fs.writeFileSync(`cards.json`, JSON.stringify({ updated: new Date().toISOString().slice(0, 10), cards: out, tokens: outTokens.concat(codexTokens), links: LINKS, madeBy, locations: outLocs, upcoming: upcomingClean }));
 console.log(`wrote`, out.length, `cards +`, outTokens.length, `tokens /`, Object.keys(LINKS).length, `producers +`, outLocs.length, `locations +`, upcomingFinal.length, `upcoming (` + upcomingFinal.filter(u => u.rel).length + ` scheduled)`);
 
+// ---- variants.json: every released variant art per shipped card (lazy-loaded by the
+// Library's Variants gallery — too big to ride cards.json itself) ----
+{
+  const shippedIds = new Set(out.map((c) => c.d));
+  const vout = {};
+  let vTotal = 0;
+  for (const c of raw) {
+    if (c.type !== `Character` || c.status !== `released` || !shippedIds.has(c.carddefid) || !Array.isArray(c.variants)) continue;
+    const vs = c.variants
+      .filter((v) => v && v.art && /^https?:\/\//.test(v.art) && String(v.status || ``).toLowerCase() === `released`)
+      .map((v) => {
+        const e = { a: String(v.art) };
+        const by = strip(v.sketcher || ``) || strip(v.colorist || ``);
+        if (by) e.by = by;
+        return e;
+      });
+    if (vs.length) { vout[c.carddefid] = vs; vTotal += vs.length; }
+  }
+  if (vTotal >= 500) {                                  // never clobber to a thin file on a feed hiccup
+    fs.writeFileSync(`variants.json`, JSON.stringify(vout));
+    console.log(`variants:`, vTotal, `art pieces across`, Object.keys(vout).length, `cards`);
+  } else console.log(`variants: fetch thin (`, vTotal, `), keeping previous file`);
+}
+
 // ---- OTA ledger write: prepend today's diffs to card-changes.json (capped) ----
 {
   const CHOUT = `card-changes.json`;

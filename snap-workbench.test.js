@@ -481,7 +481,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   // Library hub: home page with three doors; the sticky back bar navigates
   w.eval('setLibPage("home")'); await sleep(10);
   assert(d.getElementById('lib-home').classList.contains('on') && d.getElementById('lib-back').hidden, 'LIB: hub home shows the doors, back bar hidden');
-  assert(d.querySelectorAll('#lib-home [data-libgo]').length===5, 'LIB: Cards / Locations / Balance / Data mines / Tokens doors present');
+  assert(d.querySelectorAll('#lib-home [data-libgo]').length===8, 'LIB: all eight doors present (cards/locs/ota/upc/tok/arc/ssn/var)');
   assert(!d.body.classList.contains('on-cards'), 'LIB: tool cluster hidden on the hub (it targets the card grid)');
   d.querySelector('#lib-home [data-libgo="cards"]').click(); await sleep(10);
   assert(d.getElementById('lib-cards').classList.contains('on') && !d.getElementById('lib-home').classList.contains('on'), 'LIB: Cards door opens the cards pane');
@@ -517,6 +517,33 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const mRow = [...d.querySelectorAll('#toklist .tok-row')].find(r=>r.dataset.d==='Mjolnir');
   assert(mRow!==undefined && /Created by Thor/.test(mRow.textContent) && !/Thor \(location\)/.test(mRow.textContent), 'LIB: card makers carry no location tag');
   w.eval('applyTokenData(TOKEN_SEED.tokens, TOKEN_SEED.links); S.upcoming=[];');
+  // Archetype guide: every section groups real cards; owned dimming applies
+  // (an earlier test swapped in a textless fake db — restore the real one first)
+  w.eval('S.db=DB_BASE.slice(); indexDb(); S.owned.add("Wong"); setLibPage("arc");'); await sleep(30);
+  assert(/Destroy/.test(d.getElementById('arclist').textContent) && /Bounce/.test(d.getElementById('arclist').textContent)
+    && /Ramp/.test(d.getElementById('arclist').textContent), 'LIB: archetype guide renders rule-based and guide-only sections');
+  assert(d.querySelectorAll('#arclist .mini').length>20, 'LIB: archetype sections are populated from the live pool');
+  assert(d.querySelectorAll('#arclist .mini.unowned').length>0, 'LIB: unowned cards are dimmed in the guide');
+  w.eval('S.owned.delete("Wong");');
+  // Season countdown: next drop + season detection from branded suffixes
+  w.eval('S.upcoming=[{n:"Test Guy",d:"TG1",c:1,p:1,a:"",i:"",rel:"2099-01-05"},'+
+    '{n:"A Frost Giants",d:"FG1",c:2,p:2,a:"",i:"",rel:"2099-02-02"},{n:"B Frost Giants",d:"FG2",c:3,p:3,a:"",i:"",rel:"2099-02-09"},'+
+    '{n:"C Frost Giants",d:"FG3",c:4,p:4,a:"",i:"",rel:"2099-02-16"}]; setLibPage("ssn");'); await sleep(20);
+  assert(/Next card drop/.test(d.getElementById('ssnlist').textContent) && /Test Guy/.test(d.getElementById('ssnlist').textContent), 'LIB: season page names the next drop');
+  assert(/Next season/.test(d.getElementById('ssnlist').textContent) && /Frost Giants/.test(d.getElementById('ssnlist').textContent), 'LIB: branded suffix detection finds the next season');
+  assert(d.querySelectorAll('#ssnlist .upc-row').length===4, 'LIB: the release timeline lists every scheduled card');
+  w.eval('S.upcoming=[];');
+  // Variant gallery: lazy load, search, per-card sheet with artist credits
+  await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>({Wong:[{a:"https://x/1.webp",by:"Artgerm"},{a:"https://x/2.webp"}],Hulk:[{a:"https://x/3.webp",by:"Dan Hipp"}]})}); S.variants=null; setLibPage("var"); await new Promise(r=>setTimeout(r,50)); window.fetch=of; })()');
+  assert(w.eval('S.variants && Object.keys(S.variants).length')===2, 'LIB: variants.json lazy-loads on first open');
+  assert(d.querySelectorAll('#varlist .var-cell').length===2 && /2/.test(d.querySelector('#varlist .var-cell .var-n').textContent),
+    'LIB: gallery shows one cell per card with its variant count');
+  const _vq = d.getElementById('var-q'); _vq.value='hulk'; _vq.dispatchEvent(new w.window.Event('input',{bubbles:true})); await sleep(20);
+  assert(d.querySelectorAll('#varlist .var-cell').length===1, 'LIB: gallery search narrows to matching cards');
+  d.querySelector('#varlist .var-cell').click(); await sleep(20);
+  assert(d.querySelectorAll('#modal .var-fig').length===1 && /Dan Hipp/.test(d.getElementById('modal').textContent),
+    'LIB: tapping a card opens its gallery with artist credits');
+  w.eval('closeModal(); S.variants=null; S.varQ=""; document.getElementById("var-q").value="";');
   w.eval('setLibPage("cards")'); await sleep(10);
   w.eval('setTab("deck")'); await sleep(10);
   assert(!d.body.classList.contains('on-cards'), 'floating tool cluster is gated OFF elsewhere (Deck tab)');
