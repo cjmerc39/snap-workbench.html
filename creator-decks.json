@@ -1,6 +1,248 @@
 {
-  "updated": "2026-07-16",
+  "updated": "2026-07-17",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "The top tier deck NO ONE IS PLAYING! Lady Bullseye control! - Marvel Snap Infinite Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=pJ2SSVSEWx0",
+      "published": "2026-07-17",
+      "name": "Starlord Lady",
+      "ids": [
+        "FallenOne",
+        "Gambit",
+        "GrandMaster",
+        "LadyBullseye",
+        "LunaSnow",
+        "ShadowKing",
+        "ShangChi",
+        "StarlordMasterOfTheSun",
+        "Sunspot",
+        "SymbioteSpiderMan",
+        "WhiteTiger",
+        "Wong"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/FallenOne-Gambit-GrandMaster-LadyBullseye-LunaSnow-ShadowKing-ShangChi-StarlordMasterOfTheSun-Sunspot-SymbioteSpiderMan-WhiteTiger-Wong_Starlord%20Lady"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Play the THREE BEST BROKEN Decks After the OTA! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=w2FdajkPaBE",
+      "published": "2026-07-17",
+      "name": "Sizer\\'s Version",
+      "ids": [
+        "Arana",
+        "GhostSpider",
+        "MadameWeb",
+        "PeniParker",
+        "DoctorStrange",
+        "MultipleMan",
+        "HumanTorch",
+        "Cosmo",
+        "SpiderPunk",
+        "Isca",
+        "Juggernaut",
+        "SymbioteSpiderMan"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/sizers-version"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Play the THREE BEST BROKEN Decks After the OTA! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=w2FdajkPaBE",
+      "published": "2026-07-17",
+      "name": "AndreVar",
+      "ids": [
+        "Quinjet",
+        "MariaHill",
+        "VictoriaHand",
+        "GrandMaster",
+        "Mirage",
+        "ScarletWitch",
+        "Frigga",
+        "Gambit",
+        "ShadowKing",
+        "GambitHorseman",
+        "MotherAskani",
+        "Stardust"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/andrevarnk6jmy2"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Play the THREE BEST BROKEN Decks After the OTA! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=w2FdajkPaBE",
+      "published": "2026-07-17",
+      "name": "Ika Aurora",
+      "ids": [
+        "SpiderHam",
+        "HydraBob",
+        "Tarantula",
+        "ZombieMisterFantastic",
+        "AwesomeAndy",
+        "SamWilson",
+        "Cosmo",
+        "Venus",
+        "DraxAvatarOfLife",
+        "Isca",
+        "TheThingFirstSteps",
+        "Aurora"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/ika-aurora/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
+      "published": "2026-07-16",
+      "name": "Iron Hand",
+      "ids": [
+        "MajesticWingbeat",
+        "Quinjet",
+        "NicoMinoru",
+        "VictoriaHand",
+        "GrandMaster",
+        "IronPatriot",
+        "Mirage",
+        "MobiusMMobius",
+        "GambitHorseman",
+        "MotherAskani",
+        "MoonGirl",
+        "Sasquatch"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/iron-handuhabf8j/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
+      "published": "2026-07-16",
+      "name": "Sugi Move",
+      "ids": [
+        "Batroc",
+        "SpiderManBrandNewDay",
+        "Tarantula",
+        "Kraven",
+        "SamWilson",
+        "Silk",
+        "Cosmo",
+        "HydraStomper",
+        "NegasonicTeenageWarhead",
+        "Supergiant",
+        "MilesMorales",
+        "WilsonFisk"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/sugi-move0akbk7c/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
+      "published": "2026-07-16",
+      "name": "c3",
+      "ids": [
+        "MBaku",
+        "LukeCage",
+        "Lockjaw",
+        "Quake",
+        "ScarletWitch",
+        "Cerebro",
+        "Chameleon",
+        "Frigga",
+        "Killmonger",
+        "Makkari",
+        "MobiusMMobius",
+        "Bastion"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/c390hqnwv/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
+      "published": "2026-07-16",
+      "name": "Afflict Move?",
+      "ids": [
+        "SpiderManBrandNewDay",
+        "SamWilson",
+        "AuntMay",
+        "Hazmat",
+        "RocketAndGroot",
+        "SpiderPunk",
+        "Laufey",
+        "SpiderMan2099",
+        "MilesMorales",
+        "HighEvolutionary",
+        "Ajax",
+        "Abomination"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/afflict-move4zuti5q/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
+      "published": "2026-07-16",
+      "name": "Agent Var",
+      "ids": [
+        "Quinjet",
+        "Agent13",
+        "VictoriaHand",
+        "GrandMaster",
+        "Mirage",
+        "Frigga",
+        "Gambit",
+        "Mercury",
+        "ShadowKing",
+        "GambitHorseman",
+        "MotherAskani",
+        "Stardust"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/agent-vara4tuc65/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
+      "published": "2026-07-16",
+      "name": "Smitty",
+      "ids": [
+        "Sunspot",
+        "LadyBullseye",
+        "StormHorseman",
+        "Magik",
+        "Wong",
+        "Shuri",
+        "SymbioteSpiderMan",
+        "ManSpider",
+        "FallenOne",
+        "StarlordMasterOfTheSun",
+        "Taskmaster",
+        "FinFangFoom"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/smitty/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
+      "published": "2026-07-16",
+      "name": "Triton",
+      "ids": [
+        "KittyPryde",
+        "Agony",
+        "SpiderManBrandNewDay",
+        "HydraBob",
+        "Tarantula",
+        "ScarletWitch",
+        "Maverick",
+        "Cosmo",
+        "Triton",
+        "Isca",
+        "ScarletSpider",
+        "ShouLao"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/deck-tritonokubk46/"
+    },
     {
       "creator": "Unfitparrot",
       "video": "Kang has returned to CONQUER your way to Infinite! - Marvel Snap Deck Highlight",
@@ -264,28 +506,6 @@
         "Sasquatch"
       ],
       "zone": "https://marvelsnapzone.com/decks/derek2/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "NEW META Shou Lou Deck! This is CRACKED! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=6VsmpgjYH20",
-      "published": "2026-07-12",
-      "name": "Smitty",
-      "ids": [
-        "Sunspot",
-        "LadyBullseye",
-        "StormHorseman",
-        "Magik",
-        "Wong",
-        "Shuri",
-        "SymbioteSpiderMan",
-        "ManSpider",
-        "FallenOne",
-        "StarlordMasterOfTheSun",
-        "Taskmaster",
-        "FinFangFoom"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/smitty/"
     },
     {
       "creator": "Snap Judgments",
@@ -658,226 +878,6 @@
         "Dormammu"
       ],
       "zone": "https://marvelsnapzone.com/decks/jeeeeeth8h32h0/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Tarantula Enables Such BROKEN Combos! Marvel Snap Best Weekend Mission Decks",
-      "url": "https://www.youtube.com/watch?v=eGQAuYAODeY",
-      "published": "2026-07-10",
-      "name": "Ika2",
-      "ids": [
-        "Agony",
-        "SpiderManBrandNewDay",
-        "HydraBob",
-        "JeffTheBabyDolphin",
-        "MrSinister",
-        "Tarantula",
-        "Maverick",
-        "Viv",
-        "SebastianShaw",
-        "JubileeSilverSurfer",
-        "MotherAskani",
-        "CosmicGhostRider"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/ika2/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Tarantula Enables Such BROKEN Combos! Marvel Snap Best Weekend Mission Decks",
-      "url": "https://www.youtube.com/watch?v=eGQAuYAODeY",
-      "published": "2026-07-10",
-      "name": "Naka",
-      "ids": [
-        "HydraBob",
-        "Martyr",
-        "TechnoOrganicVirus",
-        "PunisherWarMachine",
-        "Tarantula",
-        "SuperiorSpiderMan",
-        "Debrii",
-        "Starbrand",
-        "Enchantress",
-        "WilsonFisk",
-        "RedSkull",
-        "Skaar"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/nakape3i90y/"
-    },
-    {
-      "creator": "Unfitparrot",
-      "video": "Tarantula Skaar is the BIGGEST NUMBER deck around! Giveaway! - Marvel Snap Deck Highlight",
-      "url": "https://www.youtube.com/watch?v=mXLBc-HYJqA",
-      "published": "2026-07-09",
-      "name": "Shadow Spider",
-      "ids": [
-        "Ares",
-        "KingEitri",
-        "LunaSnow",
-        "MonstroOctopus",
-        "Quinjet",
-        "Sasquatch",
-        "ShadowlandsDaredevil",
-        "Skaar",
-        "Starbrand",
-        "Tarantula",
-        "TechnoOrganicVirus",
-        "WilsonFisk"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Ares-KingEitri-LunaSnow-MonstroOctopus-Quinjet-Sasquatch-ShadowlandsDaredevil-Skaar-Starbrand-Tarantula-TechnoOrganicVirus-WilsonFisk_Shadow%20Spider"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play This SECRET Meta Deck Top Player's Don't Want You To Know About!",
-      "url": "https://www.youtube.com/watch?v=ZNTTBIh6ZHQ",
-      "published": "2026-07-09",
-      "name": "72.7% WR 44G",
-      "ids": [
-        "MajesticWingbeat",
-        "Batroc",
-        "SpiderManBrandNewDay",
-        "Kraven",
-        "SamWilson",
-        "ScarletWitch",
-        "Silk",
-        "LukeCage",
-        "HydraStomper",
-        "MotherAskani",
-        "IronMan",
-        "Sasquatch"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/727-wr-44g/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play This SECRET Meta Deck Top Player's Don't Want You To Know About!",
-      "url": "https://www.youtube.com/watch?v=ZNTTBIh6ZHQ",
-      "published": "2026-07-09",
-      "name": "Safetyblade1",
-      "ids": [
-        "SpiderManBrandNewDay",
-        "BlackCat",
-        "HydraBob",
-        "Thena",
-        "Havok",
-        "Tarantula",
-        "SamWilson",
-        "Cosmo",
-        "InvisibleWomanFirstSteps",
-        "Isca",
-        "Juggernaut",
-        "TheThingFirstSteps"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/safetyblade1b48911k/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play This SECRET Meta Deck Top Player's Don't Want You To Know About!",
-      "url": "https://www.youtube.com/watch?v=ZNTTBIh6ZHQ",
-      "published": "2026-07-09",
-      "name": "GamingwithFlashx",
-      "ids": [
-        "Deadpool",
-        "X23",
-        "Agony",
-        "Carnage",
-        "Tombstone",
-        "Wolverine",
-        "Killmonger",
-        "Muse",
-        "Venom",
-        "MotherAskani",
-        "Knull",
-        "Death"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/gamingwithflashxf5f06up/"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of TARANTULA | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=z5uc7oDUDhM",
-      "published": "2026-07-07",
-      "name": "Technoantula",
-      "ids": [
-        "Ares",
-        "HydraBob",
-        "Lizard",
-        "Martyr",
-        "MonstroOctopus",
-        "Sasquatch",
-        "ShadowKing",
-        "Skaar",
-        "Starbrand",
-        "Tarantula",
-        "TechnoOrganicVirus",
-        "WilsonFisk"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Ares-HydraBob-Lizard-Martyr-MonstroOctopus-Sasquatch-ShadowKing-Skaar-Starbrand-Tarantula-TechnoOrganicVirus-WilsonFisk_Technoantula?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of TARANTULA | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=z5uc7oDUDhM",
-      "published": "2026-07-07",
-      "name": "Tarantusurf",
-      "ids": [
-        "Brood",
-        "CaptainCarter",
-        "HydraBob",
-        "JeffTheBabyDolphin",
-        "Kraglin",
-        "MotherAskani",
-        "SebastianShaw",
-        "Sera",
-        "SilverSurfer",
-        "Tarantula",
-        "Venus",
-        "Viv"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Brood-CaptainCarter-HydraBob-JeffTheBabyDolphin-Kraglin-MotherAskani-SebastianShaw-Sera-SilverSurfer-Tarantula-Venus-Viv_Tarantusurf?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Unfitparrot",
-      "video": "Finally this deck is GREAT! Tombstone is perfect for Weapon X destroy - Marvel Snap Deck Highlight",
-      "url": "https://www.youtube.com/watch?v=zIL5btxwGQE",
-      "published": "2026-07-07",
-      "name": "Muse Death",
-      "ids": [
-        "ArchangelHorseman",
-        "Carnage",
-        "Death",
-        "Debrii",
-        "Hood",
-        "Killmonger",
-        "MoiraX",
-        "Muse",
-        "SquirrelGirl",
-        "Tombstone",
-        "Venom",
-        "WeaponXWolverine"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/ArchangelHorseman-Carnage-Death-Debrii-Hood-Killmonger-MoiraX-Muse-SquirrelGirl-Tombstone-Venom-WeaponXWolverine_Muse%20Death"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Tarantula fits PERFECTLY in this OP Deck, and Tombstone has a SICK COMBO! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=LZZ-psTBygE",
-      "published": "2026-07-07",
-      "name": "Tarantupergiant",
-      "ids": [
-        "HydraBob",
-        "Martyr",
-        "TechnoOrganicVirus",
-        "Tarantula",
-        "Askanison",
-        "Lizard",
-        "Cosmo",
-        "ShadowKing",
-        "Kraglin",
-        "NegasonicTeenageWarhead",
-        "Supergiant",
-        "WilsonFisk"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/tarantupergiant/"
     }
   ]
 }
