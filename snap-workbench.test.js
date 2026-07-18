@@ -1164,10 +1164,18 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(w.eval('window.__cch')===true && w.eval('S.cardChanges.length')===3, 'OTA: loadCardChanges ingests the ledger');
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>({whatever:1})}); window.__cchB=await loadCardChanges(); window.fetch=of; })()');
   assert(w.eval('window.__cchB')===false && w.eval('S.cardChanges.length')===3, 'OTA: malformed ledger is ignored, state kept');
-  w.eval('renderOtaHistory()'); await sleep(20);
+  w.eval('S.otaOpen=null; renderOtaHistory()'); await sleep(20);
   assert(d.querySelectorAll('#otalist .ota-row').length===3, 'OTA: Library renders one row per change');
-  assert(d.querySelectorAll('#otalist .ota-date').length===2, 'OTA: rows group under their patch date');
+  assert(d.querySelectorAll('#otalist .arc-acc').length===2, 'OTA: changes group into one collapsible block per patch date');
+  assert(d.querySelector('#otalist .arc-acc').classList.contains('open') && d.querySelector('#otalist .arc-acc:last-child .arc-body').hidden===true,
+    'OTA: the newest date starts open, older dates start collapsed');
   assert(/Power 12 → 11/.test(d.querySelector('#otalist .ota-row .ota-txt span').textContent), 'OTA: stat changes read as words');
+  assert(d.querySelector('#otalist .ota-diff .dfw').textContent==='old' && d.querySelector('#otalist .ota-diff .dfa').textContent==='new',
+    'OTA: text changes diff word-by-word — removed red, added green');
+  d.querySelector('#otalist .arc-acc:last-child .arc-head').click(); await sleep(20);
+  assert(d.querySelector('#otalist .arc-acc:last-child .arc-body').hidden===false, 'OTA: tapping a collapsed date expands it');
+  d.querySelector('#otalist .arc-acc:last-child .arc-head').click(); await sleep(20);
+  assert(d.querySelector('#otalist .arc-acc:last-child .arc-body').hidden===true, 'OTA: tapping again collapses the date');
   d.querySelector('#otalist .ota-row').click(); await sleep(20);
   assert(d.getElementById('modalwrap').classList.contains('on') && /Balance history/.test(d.getElementById('modal').textContent)
     && /Power 12 → 11/.test(d.getElementById('modal').textContent) && /Cost 6 → 5/.test(d.getElementById('modal').textContent),

@@ -1171,6 +1171,11 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .sheet-ota-lab{font-family:var(--head); font-weight:800; letter-spacing:.6px; font-size:10px; text-transform:uppercase; color:var(--faint); margin-bottom:5px;}
 .sheet-ota-row{font-size:11.5px; color:var(--dim); margin-top:3px;}
 .sheet-ota-date{color:var(--faint); margin-right:7px; font-weight:700;}
+/* balance-history word diffs: red = removed, green = added */
+.ota-diff{font-size:11px; color:var(--dim); line-height:1.5;}
+.dfw{color:#ff9d8a; text-decoration:line-through; text-decoration-thickness:1px;}
+.dfa{color:#7dde9a; font-weight:700;}
+#otalist .arc-body .ota-row{margin-top:6px;}
 /* R12: version history rows */
 #deckvers{margin-top:12px;}
 .ver-row{display:flex; align-items:center; gap:9px; background:var(--glass-2); box-shadow:inset 0 0 0 1px var(--hair);
@@ -2879,7 +2884,7 @@ function openCardSheet(defid){
       const hist = S.cardChanges.filter(x => x.d === defid);
       if(!hist.length) return '';
       return '<div class="sheet-ota"><div class="sheet-ota-lab">Balance history</div>' +
-        hist.map(x => '<div class="sheet-ota-row"><span class="sheet-ota-date">' + esc(x.at) + '</span>' + esc(otaChangeText(x.ch)) + '</div>').join('') + '</div>';
+        hist.map(x => '<div class="sheet-ota-row"><span class="sheet-ota-date">' + esc(x.at) + '</span>' + otaChangeHtml(x.ch) + '</div>').join('') + '</div>';
     })()+
     (isTok
       ? '<div class="mnote">&#11046; Token &mdash; created in play by another card. It can sit on a play line, but never counts as one of your 12.</div>'
@@ -6030,7 +6035,7 @@ async function loadCardChanges(){
     return true;
   }catch(e){ return false; }
 }
-/* human words for one change entry: c=cost p=power a=text s=series */
+/* human words for one change entry: c=cost p=power a=text s=series (plain text — the coach) */
 function otaChangeText(ch){
   return ch.map(x =>
     x.k === 'c' ? 'Cost ' + x.from + ' → ' + x.to :
@@ -6038,26 +6043,77 @@ function otaChangeText(ch){
     x.k === 's' ? 'Series ' + x.from + ' → ' + x.to :
     'Text updated').join(' · ');
 }
+/* word-level diff (LCS): the old text with removed words struck red and added words green,
+   so a one-word wording tweak reads at a glance instead of a bare "Text updated" */
+function diffWordsHtml(from, to){
+  const A = String(from||'').split(/\s+/).filter(Boolean), B = String(to||'').split(/\s+/).filter(Boolean);
+  const m = A.length, n = B.length;
+  const L = Array.from({ length:m+1 }, () => new Array(n+1).fill(0));
+  for(let i = m-1; i >= 0; i--) for(let j = n-1; j >= 0; j--)
+    L[i][j] = A[i] === B[j] ? L[i+1][j+1] + 1 : Math.max(L[i+1][j], L[i][j+1]);
+  const out = [];
+  let i = 0, j = 0;
+  while(i < m && j < n){
+    if(A[i] === B[j]){ out.push(esc(A[i])); i++; j++; }
+    else if(L[i+1][j] >= L[i][j+1]){ out.push('<span class="dfw">' + esc(A[i]) + '</span>'); i++; }
+    else { out.push('<span class="dfa">' + esc(B[j]) + '</span>'); j++; }
+  }
+  while(i < m){ out.push('<span class="dfw">' + esc(A[i]) + '</span>'); i++; }
+  while(j < n){ out.push('<span class="dfa">' + esc(B[j]) + '</span>'); j++; }
+  return out.join(' ');
+}
+/* rich html for one change entry: stat changes inline, text changes as a word diff */
+function otaChangeHtml(ch){
+  const parts = [];
+  const stats = ch.filter(x => x.k !== 'a').map(x =>
+    x.k === 'c' ? 'Cost ' + x.from + ' → ' + x.to :
+    x.k === 'p' ? 'Power ' + x.from + ' → ' + x.to :
+    'Series ' + x.from + ' → ' + x.to);
+  if(stats.length) parts.push('<span>' + esc(stats.join(' · ')) + '</span>');
+  ch.filter(x => x.k === 'a').forEach(x => {
+    parts.push(x.from !== undefined && x.to !== undefined
+      ? '<span class="ota-diff">' + diffWordsHtml(x.from, x.to) + '</span>'
+      : '<span>Text updated</span>');
+  });
+  return parts.join(' ');
+}
 function renderOtaHistory(){
   const box = $('#otalist'); if(!box) return;
   if(!S.cardChanges.length){
     box.innerHTML = '<div class="odds-hint">No balance changes recorded yet — the nightly updater starts writing history from July 16, 2026 onward.</div>';
     return;
   }
-  const shown = S.cardChanges.slice(0, 60);
-  let lastDate = null;
+  // one collapsible group per patch date (newest first, newest open) — the ledger is
+  // already newest-first, so consecutive rows sharing a date form one group
+  const shown = S.cardChanges.slice(0, 120);
+  const days = [];
+  shown.forEach(x => {
+    const g = days[days.length - 1];
+    if(g && g.at === x.at) g.rows.push(x); else days.push({ at:x.at, rows:[x] });
+  });
+  const open = days.some(g => g.at === S.otaOpen) ? S.otaOpen : days[0].at;
+  const row = x =>
+    '<div class="ota-row" data-d="' + esc(x.d) + '">' + synThumb(x.d) +
+    '<div class="ota-txt"><b>' + esc((getCard(x.d) || { n: x.n }).n) + '</b>' +
+    otaChangeHtml(x.ch) + '</div></div>';
   box.innerHTML =
-    '<div class="coll-section">Balance history <span class="cs-n">' + S.cardChanges.length + ' change' + (S.cardChanges.length === 1 ? '' : 's') + ' on record</span></div>' +
-    shown.map(x => {
-      const head = x.at !== lastDate ? '<div class="ota-date">' + esc(x.at) + '</div>' : '';
-      lastDate = x.at;
-      return head +
-        '<div class="ota-row" data-d="' + esc(x.d) + '">' + synThumb(x.d) +
-        '<div class="ota-txt"><b>' + esc((getCard(x.d) || { n: x.n }).n) + '</b>' +
-        '<span>' + esc(otaChangeText(x.ch)) + '</span></div></div>';
-    }).join('') +
+    '<div class="mnote">' + S.cardChanges.length + ' change' + (S.cardChanges.length === 1 ? '' : 's') + ' on record. Tap a date to open it — in text changes, <span class="dfw">removed words</span> are red and <span class="dfa">added words</span> are green.</div>' +
+    days.map(g =>
+      '<div class="arc-acc' + (g.at === open ? ' open' : '') + '" data-ota="' + esc(g.at) + '"><div class="arc-head">' +
+        '<div class="arc-ht"><b>' + esc(g.at) + '</b> <span class="cs-n">' + g.rows.length + ' change' + (g.rows.length === 1 ? '' : 's') + '</span></div>' +
+        '<span class="arc-chev">&#9662;</span></div>' +
+      '<div class="arc-body"' + (g.at === open ? '' : ' hidden') + '>' + g.rows.map(row).join('') + '</div></div>').join('') +
     (S.cardChanges.length > shown.length ? '<div class="odds-hint">Older changes roll off the list.</div>' : '');
-  box.onclick = e => { const r = e.target.closest('.ota-row'); if(r) openCardSheet(r.dataset.d); };
+  box.onclick = e => {
+    const r = e.target.closest('.ota-row'); if(r){ openCardSheet(r.dataset.d); return; }
+    const hd = e.target.closest('.arc-head');
+    if(hd){
+      const acc = hd.closest('.arc-acc'), body = acc.querySelector('.arc-body');
+      const on = !acc.classList.contains('open');
+      acc.classList.toggle('open', on); body.hidden = !on;
+      S.otaOpen = on ? acc.dataset.ota : (S.otaOpen === acc.dataset.ota ? '' : S.otaOpen);
+    }
+  };
 }
 /* R9: rolling 30-day meta stats (creator-stats.json) — deeper pool than the 14-day display decks */
 async function loadCreatorStats(){
