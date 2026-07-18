@@ -1,6 +1,203 @@
 {
-  "updated": "2026-07-17",
+  "updated": "2026-07-18",
   "decks": [
+    {
+      "creator": "Coougarrr",
+      "video": "This \"Anti-Synergy\" Was Actually Broken (A Tournament Story)",
+      "url": "https://www.youtube.com/watch?v=0S8eDZuguUY",
+      "published": "2026-07-18",
+      "name": "",
+      "ids": [
+        "MotherAskani",
+        "Cosmo",
+        "Frigga",
+        "ScarletWitch",
+        "Sentinel",
+        "Mystique",
+        "Quinjet",
+        "Bast",
+        "Cerebro",
+        "LukeCage",
+        "Armor",
+        "Nightcrawler"
+      ]
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
+      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
+      "published": "2026-07-18",
+      "name": "Stature and Fractured Friends",
+      "ids": [
+        "DoctorOctopusFracturedFrontier",
+        "IronPatriot",
+        "ShadowlandsDaredevil",
+        "PsylockeFracturedFrontier",
+        "Crystal",
+        "LunaSnow",
+        "RedHulkFracturedFrontier",
+        "Isca",
+        "Stature",
+        "ThanosFracturedFrontier",
+        "BlackBolt",
+        "WilsonFisk"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/stature-and-fractured-friendsvhg3hrf/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
+      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
+      "published": "2026-07-18",
+      "name": "Fractured Doc Ock",
+      "ids": [
+        "Nova",
+        "DoctorOctopusFracturedFrontier",
+        "JeffTheBabyDolphin",
+        "Brood",
+        "CaptainCarter",
+        "SilverSurfer",
+        "Killmonger",
+        "Venus",
+        "Nocturne",
+        "SebastianShaw",
+        "MotherAskani",
+        "Sera"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/fractured-doc-ock/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
+      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
+      "published": "2026-07-18",
+      "name": "Fractured Hellcow",
+      "ids": [
+        "Quicksilver",
+        "Domino",
+        "RedGuardian",
+        "Diamondback",
+        "Hazmat",
+        "HellcowFracturedFrontier",
+        "CalibanHorseman",
+        "Laufey",
+        "EnSabahNur",
+        "Malekith",
+        "Wiccan",
+        "Ajax"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/fractured-hellcow/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
+      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
+      "published": "2026-07-18",
+      "name": "Fractured Jane",
+      "ids": [
+        "Quicksilver",
+        "Domino",
+        "Diamondback",
+        "Hazmat",
+        "Speed",
+        "CalibanHorseman",
+        "JaneFosterFracturedFrontier",
+        "Jubilee",
+        "EnSabahNur",
+        "Malekith",
+        "Wiccan",
+        "Ajax"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/fractured-jane/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
+      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
+      "published": "2026-07-18",
+      "name": "Fractured Death",
+      "ids": [
+        "HydraBob",
+        "Martyr",
+        "JenniferKale",
+        "Lizard",
+        "Venom",
+        "Kraglin",
+        "LunaSnow",
+        "Gladiator",
+        "DeathFracturedFrontier",
+        "WilsonFisk",
+        "Destroyer",
+        "Death"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/fractured-death/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
+      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
+      "published": "2026-07-18",
+      "name": "Fractured Psylocke",
+      "ids": [
+        "Magik",
+        "SilverSurfer",
+        "HitMonkey",
+        "Killmonger",
+        "StrongGuy",
+        "Prodigy",
+        "PsylockeFracturedFrontier",
+        "ShadowKing",
+        "Wave",
+        "Sera",
+        "Blink",
+        "Onslaught"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/fractured-psylocke/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
+      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
+      "published": "2026-07-18",
+      "name": "Red Wolf",
+      "ids": [
+        "KingEitri",
+        "RedWolfFracturedFrontier",
+        "JeffTheBabyDolphin",
+        "ZombieMisterFantastic",
+        "SamWilson",
+        "MarvelBoy",
+        "Venus",
+        "Isca",
+        "JubileeSilverSurfer",
+        "Aurora",
+        "Mockingbird",
+        "Thanos"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/deck-red-wolftr7fwxh/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
+      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
+      "published": "2026-07-18",
+      "name": "Red Skaar",
+      "ids": [
+        "Quinjet",
+        "Martyr",
+        "TechnoOrganicVirus",
+        "Tarantula",
+        "Lizard",
+        "ShadowKing",
+        "RedHulkFracturedFrontier",
+        "Starbrand",
+        "Ares",
+        "WilsonFisk",
+        "Sasquatch",
+        "Skaar"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/red-skaar6u8rqdl/"
+    },
     {
       "creator": "Unfitparrot",
       "video": "The top tier deck NO ONE IS PLAYING! Lady Bullseye control! - Marvel Snap Infinite Deck Highlight",
@@ -366,8 +563,8 @@
         "Magik",
         "EsmeCuckoo",
         "Wong",
-        "Stick",
         "MotherAskani",
+        "Stick",
         "SymbioteSpiderMan",
         "BlackPanther",
         "ArnimZola",
@@ -436,8 +633,8 @@
         "Mercury",
         "Prodigy",
         "ElsaBloodstone",
-        "WolverineHorseman",
-        "MotherAskani"
+        "MotherAskani",
+        "WolverineHorseman"
       ],
       "zone": "https://marvelsnapzone.com/decks/derek3/"
     },
@@ -623,9 +820,9 @@
       "name": "Derek1",
       "ids": [
         "Wasp",
+        "LadyBullseye",
         "GrandMaster",
         "KateBishop",
-        "LadyBullseye",
         "Scorpion",
         "WerewolfByNight",
         "Prowler",
@@ -680,204 +877,6 @@
         "SpiderManBrandNewDay"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/Batroc-Cosmo-GalactusFirstSteps-HydraStomper-Kraven-MaryJane-Nightcrawler-ProfessorX-RocketAndGroot-SamWilson-Silk-SpiderManBrandNewDay_Move?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Rocks",
-      "ids": [
-        "Askanison",
-        "Cosmo",
-        "Debrii",
-        "Killmonger",
-        "MasterMold",
-        "Maximus",
-        "NegasonicTeenageWarhead",
-        "Ronan",
-        "ScarletWitch",
-        "ShadowKing",
-        "Supergiant",
-        "WilsonFisk"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Askanison-Cosmo-Debrii-Killmonger-MasterMold-Maximus-NegasonicTeenageWarhead-Ronan-ScarletWitch-ShadowKing-Supergiant-WilsonFisk_Rocks?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "SNAP Deck",
-      "ids": [
-        "BuckyBarnes",
-        "Carnage",
-        "Death",
-        "Debrii",
-        "Dormammu",
-        "Killmonger",
-        "Muse",
-        "SquirrelGirl",
-        "UncleBen",
-        "Venom",
-        "WeaponXWolverine",
-        "X23"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/BuckyBarnes-Carnage-Death-Debrii-Dormammu-Killmonger-Muse-SquirrelGirl-UncleBen-Venom-WeaponXWolverine-X23_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Aurora",
-      "ids": [
-        "Aurora",
-        "Cosmo",
-        "FanFei",
-        "HydraBob",
-        "Isca",
-        "LinLie",
-        "MadameWeb",
-        "MaryJane",
-        "SamWilson",
-        "SpiderHam",
-        "Venus",
-        "ZombieMisterFantastic"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Aurora-Cosmo-FanFei-HydraBob-Isca-LinLie-MadameWeb-MaryJane-SamWilson-SpiderHam-Venus-ZombieMisterFantastic_Aurora?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Doom",
-      "ids": [
-        "CalibanHorseman",
-        "Chamber",
-        "CosmicGhostRider",
-        "Doom2099",
-        "DrDoom",
-        "DraxAvatarOfLife",
-        "GalactusFirstSteps",
-        "InvisibleWomanFirstSteps",
-        "IronLad",
-        "Isca",
-        "Moondragon",
-        "Sandman"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/CalibanHorseman-Chamber-CosmicGhostRider-Doom2099-DrDoom-DraxAvatarOfLife-GalactusFirstSteps-InvisibleWomanFirstSteps-IronLad-Isca-Moondragon-Sandman_Doom?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Scream",
-      "ids": [
-        "Aero",
-        "Batroc",
-        "Kingpin",
-        "Kraven",
-        "Magneto",
-        "Polaris",
-        "Prowler",
-        "SamWilson",
-        "Scream",
-        "SpiderMan",
-        "SpiderManBrandNewDay",
-        "Stegron"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Aero-Batroc-Kingpin-Kraven-Magneto-Polaris-Prowler-SamWilson-Scream-SpiderMan-SpiderManBrandNewDay-Stegron_Scream?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Galacti",
-      "ids": [
-        "AdamWarlock",
-        "AmericaChavez",
-        "JeffTheBabyDolphin",
-        "JubileeSilverSurfer",
-        "Magik",
-        "MajesticWingbeat",
-        "Maverick",
-        "NicoMinoru",
-        "Stick",
-        "SuperiorSpiderMan",
-        "Surge",
-        "ZombieGalacti"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AdamWarlock-AmericaChavez-JeffTheBabyDolphin-JubileeSilverSurfer-Magik-MajesticWingbeat-Maverick-NicoMinoru-Stick-SuperiorSpiderMan-Surge-ZombieGalacti_Galacti?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Rocks",
-      "ids": [
-        "Askanison",
-        "Cosmo",
-        "Debrii",
-        "HydraBob",
-        "IronPatriot",
-        "NegasonicTeenageWarhead",
-        "Nightcrawler",
-        "Ozymandias",
-        "Rhino",
-        "ShadowKing",
-        "Supergiant",
-        "WilsonFisk"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Askanison-Cosmo-Debrii-HydraBob-IronPatriot-NegasonicTeenageWarhead-Nightcrawler-Ozymandias-Rhino-ShadowKing-Supergiant-WilsonFisk_Rocks?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Aurora",
-      "ids": [
-        "Aurora",
-        "AwesomeAndy",
-        "Cosmo",
-        "HydraBob",
-        "Isca",
-        "Mercury",
-        "SamWilson",
-        "SpiderHam",
-        "Tarantula",
-        "TheThingFirstSteps",
-        "Venus",
-        "ZombieMisterFantastic"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Aurora-AwesomeAndy-Cosmo-HydraBob-Isca-Mercury-SamWilson-SpiderHam-Tarantula-TheThingFirstSteps-Venus-ZombieMisterFantastic_Aurora?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Tarantula Enables Such BROKEN Combos! Marvel Snap Best Weekend Mission Decks",
-      "url": "https://www.youtube.com/watch?v=eGQAuYAODeY",
-      "published": "2026-07-10",
-      "name": "Jeeeeet",
-      "ids": [
-        "Deadpool",
-        "FastballSpecial",
-        "KidOmega",
-        "Carnage",
-        "Forge",
-        "WadeWilson",
-        "Hulkbuster",
-        "Tombstone",
-        "Venom",
-        "ThePhoenixForce",
-        "Nimrod",
-        "Dormammu"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/jeeeeeth8h32h0/"
     }
   ]
 }
