@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-18",
+ "updated": "2026-07-19",
  "windowDays": 30,
  "deckCount": 105,
  "ledger": [
@@ -1345,8 +1345,8 @@
     "Magik",
     "EsmeCuckoo",
     "Wong",
-    "Stick",
     "MotherAskani",
+    "Stick",
     "SymbioteSpiderMan",
     "BlackPanther",
     "ArnimZola",
@@ -1385,8 +1385,8 @@
     "Mercury",
     "Prodigy",
     "ElsaBloodstone",
-    "WolverineHorseman",
-    "MotherAskani"
+    "MotherAskani",
+    "WolverineHorseman"
    ]
   },
   {
@@ -1502,9 +1502,9 @@
    "published": "2026-07-11",
    "ids": [
     "Wasp",
+    "LadyBullseye",
     "GrandMaster",
     "KateBishop",
-    "LadyBullseye",
     "Scorpion",
     "WerewolfByNight",
     "Prowler",
@@ -1576,11 +1576,11 @@
     "MajesticWingbeat",
     "Batroc",
     "SpiderManBrandNewDay",
-    "LukeCage",
     "Kraven",
     "SamWilson",
     "ScarletWitch",
     "Silk",
+    "LukeCage",
     "HydraStomper",
     "MotherAskani",
     "IronMan",

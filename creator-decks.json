@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-18",
+  "updated": "2026-07-19",
   "decks": [
     {
       "creator": "Coougarrr",
@@ -291,6 +291,28 @@
       "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
       "published": "2026-07-16",
+      "name": "Smlz",
+      "ids": [
+        "Agony",
+        "SpiderManBrandNewDay",
+        "GrandMaster",
+        "StormHorseman",
+        "Brood",
+        "CaptainCarter",
+        "Maverick",
+        "HopeSummers",
+        "Prodigy",
+        "Stick",
+        "WolverineHorseman",
+        "MotherAskani"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/smlzhqnqk5h/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
+      "published": "2026-07-16",
       "name": "Iron Hand",
       "ids": [
         "MajesticWingbeat",
@@ -563,8 +585,8 @@
         "Magik",
         "EsmeCuckoo",
         "Wong",
-        "Stick",
         "MotherAskani",
+        "Stick",
         "SymbioteSpiderMan",
         "BlackPanther",
         "ArnimZola",
@@ -633,8 +655,8 @@
         "Mercury",
         "Prodigy",
         "ElsaBloodstone",
-        "WolverineHorseman",
-        "MotherAskani"
+        "MotherAskani",
+        "WolverineHorseman"
       ],
       "zone": "https://marvelsnapzone.com/decks/derek3/"
     },
@@ -820,9 +842,9 @@
       "name": "Derek1",
       "ids": [
         "Wasp",
+        "LadyBullseye",
         "GrandMaster",
         "KateBishop",
-        "LadyBullseye",
         "Scorpion",
         "WerewolfByNight",
         "Prowler",
@@ -855,28 +877,6 @@
         "TheThingFirstSteps"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/GalactusFirstSteps-Iceman-Isca-JeffTheBabyLandShark-MajesticWingbeat-Mercury-Mysterio-Nightcrawler-ProfessorX-RocketAndGroot-SpiderManBrandNewDay-TheThingFirstSteps_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Move",
-      "ids": [
-        "Batroc",
-        "Cosmo",
-        "GalactusFirstSteps",
-        "HydraStomper",
-        "Kraven",
-        "MaryJane",
-        "Nightcrawler",
-        "ProfessorX",
-        "RocketAndGroot",
-        "SamWilson",
-        "Silk",
-        "SpiderManBrandNewDay"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Batroc-Cosmo-GalactusFirstSteps-HydraStomper-Kraven-MaryJane-Nightcrawler-ProfessorX-RocketAndGroot-SamWilson-Silk-SpiderManBrandNewDay_Move?utm_medium=affiliate&utm_campaign=alexcoccia"
     }
   ]
 }
