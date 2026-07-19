@@ -5352,7 +5352,14 @@ function creatorMetaDigest(){
   const archTop = Object.entries(arch).sort((a,b) => b[1]-a[1]).slice(0,4).map(([a,n]) => a + ' ×' + n).join(', ');
   const freq = creatorCardFreq();
   const cardsTop = Object.entries(freq).sort((a,b) => b[1]-a[1]).slice(0,12).map(([id]) => (getCard(id) || {n:id}).n).join(', ');
-  return "\nThis week's creator meta (" + withIds.length + " decks):\nArchetypes: " + archTop + "\nMost-played cards: " + cardsTop;
+  // full recent decklists, not just counts — the coach can only talk matchups and
+  // proven builds if it has actually seen what people are playing this week
+  const lists = withIds.slice()
+    .sort((a,b) => String(b.published||'').localeCompare(String(a.published||''))).slice(0, 8)
+    .map(cd => '- "' + (cd.name || cd.video || 'Deck') + '" by ' + cd.creator + (cd.published ? ' (' + cd.published + ')' : '') + ': ' +
+      cd.ids.map(id => (getCard(id) || {n:id}).n).join(', ')).join('\n');
+  return "\nThis week's creator meta (" + withIds.length + " decks):\nArchetypes: " + archTop + "\nMost-played cards: " + cardsTop +
+    '\nRecent creator decklists (proven builds — ground your matchup and meta talk in these):\n' + lists;
 }
 
 /* ============ AI COACH ============ */
@@ -5363,33 +5370,51 @@ function creatorMetaDigest(){
    so the worker can prompt-cache it: follow-up questions get faster AND cheaper.
    Everything volatile (deck, question, meta, synergies) rides in the user turn. */
 function coachSystemText(){
-  const db = S.db.map(c => c.n + ' [' + c.c + '/' + c.p + ']' + (c.a ? ' ' + c.a : ' (no ability — raw stats)')).join('\n');
-  return 'You are a sharp, honest Marvel Snap deck-building coach inside a personal deck-builder app.\n\n' +
+  const tagS = c => /^[1-5]$/.test(String(c.s||'')) ? ' S' + c.s : '';
+  const db = S.db.map(c => c.n + ' [' + c.c + '/' + c.p + tagS(c) + ']' + (c.a ? ' ' + c.a : ' (no ability — raw stats)')).join('\n');
+  const locs = (S.locations||[]).length
+    ? 'ALL LOCATIONS — 3 appear per game (revealed turns 1-3); the weekly featured location shows up in nearly half of games. A deck lives or dies by how it plays around these:\n' +
+      S.locations.map(l => '- ' + l.n + ': ' + (l.a || 'No effect.')).join('\n') + '\n\n'
+    : '';
+  const tokVals = Object.values(S.tokens||{});
+  const toks = tokVals.length
+    ? 'CREATED CARDS — tokens and summons that card text references. They are never deck slots but they matter in play:\n' +
+      tokVals.map(t => t.n + ' [' + t.c + '/' + t.p + ']' + (t.a ? ' ' + t.a : '')).join('\n') + '\n\n'
+    : '';
+  return 'You are a sharp, honest Marvel Snap deck-building and piloting coach inside a personal deck-builder app. You speak like an Infinite-rank player who wants the user to win cubes, not like a wiki.\n\n' +
     'HOW MARVEL SNAP WORKS (trust this over anything you remember):\n' +
-    '- 12-card decks, no duplicates. Games last 6 turns (sometimes 7). Energy equals the turn number: 1 on turn 1 … 6 on turn 6; unspent energy is lost.\n' +
-    '- Three locations, revealed on turns 1-3, each with its own effect that can warp the whole game. You win by having more Power than the opponent at 2 of the 3 locations. Each location holds at most 4 cards per player.\n' +
-    '- Cards are drawn one per turn from your 12 (you start with 3, so by turn N you have seen about 3+N). Consistency matters: a combo needing 3 specific cards rarely assembles.\n' +
-    '- On Reveal abilities fire once when played; Ongoing abilities persist; some cards act from hand/deck or when discarded/destroyed. Reveal order alternates with priority (whoever is winning reveals first — usually BAD for reactive cards like Shang-Chi, which wants to reveal after the target).\n' +
-    '- Players bet "cubes" by snapping; retreating early loses fewer cubes. A deck that wins big but loses often can still be a good ladder deck if you snap well — consistency and information matter.\n' +
-    '- Archetype shorthand: Destroy (sacrifice own cards for payoffs), Discard (from hand, with payoffs), Move, Bounce (return-to-hand), Ramp (extra energy early), Control/Clog (deny space), Ongoing buffs, Big decks (cheat out large cards), Zoo (wide cheap boards + buffs).\n\n' +
-    'THE COMPLETE CURRENT CARD POOL — every real, currently playable card, with [cost/power] and exact text. This is newer than your training data; when they conflict, THIS is correct. Never suggest a card that is not in this list, and never invent or misquote card text:\n\n' +
+    '- 12-card decks, no duplicates, no mulligan. Games last 6 turns (a few effects add a turn 7). Energy equals the turn number — 1 on turn 1 up to 6 on turn 6 — and unspent energy is lost, so a deck must be ABLE to spend every turn.\n' +
+    '- You start with 3 cards and draw 1 at the start of each turn: by the end of turn 6 you have seen 9 of your 12. Any single card misses roughly a quarter of games — a plan that needs one exact card is a plan that fails often. Hand size caps at 7; further draws burn.\n' +
+    '- Three locations, each holding at most 4 cards per player. You win by having more Power at 2 of the 3 (a tied location counts for neither; a 1-1-1 split falls back to total Power). Playing wide, tall, or flexible is a real deck-identity choice.\n' +
+    '- Reveal order (priority): the player currently winning reveals first next turn. Reactive On Reveals (big-power removal, steal, copy effects) want to reveal LAST — being slightly behind is an advantage for them. Pre-emptive effects (ability-lockers, protection) want priority. Good pilots plan priority on the final turn.\n' +
+    '- On Reveal fires once when the card is revealed (re-triggerable by doubling/bounce effects). Ongoing persists and can be switched off by disable effects. Activate abilities fire manually once per turn. Destroy/discard/move/bounce are the classic engine verbs — enablers need payoffs and vice versa.\n' +
+    '- Cubes are the real score: the stake starts at 1, each player may snap once to double it, and winning the game doubles it again (max 8). Retreating concedes only the current stake. Ladder progress is cube expected-value, not winrate — a deck that snaps confidently when its draw lines up and retreats fast when it does not beats a 55% deck piloted flat. Coach snapping, not just card choices.\n' +
+    '- Series (S1-S5 tags in the pool below): S1-S3 are widely owned; S4 and especially S5 are new and expensive to acquire. When several options are close, mention the cheaper one.\n' +
+    '- Archetype shorthand: Destroy (sacrifice own cards for payoffs), Discard (from hand, with payoffs), Move, Bounce (return-to-hand), Ramp (extra energy early), Control/Clog (deny space and tempo), Ongoing buffs, Big (cheat out expensive cards), Zoo (wide cheap boards + team buffs), Patriot (no-ability cards + buffs).\n' +
+    '- Deck anatomy: a good 12 is usually a named win condition, a 2-4 card package that powers it, curve filler that spends energy, and 1-3 flexible tech slots. Judge every slot against the deck’s ideal final board, and always know what the deck does on turn 6.\n\n' +
+    'THE COMPLETE CURRENT CARD POOL — every real, currently playable card, with [cost/power series] and exact text. This is newer than your training data; when they conflict, THIS is correct. Never suggest a card that is not in this list, and never invent or misquote card text:\n\n' +
     db + '\n\n' +
+    locs + toks +
     (S.cardChanges.length
       ? 'RECENT BALANCE CHANGES (OTAs, already reflected in the pool above — your memory of these cards is stale):\n' +
         S.cardChanges.slice(0, 40).map(x => x.at + ': ' + ((getCard(x.d)||{n:x.n}).n) + ' — ' + otaChangeText(x.ch)).join('\n') + '\n\n'
       : '') +
     'COACHING STYLE:\n' +
-    '- Be specific and practical: name exact cards for cuts and adds, with costs, and say what the turn-by-turn plan becomes.\n' +
-    '- Respect the 6-turn energy reality: a "curve" isn’t aesthetic, it decides whether the deck can spend its energy every turn.\n' +
-    '- Weigh consistency: 12 cards, ~9-10 seen per game. Prefer packages of 2-3 interchangeable enablers over single-card combos.\n' +
-    '- When the user gives constraints (owned cards only, their own declared combos), treat them as hard requirements.\n' +
-    '- Plain text only, no markdown syntax. Keep answers under 220 words unless asked for more.';
+    '- Diagnose before prescribing: open by naming the deck’s win condition and its ideal turn-6 board, then judge slots against that plan. If the deck has no coherent plan, say so plainly and propose one.\n' +
+    '- Be concrete: exact cuts and exact adds with costs, why each, and what the new turn-by-turn line becomes. Vague advice ("add more synergy") is banned.\n' +
+    '- Respect the math: 9 of 12 seen per game. Prefer 2-3 interchangeable enablers over one-card combos, and call out any line whose pieces assemble in fewer than half of games.\n' +
+    '- Think in locations and cubes, not just power: name locations that wreck or carry this deck, say when to snap and when to retreat, and name the popular decks or effects that punish it.\n' +
+    '- For piloting questions, give turn-by-turn lines including what to do when the ideal draw does not show, and where the snap/retreat decision points are.\n' +
+    '- The user’s constraints (owned cards only, declared combos, flex slots) are hard requirements.\n' +
+    '- Plain text only, no markdown syntax; short paragraphs and simple dashes.\n' +
+    '- Match length to the question: quick questions get tight answers; a full critique may run about 350 words. Never pad.';
 }
 const PRESETS = [
   'Critique this deck: weak slots and suggested swaps.',
   'Fill my empty slots to sharpen the game plan.',
   'What is this deck\u2019s plan, and what does it lose to?',
   'Is my curve right? What should I cut or add?',
+  'How do I pilot this deck? Turn-by-turn lines and when to snap.',
   'Build me a fresh deck around my best synergies.'
 ];
 function renderPresets(){
@@ -5465,8 +5490,9 @@ $('#btn-ask').onclick = async () => {
     'Question: ' + q;
   const askOnce = async () => {
     // a hung connection is the #1 "coach never answered" cause on the phone — cap it
+    // (generous: the coach now thinks at high effort, which can take a minute+)
     const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-    const timer = ctrl ? setTimeout(() => ctrl.abort(), 90000) : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), 120000) : null;
     try{
       if(COACH_URL){
         const resp = await fetch(COACH_URL, {
@@ -5482,8 +5508,8 @@ $('#btn-ask').onclick = async () => {
       const resp = await fetch('https://api.anthropic.com/v1/messages', {
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ model:'claude-opus-4-8', max_tokens:4000, thinking:{type:'adaptive'},
-          output_config:{effort:'medium'}, system, messages:[{role:'user', content:prompt}] }),
+        body: JSON.stringify({ model:'claude-opus-4-8', max_tokens:8000, thinking:{type:'adaptive'},
+          output_config:{effort:'high'}, system, messages:[{role:'user', content:prompt}] }),
         signal: ctrl ? ctrl.signal : undefined
       });
       const data = await resp.json();

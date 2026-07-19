@@ -96,9 +96,9 @@ async function coach(request, env, cors) {
 
   const payload = {
     model: 'claude-opus-4-8',
-    max_tokens: 4000,                       // adaptive thinking + the answer share this budget
+    max_tokens: 8000,                       // adaptive thinking + the answer share this budget
     thinking: { type: 'adaptive' },
-    output_config: { effort: 'medium' },    // keeps latency sane on a phone; quality stays high
+    output_config: { effort: 'high' },      // strategy questions need real thought; caching keeps repeat asks fast
     messages: [{ role: 'user', content: prompt }],
   };
   if (system) {
@@ -112,7 +112,7 @@ async function coach(request, env, cors) {
   for (let attempt = 0; attempt < 2; attempt++) {
     if (attempt) await new Promise((res) => setTimeout(res, 1500));
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 55000);
+    const timer = setTimeout(() => ctrl.abort(), 80000);
     let r, data;
     try {
       r = await fetch('https://api.anthropic.com/v1/messages', {
@@ -129,7 +129,8 @@ async function coach(request, env, cors) {
     } catch (e) {
       clearTimeout(timer);
       lastErr = ctrl.signal.aborted ? 'the model took too long — try again' : 'could not reach the model';
-      continue;                             // network / timeout: retry once
+      if (ctrl.signal.aborted) break;       // 80s already spent — a retry can't finish before the phone gives up
+      continue;                             // network blip: retry once
     }
     clearTimeout(timer);
     if (r.ok) {

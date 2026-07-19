@@ -1136,6 +1136,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(_mn.overlap===3 && _mn.closest && _mn.closest.creator==='Beta', 'H: closest = the higher-overlap creator deck (Beta, 3 shared)');
   const _dig = w.eval('creatorMetaDigest()');
   assert(_dig.length>0 && /Most-played cards/.test(_dig) && /×/.test(_dig), 'H: creatorMetaDigest non-empty with archetypes (×) + most-played cards');
+  assert(/Recent creator decklists/.test(_dig) && /"Beta Deck" by Beta \(2026-07-02\)/.test(_dig) && /Wong/.test(_dig),
+    'H: the digest carries full recent decklists, newest first');
   w.eval('S.creatorDecks=[]');
   assert(w.eval('deckMetaNote(activeDeck())')===null && w.eval('creatorMetaDigest()')==='', 'H: empty creator meta -> null note + empty digest');
   w.eval('S.creatorDecks=[{creator:"Beta",video:"v2",url:"",published:"2026-07-02",name:"Beta Deck",ids:["Hulk","AntMan","Wong"],untapped:""}]; setTab("deck"); renderDeck();'); await sleep(20);
@@ -1154,6 +1156,13 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   await w.eval('(async()=>{ S.mySyns=[{id:"t1",ids:["Wong","Odin"],note:"double reveals"}]; const of=window.fetch; let cap=null; window.fetch=async(u,o)=>{ cap=o; return { ok:true, json:async()=>({content:[{type:"text",text:"ok"}]}) }; }; document.getElementById("btn-ask").click(); await new Promise(r=>setTimeout(r,60)); window.__coachCap2=cap; window.fetch=of; S.mySyns=[]; })()');
   const _cap2 = JSON.parse(w.eval('window.__coachCap2.body'));
   assert(/personally declared/.test(_cap2.prompt) && /Wong \+ Odin — double reveals/.test(_cap2.prompt), 'coach: user-declared combos ride in prompt');
+  // grounding v2: the coach knows every location and every created card, not just the deck
+  await w.eval('(async()=>{ const savedL=S.locations, savedT=S.tokens; S.locations=[{n:"Test Tavern",d:"TT",a:"Cards here cost 1 less."}]; S.tokens={Widget:{n:"Widget",d:"Widget",c:1,p:2,a:"Test token."}}; const of=window.fetch; let cap=null; window.fetch=async(u,o)=>{ cap=o; return { ok:true, json:async()=>({content:[{type:"text",text:"ok"}]}) }; }; document.getElementById("btn-ask").click(); await new Promise(r=>setTimeout(r,60)); window.__coachCap3=cap; window.fetch=of; S.locations=savedL; S.tokens=savedT; })()');
+  const _cap3 = JSON.parse(w.eval('window.__coachCap3.body'));
+  assert(/ALL LOCATIONS/.test(_cap3.system) && /Test Tavern: Cards here cost 1 less\./.test(_cap3.system), 'coach: the full location list rides in system');
+  assert(/CREATED CARDS/.test(_cap3.system) && /Widget \[1\/2\] Test token\./.test(_cap3.system), 'coach: created tokens ride in system');
+  assert(/cubes/i.test(_cap3.system) && /priority/i.test(_cap3.system) && /no mulligan/.test(_cap3.system), 'coach: the primer teaches cubes, priority, and draw math');
+  assert(_cap3.system.length < 240000, 'coach: system grounding stays under the worker cap');
 
   // ============ OTA balance history (card-changes.json) ============
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>({updated:"2026-07-16",changes:['+
