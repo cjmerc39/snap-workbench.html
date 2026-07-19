@@ -585,8 +585,8 @@
         "Magik",
         "EsmeCuckoo",
         "Wong",
-        "MotherAskani",
         "Stick",
+        "MotherAskani",
         "SymbioteSpiderMan",
         "BlackPanther",
         "ArnimZola",
@@ -655,8 +655,8 @@
         "Mercury",
         "Prodigy",
         "ElsaBloodstone",
-        "MotherAskani",
-        "WolverineHorseman"
+        "WolverineHorseman",
+        "MotherAskani"
       ],
       "zone": "https://marvelsnapzone.com/decks/derek3/"
     },
@@ -842,9 +842,9 @@
       "name": "Derek1",
       "ids": [
         "Wasp",
-        "LadyBullseye",
         "GrandMaster",
         "KateBishop",
+        "LadyBullseye",
         "Scorpion",
         "WerewolfByNight",
         "Prowler",
