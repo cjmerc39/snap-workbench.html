@@ -1,6 +1,94 @@
 {
-  "updated": "2026-07-19",
+  "updated": "2026-07-20",
   "decks": [
+    {
+      "creator": "Snap Judgments",
+      "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
+      "published": "2026-07-20",
+      "name": "Doc Guapo",
+      "ids": [
+        "SilverSable",
+        "RocketRaccoon",
+        "AmericaChavez",
+        "NicoMinoru",
+        "Surge",
+        "Boomerang",
+        "Toxin",
+        "GrandMaster",
+        "Sage",
+        "Beast",
+        "MotherAskani",
+        "Sasquatch"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/doc-guapo/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
+      "published": "2026-07-20",
+      "name": "FiendsFirefly",
+      "ids": [
+        "Miek",
+        "Echo",
+        "Scorn",
+        "Morbius",
+        "Marrow",
+        "Wolverine",
+        "Crystal",
+        "MoonGirl",
+        "Supergiant",
+        "ProximaMidnight",
+        "Modok",
+        "Blink"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/fiendsfirefly/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
+      "published": "2026-07-20",
+      "name": "Ika",
+      "ids": [
+        "HydraBob",
+        "LukeCage",
+        "LadyBullseye",
+        "Scorpion",
+        "Lizard",
+        "RedGuardian",
+        "Diamondback",
+        "Hazmat",
+        "NegasonicTeenageWarhead",
+        "Supergiant",
+        "Malekith",
+        "Ajax"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/deck-ikaqq8ucor/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
+      "published": "2026-07-20",
+      "name": "Interrobang",
+      "ids": [
+        "SilverSable",
+        "RocketRaccoon",
+        "AmericaChavez",
+        "Iceman",
+        "NicoMinoru",
+        "Boomerang",
+        "Toxin",
+        "GrandMaster",
+        "JoaquinTorres",
+        "HitMonkey",
+        "Beast",
+        "ShouLao"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/interrobang2gyinm1/"
+    },
     {
       "creator": "Coougarrr",
       "video": "This \"Anti-Synergy\" Was Actually Broken (A Tournament Story)",
@@ -585,8 +673,8 @@
         "Magik",
         "EsmeCuckoo",
         "Wong",
-        "Stick",
         "MotherAskani",
+        "Stick",
         "SymbioteSpiderMan",
         "BlackPanther",
         "ArnimZola",
@@ -655,8 +743,8 @@
         "Mercury",
         "Prodigy",
         "ElsaBloodstone",
-        "WolverineHorseman",
-        "MotherAskani"
+        "MotherAskani",
+        "WolverineHorseman"
       ],
       "zone": "https://marvelsnapzone.com/decks/derek3/"
     },
@@ -789,94 +877,6 @@
         "WilsonFisk",
         "CosmicGhostRider"
       ]
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Clog is BACK! NO FUN for Opponents! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=ztCM-NMIbpA",
-      "published": "2026-07-11",
-      "name": "Honifer",
-      "ids": [
-        "Hood",
-        "Titania",
-        "WhiteWidow",
-        "Armor",
-        "KateBishop",
-        "GreenGoblin",
-        "Magik",
-        "Mercury",
-        "ShadowKing",
-        "Viper",
-        "Isca",
-        "RedHulk"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/honiferq97y85d/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Clog is BACK! NO FUN for Opponents! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=ztCM-NMIbpA",
-      "published": "2026-07-11",
-      "name": "Ika",
-      "ids": [
-        "SpiderManBrandNewDay",
-        "HydraBob",
-        "Tarantula",
-        "Kraven",
-        "SamWilson",
-        "Silk",
-        "HydraStomper",
-        "Prowler",
-        "Kraglin",
-        "Isca",
-        "CosmicGhostRider",
-        "WilsonFisk"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/deck-ikah88nuym/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Clog is BACK! NO FUN for Opponents! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=ztCM-NMIbpA",
-      "published": "2026-07-11",
-      "name": "Derek1",
-      "ids": [
-        "Wasp",
-        "GrandMaster",
-        "KateBishop",
-        "LadyBullseye",
-        "Scorpion",
-        "WerewolfByNight",
-        "Prowler",
-        "MotherAskani",
-        "Laufey",
-        "HighEvolutionary",
-        "Ikari",
-        "Abomination"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/derek1/"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "SNAP Deck",
-      "ids": [
-        "GalactusFirstSteps",
-        "Iceman",
-        "Isca",
-        "JeffTheBabyLandShark",
-        "MajesticWingbeat",
-        "Mercury",
-        "Mysterio",
-        "Nightcrawler",
-        "ProfessorX",
-        "RocketAndGroot",
-        "SpiderManBrandNewDay",
-        "TheThingFirstSteps"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/GalactusFirstSteps-Iceman-Isca-JeffTheBabyLandShark-MajesticWingbeat-Mercury-Mysterio-Nightcrawler-ProfessorX-RocketAndGroot-SpiderManBrandNewDay-TheThingFirstSteps_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
     }
   ]
 }
