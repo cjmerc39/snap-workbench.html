@@ -1417,8 +1417,8 @@
     "Magik",
     "EsmeCuckoo",
     "Wong",
-    "MotherAskani",
     "Stick",
+    "MotherAskani",
     "SymbioteSpiderMan",
     "BlackPanther",
     "ArnimZola",
@@ -1457,8 +1457,8 @@
     "Mercury",
     "Prodigy",
     "ElsaBloodstone",
-    "MotherAskani",
-    "WolverineHorseman"
+    "WolverineHorseman",
+    "MotherAskani"
    ]
   },
   {
@@ -1574,9 +1574,9 @@
    "published": "2026-07-11",
    "ids": [
     "Wasp",
-    "LadyBullseye",
     "GrandMaster",
     "KateBishop",
+    "LadyBullseye",
     "Scorpion",
     "WerewolfByNight",
     "Prowler",
