@@ -30,7 +30,7 @@ const CHANNELS = [
 ];
 const UA = { headers: { [`user-agent`]: `snap-workbench github action (personal deck builder)` } };
 const OUT = `creator-decks.json`;
-const CAP = 40;          // keep at most this many decks (was 30 for 3 channels; 4th channel added 2026-07-15)
+const CAP = 60;          // keep at most this many decks (raised from 40 when reddit gained its own segment 2026-07-21)
 const AGE_DAYS = 14;     // only keep decks from videos published within this window (owner: two weeks)
 const DAY = 86400000;
 
@@ -179,7 +179,8 @@ const dedupKey = x => (x.ids && x.ids.length) ? x.ids.slice().sort().join(`,`) :
 // so no OAuth). Reddit may throttle datacenter IPs; every failure path degrades to
 // "no reddit decks tonight" without touching the rest of the harvest.
 const SUBREDDIT = `MarvelSnapDecks`;
-const REDDIT_CAP = 15;        // per-run ceiling: a busy subreddit day can't crowd out the channels
+const REDDIT_CAP = 25;        // per-run ceiling: a busy subreddit day can't crowd out the channels
+const REDDIT_COMMENT_BUDGET = 25;   // comment-thread fetches per run (600ms apart ≈ 15s worst case)
 const REDDIT_UA = { headers: { [`user-agent`]: `web:snap-workbench:1.0 (personal deck builder)` } };
 
 // codes in reddit text arrive three ways: bare on a line, wrapped in markdown (backticks/
@@ -212,23 +213,42 @@ function atomText(e){
 }
 const atomAuthor = e => ((e.match(/<name>([^<]*)<\/name>/) || [])[1] || ``).replace(/^\/?u\//, ``).trim();
 
-async function fetchReddit(D, KNOWN){
+async function fetchReddit(D, KNOWN, prevUrls){
   try{
-    const r = await fetch(`https://www.reddit.com/r/` + SUBREDDIT + `/new/.rss?limit=25`, REDDIT_UA);
-    if(!r.ok){ console.error(`  r/${SUBREDDIT}: HTTP ${r.status}`); return { ok:false, decks:[] }; }
-    const xml = await r.text();
-    const entries = xml.split(`<entry>`).slice(1);
+    // two views of the sub: everything recent, plus the week's popular decks that
+    // have already scrolled out of /new. Same entry shape; dedupe by post URL.
+    const FEEDS = [`/new/.rss?limit=50`, `/top/.rss?t=week&limit=25`];
+    let entries = [];
+    let feedOk = false;
+    for(const f of FEEDS){
+      try{
+        const r = await fetch(`https://www.reddit.com/r/` + SUBREDDIT + f, REDDIT_UA);
+        if(!r.ok){ console.error(`  r/${SUBREDDIT}${f.split(`?`)[0]}: HTTP ${r.status}`); continue; }
+        entries = entries.concat((await r.text()).split(`<entry>`).slice(1));
+        feedOk = true;
+        await new Promise(res => setTimeout(res, 600));
+      }catch(err2){ console.error(`  r/${SUBREDDIT}${f.split(`?`)[0]}: ${err2 && err2.message}`); }
+    }
+    if(!feedOk) return { ok:false, decks:[] };
     const decks = [];
+    const seenPost = new Set();
     let commentFetches = 0;
+    const nowMs = Date.now();
     for(const e of entries){
       if(decks.length >= REDDIT_CAP) break;
       const title = unesc((e.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || ``).trim();
       const url = unesc((e.match(/<link[^>]*href="([^"]+)"/) || [])[1] || ``);
       const published = ((e.match(/<(?:published|updated)>([^<]+)</) || [])[1] || ``).slice(0, 10);
+      if(!url || seenPost.has(url)) continue;
+      seenPost.add(url);
+      // already harvested on a previous night (the merge keeps its deck) — don't spend
+      // tonight's comment budget re-checking it; and skip posts past the display window
+      if(prevUrls && prevUrls.has(url)) continue;
+      if(published && (nowMs - Date.parse(published)) >= AGE_DAYS * DAY) continue;
       const op = atomAuthor(e);
       let found = redditCodes(title + `\n` + atomText(e), D);
       // no code in the post: the OP usually leaves it as a comment — one bounded fetch each
-      if(!found.some(dk => dk.ids && dk.ids.length) && /\/comments\//.test(url) && commentFetches < 12){
+      if(!found.some(dk => dk.ids && dk.ids.length) && /\/comments\//.test(url) && commentFetches < REDDIT_COMMENT_BUDGET){
         commentFetches++;
         try{
           const cr = await fetch(url.replace(/\/?$/, `/`) + `.rss`, REDDIT_UA);
@@ -255,7 +275,7 @@ async function fetchReddit(D, KNOWN){
         decks.push(entry);
       }
     }
-    console.log(`  r/${SUBREDDIT}: ${entries.length} posts -> ${decks.length} deck(s) (${commentFetches} comment thread(s) checked)`);
+    console.log(`  r/${SUBREDDIT}: ${seenPost.size} posts (${entries.length} feed entries) -> ${decks.length} new deck(s) (${commentFetches} comment thread(s) checked${prevUrls && prevUrls.size ? `, ` + prevUrls.size + ` already harvested` : ``})`);
     return { ok:true, decks };
   }catch(err){
     console.error(`  r/${SUBREDDIT}: fetch failed - ${err && err.message}`);
@@ -397,7 +417,14 @@ async function main(){
     if(ok) anyOk = true;
     fresh = fresh.concat(decks);
   }
-  const rr = await fetchReddit(D, table.KNOWN);         // r/MarvelSnapDecks rides the same pipeline
+  // posts whose deck we already hold: the merge preserves them, so tonight's comment
+  // budget goes to posts we have never checked instead of re-fetching the same threads
+  const prevRedditUrls = new Set();
+  try{
+    const pj0 = JSON.parse(fs.readFileSync(OUT, `utf8`));
+    (pj0.decks || []).forEach(x => { if(x && /^r\//.test(String(x.creator||``)) && x.url) prevRedditUrls.add(x.url); });
+  }catch(e){ /* first run */ }
+  const rr = await fetchReddit(D, table.KNOWN, prevRedditUrls);   // r/MarvelSnapDecks rides the same pipeline
   if(rr.ok) anyOk = true;
   fresh = fresh.concat(rr.decks);
   await resolveZoneDecks(fresh, table.KNOWN);           // fill marvelsnapzone link-outs via /pro/do.php
