@@ -112,6 +112,27 @@
     },
     {
       "creator": "r/MarvelSnapDecks",
+      "video": "[Fantastic Four- End of Turn]. Please Help (CL 25,451)",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0dlpa/fantastic_four_end_of_turn_please_help_cl_25451/",
+      "published": "2026-07-19",
+      "name": "",
+      "ids": [
+        "MarvelBoy",
+        "Sunspot",
+        "StrangeSupreme",
+        "Isca",
+        "InvisibleWomanFirstSteps",
+        "SubMariner",
+        "Thena",
+        "Lockheed",
+        "HumanTorchFirstSteps",
+        "MrFantasticFirstSteps",
+        "DraxAvatarOfLife",
+        "TheThingFirstSteps"
+      ]
+    },
+    {
+      "creator": "r/MarvelSnapDecks",
       "video": "Worst deck cl33566",
       "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0yfby/worst_deck_cl33566/",
       "published": "2026-07-19",
@@ -417,6 +438,27 @@
       "zone": "https://marvelsnapzone.com/decks/ika-aurora/"
     },
     {
+      "creator": "r/MarvelSnapDecks",
+      "video": "Electro to infinite CL 18k",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyseug/electro_to_infinite_cl_18k/",
+      "published": "2026-07-17",
+      "name": "",
+      "ids": [
+        "Infinaut",
+        "WarMachine",
+        "Jubilee",
+        "Lockjaw",
+        "Giganto",
+        "ArnimZola",
+        "RedHulk",
+        "Skaar",
+        "Wave",
+        "Blink",
+        "EbonyMaw",
+        "Electro"
+      ]
+    },
+    {
       "creator": "Snap Judgments",
       "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
@@ -591,6 +633,27 @@
         "ShouLao"
       ],
       "zone": "https://marvelsnapzone.com/decks/deck-tritonokubk46/"
+    },
+    {
+      "creator": "r/MarvelSnapDecks",
+      "video": "Won TEN GAMES IN A ROW with Tarantula/Nightmare! 🕷️😱 (CL: 29k)",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyivb0/won_ten_games_in_a_row_with_tarantulanightmare_cl/",
+      "published": "2026-07-16",
+      "name": "TIRA ME A LAS ARANAS!",
+      "ids": [
+        "HydraBob",
+        "TechnoOrganicVirus",
+        "Tarantula",
+        "IronPatriot",
+        "Nightmare",
+        "Viv",
+        "Starbrand",
+        "Crossbones",
+        "CullObsidian",
+        "WilsonFisk",
+        "RedSkull",
+        "GalactusFirstSteps"
+      ]
     },
     {
       "creator": "Unfitparrot",
@@ -1249,46 +1312,6 @@
         "CosmicGhostRider"
       ],
       "zone": "https://marvelsnapzone.com/decks/ika2/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Tarantula Enables Such BROKEN Combos! Marvel Snap Best Weekend Mission Decks",
-      "url": "https://www.youtube.com/watch?v=eGQAuYAODeY",
-      "published": "2026-07-10",
-      "name": "Nakape3i90y",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/nakape3i90y/"
-    },
-    {
-      "creator": "Unfitparrot",
-      "video": "Tarantula Skaar is the BIGGEST NUMBER deck around! Giveaway! - Marvel Snap Deck Highlight",
-      "url": "https://www.youtube.com/watch?v=mXLBc-HYJqA",
-      "published": "2026-07-09",
-      "name": "Shadow Spider",
-      "ids": [
-        "Ares",
-        "KingEitri",
-        "LunaSnow",
-        "MonstroOctopus",
-        "Quinjet",
-        "Sasquatch",
-        "ShadowlandsDaredevil",
-        "Skaar",
-        "Starbrand",
-        "Tarantula",
-        "TechnoOrganicVirus",
-        "WilsonFisk"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Ares-KingEitri-LunaSnow-MonstroOctopus-Quinjet-Sasquatch-ShadowlandsDaredevil-Skaar-Starbrand-Tarantula-TechnoOrganicVirus-WilsonFisk_Shadow%20Spider"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play This SECRET Meta Deck Top Player's Don't Want You To Know About!",
-      "url": "https://www.youtube.com/watch?v=ZNTTBIh6ZHQ",
-      "published": "2026-07-09",
-      "name": "727 Wr 44g",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/727-wr-44g/"
     }
   ]
 }
