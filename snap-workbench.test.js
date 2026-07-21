@@ -838,6 +838,20 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     'both subreddits show in the Following roster (mutable like any channel)');
   w.eval('S.creatorDecks=[{creator:"r/MarvelSnapComp",video:"Guide: Discard to Infinite",url:"https://www.reddit.com/r/MarvelSnapComp/comments/xyz/g/",published:"2026-07-21",name:"Comp Discard",ids:["Hulk","AntMan","Wong"]}]; renderRedditDecks();'); await sleep(10);
   assert(/r\/MarvelSnapComp/.test(d.querySelector('#redditlist .cr-creator').textContent), 'comp-sub decks land on the Reddit segment too');
+  // back-to-top: appears only on the long deck lists once scrolled, and scrolls <main> home
+  const _main = d.querySelector('main');
+  assert(!d.getElementById('btn-top').classList.contains('on'), 'TOP: hidden before any scroll');
+  w.eval('document.querySelector("main").scrollTop=900;'); _main.dispatchEvent(new w.window.Event('scroll')); await sleep(10);
+  assert(d.getElementById('btn-top').classList.contains('on'), 'TOP: shows on a scrolled Reddit segment');
+  d.getElementById('btn-top').click(); await sleep(10);
+  assert(w.eval('document.querySelector("main").scrollTop')===0 && !d.getElementById('btn-top').classList.contains('on'),
+    'TOP: tap scrolls main home and hides the button');
+  w.eval('document.querySelector("main").scrollTop=900;'); _main.dispatchEvent(new w.window.Event('scroll')); await sleep(10);
+  d.querySelector('#savedseg [data-seg="mine"]').click(); await sleep(10);
+  assert(!d.getElementById('btn-top').classList.contains('on'), 'TOP: never shows on the My decks segment');
+  w.eval('setTab("deck")'); await sleep(10);
+  assert(!d.getElementById('btn-top').classList.contains('on'), 'TOP: leaving the Saved tab hides it');
+  w.eval('setTab("saved")'); await sleep(10);
   w.eval('S.creatorDecks=[]; renderRedditDecks();'); await sleep(10);
   assert(/No Reddit decks right now/.test(d.getElementById('redditlist').textContent), 'empty reddit pane explains itself');
   d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(10);

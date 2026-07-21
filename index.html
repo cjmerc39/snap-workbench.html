@@ -508,6 +508,13 @@ h1 .h-snap{color:var(--gold);}
 .sv-btn.load{color:var(--gold); border-color:var(--gold);}
 /* creator decks (Saved > Creator segment) + import-preview card strip */
 #saved-mine[hidden], #saved-creator[hidden], #saved-reddit[hidden]{display:none;}
+/* back-to-top for the long deck lists (Creator + Reddit segments) */
+#btn-top{position:fixed; right:14px; bottom:calc(58px + env(safe-area-inset-bottom) + 14px); z-index:40;
+  width:46px; height:46px; border-radius:999px; border:none; display:none; cursor:pointer;
+  background:var(--gold); color:var(--iris-ink); font-size:20px; font-weight:800; line-height:46px; text-align:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.55);}
+#btn-top.on{display:block;}
+#btn-top:active{transform:scale(.94);}
 .crow{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px; margin-bottom:10px;}
 .cr-head{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 8px; margin-bottom:8px;}
 .cr-creator{font-weight:800; font-size:13.5px; color:var(--gold);}
@@ -1560,6 +1567,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
   </div>
 </div>
 <div id="toast"></div>
+<button id="btn-top" type="button" aria-label="Back to top">&#8593;</button>
 
 <script>
 'use strict';
@@ -5100,7 +5108,27 @@ document.querySelectorAll('#savedseg button').forEach(b => b.onclick = () => {
   $('#saved-reddit').hidden = seg !== 'reddit';
   if(seg === 'creator') renderCreatorDecks();
   if(seg === 'reddit') renderRedditDecks();
+  updateTopBtn();
 });
+/* back-to-top: only on the long deck lists (Creator/Reddit segments), only once scrolled */
+function updateTopBtn(){
+  const b = $('#btn-top'); if(!b) return;
+  const m = document.querySelector('main');
+  const onLongList = S.tab === 'saved' &&
+    (($('#saved-creator') && !$('#saved-creator').hidden) || ($('#saved-reddit') && !$('#saved-reddit').hidden));
+  b.classList.toggle('on', !!(onLongList && m && m.scrollTop > 500));
+}
+(function(){
+  const m = document.querySelector('main');
+  if(m) m.addEventListener('scroll', updateTopBtn, { passive: true });
+  const b = $('#btn-top');
+  if(b) b.onclick = () => {
+    const mm = document.querySelector('main'); if(!mm) return;
+    if(mm.scrollTo) try{ mm.scrollTo({ top: 0, behavior: 'smooth' }); }catch(e){ mm.scrollTop = 0; }
+    else mm.scrollTop = 0;
+    updateTopBtn();
+  };
+})();
 if($('#cr-add-btn')) $('#cr-add-btn').onclick = openAddCreator;
 $('#btn-newdeck').onclick = () => {
   const d = { id:uid(), name:'', cards:[], updated:Date.now() };   // R6: blank draft (hidden from Saved/sync until its first card)
@@ -5616,6 +5644,7 @@ function setTab(t){
   if(t === 'collection'){ renderCollection(); setLibPage(S.libPage); }   // refresh owned/db state + re-apply the hub page
   const sc = document.querySelector('main'); // <main> is the scroller, not the window
   if(sc) sc.scrollTop = 0;
+  updateTopBtn();                            // back-to-top only lives on the Saved deck lists
 }
 document.querySelectorAll('#tabbar button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
 let _qT;
