@@ -2,6 +2,94 @@
   "updated": "2026-07-21",
   "decks": [
     {
+      "creator": "Snap Judgments",
+      "video": "Scorpion Brand New Day BREAKS this 70% Win Rate Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=BOZm8tX-vKU",
+      "published": "2026-07-21",
+      "name": "Brady/Flash",
+      "ids": [
+        "AntMan",
+        "Goliath",
+        "PolarisHorseman",
+        "SamWilson",
+        "USAgent",
+        "CaptainAmerica",
+        "Cosmo",
+        "Diamondback",
+        "Moonstone",
+        "ManThing",
+        "Spectrum",
+        "ScorpionBrandNewDay"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/bradyflash/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Scorpion Brand New Day BREAKS this 70% Win Rate Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=BOZm8tX-vKU",
+      "published": "2026-07-21",
+      "name": "Ika 2",
+      "ids": [
+        "Hood",
+        "NicoMinoru",
+        "SpiderManBrandNewDay",
+        "Merlin",
+        "KateBishop",
+        "GreenGoblin",
+        "Magik",
+        "Viper",
+        "Debrii",
+        "Isca",
+        "Cannonball",
+        "Gorr"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/ika-2/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Scorpion Brand New Day BREAKS this 70% Win Rate Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=BOZm8tX-vKU",
+      "published": "2026-07-21",
+      "name": "ZombiesGoNomNom",
+      "ids": [
+        "SilverSable",
+        "LukeCage",
+        "Scorpion",
+        "Mysterio",
+        "RedGuardian",
+        "Diamondback",
+        "Hazmat",
+        "DragonOfTheMoon",
+        "Laufey",
+        "Malekith",
+        "AntiVenom",
+        "Ajax"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/zombiesgonomnomuuc54es/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Scorpion Brand New Day BREAKS this 70% Win Rate Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=BOZm8tX-vKU",
+      "published": "2026-07-21",
+      "name": "Unhlpfulyoda 82%wr 22g",
+      "ids": [
+        "SpiderManBrandNewDay",
+        "HydraBob",
+        "Askanison",
+        "IronPatriot",
+        "Rhino",
+        "Cosmo",
+        "ShadowKing",
+        "Debrii",
+        "NegasonicTeenageWarhead",
+        "Supergiant",
+        "Ozymandias",
+        "WilsonFisk"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/unhlpfulyoda-82wr-22g/"
+    },
+    {
       "creator": "r/MarvelSnapDecks",
       "video": "Dusted off my oldest deck... Super fun spell-bounce deck (CL 27,548)",
       "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v27ju3/dusted_off_my_oldest_deck_super_fun_spellbounce/",
@@ -20,7 +108,8 @@
         "LinLie",
         "WebSling",
         "NicholasScratch"
-      ]
+      ],
+      "rk": 19
     },
     {
       "creator": "Snap Judgments",
@@ -192,7 +281,8 @@
         "Jocasta",
         "AirWalker",
         "Angel"
-      ]
+      ],
+      "rk": 11
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -540,7 +630,8 @@
         "Blink",
         "EbonyMaw",
         "Electro"
-      ]
+      ],
+      "rk": 12
     },
     {
       "creator": "Snap Judgments",
@@ -737,7 +828,8 @@
         "WilsonFisk",
         "RedSkull",
         "GalactusFirstSteps"
-      ]
+      ],
+      "rk": 22
     },
     {
       "creator": "Unfitparrot",
@@ -1094,6 +1186,24 @@
       "video": "Clog is BACK! NO FUN for Opponents! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=ztCM-NMIbpA",
       "published": "2026-07-11",
+      "name": "Deck Ikah88nuym",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/deck-ikah88nuym/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Clog is BACK! NO FUN for Opponents! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=ztCM-NMIbpA",
+      "published": "2026-07-11",
+      "name": "Derek1",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/derek1/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Clog is BACK! NO FUN for Opponents! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=ztCM-NMIbpA",
+      "published": "2026-07-11",
       "name": "Ika",
       "ids": [
         "SpiderManBrandNewDay",
@@ -1176,138 +1286,6 @@
         "SpiderManBrandNewDay"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/Batroc-Cosmo-GalactusFirstSteps-HydraStomper-Kraven-MaryJane-Nightcrawler-ProfessorX-RocketAndGroot-SamWilson-Silk-SpiderManBrandNewDay_Move?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Rocks",
-      "ids": [
-        "Askanison",
-        "Cosmo",
-        "Debrii",
-        "Killmonger",
-        "MasterMold",
-        "Maximus",
-        "NegasonicTeenageWarhead",
-        "Ronan",
-        "ScarletWitch",
-        "ShadowKing",
-        "Supergiant",
-        "WilsonFisk"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Askanison-Cosmo-Debrii-Killmonger-MasterMold-Maximus-NegasonicTeenageWarhead-Ronan-ScarletWitch-ShadowKing-Supergiant-WilsonFisk_Rocks?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "SNAP Deck",
-      "ids": [
-        "BuckyBarnes",
-        "Carnage",
-        "Death",
-        "Debrii",
-        "Dormammu",
-        "Killmonger",
-        "Muse",
-        "SquirrelGirl",
-        "UncleBen",
-        "Venom",
-        "WeaponXWolverine",
-        "X23"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/BuckyBarnes-Carnage-Death-Debrii-Dormammu-Killmonger-Muse-SquirrelGirl-UncleBen-Venom-WeaponXWolverine-X23_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Aurora",
-      "ids": [
-        "Aurora",
-        "Cosmo",
-        "FanFei",
-        "HydraBob",
-        "Isca",
-        "LinLie",
-        "MadameWeb",
-        "MaryJane",
-        "SamWilson",
-        "SpiderHam",
-        "Venus",
-        "ZombieMisterFantastic"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Aurora-Cosmo-FanFei-HydraBob-Isca-LinLie-MadameWeb-MaryJane-SamWilson-SpiderHam-Venus-ZombieMisterFantastic_Aurora?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Doom",
-      "ids": [
-        "CalibanHorseman",
-        "Chamber",
-        "CosmicGhostRider",
-        "Doom2099",
-        "DrDoom",
-        "DraxAvatarOfLife",
-        "GalactusFirstSteps",
-        "InvisibleWomanFirstSteps",
-        "IronLad",
-        "Isca",
-        "Moondragon",
-        "Sandman"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/CalibanHorseman-Chamber-CosmicGhostRider-Doom2099-DrDoom-DraxAvatarOfLife-GalactusFirstSteps-InvisibleWomanFirstSteps-IronLad-Isca-Moondragon-Sandman_Doom?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Scream",
-      "ids": [
-        "Aero",
-        "Batroc",
-        "Kingpin",
-        "Kraven",
-        "Magneto",
-        "Polaris",
-        "Prowler",
-        "SamWilson",
-        "Scream",
-        "SpiderMan",
-        "SpiderManBrandNewDay",
-        "Stegron"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Aero-Batroc-Kingpin-Kraven-Magneto-Polaris-Prowler-SamWilson-Scream-SpiderMan-SpiderManBrandNewDay-Stegron_Scream?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Galacti",
-      "ids": [
-        "AdamWarlock",
-        "AmericaChavez",
-        "JeffTheBabyDolphin",
-        "JubileeSilverSurfer",
-        "Magik",
-        "MajesticWingbeat",
-        "Maverick",
-        "NicoMinoru",
-        "Stick",
-        "SuperiorSpiderMan",
-        "Surge",
-        "ZombieGalacti"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AdamWarlock-AmericaChavez-JeffTheBabyDolphin-JubileeSilverSurfer-Magik-MajesticWingbeat-Maverick-NicoMinoru-Stick-SuperiorSpiderMan-Surge-ZombieGalacti_Galacti?utm_medium=affiliate&utm_campaign=alexcoccia"
     }
   ],
   "redditChecked": [
@@ -1339,6 +1317,36 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v10bs6/first_time_hitting_infinite_im_a_simple_man_i/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0wsgu/cl_24411_was_a_slog_for_me_locations_screwed_me/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0tr3i/another_infinite_with_spider_man_noir_deck_cl/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0q6le/discard_infinite_cl_13410/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0q6le/discard_infinite_cl_13410/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v2rt75/i_have_hit_infinite_for_a_4th_time_cl_14533/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0m5io/infinite_with_surfer_cl_22529/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0kbbn/what_you_think_about_my_deck_collection_level/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0k5up/forcemove_deck_cl9220/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0k2dr/ego_must_be_stopped_cl_24666/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0i3h0/moirax_is_amazingcl11326/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0hfc5/easily_my_strongest_deck_right_now_infinite_3x_cl/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0gmcg/thinking_of_updating_my_goto_chaos_deck_after_the/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0gkjq/infinite_with_nightmare_cl_5346/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0et6j/my_first_infinite_cl_9470/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0aklo/two_6drop_move_deck_cl_27119/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v07jl3/merge_heavy_infinite_cl_28k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v01t3p/small_cl_players_cl6500/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v01hgo/what_can_i_improve_in_this_destroy_deck_cl_1685/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uzyzq1/black_hamzat_cl6500/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uzwws5/damn_can_it_go_any_higher_than_this_with_jsscl20k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uzsqff/lf_bounce_beast_deck_cl_22k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uzlafh/made_the_best_of_the_latest_ota_and_mixed_move/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uz7hqt/trying_to_cook_cause_im_bored_any_ideas_to/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyzayb/improvements_to_nonstandard_movement_deck_cl_27k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uywwzc/help_improving_my_c5_deck_cl_27k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyj6ca/cl6807_need_help_post_askani_nerf/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyhz4j/my_deck_for_bnd_scorpion_next_week_cl28789/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyg9zl/high_voltage_recommendations_cl_27162/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uwwshm/end_of_turn_easy_infinity_cl25285/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uxnhyx/2nd_time_infinite_with_sauron_nightmare_cl_16410/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uxizer/hit_infinite_again_cl22861/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uxee2j/dooms_end_to_infinite_cl_32438/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uxp9it/zombie_g_move_got_me_to_infinite_30_months_in_a/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uy1rjq/just_got_majestic_wingbeat_any_good_decks_to_put/"
   ]
 }
