@@ -838,6 +838,21 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     'both subreddits show in the Following roster (mutable like any channel)');
   w.eval('S.creatorDecks=[{creator:"r/MarvelSnapComp",video:"Guide: Discard to Infinite",url:"https://www.reddit.com/r/MarvelSnapComp/comments/xyz/g/",published:"2026-07-21",name:"Comp Discard",ids:["Hulk","AntMan","Wong"]}]; renderRedditDecks();'); await sleep(10);
   assert(/r\/MarvelSnapComp/.test(d.querySelector('#redditlist .cr-creator').textContent), 'comp-sub decks land on the Reddit segment too');
+  // upvote-rank sort + subreddit filter chips
+  w.eval('S.redditSub=null; S.creatorDecks=[' +
+    '{creator:"r/MarvelSnapDecks",video:"newest unranked",url:"https://www.reddit.com/r/MarvelSnapDecks/comments/n1/a/",published:"2026-07-21",name:"Unranked New",ids:["Hulk","AntMan"]},' +
+    '{creator:"r/MarvelSnapDecks",video:"rank three",url:"https://www.reddit.com/r/MarvelSnapDecks/comments/r3/b/",published:"2026-07-15",name:"Rank Three",ids:["Hulk","Wong"],rk:3},' +
+    '{creator:"r/MarvelSnapComp",video:"rank one",url:"https://www.reddit.com/r/MarvelSnapComp/comments/r1/c/",published:"2026-07-14",name:"Rank One",ids:["Hulk","Odin"],rk:1}]; renderRedditDecks();'); await sleep(10);
+  const _rNames = [...d.querySelectorAll('#redditlist .cr-deckname')].map(x=>x.textContent);
+  assert(_rNames.join('|')==='Rank One|Rank Three|Unranked New', 'RSORT: ranked decks lead (best rank first), unranked follow newest-first');
+  assert(/▲ #1 this week/.test(d.querySelector('#redditlist .crow .cr-rank').textContent), 'RSORT: the weekly rank badge renders');
+  const _chips = [...d.querySelectorAll('#redditlist .cr-tools .chip')].map(x=>x.textContent);
+  assert(_chips.join('|')==='All|r/MarvelSnapComp|r/MarvelSnapDecks', 'RSORT: filter chips list All + each sub with decks');
+  [...d.querySelectorAll('#redditlist .cr-tools .chip')].find(c=>c.textContent==='r/MarvelSnapComp').click(); await sleep(10);
+  assert(d.querySelectorAll('#redditlist .crow').length===1 && /Rank One/.test(d.getElementById('redditlist').textContent), 'RSORT: a sub chip filters to that sub');
+  [...d.querySelectorAll('#redditlist .cr-tools .chip')].find(c=>c.textContent==='All').click(); await sleep(10);
+  assert(d.querySelectorAll('#redditlist .crow').length===3, 'RSORT: the All chip clears the filter');
+  w.eval('S.redditSub=null;');
   // back-to-top: appears only on the long deck lists once scrolled, and scrolls <main> home
   const _main = d.querySelector('main');
   assert(!d.getElementById('btn-top').classList.contains('on'), 'TOP: hidden before any scroll');

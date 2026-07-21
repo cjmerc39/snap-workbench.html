@@ -1196,6 +1196,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 /* R12: buildability on creator rows */
 .cr-tools{margin:0 0 10px;}
 .cr-own{font-size:10px; font-weight:800; color:var(--dim); background:rgba(255,255,255,.06); border-radius:6px; padding:2px 7px; white-space:nowrap;}
+.cr-rank{font-size:10px; font-weight:800; color:var(--gold); background:rgba(255,255,255,.06); border-radius:6px; padding:2px 7px; white-space:nowrap;}
 .cr-own.full{color:#0b1f17; background:var(--ok);}
 .cr-missing{font-size:11px; color:var(--faint); margin-top:6px;}
 .mc-strip{display:flex; flex-wrap:wrap; gap:5px; margin:2px 0 8px;}
@@ -4902,6 +4903,7 @@ function crRow(cd, cq){
   if(cd.video) head.appendChild(el('span','cr-video', cd.video));
   if(cd.added) head.appendChild(el('span','cr-added','Added'));
   if(cd.published) head.appendChild(el('span','cr-date', cd.published));
+  if(cd.rk) head.appendChild(el('span','cr-rank','▲ #' + cd.rk + ' this week'));   // weekly upvote rank from the sub's top feed
   if(cd.name) head.appendChild(el('span','cr-deckname', cd.name));   // several decks can share one video — the name tells them apart
   // R12: can you actually build this? Own-count chip + what's missing, right on the row.
   const bi = S.owned.size ? crBuildInfo(cd) : null;
@@ -4986,13 +4988,34 @@ function renderRedditDecks(){
   const wrap = $('#redditlist'); if(!wrap) return;
   wrap.innerHTML = '';
   const hidden = new Set((S.prefs && S.prefs.hiddenCreators) || []);
-  const all = S.creatorDecks.filter(isRedditDeck).filter(cd => !hidden.has(cd.creator))
-    .slice().sort((a,b) => String(b.published||'').localeCompare(String(a.published||'')));
+  let all = S.creatorDecks.filter(isRedditDeck).filter(cd => !hidden.has(cd.creator));
   if(!all.length){
     wrap.appendChild(el('div','warnbox','No Reddit decks right now — the nightly harvest keeps the last two weeks of posts that carry a share code (r/MarvelSnapDecks, r/MarvelSnapComp).'));
     return;
   }
-  wrap.appendChild(el('div','mnote','Decks posted on r/MarvelSnapDecks and r/MarvelSnapComp (codes from the post or the poster’s comment), refreshed nightly. Tap Open post for the discussion.'));
+  // subreddit filter — chips appear once more than one sub has decks
+  const subs = [...new Set(all.map(cd => cd.creator))].sort();
+  if(subs.length > 1 || S.redditSub){
+    const bar = el('div','cr-tools');
+    ['All'].concat(subs).forEach(sname => {
+      const on = (S.redditSub || 'All') === sname;
+      const c = el('button','chip' + (on ? ' on' : ''), sname);
+      c.type = 'button';
+      c.onclick = () => { S.redditSub = sname === 'All' ? null : sname; renderRedditDecks(); };
+      bar.appendChild(c);
+    });
+    wrap.appendChild(bar);
+  }
+  if(S.redditSub) all = all.filter(cd => cd.creator === S.redditSub);
+  if(!all.length){
+    wrap.appendChild(el('div','warnbox','No decks from ' + S.redditSub + ' in the current window.'));
+    return;
+  }
+  // reddit's feeds carry no raw scores, but the weekly-top feed is upvote-ordered:
+  // ranked decks first (best rank up top), then everything else newest-first
+  all = all.slice().sort((a,b) =>
+    ((a.rk || 999) - (b.rk || 999)) || String(b.published||'').localeCompare(String(a.published||'')));
+  wrap.appendChild(el('div','mnote','Most-upvoted this week first (▲ badges), then newest. Codes come from the post or the poster’s comment; refreshed nightly. Tap Open post for the discussion.'));
   all.forEach(cd => wrap.appendChild(crRow(cd, '')));
 }
 function renderCreatorDecks(){

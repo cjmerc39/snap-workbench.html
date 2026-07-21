@@ -240,13 +240,23 @@ async function fetchReddit(D, KNOWN, prevUrls, checkedSet){
         try{
           const r = await fetch(`https://www.reddit.com/r/` + sub + f, REDDIT_UA);
           if(r.ok){
-            (await r.text()).split(`<entry>`).slice(1).forEach(e => posts.push({ sub, e }));
+            const isTop = f.startsWith(`/top`);
+            (await r.text()).split(`<entry>`).slice(1).forEach((e, idx) =>
+              posts.push({ sub, e, topIdx: isTop ? idx + 1 : 0 }));
             feedOk = true; got = true;
           } else console.error(`  r/${sub}${f.split(`?`)[0]}: HTTP ${r.status}` + (attempt ? `` : ` — retrying in ` + (REDDIT_FEED_PACE_MS/1000) + `s`));
         }catch(err2){ console.error(`  r/${sub}${f.split(`?`)[0]}: ${err2 && err2.message}`); }
       }
     }
     if(!feedOk) return { ok:false, decks:[] };
+    // the RSS carries no scores, but /top/week IS upvote-ordered — a post's position
+    // there is its weekly rank (per sub). The app sorts the Reddit segment with it.
+    const rankOf = new Map();
+    for(const p of posts){
+      if(!p.topIdx) continue;
+      const u = unesc((p.e.match(/<link[^>]*href="([^"]+)"/) || [])[1] || ``);
+      if(u && !rankOf.has(u)) rankOf.set(u, p.topIdx);
+    }
     // round-robin the subs so the comment budget can't be eaten whole by whichever
     // feed happens to list first
     const bySub = new Map(SUBREDDITS.map(s => [s, []]));
@@ -307,6 +317,7 @@ async function fetchReddit(D, KNOWN, prevUrls, checkedSet){
         if(dk.untapped) entry.untapped = dk.untapped;
         if(dk.zone) entry.zone = dk.zone;
         if(dk.fan){ entry.fan = dk.fan; entry.fanId = dk.fanId; }
+        if(rankOf.has(url)) entry.rk = rankOf.get(url);   // weekly upvote rank (per sub)
         decks.push(entry);
         perSub[sub] = (perSub[sub] || 0) + 1;
       }
@@ -315,7 +326,7 @@ async function fetchReddit(D, KNOWN, prevUrls, checkedSet){
       SUBREDDITS.map(s => `r/` + s + ` ` + (perSub[s] || 0)).join(`, `) + `] | ` +
       `already-had ${tally.prev} · aged-out ${tally.aged} · code-in-body ${tally.bodyCode} · no-comments-url ${tally.noComments} · ` +
       `threads-checked ${commentFetches} · checked-before ${tally.checkedBefore} · gated ${tally.gated}`);
-    return { ok:true, decks, checkedEmpty };
+    return { ok:true, decks, checkedEmpty, ranks: Object.fromEntries(rankOf) };
   }catch(err){
     console.error(`  reddit: fetch failed - ${err && err.message}`);
     return { ok:false, decks:[] };
@@ -493,6 +504,14 @@ async function main(){
   // R10.2: heal fossil ids in kept entries (tokens decoded before a decoder fix, preserved by the merge)
   const healIds = arr => (arr || []).map(id => table.KNOWN.has(id) ? id : (table.SHORT[id] || id));
   merged.forEach(x => { if(x.ids && x.ids.length) x.ids = healIds(x.ids); });
+  // refresh weekly upvote ranks on every kept reddit deck (ranks shift nightly; a post
+  // that fell off this week's top loses its badge) — only when the feeds answered
+  if(rr.ok && rr.ranks){
+    for(const x of merged){
+      if(!/^r\//.test(String(x.creator || ``))) continue;
+      if(rr.ranks[x.url]) x.rk = rr.ranks[x.url]; else delete x.rk;
+    }
+  }
   const today = new Date().toISOString().slice(0, 10);
 
   console.log(`fresh: ${fresh.length} | kept-from-prev (<${AGE_DAYS}d): ${keepPrev.length} | merged+deduped+capped: ${merged.length}`);
