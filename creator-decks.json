@@ -91,6 +91,48 @@
     },
     {
       "creator": "r/MarvelSnapDecks",
+      "video": "Sun Scorpion ☀️🦂 CL13K",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v2sq50/sun_scorpion_cl13k/",
+      "published": "2026-07-21",
+      "name": "",
+      "ids": [
+        "StarlordMasterOfTheSun",
+        "GrandMaster",
+        "Sunspot",
+        "LadyBullseye",
+        "Wong",
+        "Chameleon",
+        "Magik",
+        "ArnimZola",
+        "CassandraNova",
+        "Ajax",
+        "Scorpion",
+        "ScorpionBrandNewDay"
+      ]
+    },
+    {
+      "creator": "r/MarvelSnapDecks",
+      "video": "Infinite with lockdown",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v2s51x/infinite_with_lockdown/",
+      "published": "2026-07-21",
+      "name": "",
+      "ids": [
+        "EbonyMaw",
+        "JeffTheBabyLandShark",
+        "Storm",
+        "Electro",
+        "WarMachine",
+        "Infinaut",
+        "Lockjaw",
+        "ProfessorX",
+        "Nightcrawler",
+        "Blink",
+        "Titania",
+        "LunaSnow"
+      ]
+    },
+    {
+      "creator": "r/MarvelSnapDecks",
       "video": "Dusted off my oldest deck... Super fun spell-bounce deck (CL 27,548)",
       "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v27ju3/dusted_off_my_oldest_deck_super_fun_spellbounce/",
       "published": "2026-07-21",
@@ -1242,50 +1284,6 @@
         "Abomination"
       ],
       "zone": "https://marvelsnapzone.com/decks/derek1/"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "SNAP Deck",
-      "ids": [
-        "GalactusFirstSteps",
-        "Iceman",
-        "Isca",
-        "JeffTheBabyLandShark",
-        "MajesticWingbeat",
-        "Mercury",
-        "Mysterio",
-        "Nightcrawler",
-        "ProfessorX",
-        "RocketAndGroot",
-        "SpiderManBrandNewDay",
-        "TheThingFirstSteps"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/GalactusFirstSteps-Iceman-Isca-JeffTheBabyLandShark-MajesticWingbeat-Mercury-Mysterio-Nightcrawler-ProfessorX-RocketAndGroot-SpiderManBrandNewDay-TheThingFirstSteps_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Move",
-      "ids": [
-        "Batroc",
-        "Cosmo",
-        "GalactusFirstSteps",
-        "HydraStomper",
-        "Kraven",
-        "MaryJane",
-        "Nightcrawler",
-        "ProfessorX",
-        "RocketAndGroot",
-        "SamWilson",
-        "Silk",
-        "SpiderManBrandNewDay"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Batroc-Cosmo-GalactusFirstSteps-HydraStomper-Kraven-MaryJane-Nightcrawler-ProfessorX-RocketAndGroot-SamWilson-Silk-SpiderManBrandNewDay_Move?utm_medium=affiliate&utm_campaign=alexcoccia"
     }
   ],
   "redditChecked": [
@@ -1347,6 +1345,9 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1uxizer/hit_infinite_again_cl22861/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1uxee2j/dooms_end_to_infinite_cl_32438/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1uxp9it/zombie_g_move_got_me_to_infinite_30_months_in_a/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uy1rjq/just_got_majestic_wingbeat_any_good_decks_to_put/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uy1rjq/just_got_majestic_wingbeat_any_good_decks_to_put/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uwr64r/it_might_not_be_the_best_deck_but_it_definitely/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uydnu9/some_deck_for_namora_cl18850/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uxqn2w/infinit_with_this_doom_deck_alioth_is_the/"
   ]
 }
