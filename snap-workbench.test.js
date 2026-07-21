@@ -820,14 +820,24 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(_cdec.Name==='Test Deck' && Array.isArray(_cdec.Cards) && _cdec.Cards.length===w.eval('S.creatorDecks[0].ids.length')
     && _cdec.Cards.every(c=>c.CardDefId), 'the copied code is a valid Snap share code for that deck');
   assert(/Copied/.test(_ccBtn.textContent), 'the button confirms the copy');
-  // reddit-harvested decks (creator r/MarvelSnapDecks) render like any creator deck,
-  // with the link-out labelled for a post instead of a video
-  w.eval('S.creatorDecks=[{creator:"r/MarvelSnapDecks",video:"My spicy Wong list",url:"https://www.reddit.com/r/MarvelSnapDecks/comments/abc/x/",published:"2026-07-20",name:"Wong Spice",ids:["Hulk","AntMan","Wong"]}]; renderCreatorDecks();'); await sleep(20);
-  const _rrow = d.querySelector('#creatorlist .crow');
-  assert(_rrow!==null && /r\/MarvelSnapDecks/.test(_rrow.querySelector('.cr-creator').textContent), 'reddit deck renders with the subreddit as creator');
+  // reddit-harvested decks live on their OWN segment: excluded from Creator decks,
+  // rendered in #redditlist with the link-out labelled for a post instead of a video
+  w.eval('S.creatorDecks=[' +
+    '{creator:"r/MarvelSnapDecks",video:"My spicy Wong list",url:"https://www.reddit.com/r/MarvelSnapDecks/comments/abc/x/",published:"2026-07-20",name:"Wong Spice",ids:["Hulk","AntMan","Wong"]},' +
+    '{creator:"Alexander Coccia",video:"YT deck",url:"https://youtu.be/x",published:"2026-07-19",name:"YT Build",ids:["Hulk","AntMan"]}]; renderCreatorDecks();'); await sleep(20);
+  assert(d.querySelectorAll('#creatorlist .crow').length===1 && !/r\/MarvelSnapDecks/.test(d.querySelector('#creatorlist .cr-creator').textContent),
+    'reddit decks are excluded from the Creator segment');
+  d.querySelector('#savedseg [data-seg="reddit"]').click(); await sleep(20);
+  assert(d.getElementById('saved-reddit').hidden===false && d.getElementById('saved-creator').hidden===true, 'the Reddit segment button shows its pane');
+  const _rrow = d.querySelector('#redditlist .crow');
+  assert(_rrow!==null && /r\/MarvelSnapDecks/.test(_rrow.querySelector('.cr-creator').textContent), 'reddit deck renders in its own pane');
+  assert(d.querySelectorAll('#redditlist .crow').length===1, 'only reddit decks render there');
   assert([..._rrow.querySelectorAll('a.abtn')].some(a=>a.textContent==='Open post' && /reddit\.com/.test(a.href)), 'reddit rows link out as "Open post", not "Watch"');
   assert([..._rrow.querySelectorAll('button.abtn')].some(b=>b.textContent==='Copy code'), 'reddit decks get the Copy code button too');
   assert(w.eval('creatorRoster().some(r=>r.name==="r/MarvelSnapDecks")'), 'the subreddit shows in the Following roster (mutable like any channel)');
+  w.eval('S.creatorDecks=[]; renderRedditDecks();'); await sleep(10);
+  assert(/No Reddit decks right now/.test(d.getElementById('redditlist').textContent), 'empty reddit pane explains itself');
+  d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(10);
 
   // --- marvelsnapzone (zone) + snap.fan (fan) link-outs render for undecodable entries ---
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+
@@ -893,7 +903,10 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(w.eval('window.__realcd')===true && w.eval('S.creatorDecks.length')>0, 'shipped creator-decks.json parses + loads ('+w.eval('S.creatorDecks.length')+' decks)');
   w.eval('setTab("saved")'); await sleep(10);
   d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(30);
-  assert(d.querySelectorAll('#creatorlist .crow').length===w.eval('S.creatorDecks.length'), 'every shipped creator deck renders a .crow row');
+  assert(d.querySelectorAll('#creatorlist .crow').length===w.eval('S.creatorDecks.filter(cd=>!isRedditDeck(cd)).length'), 'every shipped non-reddit creator deck renders a .crow row');
+  d.querySelector('#savedseg [data-seg="reddit"]').click(); await sleep(20);
+  assert(d.querySelectorAll('#redditlist .crow').length===w.eval('S.creatorDecks.filter(isRedditDeck).length'), 'every shipped reddit deck renders on the Reddit segment');
+  d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(10);
   d.querySelector('#savedseg [data-seg="mine"]').click(); await sleep(10);
 
   // restore an ordinary tab for the remaining suite

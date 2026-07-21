@@ -507,7 +507,7 @@ h1 .h-snap{color:var(--gold);}
 .sv-btn{background:var(--panel); border:1px solid var(--line); color:var(--dim); border-radius:9px; padding:8px 11px; font-size:13px; font-weight:700; min-height:44px; min-width:44px;}
 .sv-btn.load{color:var(--gold); border-color:var(--gold);}
 /* creator decks (Saved > Creator segment) + import-preview card strip */
-#saved-mine[hidden], #saved-creator[hidden]{display:none;}
+#saved-mine[hidden], #saved-creator[hidden], #saved-reddit[hidden]{display:none;}
 .crow{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px; margin-bottom:10px;}
 .cr-head{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 8px; margin-bottom:8px;}
 .cr-creator{font-weight:800; font-size:13.5px; color:var(--gold);}
@@ -1372,7 +1372,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 
   <!-- SAVED -->
   <section class="view" id="view-saved">
-    <div class="segment" id="savedseg"><button data-seg="mine" class="on">My decks</button><button data-seg="creator">Creator decks</button></div>
+    <div class="segment" id="savedseg"><button data-seg="mine" class="on">My decks</button><button data-seg="creator">Creator decks</button><button data-seg="reddit">Reddit</button></div>
     <div id="saved-mine">
       <button class="abtn primary" id="btn-newdeck" style="width:100%">+ New deck</button>
       <button class="abtn" id="btn-compare" style="width:100%;margin-top:8px">Compare two decks</button>
@@ -1383,6 +1383,10 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       <div class="section-label">Creator decks</div>
       <div class="cr-add"><button class="abtn primary" id="cr-add-btn">+ Add creator</button></div>
       <div id="creatorlist"></div>
+    </div>
+    <div id="saved-reddit" hidden>
+      <div class="section-label">r/MarvelSnapDecks</div>
+      <div id="redditlist"></div>
     </div>
   </section>
 
@@ -4866,6 +4870,122 @@ function openCreatorManager(){
   const ad = $('#crm-add'); if(ad) ad.onclick = () => openAddCreator();
   const cl = $('#crm-close'); if(cl) cl.onclick = closeModal;
 }
+/* deck-row toolkit — shared by the Creator and Reddit segments */
+const isRedditDeck = cd => /^r\//.test(String((cd && cd.creator) || ''));
+const crHealId = id => S.byId[id] ? id : (S.short[id] || id);
+const crHttpOk = u => /^https?:\/\//i.test(u);   // defense-in-depth: only http(s) hrefs ever become links
+const crLinkBtn = (href, label) => { const a=document.createElement('a'); a.className='abtn'; a.href=href; a.target='_blank'; a.rel='noopener noreferrer'; a.textContent=label; return a; };
+function crBuildInfo(cd){
+  const ids = (cd.ids || []).map(crHealId);
+  if(!ids.length) return null;                     // link-out-only rows can't be judged
+  const missing = ids.filter(id => !S.owned.has(id));
+  return { own: ids.length - missing.length, total: ids.length, missing };
+}
+function crCardHits(cd, cq){
+  return (cd.ids || []).map(crHealId)
+    .filter(id => { const c = getCard(id); return ((c && c.n) || id).toLowerCase().includes(cq); });
+}
+/* one deck row (head / card strip / missing line / actions); cq lights searched cards */
+function crRow(cd, cq){
+  const row = el('div','crow');
+  const head = el('div','cr-head');
+  head.appendChild(el('span','cr-creator', cd.creator));
+  if(cd.video) head.appendChild(el('span','cr-video', cd.video));
+  if(cd.added) head.appendChild(el('span','cr-added','Added'));
+  if(cd.published) head.appendChild(el('span','cr-date', cd.published));
+  if(cd.name) head.appendChild(el('span','cr-deckname', cd.name));   // several decks can share one video — the name tells them apart
+  // R12: can you actually build this? Own-count chip + what's missing, right on the row.
+  const bi = S.owned.size ? crBuildInfo(cd) : null;
+  if(bi) head.appendChild(el('span','cr-own' + (bi.missing.length ? '' : ' full'),
+    bi.missing.length ? 'own ' + bi.own + '/' + bi.total : '✓ buildable'));
+  row.appendChild(head);
+  const healed = (cd.ids||[]).map(crHealId);
+  if(healed.length){
+    const strip = el('div','cr-strip');
+    strip.innerHTML = healed.map(id => getCard(id) || makeStub(id)).sort(SORTS[0].fn).map(miniHtml).join('');
+    if(cq){                                        // R13: light up the searched card, dim the rest
+      const hits = new Set(crCardHits(cd, cq));
+      strip.classList.add('q');
+      strip.querySelectorAll('.mini').forEach(m => { if(hits.has(m.dataset.d)) m.classList.add('hit'); });
+    }
+    row.appendChild(strip);
+  } else if(cd.zone){
+    // Snap Zone deck pages can't be decoded in the browser (bot wall + no CORS on their
+    // API), but their preview renderer is open — show the official 12-card image, same
+    // host all the card art already comes from. The nightly harvester decodes built-ins.
+    const slug = (String(cd.zone).match(/marvelsnapzone\.com\/decks\/([^\/?#]+)/i) || [])[1];
+    if(slug){
+      const img = document.createElement('img');
+      img.className = 'cr-zoneprev'; img.loading = 'lazy'; img.decoding = 'async'; img.alt = 'Deck preview';
+      img.referrerPolicy = 'no-referrer';          // hotlink filters key on Referer
+      img.src = 'https://marvelsnapzone.com/img/deckpreview.php?slug=' + encodeURIComponent(slug);
+      img.onerror = () => {                        // burst-loading several previews can trip the CDN — retry once
+        if(img.dataset.retried){ img.remove(); return; }
+        img.dataset.retried = '1';
+        setTimeout(() => { img.src = img.src + (img.src.includes('&r=') ? '' : '&r=1'); }, 1500 + Math.floor(Math.random()*1500));
+      };
+      row.appendChild(img);
+    }
+  }
+  if(bi && bi.missing.length){
+    const names = bi.missing.map(id => (getCard(id)||{n:id}).n);
+    row.appendChild(el('div','cr-missing', 'Missing: ' +
+      (names.length <= 4 ? names.join(', ') : names.slice(0,3).join(', ') + ' +' + (names.length-3) + ' more')));
+  }
+  const acts = el('div','cr-acts');
+  if(cd.ids.length){
+    const saveB = el('button','abtn primary','Save a copy');
+    saveB.onclick = () => {
+      const ids2 = healed.slice(0,12);
+      const unknown = ids2.filter(id => !S.byId[id]); unknown.forEach(makeStub);
+      const dk = { id:uid(), name: cd.name || (cd.creator + ' deck'), cards: ids2, updated: Date.now() };
+      snapshotDeck(dk); S.decks.unshift(dk); S.activeId = dk.id; persistDecks(); renderAll(); setTab('deck');
+      toast('Saved “' + dk.name + '”');
+    };
+    acts.appendChild(saveB);
+    // straight to the game: copy the share code without a save-then-export detour
+    const codeB = el('button','abtn','Copy code');
+    codeB.onclick = async () => {
+      const ok = await copyText(exportCode({ name: cd.name || (cd.creator + ' deck'), cards: healed.slice(0,12) }));
+      toast(ok ? 'Deck code copied — paste it in Snap' : 'Could not copy on this browser');
+      if(ok){ codeB.textContent = '✓ Copied'; setTimeout(() => { codeB.textContent = 'Copy code'; }, 1600); }
+    };
+    acts.appendChild(codeB);
+  } else if(cd.untapped && crHttpOk(cd.untapped)){
+    acts.appendChild(crLinkBtn(cd.untapped, 'View on untapped'));
+  } else if(cd.zone && crHttpOk(cd.zone)){
+    acts.appendChild(crLinkBtn(cd.zone, 'View on Snap Zone'));
+  } else if(cd.fan && crHttpOk(cd.fan)){
+    acts.appendChild(crLinkBtn(cd.fan, 'View on snap.fan'));
+  }
+  if(cd.url && crHttpOk(cd.url)) acts.appendChild(crLinkBtn(cd.url, /reddit\.com/i.test(cd.url) ? 'Open post' : 'Watch'));
+  if(cd.added){                                                 // R5-J: remove the whole channel + its decks
+    const rm = el('button','abtn danger','Remove');
+    rm.onclick = () => {
+      S.addedCreators = S.addedCreators.filter(c => c.id !== cd.chId);
+      S.addedCreatorDecks = S.addedCreatorDecks.filter(d => d.chId !== cd.chId);
+      persistCreators(); renderCreatorDecks();
+    };
+    acts.appendChild(rm);
+  }
+  row.appendChild(acts);
+  return row;
+}
+/* the Reddit segment: harvested r/MarvelSnapDecks posts, newest first — same rows,
+   none of the channel chrome (follow manager / trending / per-creator filters) */
+function renderRedditDecks(){
+  const wrap = $('#redditlist'); if(!wrap) return;
+  wrap.innerHTML = '';
+  const hidden = new Set((S.prefs && S.prefs.hiddenCreators) || []);
+  const all = S.creatorDecks.filter(isRedditDeck).filter(cd => !hidden.has(cd.creator))
+    .slice().sort((a,b) => String(b.published||'').localeCompare(String(a.published||'')));
+  if(!all.length){
+    wrap.appendChild(el('div','warnbox','No Reddit decks right now — the nightly harvest keeps the last two weeks of r/MarvelSnapDecks posts that carry a share code.'));
+    return;
+  }
+  wrap.appendChild(el('div','mnote','Decks posted on r/MarvelSnapDecks (codes from the post or the poster’s comment), refreshed nightly. Tap Open post for the discussion.'));
+  all.forEach(cd => wrap.appendChild(crRow(cd, '')));
+}
 function renderCreatorDecks(){
   refreshAddedCreators(); // fire-and-forget; TTL + busy guard make this a no-op except ~once a day
   const wrap = $('#creatorlist'); if(!wrap) return;
@@ -4873,6 +4993,7 @@ function renderCreatorDecks(){
   // R5-J: harvested + in-app added, tagged. R11.1: newest first — a just-added creator's
   // decks used to land BELOW 30+ builtin rows, invisible without a long scroll.
   let all = S.creatorDecks.concat(S.addedCreatorDecks || [])
+    .filter(cd => !isRedditDeck(cd))               // reddit decks live on their own segment
     .slice().sort((a,b) => String(b.published||'').localeCompare(String(a.published||'')));
   // A channel can be BOTH built-in and followed in-app (Snap Judgments) — the same deck
   // then arrives from two sources. Keep one row per creator+deck, preferring the entry
@@ -4916,7 +5037,7 @@ function renderCreatorDecks(){
     wrap.appendChild(el('div','warnbox','No creator decks yet — these refresh daily. Tap “+ Add creator” to follow any YouTube channel.'));
     return;
   }
-  const healId0 = id => S.byId[id] ? id : (S.short[id] || id);
+  const healId0 = crHealId;
   // R13: card search — "is anyone building around the card I want to play?"
   // Transient like crFilter; matches card NAMES in each deck (healed ids), hits glow in the strip.
   const sr = el('div','cr-search');
@@ -4937,8 +5058,7 @@ function renderCreatorDecks(){
     }
   }
   const cq = (S.crCardQ || '').trim().toLowerCase();
-  const cardHits = cd => (cd.ids || []).map(healId0)
-    .filter(id => { const c = getCard(id); return ((c && c.n) || id).toLowerCase().includes(cq); });
+  const cardHits = cd => crCardHits(cd, cq);
   if(cq){
     all = all.filter(cd => cardHits(cd).length);
     if(!all.length){
@@ -4949,12 +5069,7 @@ function renderCreatorDecks(){
   }
   // R12: buildability — the first question a collection-gated game asks of any deck.
   // Only meaningful once the user has marked a collection (S.owned non-empty).
-  const buildInfo = cd => {
-    const ids = (cd.ids || []).map(healId0);
-    if(!ids.length) return null;                     // link-out-only rows can't be judged
-    const missing = ids.filter(id => !S.owned.has(id));
-    return { own: ids.length - missing.length, total: ids.length, missing };
-  };
+  const buildInfo = crBuildInfo;
   if(S.owned.size){
     const bt = el('button','chip' + (S.prefs.crBuildable ? ' on' : ''), (S.prefs.crBuildable ? '✓ ' : '') + 'Buildable only');
     bt.id = 'cr-buildable'; bt.type = 'button';
@@ -4969,95 +5084,8 @@ function renderCreatorDecks(){
       }
     }
   }
-  const httpOk = u => /^https?:\/\//i.test(u);   // defense-in-depth: only http(s) hrefs ever become links
-  const linkBtn = (href, label) => { const a=document.createElement('a'); a.className='abtn'; a.href=href; a.target='_blank'; a.rel='noopener noreferrer'; a.textContent=label; return a; };
-  // R10.2: heal fossil ids (pre-vowel-fix compressed tokens like Agn5) via the skeleton index,
-  // and show every strip in the app's default order: energy asc -> power asc -> name.
-  all.forEach(cd => {
-    const row = el('div','crow');
-    const head = el('div','cr-head');
-    head.appendChild(el('span','cr-creator', cd.creator));
-    if(cd.video) head.appendChild(el('span','cr-video', cd.video));
-    if(cd.added) head.appendChild(el('span','cr-added','Added'));
-    if(cd.published) head.appendChild(el('span','cr-date', cd.published));
-    if(cd.name) head.appendChild(el('span','cr-deckname', cd.name));   // several decks can share one video — the name tells them apart
-    // R12: can you actually build this? Own-count chip + what's missing, right on the row.
-    const bi = S.owned.size ? buildInfo(cd) : null;
-    if(bi) head.appendChild(el('span','cr-own' + (bi.missing.length ? '' : ' full'),
-      bi.missing.length ? 'own ' + bi.own + '/' + bi.total : '✓ buildable'));
-    row.appendChild(head);
-    const healed = (cd.ids||[]).map(healId0);
-    if(healed.length){
-      const strip = el('div','cr-strip');
-      strip.innerHTML = healed.map(id => getCard(id) || makeStub(id)).sort(SORTS[0].fn).map(miniHtml).join('');
-      if(cq){                                        // R13: light up the searched card, dim the rest
-        const hits = new Set(cardHits(cd));
-        strip.classList.add('q');
-        strip.querySelectorAll('.mini').forEach(m => { if(hits.has(m.dataset.d)) m.classList.add('hit'); });
-      }
-      row.appendChild(strip);
-    } else if(cd.zone){
-      // Snap Zone deck pages can't be decoded in the browser (bot wall + no CORS on their
-      // API), but their preview renderer is open — show the official 12-card image, same
-      // host all the card art already comes from. The nightly harvester decodes built-ins.
-      const slug = (String(cd.zone).match(/marvelsnapzone\.com\/decks\/([^\/?#]+)/i) || [])[1];
-      if(slug){
-        const img = document.createElement('img');
-        img.className = 'cr-zoneprev'; img.loading = 'lazy'; img.decoding = 'async'; img.alt = 'Deck preview';
-        img.referrerPolicy = 'no-referrer';          // hotlink filters key on Referer
-        img.src = 'https://marvelsnapzone.com/img/deckpreview.php?slug=' + encodeURIComponent(slug);
-        img.onerror = () => {                        // burst-loading several previews can trip the CDN — retry once
-          if(img.dataset.retried){ img.remove(); return; }
-          img.dataset.retried = '1';
-          setTimeout(() => { img.src = img.src + (img.src.includes('&r=') ? '' : '&r=1'); }, 1500 + Math.floor(Math.random()*1500));
-        };
-        row.appendChild(img);
-      }
-    }
-    if(bi && bi.missing.length){
-      const names = bi.missing.map(id => (getCard(id)||{n:id}).n);
-      row.appendChild(el('div','cr-missing', 'Missing: ' +
-        (names.length <= 4 ? names.join(', ') : names.slice(0,3).join(', ') + ' +' + (names.length-3) + ' more')));
-    }
-    const acts = el('div','cr-acts');
-    if(cd.ids.length){
-      const saveB = el('button','abtn primary','Save a copy');
-      saveB.onclick = () => {
-        const ids2 = healed.slice(0,12);
-        const unknown = ids2.filter(id => !S.byId[id]); unknown.forEach(makeStub);
-        const dk = { id:uid(), name: cd.name || (cd.creator + ' deck'), cards: ids2, updated: Date.now() };
-        snapshotDeck(dk); S.decks.unshift(dk); S.activeId = dk.id; persistDecks(); renderAll(); setTab('deck');
-        toast('Saved “' + dk.name + '”');
-      };
-      acts.appendChild(saveB);
-      // straight to the game: copy the share code without a save-then-export detour
-      const codeB = el('button','abtn','Copy code');
-      codeB.onclick = async () => {
-        const ok = await copyText(exportCode({ name: cd.name || (cd.creator + ' deck'), cards: healed.slice(0,12) }));
-        toast(ok ? 'Deck code copied — paste it in Snap' : 'Could not copy on this browser');
-        if(ok){ codeB.textContent = '✓ Copied'; setTimeout(() => { codeB.textContent = 'Copy code'; }, 1600); }
-      };
-      acts.appendChild(codeB);
-    } else if(cd.untapped && httpOk(cd.untapped)){
-      acts.appendChild(linkBtn(cd.untapped, 'View on untapped'));
-    } else if(cd.zone && httpOk(cd.zone)){
-      acts.appendChild(linkBtn(cd.zone, 'View on Snap Zone'));
-    } else if(cd.fan && httpOk(cd.fan)){
-      acts.appendChild(linkBtn(cd.fan, 'View on snap.fan'));
-    }
-    if(cd.url && httpOk(cd.url)) acts.appendChild(linkBtn(cd.url, /reddit\.com/i.test(cd.url) ? 'Open post' : 'Watch'));
-    if(cd.added){                                                 // R5-J: remove the whole channel + its decks
-      const rm = el('button','abtn danger','Remove');
-      rm.onclick = () => {
-        S.addedCreators = S.addedCreators.filter(c => c.id !== cd.chId);
-        S.addedCreatorDecks = S.addedCreatorDecks.filter(d => d.chId !== cd.chId);
-        persistCreators(); renderCreatorDecks();
-      };
-      acts.appendChild(rm);
-    }
-    row.appendChild(acts);
-    wrap.appendChild(row);
-  });
+  // R10.2 fossil-id healing + default strip order now live in crRow (shared with the Reddit segment)
+  all.forEach(cd => wrap.appendChild(crRow(cd, cq)));
   if(S.creatorDecksLabel){
     const age = (Date.now() - Date.parse(S.creatorDecksLabel)) / 86400000;
     if(!isNaN(age) && age > 14) wrap.appendChild(el('div','cr-stale','updated ' + S.creatorDecksLabel));
@@ -5068,7 +5096,9 @@ document.querySelectorAll('#savedseg button').forEach(b => b.onclick = () => {
   document.querySelectorAll('#savedseg button').forEach(x => x.classList.toggle('on', x === b));
   $('#saved-mine').hidden = seg !== 'mine';
   $('#saved-creator').hidden = seg !== 'creator';
+  $('#saved-reddit').hidden = seg !== 'reddit';
   if(seg === 'creator') renderCreatorDecks();
+  if(seg === 'reddit') renderRedditDecks();
 });
 if($('#cr-add-btn')) $('#cr-add-btn').onclick = openAddCreator;
 $('#btn-newdeck').onclick = () => {
@@ -5597,6 +5627,8 @@ function renderAll(){
   renderCards(); renderDeck(); renderDeckbar(); renderSaved(); renderMySyns();
   const sc = $('#saved-creator');
   if(sc && !sc.hidden) renderCreatorDecks();       // creator rows are heavy (30×12 minis) — render only while that segment is visible; the segment switch renders it otherwise
+  const sr = $('#saved-reddit');
+  if(sr && !sr.hidden) renderRedditDecks();
   if(S.tab === 'collection') renderCollection();   // keep the Collection grid in sync while it's the visible tab (detail sheet <-> grid)
 }
 async function loadSiteData(){
