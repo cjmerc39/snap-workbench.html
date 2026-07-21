@@ -1385,7 +1385,7 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
       <div id="creatorlist"></div>
     </div>
     <div id="saved-reddit" hidden>
-      <div class="section-label">r/MarvelSnapDecks</div>
+      <div class="section-label">Reddit decks</div>
       <div id="redditlist"></div>
     </div>
   </section>
@@ -4795,6 +4795,7 @@ const BUILTIN_CREATORS = [
   { name:'Unfitparrot',      url:'https://www.youtube.com/@Unfitparrot' },
   { name:'Snap Judgments',   url:'https://www.youtube.com/channel/UCRM70o4UWSPL839M9d42xGw' },
   { name:'r/MarvelSnapDecks', url:'https://www.reddit.com/r/MarvelSnapDecks/' },   // nightly reddit harvest (posts + OP comments)
+  { name:'r/MarvelSnapComp',  url:'https://www.reddit.com/r/MarvelSnapComp/' },    // competitive sub — deck guides nearly always carry codes
 ];
 /* one entry per creator NAME — a channel that's both built-in and followed in-app
    (Snap Judgments) merges instead of appearing twice */
@@ -4980,10 +4981,10 @@ function renderRedditDecks(){
   const all = S.creatorDecks.filter(isRedditDeck).filter(cd => !hidden.has(cd.creator))
     .slice().sort((a,b) => String(b.published||'').localeCompare(String(a.published||'')));
   if(!all.length){
-    wrap.appendChild(el('div','warnbox','No Reddit decks right now — the nightly harvest keeps the last two weeks of r/MarvelSnapDecks posts that carry a share code.'));
+    wrap.appendChild(el('div','warnbox','No Reddit decks right now — the nightly harvest keeps the last two weeks of posts that carry a share code (r/MarvelSnapDecks, r/MarvelSnapComp).'));
     return;
   }
-  wrap.appendChild(el('div','mnote','Decks posted on r/MarvelSnapDecks (codes from the post or the poster’s comment), refreshed nightly. Tap Open post for the discussion.'));
+  wrap.appendChild(el('div','mnote','Decks posted on r/MarvelSnapDecks and r/MarvelSnapComp (codes from the post or the poster’s comment), refreshed nightly. Tap Open post for the discussion.'));
   all.forEach(cd => wrap.appendChild(crRow(cd, '')));
 }
 function renderCreatorDecks(){

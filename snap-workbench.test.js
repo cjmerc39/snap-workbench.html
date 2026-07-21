@@ -834,7 +834,10 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(d.querySelectorAll('#redditlist .crow').length===1, 'only reddit decks render there');
   assert([..._rrow.querySelectorAll('a.abtn')].some(a=>a.textContent==='Open post' && /reddit\.com/.test(a.href)), 'reddit rows link out as "Open post", not "Watch"');
   assert([..._rrow.querySelectorAll('button.abtn')].some(b=>b.textContent==='Copy code'), 'reddit decks get the Copy code button too');
-  assert(w.eval('creatorRoster().some(r=>r.name==="r/MarvelSnapDecks")'), 'the subreddit shows in the Following roster (mutable like any channel)');
+  assert(w.eval('creatorRoster().some(r=>r.name==="r/MarvelSnapDecks") && creatorRoster().some(r=>r.name==="r/MarvelSnapComp")'),
+    'both subreddits show in the Following roster (mutable like any channel)');
+  w.eval('S.creatorDecks=[{creator:"r/MarvelSnapComp",video:"Guide: Discard to Infinite",url:"https://www.reddit.com/r/MarvelSnapComp/comments/xyz/g/",published:"2026-07-21",name:"Comp Discard",ids:["Hulk","AntMan","Wong"]}]; renderRedditDecks();'); await sleep(10);
+  assert(/r\/MarvelSnapComp/.test(d.querySelector('#redditlist .cr-creator').textContent), 'comp-sub decks land on the Reddit segment too');
   w.eval('S.creatorDecks=[]; renderRedditDecks();'); await sleep(10);
   assert(/No Reddit decks right now/.test(d.getElementById('redditlist').textContent), 'empty reddit pane explains itself');
   d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(10);

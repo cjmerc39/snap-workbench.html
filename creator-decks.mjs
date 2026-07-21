@@ -178,7 +178,7 @@ const dedupKey = x => (x.ids && x.ids.length) ? x.ids.slice().sort().join(`,`) :
 // Unauthenticated public JSON (Reddit's app-registration is gated behind a review queue,
 // so no OAuth). Reddit may throttle datacenter IPs; every failure path degrades to
 // "no reddit decks tonight" without touching the rest of the harvest.
-const SUBREDDIT = `MarvelSnapDecks`;
+const SUBREDDITS = [`MarvelSnapDecks`, `MarvelSnapComp`];   // comp sub added 2026-07-21 (deck guides ~always carry codes)
 const REDDIT_CAP = 25;        // per-run ceiling: a busy subreddit day can't crowd out the channels
 const REDDIT_COMMENT_BUDGET = 25;   // comment-thread fetches per run (600ms apart ≈ 15s worst case)
 const REDDIT_UA = { headers: { [`user-agent`]: `web:snap-workbench:1.0 (personal deck builder)` } };
@@ -213,7 +213,7 @@ function atomText(e){
 }
 const atomAuthor = e => ((e.match(/<name>([^<]*)<\/name>/) || [])[1] || ``).replace(/^\/?u\//, ``).trim();
 
-async function fetchReddit(D, KNOWN, prevUrls){
+async function fetchReddit(sub, D, KNOWN, prevUrls, budget){
   try{
     // two views of the sub: everything recent, plus the week's popular decks that
     // have already scrolled out of /new. Same entry shape; dedupe by post URL.
@@ -222,12 +222,12 @@ async function fetchReddit(D, KNOWN, prevUrls){
     let feedOk = false;
     for(const f of FEEDS){
       try{
-        const r = await fetch(`https://www.reddit.com/r/` + SUBREDDIT + f, REDDIT_UA);
-        if(!r.ok){ console.error(`  r/${SUBREDDIT}${f.split(`?`)[0]}: HTTP ${r.status}`); continue; }
+        const r = await fetch(`https://www.reddit.com/r/` + sub + f, REDDIT_UA);
+        if(!r.ok){ console.error(`  r/${sub}${f.split(`?`)[0]}: HTTP ${r.status}`); continue; }
         entries = entries.concat((await r.text()).split(`<entry>`).slice(1));
         feedOk = true;
         await new Promise(res => setTimeout(res, 600));
-      }catch(err2){ console.error(`  r/${SUBREDDIT}${f.split(`?`)[0]}: ${err2 && err2.message}`); }
+      }catch(err2){ console.error(`  r/${sub}${f.split(`?`)[0]}: ${err2 && err2.message}`); }
     }
     if(!feedOk) return { ok:false, decks:[] };
     const decks = [];
@@ -251,8 +251,8 @@ async function fetchReddit(D, KNOWN, prevUrls){
       if(found.some(dk => dk.ids && dk.ids.length)) tally.bodyCode++;
       else if(!/\/comments\//.test(url)) tally.noComments++;
       // no code in the post: the OP usually leaves it as a comment — one bounded fetch each
-      if(!found.some(dk => dk.ids && dk.ids.length) && /\/comments\//.test(url) && commentFetches < REDDIT_COMMENT_BUDGET){
-        commentFetches++;
+      if(!found.some(dk => dk.ids && dk.ids.length) && /\/comments\//.test(url) && budget.left > 0){
+        commentFetches++; budget.left--;
         try{
           const cr = await fetch(url.replace(/\/?$/, `/`) + `.rss`, REDDIT_UA);
           if(cr.ok){
@@ -264,7 +264,7 @@ async function fetchReddit(D, KNOWN, prevUrls){
         await new Promise(res => setTimeout(res, 600));   // polite pacing between comment fetches
       }
       for(const dk of found){
-        const entry = { creator: `r/` + SUBREDDIT, video: title.slice(0, 120), url, published,
+        const entry = { creator: `r/` + sub, video: title.slice(0, 120), url, published,
           name: dk.name || ``, ids: (dk.ids || []).slice(0, 12) };
         if(entry.ids.length){
           const real = entry.ids.filter(id => KNOWN.has(id)).length;
@@ -278,12 +278,12 @@ async function fetchReddit(D, KNOWN, prevUrls){
         decks.push(entry);
       }
     }
-    console.log(`  r/${SUBREDDIT}: ${seenPost.size} posts (${entries.length} feed entries) -> ${decks.length} new deck(s) | ` +
+    console.log(`  r/${sub}: ${seenPost.size} posts (${entries.length} feed entries) -> ${decks.length} new deck(s) | ` +
       `already-had ${tally.prev} · aged-out ${tally.aged} · code-in-body ${tally.bodyCode} · no-comments-url ${tally.noComments} · ` +
       `threads-checked ${commentFetches} · gated ${tally.gated}`);
     return { ok:true, decks };
   }catch(err){
-    console.error(`  r/${SUBREDDIT}: fetch failed - ${err && err.message}`);
+    console.error(`  r/${sub}: fetch failed - ${err && err.message}`);
     return { ok:false, decks:[] };
   }
 }
@@ -429,9 +429,12 @@ async function main(){
     const pj0 = JSON.parse(fs.readFileSync(OUT, `utf8`));
     (pj0.decks || []).forEach(x => { if(x && /^r\//.test(String(x.creator||``)) && x.url) prevRedditUrls.add(x.url); });
   }catch(e){ /* first run */ }
-  const rr = await fetchReddit(D, table.KNOWN, prevRedditUrls);   // r/MarvelSnapDecks rides the same pipeline
-  if(rr.ok) anyOk = true;
-  fresh = fresh.concat(rr.decks);
+  const rBudget = { left: REDDIT_COMMENT_BUDGET };     // comment fetches shared across the subs
+  for(const sub of SUBREDDITS){
+    const rr = await fetchReddit(sub, D, table.KNOWN, prevRedditUrls, rBudget);
+    if(rr.ok) anyOk = true;
+    fresh = fresh.concat(rr.decks);
+  }
   await resolveZoneDecks(fresh, table.KNOWN);           // fill marvelsnapzone link-outs via /pro/do.php
   await resolveFanDecks(fresh, table.KNOWN);            // fill snap.fan link-outs via their open API
   fresh.forEach(x => { if(x) delete x.fanId; });        // working field only — never written to the JSON
