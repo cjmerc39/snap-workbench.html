@@ -165,7 +165,7 @@ async function fetchChannel(ch, D){
       }
     }
     console.log(`  ${ch.creator}: ${entries.length} videos -> ${decks.length} deck(s)`);
-    return { ok:true, decks, checkedEmpty };
+    return { ok:true, decks };
   }catch(err){
     console.error(`  ${ch.creator}: fetch failed - ${err && err.message}`);
     return { ok:false, decks:[] };
@@ -315,7 +315,7 @@ async function fetchReddit(D, KNOWN, prevUrls, checkedSet){
       SUBREDDITS.map(s => `r/` + s + ` ` + (perSub[s] || 0)).join(`, `) + `] | ` +
       `already-had ${tally.prev} · aged-out ${tally.aged} · code-in-body ${tally.bodyCode} · no-comments-url ${tally.noComments} · ` +
       `threads-checked ${commentFetches} · checked-before ${tally.checkedBefore} · gated ${tally.gated}`);
-    return { ok:true, decks };
+    return { ok:true, decks, checkedEmpty };
   }catch(err){
     console.error(`  reddit: fetch failed - ${err && err.message}`);
     return { ok:false, decks:[] };
