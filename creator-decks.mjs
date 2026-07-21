@@ -217,25 +217,32 @@ const atomAuthor = e => ((e.match(/<name>([^<]*)<\/name>/) || [])[1] || ``).repl
 // that, and grab all listing feeds before any comment thread so a burned budget can't
 // starve the later subreddit (the 2026-07-21 failure mode: sub 2's feeds 429'd because
 // sub 1's comment fetches at 600ms spacing had already tripped the limit).
-const REDDIT_PACE_MS = 6500;
+const REDDIT_PACE_MS = 6500;        // post (comment-thread) feeds tolerate this fine
+const REDDIT_FEED_PACE_MS = 65000;  // subreddit LISTING feeds are throttled ~1/min for datacenter IPs — observed 2026-07-21: request #1 200, #2-#4 429 even at 6.5s spacing while all 25 post feeds passed
 async function fetchReddit(D, KNOWN, prevUrls){
   const pace = () => new Promise(res => setTimeout(res, REDDIT_PACE_MS));
+  const feedPace = () => new Promise(res => setTimeout(res, REDDIT_FEED_PACE_MS));
   try{
-    // two views of each sub: everything recent, plus the week's popular decks that
-    // have already scrolled out of /new. Entries carry their sub; dedupe by post URL.
+    // two views of each sub: everything recent, plus the week's popular decks that have
+    // already scrolled out of /new. /new feeds go first for both subs (fairness when the
+    // limiter bites anyway); each feed gets one paced retry. Entries carry their sub.
+    const FEEDS = [];
+    for(const f of [`/new/.rss?limit=50`, `/top/.rss?t=week&limit=25`])
+      for(const sub of SUBREDDITS) FEEDS.push({ sub, f });
     const posts = [];
     let feedOk = false;
-    for(const sub of SUBREDDITS){
-      for(const f of [`/new/.rss?limit=50`, `/top/.rss?t=week&limit=25`]){
+    for(let i = 0; i < FEEDS.length; i++){
+      const { sub, f } = FEEDS[i];
+      let got = false;
+      for(let attempt = 0; attempt < 2 && !got; attempt++){
+        if(i || attempt) await feedPace();             // a full minute between listing hits
         try{
           const r = await fetch(`https://www.reddit.com/r/` + sub + f, REDDIT_UA);
-          if(!r.ok){ console.error(`  r/${sub}${f.split(`?`)[0]}: HTTP ${r.status}`); }
-          else{
+          if(r.ok){
             (await r.text()).split(`<entry>`).slice(1).forEach(e => posts.push({ sub, e }));
-            feedOk = true;
-          }
+            feedOk = true; got = true;
+          } else console.error(`  r/${sub}${f.split(`?`)[0]}: HTTP ${r.status}` + (attempt ? `` : ` — retrying in ` + (REDDIT_FEED_PACE_MS/1000) + `s`));
         }catch(err2){ console.error(`  r/${sub}${f.split(`?`)[0]}: ${err2 && err2.message}`); }
-        await pace();
       }
     }
     if(!feedOk) return { ok:false, decks:[] };
