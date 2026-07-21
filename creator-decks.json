@@ -2,6 +2,27 @@
   "updated": "2026-07-21",
   "decks": [
     {
+      "creator": "r/MarvelSnapDecks",
+      "video": "Dusted off my oldest deck... Super fun spell-bounce deck (CL 27,548)",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v27ju3/dusted_off_my_oldest_deck_super_fun_spellbounce/",
+      "published": "2026-07-21",
+      "name": "",
+      "ids": [
+        "Beast",
+        "HitMonkey",
+        "Yellowjacket",
+        "Magneto",
+        "Bishop",
+        "WerewolfByNight",
+        "Merlin",
+        "Venus",
+        "Starhawk",
+        "LinLie",
+        "WebSling",
+        "NicholasScratch"
+      ]
+    },
+    {
       "creator": "Snap Judgments",
       "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
@@ -1288,28 +1309,7 @@
         "WilsonFisk"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/Askanison-Cosmo-Debrii-HydraBob-IronPatriot-NegasonicTeenageWarhead-Nightcrawler-Ozymandias-Rhino-ShadowKing-Supergiant-WilsonFisk_Rocks?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #192",
-      "url": "https://www.youtube.com/watch?v=t_vrJXXJZGM",
-      "published": "2026-07-10",
-      "name": "Aurora",
-      "ids": [
-        "Aurora",
-        "AwesomeAndy",
-        "Cosmo",
-        "HydraBob",
-        "Isca",
-        "Mercury",
-        "SamWilson",
-        "SpiderHam",
-        "Tarantula",
-        "TheThingFirstSteps",
-        "Venus",
-        "ZombieMisterFantastic"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Aurora-AwesomeAndy-Cosmo-HydraBob-Isca-Mercury-SamWilson-SpiderHam-Tarantula-TheThingFirstSteps-Venus-ZombieMisterFantastic_Aurora?utm_medium=affiliate&utm_campaign=alexcoccia"
     }
-  ]
+  ],
+  "redditChecked": []
 }
