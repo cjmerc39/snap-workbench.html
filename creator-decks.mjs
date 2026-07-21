@@ -213,29 +213,39 @@ function atomText(e){
 }
 const atomAuthor = e => ((e.match(/<name>([^<]*)<\/name>/) || [])[1] || ``).replace(/^\/?u\//, ``).trim();
 
-async function fetchReddit(sub, D, KNOWN, prevUrls, budget){
+// Unauthenticated reddit allows ~10 requests/minute per IP — pace EVERY request under
+// that, and grab all listing feeds before any comment thread so a burned budget can't
+// starve the later subreddit (the 2026-07-21 failure mode: sub 2's feeds 429'd because
+// sub 1's comment fetches at 600ms spacing had already tripped the limit).
+const REDDIT_PACE_MS = 6500;
+async function fetchReddit(D, KNOWN, prevUrls){
+  const pace = () => new Promise(res => setTimeout(res, REDDIT_PACE_MS));
   try{
-    // two views of the sub: everything recent, plus the week's popular decks that
-    // have already scrolled out of /new. Same entry shape; dedupe by post URL.
-    const FEEDS = [`/new/.rss?limit=50`, `/top/.rss?t=week&limit=25`];
-    let entries = [];
+    // two views of each sub: everything recent, plus the week's popular decks that
+    // have already scrolled out of /new. Entries carry their sub; dedupe by post URL.
+    const posts = [];
     let feedOk = false;
-    for(const f of FEEDS){
-      try{
-        const r = await fetch(`https://www.reddit.com/r/` + sub + f, REDDIT_UA);
-        if(!r.ok){ console.error(`  r/${sub}${f.split(`?`)[0]}: HTTP ${r.status}`); continue; }
-        entries = entries.concat((await r.text()).split(`<entry>`).slice(1));
-        feedOk = true;
-        await new Promise(res => setTimeout(res, 600));
-      }catch(err2){ console.error(`  r/${sub}${f.split(`?`)[0]}: ${err2 && err2.message}`); }
+    for(const sub of SUBREDDITS){
+      for(const f of [`/new/.rss?limit=50`, `/top/.rss?t=week&limit=25`]){
+        try{
+          const r = await fetch(`https://www.reddit.com/r/` + sub + f, REDDIT_UA);
+          if(!r.ok){ console.error(`  r/${sub}${f.split(`?`)[0]}: HTTP ${r.status}`); }
+          else{
+            (await r.text()).split(`<entry>`).slice(1).forEach(e => posts.push({ sub, e }));
+            feedOk = true;
+          }
+        }catch(err2){ console.error(`  r/${sub}${f.split(`?`)[0]}: ${err2 && err2.message}`); }
+        await pace();
+      }
     }
     if(!feedOk) return { ok:false, decks:[] };
     const decks = [];
+    const perSub = {};
     const seenPost = new Set();
-    let commentFetches = 0;
+    let commentFetches = 0, budget = REDDIT_COMMENT_BUDGET;
     const nowMs = Date.now();
     const tally = { prev: 0, aged: 0, bodyCode: 0, noComments: 0, gated: 0 };
-    for(const e of entries){
+    for(const { sub, e } of posts){
       if(decks.length >= REDDIT_CAP) break;
       const title = unesc((e.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || ``).trim();
       const url = unesc((e.match(/<link[^>]*href="([^"]+)"/) || [])[1] || ``);
@@ -251,8 +261,8 @@ async function fetchReddit(sub, D, KNOWN, prevUrls, budget){
       if(found.some(dk => dk.ids && dk.ids.length)) tally.bodyCode++;
       else if(!/\/comments\//.test(url)) tally.noComments++;
       // no code in the post: the OP usually leaves it as a comment — one bounded fetch each
-      if(!found.some(dk => dk.ids && dk.ids.length) && /\/comments\//.test(url) && budget.left > 0){
-        commentFetches++; budget.left--;
+      if(!found.some(dk => dk.ids && dk.ids.length) && /\/comments\//.test(url) && budget > 0){
+        commentFetches++; budget--;
         try{
           const cr = await fetch(url.replace(/\/?$/, `/`) + `.rss`, REDDIT_UA);
           if(cr.ok){
@@ -261,7 +271,7 @@ async function fetchReddit(sub, D, KNOWN, prevUrls, budget){
               if(op && atomAuthor(ce) === op) found = found.concat(redditCodes(atomText(ce), D));
           }
         }catch(err2){ /* one dead comment thread is fine */ }
-        await new Promise(res => setTimeout(res, 600));   // polite pacing between comment fetches
+        await pace();
       }
       for(const dk of found){
         const entry = { creator: `r/` + sub, video: title.slice(0, 120), url, published,
@@ -276,14 +286,16 @@ async function fetchReddit(sub, D, KNOWN, prevUrls, budget){
         if(dk.zone) entry.zone = dk.zone;
         if(dk.fan){ entry.fan = dk.fan; entry.fanId = dk.fanId; }
         decks.push(entry);
+        perSub[sub] = (perSub[sub] || 0) + 1;
       }
     }
-    console.log(`  r/${sub}: ${seenPost.size} posts (${entries.length} feed entries) -> ${decks.length} new deck(s) | ` +
+    console.log(`  reddit: ${seenPost.size} posts (${posts.length} feed entries) -> ${decks.length} new deck(s) [` +
+      SUBREDDITS.map(s => `r/` + s + ` ` + (perSub[s] || 0)).join(`, `) + `] | ` +
       `already-had ${tally.prev} · aged-out ${tally.aged} · code-in-body ${tally.bodyCode} · no-comments-url ${tally.noComments} · ` +
       `threads-checked ${commentFetches} · gated ${tally.gated}`);
     return { ok:true, decks };
   }catch(err){
-    console.error(`  r/${sub}: fetch failed - ${err && err.message}`);
+    console.error(`  reddit: fetch failed - ${err && err.message}`);
     return { ok:false, decks:[] };
   }
 }
@@ -429,12 +441,9 @@ async function main(){
     const pj0 = JSON.parse(fs.readFileSync(OUT, `utf8`));
     (pj0.decks || []).forEach(x => { if(x && /^r\//.test(String(x.creator||``)) && x.url) prevRedditUrls.add(x.url); });
   }catch(e){ /* first run */ }
-  const rBudget = { left: REDDIT_COMMENT_BUDGET };     // comment fetches shared across the subs
-  for(const sub of SUBREDDITS){
-    const rr = await fetchReddit(sub, D, table.KNOWN, prevRedditUrls, rBudget);
-    if(rr.ok) anyOk = true;
-    fresh = fresh.concat(rr.decks);
-  }
+  const rr = await fetchReddit(D, table.KNOWN, prevRedditUrls);   // both subs, feeds-first, paced
+  if(rr.ok) anyOk = true;
+  fresh = fresh.concat(rr.decks);
   await resolveZoneDecks(fresh, table.KNOWN);           // fill marvelsnapzone link-outs via /pro/do.php
   await resolveFanDecks(fresh, table.KNOWN);            // fill snap.fan link-outs via their open API
   fresh.forEach(x => { if(x) delete x.fanId; });        // working field only — never written to the JSON
