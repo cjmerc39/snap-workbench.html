@@ -5029,6 +5029,14 @@ function renderCreatorDecks(){
         toast('Saved “' + dk.name + '”');
       };
       acts.appendChild(saveB);
+      // straight to the game: copy the share code without a save-then-export detour
+      const codeB = el('button','abtn','Copy code');
+      codeB.onclick = async () => {
+        const ok = await copyText(exportCode({ name: cd.name || (cd.creator + ' deck'), cards: healed.slice(0,12) }));
+        toast(ok ? 'Deck code copied — paste it in Snap' : 'Could not copy on this browser');
+        if(ok){ codeB.textContent = '✓ Copied'; setTimeout(() => { codeB.textContent = 'Copy code'; }, 1600); }
+      };
+      acts.appendChild(codeB);
     } else if(cd.untapped && httpOk(cd.untapped)){
       acts.appendChild(linkBtn(cd.untapped, 'View on untapped'));
     } else if(cd.zone && httpOk(cd.zone)){

@@ -808,6 +808,18 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const _crows = d.querySelectorAll('#creatorlist .crow');
   assert(_crows[1].querySelector('.abtn.primary')===null, 'undecodable creator deck (ids:[]) has no Save button');
   assert(_crows[1].querySelector('a[href*="untapped.gg"]')!==null, 'undecodable creator deck shows an untapped link-out');
+  // Copy code straight from the creator row — no save-then-export detour
+  const _ccBtn = [..._crows[0].querySelectorAll('button.abtn')].find(b=>b.textContent==='Copy code');
+  assert(_ccBtn!==undefined, 'creator row with ids offers Copy code');
+  assert(![..._crows[1].querySelectorAll('button.abtn')].some(b=>b.textContent==='Copy code'), 'link-only creator deck has no Copy code');
+  w.eval('window.__copied=null; navigator.clipboard.writeText=async t=>{ window.__copied=t; return true; };');
+  _ccBtn.click(); await sleep(30);
+  const _ccode = w.eval('window.__copied');
+  assert(typeof _ccode==='string' && _ccode.length>10, 'Copy code writes the code to the clipboard');
+  const _cdec = JSON.parse(Buffer.from(_ccode,'base64').toString('utf8'));
+  assert(_cdec.Name==='Test Deck' && Array.isArray(_cdec.Cards) && _cdec.Cards.length===w.eval('S.creatorDecks[0].ids.length')
+    && _cdec.Cards.every(c=>c.CardDefId), 'the copied code is a valid Snap share code for that deck');
+  assert(/Copied/.test(_ccBtn.textContent), 'the button confirms the copy');
 
   // --- marvelsnapzone (zone) + snap.fan (fan) link-outs render for undecodable entries ---
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+
