@@ -234,6 +234,7 @@ async function fetchReddit(D, KNOWN, prevUrls){
     const seenPost = new Set();
     let commentFetches = 0;
     const nowMs = Date.now();
+    const tally = { prev: 0, aged: 0, bodyCode: 0, noComments: 0, gated: 0 };
     for(const e of entries){
       if(decks.length >= REDDIT_CAP) break;
       const title = unesc((e.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || ``).trim();
@@ -243,10 +244,12 @@ async function fetchReddit(D, KNOWN, prevUrls){
       seenPost.add(url);
       // already harvested on a previous night (the merge keeps its deck) — don't spend
       // tonight's comment budget re-checking it; and skip posts past the display window
-      if(prevUrls && prevUrls.has(url)) continue;
-      if(published && (nowMs - Date.parse(published)) >= AGE_DAYS * DAY) continue;
+      if(prevUrls && prevUrls.has(url)){ tally.prev++; continue; }
+      if(published && (nowMs - Date.parse(published)) >= AGE_DAYS * DAY){ tally.aged++; continue; }
       const op = atomAuthor(e);
       let found = redditCodes(title + `\n` + atomText(e), D);
+      if(found.some(dk => dk.ids && dk.ids.length)) tally.bodyCode++;
+      else if(!/\/comments\//.test(url)) tally.noComments++;
       // no code in the post: the OP usually leaves it as a comment — one bounded fetch each
       if(!found.some(dk => dk.ids && dk.ids.length) && /\/comments\//.test(url) && commentFetches < REDDIT_COMMENT_BUDGET){
         commentFetches++;
@@ -265,7 +268,7 @@ async function fetchReddit(D, KNOWN, prevUrls){
           name: dk.name || ``, ids: (dk.ids || []).slice(0, 12) };
         if(entry.ids.length){
           const real = entry.ids.filter(id => KNOWN.has(id)).length;
-          if(real * 2 <= entry.ids.length) continue;       // majority-real gate, same bar as the resolvers
+          if(real * 2 <= entry.ids.length){ tally.gated++; continue; }  // majority-real gate, same bar as the resolvers
         } else if(!(dk.untapped || dk.zone || dk.fan)){
           continue;                                        // nothing decodable and nothing to link out to
         }
@@ -275,7 +278,9 @@ async function fetchReddit(D, KNOWN, prevUrls){
         decks.push(entry);
       }
     }
-    console.log(`  r/${SUBREDDIT}: ${seenPost.size} posts (${entries.length} feed entries) -> ${decks.length} new deck(s) (${commentFetches} comment thread(s) checked${prevUrls && prevUrls.size ? `, ` + prevUrls.size + ` already harvested` : ``})`);
+    console.log(`  r/${SUBREDDIT}: ${seenPost.size} posts (${entries.length} feed entries) -> ${decks.length} new deck(s) | ` +
+      `already-had ${tally.prev} · aged-out ${tally.aged} · code-in-body ${tally.bodyCode} · no-comments-url ${tally.noComments} · ` +
+      `threads-checked ${commentFetches} · gated ${tally.gated}`);
     return { ok:true, decks };
   }catch(err){
     console.error(`  r/${SUBREDDIT}: fetch failed - ${err && err.message}`);
