@@ -165,7 +165,7 @@ async function fetchChannel(ch, D){
       }
     }
     console.log(`  ${ch.creator}: ${entries.length} videos -> ${decks.length} deck(s)`);
-    return { ok:true, decks };
+    return { ok:true, decks, checkedEmpty };
   }catch(err){
     console.error(`  ${ch.creator}: fetch failed - ${err && err.message}`);
     return { ok:false, decks:[] };
@@ -180,7 +180,8 @@ const dedupKey = x => (x.ids && x.ids.length) ? x.ids.slice().sort().join(`,`) :
 // "no reddit decks tonight" without touching the rest of the harvest.
 const SUBREDDITS = [`MarvelSnapDecks`, `MarvelSnapComp`];   // comp sub added 2026-07-21 (deck guides ~always carry codes)
 const REDDIT_CAP = 25;        // per-run ceiling: a busy subreddit day can't crowd out the channels
-const REDDIT_COMMENT_BUDGET = 25;   // comment-thread fetches per run (600ms apart ≈ 15s worst case)
+const REDDIT_COMMENT_BUDGET = 30;   // comment-thread fetches per run (6.5s apart ≈ 3min worst case)
+const REDDIT_CHECKED_CAP = 300;     // remembered checked-but-codeless post urls (rides creator-decks.json)
 const REDDIT_UA = { headers: { [`user-agent`]: `web:snap-workbench:1.0 (personal deck builder)` } };
 
 // codes in reddit text arrive three ways: bare on a line, wrapped in markdown (backticks/
@@ -219,7 +220,7 @@ const atomAuthor = e => ((e.match(/<name>([^<]*)<\/name>/) || [])[1] || ``).repl
 // sub 1's comment fetches at 600ms spacing had already tripped the limit).
 const REDDIT_PACE_MS = 6500;        // post (comment-thread) feeds tolerate this fine
 const REDDIT_FEED_PACE_MS = 65000;  // subreddit LISTING feeds are throttled ~1/min for datacenter IPs — observed 2026-07-21: request #1 200, #2-#4 429 even at 6.5s spacing while all 25 post feeds passed
-async function fetchReddit(D, KNOWN, prevUrls){
+async function fetchReddit(D, KNOWN, prevUrls, checkedSet){
   const pace = () => new Promise(res => setTimeout(res, REDDIT_PACE_MS));
   const feedPace = () => new Promise(res => setTimeout(res, REDDIT_FEED_PACE_MS));
   try{
@@ -246,13 +247,23 @@ async function fetchReddit(D, KNOWN, prevUrls){
       }
     }
     if(!feedOk) return { ok:false, decks:[] };
+    // round-robin the subs so the comment budget can't be eaten whole by whichever
+    // feed happens to list first
+    const bySub = new Map(SUBREDDITS.map(s => [s, []]));
+    posts.forEach(p => { if(bySub.has(p.sub)) bySub.get(p.sub).push(p); });
+    const fair = [];
+    for(let i = 0, more = true; more; i++){
+      more = false;
+      for(const s of SUBREDDITS){ const arr = bySub.get(s); if(i < arr.length){ fair.push(arr[i]); more = true; } }
+    }
     const decks = [];
     const perSub = {};
     const seenPost = new Set();
+    const checkedEmpty = [];
     let commentFetches = 0, budget = REDDIT_COMMENT_BUDGET;
     const nowMs = Date.now();
-    const tally = { prev: 0, aged: 0, bodyCode: 0, noComments: 0, gated: 0 };
-    for(const { sub, e } of posts){
+    const tally = { prev: 0, aged: 0, bodyCode: 0, noComments: 0, checkedBefore: 0, gated: 0 };
+    for(const { sub, e } of fair){
       if(decks.length >= REDDIT_CAP) break;
       const title = unesc((e.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || ``).trim();
       const url = unesc((e.match(/<link[^>]*href="([^"]+)"/) || [])[1] || ``);
@@ -267,8 +278,11 @@ async function fetchReddit(D, KNOWN, prevUrls){
       let found = redditCodes(title + `\n` + atomText(e), D);
       if(found.some(dk => dk.ids && dk.ids.length)) tally.bodyCode++;
       else if(!/\/comments\//.test(url)) tally.noComments++;
-      // no code in the post: the OP usually leaves it as a comment — one bounded fetch each
-      if(!found.some(dk => dk.ids && dk.ids.length) && /\/comments\//.test(url) && budget > 0){
+      // no code in the post: the OP usually leaves it as a comment — one bounded fetch
+      // each, skipping threads a previous night already checked and found codeless
+      if(!found.some(dk => dk.ids && dk.ids.length) && /\/comments\//.test(url) && checkedSet && checkedSet.has(url)){
+        tally.checkedBefore++;
+      } else if(!found.some(dk => dk.ids && dk.ids.length) && /\/comments\//.test(url) && budget > 0){
         commentFetches++; budget--;
         try{
           const cr = await fetch(url.replace(/\/?$/, `/`) + `.rss`, REDDIT_UA);
@@ -278,6 +292,7 @@ async function fetchReddit(D, KNOWN, prevUrls){
               if(op && atomAuthor(ce) === op) found = found.concat(redditCodes(atomText(ce), D));
           }
         }catch(err2){ /* one dead comment thread is fine */ }
+        if(!found.some(dk => dk.ids && dk.ids.length)) checkedEmpty.push(url);   // don't re-check next night
         await pace();
       }
       for(const dk of found){
@@ -299,7 +314,7 @@ async function fetchReddit(D, KNOWN, prevUrls){
     console.log(`  reddit: ${seenPost.size} posts (${posts.length} feed entries) -> ${decks.length} new deck(s) [` +
       SUBREDDITS.map(s => `r/` + s + ` ` + (perSub[s] || 0)).join(`, `) + `] | ` +
       `already-had ${tally.prev} · aged-out ${tally.aged} · code-in-body ${tally.bodyCode} · no-comments-url ${tally.noComments} · ` +
-      `threads-checked ${commentFetches} · gated ${tally.gated}`);
+      `threads-checked ${commentFetches} · checked-before ${tally.checkedBefore} · gated ${tally.gated}`);
     return { ok:true, decks };
   }catch(err){
     console.error(`  reddit: fetch failed - ${err && err.message}`);
@@ -448,7 +463,9 @@ async function main(){
     const pj0 = JSON.parse(fs.readFileSync(OUT, `utf8`));
     (pj0.decks || []).forEach(x => { if(x && /^r\//.test(String(x.creator||``)) && x.url) prevRedditUrls.add(x.url); });
   }catch(e){ /* first run */ }
-  const rr = await fetchReddit(D, table.KNOWN, prevRedditUrls);   // both subs, feeds-first, paced
+  let prevChecked = [];
+  try{ const pc = JSON.parse(fs.readFileSync(OUT, `utf8`)); if(Array.isArray(pc.redditChecked)) prevChecked = pc.redditChecked; }catch(e){ /* first run */ }
+  const rr = await fetchReddit(D, table.KNOWN, prevRedditUrls, new Set(prevChecked));   // both subs, feeds-first, paced
   if(rr.ok) anyOk = true;
   fresh = fresh.concat(rr.decks);
   await resolveZoneDecks(fresh, table.KNOWN);           // fill marvelsnapzone link-outs via /pro/do.php
@@ -490,7 +507,8 @@ async function main(){
     console.error(`all channel fetches failed — leaving ${OUT} untouched`);
     return;
   }
-  fs.writeFileSync(OUT, JSON.stringify({ updated: today, decks: merged }, null, 2));
+  const redditChecked = [...new Set(prevChecked.concat(rr.checkedEmpty || []))].slice(-REDDIT_CHECKED_CAP);
+  fs.writeFileSync(OUT, JSON.stringify({ updated: today, decks: merged, redditChecked }, null, 2));
   console.log(`wrote ${merged.length} creator decks to ${OUT}`);
 
   // ---- R9: rolling 30-day stats ledger (separate file so the 14-day display window stays tight) ----
