@@ -933,9 +933,13 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const _realCD = JSON.parse(fs.readFileSync('creator-decks.json','utf8'));
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+JSON.stringify(_realCD)+')}); window.__realcd=await loadCreatorDecks(); window.fetch=of; })()');
   assert(w.eval('window.__realcd')===true && w.eval('S.creatorDecks.length')>0, 'shipped creator-decks.json parses + loads ('+w.eval('S.creatorDecks.length')+' decks)');
+  assert(!_realCD.decks.some(x=>x.rk) || w.eval('S.creatorDecks.some(cd=>cd.rk>0)'), 'loadCreatorDecks keeps the weekly rank field (rk survives the sanitizer)');
   w.eval('setTab("saved")'); await sleep(10);
   d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(30);
-  assert(d.querySelectorAll('#creatorlist .crow').length===w.eval('S.creatorDecks.filter(cd=>!isRedditDeck(cd)).length'), 'every shipped non-reddit creator deck renders a .crow row');
+  const _expRows = w.eval('(function(){const ds=S.creatorDecks.filter(cd=>!isRedditDeck(cd));' +
+    'const key=cd=>{const ident=String(cd.zone||cd.fan||cd.untapped||"")||((cd.ids&&cd.ids.length)?cd.ids.slice().sort().join(","):"");return ident?String(cd.creator||"")+"|"+ident:"";};' +
+    'const s=new Set();let n=0;for(const cd of ds){const k=key(cd);if(!k){n++;continue;}if(!s.has(k)){s.add(k);n++;}}return n;})()');
+  assert(d.querySelectorAll('#creatorlist .crow').length===_expRows, 'every shipped non-reddit creator deck renders a .crow row (after the intended same-deck dedup)');
   d.querySelector('#savedseg [data-seg="reddit"]').click(); await sleep(20);
   assert(d.querySelectorAll('#redditlist .crow').length===w.eval('S.creatorDecks.filter(isRedditDeck).length'), 'every shipped reddit deck renders on the Reddit segment');
   d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(10);

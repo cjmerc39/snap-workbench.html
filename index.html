@@ -5724,6 +5724,7 @@ async function loadCreatorDecks(){
       creator:String(x.creator), video:String(x.video), url:String(x.url||''),
       published:String(x.published||''), name:String(x.name||''),
       ids:Array.isArray(x.ids)?x.ids.filter(Boolean):[],
+      rk:(Number.isInteger(x.rk) && x.rk > 0) ? x.rk : 0,   // weekly upvote rank (reddit decks)
       untapped:x.untapped?String(x.untapped):'', zone:x.zone?String(x.zone):'', fan:x.fan?String(x.fan):'' }));
     S.creatorDecksLabel = (j && j.updated) ? String(j.updated) : '';
     return true;
