@@ -112,6 +112,27 @@
     },
     {
       "creator": "r/MarvelSnapDecks",
+      "video": "Tweek to Fantomex Meta took me to Infinite. (CL: 12,204.)",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0nt9d/tweek_to_fantomex_meta_took_me_to_infinite_cl/",
+      "published": "2026-07-19",
+      "name": "",
+      "ids": [
+        "Fantomex",
+        "Gambit",
+        "Venom",
+        "MorganLeFay",
+        "WildChild",
+        "Carnage",
+        "Marrow",
+        "MoiraX",
+        "Blade",
+        "Jocasta",
+        "AirWalker",
+        "Angel"
+      ]
+    },
+    {
+      "creator": "r/MarvelSnapDecks",
       "video": "[Fantastic Four- End of Turn]. Please Help (CL 25,451)",
       "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0dlpa/fantastic_four_end_of_turn_please_help_cl_25451/",
       "published": "2026-07-19",
@@ -1290,28 +1311,6 @@
         "Dormammu"
       ],
       "zone": "https://marvelsnapzone.com/decks/jeeeeeth8h32h0/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Tarantula Enables Such BROKEN Combos! Marvel Snap Best Weekend Mission Decks",
-      "url": "https://www.youtube.com/watch?v=eGQAuYAODeY",
-      "published": "2026-07-10",
-      "name": "Ika2",
-      "ids": [
-        "Agony",
-        "SpiderManBrandNewDay",
-        "HydraBob",
-        "JeffTheBabyDolphin",
-        "MrSinister",
-        "Tarantula",
-        "Maverick",
-        "Viv",
-        "SebastianShaw",
-        "JubileeSilverSurfer",
-        "MotherAskani",
-        "CosmicGhostRider"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/ika2/"
     }
   ]
 }
