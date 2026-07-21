@@ -174,6 +174,95 @@ async function fetchChannel(ch, D){
 
 const dedupKey = x => (x.ids && x.ids.length) ? x.ids.slice().sort().join(`,`) : (x.untapped || x.zone || x.fan || x.url || ``);
 
+// ---- Reddit: r/MarvelSnapDecks — OPs drop share codes in the post body or a comment ----
+// Unauthenticated public JSON (Reddit's app-registration is gated behind a review queue,
+// so no OAuth). Reddit may throttle datacenter IPs; every failure path degrades to
+// "no reddit decks tonight" without touching the rest of the harvest.
+const SUBREDDIT = `MarvelSnapDecks`;
+const REDDIT_CAP = 15;        // per-run ceiling: a busy subreddit day can't crowd out the channels
+const REDDIT_UA = { headers: { [`user-agent`]: `web:snap-workbench:1.0 (personal deck builder)` } };
+
+// codes in reddit text arrive three ways: bare on a line, wrapped in markdown (backticks/
+// bold), or glued to prose ("Code: eyJ…"). extractDecks covers the first after markdown
+// wrappers become newlines; a long-run pass covers the rest (80+ base64 chars is never prose).
+function redditCodes(text, D){
+  const clean = String(text || ``).replace(/[\u200B-\u200D\uFEFF]/g, ``);
+  const found = extractDecks(clean.replace(/[`*>]+/g, `\n`), D);
+  const runRe = /[A-Za-z0-9+/]{80,}={0,2}/g;
+  let m;
+  while((m = runRe.exec(clean)) !== null){
+    const r = D.parseLong(m[0]);
+    if(r && r.ids.length) found.push({ name: r.name, ids: r.ids });
+  }
+  const seen = new Set(), out = [];
+  for(const dk of found){
+    const k = (dk.ids && dk.ids.length) ? dk.ids.slice().sort().join(`,`) : (dk.untapped || dk.zone || dk.fan || ``);
+    if(!k || seen.has(k)) continue;
+    seen.add(k); out.push(dk);
+  }
+  return out;
+}
+
+// Reddit serves RSS (Atom) to honest feed-reader UAs while hard-403ing the .json
+// endpoints — so both the post listing and each post's comment thread ride RSS.
+// Atom content is XML-escaped HTML: unescape -> strip tags -> unescape inner entities.
+function atomText(e){
+  const raw = unesc((e.match(/<content[^>]*>([\s\S]*?)<\/content>/) || [])[1] || ``);
+  return unesc(raw.replace(/<[^>]+>/g, `\n`));
+}
+const atomAuthor = e => ((e.match(/<name>([^<]*)<\/name>/) || [])[1] || ``).replace(/^\/?u\//, ``).trim();
+
+async function fetchReddit(D, KNOWN){
+  try{
+    const r = await fetch(`https://www.reddit.com/r/` + SUBREDDIT + `/new/.rss?limit=25`, REDDIT_UA);
+    if(!r.ok){ console.error(`  r/${SUBREDDIT}: HTTP ${r.status}`); return { ok:false, decks:[] }; }
+    const xml = await r.text();
+    const entries = xml.split(`<entry>`).slice(1);
+    const decks = [];
+    let commentFetches = 0;
+    for(const e of entries){
+      if(decks.length >= REDDIT_CAP) break;
+      const title = unesc((e.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || ``).trim();
+      const url = unesc((e.match(/<link[^>]*href="([^"]+)"/) || [])[1] || ``);
+      const published = ((e.match(/<(?:published|updated)>([^<]+)</) || [])[1] || ``).slice(0, 10);
+      const op = atomAuthor(e);
+      let found = redditCodes(title + `\n` + atomText(e), D);
+      // no code in the post: the OP usually leaves it as a comment — one bounded fetch each
+      if(!found.some(dk => dk.ids && dk.ids.length) && /\/comments\//.test(url) && commentFetches < 12){
+        commentFetches++;
+        try{
+          const cr = await fetch(url.replace(/\/?$/, `/`) + `.rss`, REDDIT_UA);
+          if(cr.ok){
+            const cxml = await cr.text();
+            for(const ce of cxml.split(`<entry>`).slice(1))
+              if(op && atomAuthor(ce) === op) found = found.concat(redditCodes(atomText(ce), D));
+          }
+        }catch(err2){ /* one dead comment thread is fine */ }
+        await new Promise(res => setTimeout(res, 600));   // polite pacing between comment fetches
+      }
+      for(const dk of found){
+        const entry = { creator: `r/` + SUBREDDIT, video: title.slice(0, 120), url, published,
+          name: dk.name || ``, ids: (dk.ids || []).slice(0, 12) };
+        if(entry.ids.length){
+          const real = entry.ids.filter(id => KNOWN.has(id)).length;
+          if(real * 2 <= entry.ids.length) continue;       // majority-real gate, same bar as the resolvers
+        } else if(!(dk.untapped || dk.zone || dk.fan)){
+          continue;                                        // nothing decodable and nothing to link out to
+        }
+        if(dk.untapped) entry.untapped = dk.untapped;
+        if(dk.zone) entry.zone = dk.zone;
+        if(dk.fan){ entry.fan = dk.fan; entry.fanId = dk.fanId; }
+        decks.push(entry);
+      }
+    }
+    console.log(`  r/${SUBREDDIT}: ${entries.length} posts -> ${decks.length} deck(s) (${commentFetches} comment thread(s) checked)`);
+    return { ok:true, decks };
+  }catch(err){
+    console.error(`  r/${SUBREDDIT}: fetch failed - ${err && err.message}`);
+    return { ok:false, decks:[] };
+  }
+}
+
 // ---- marvelsnapzone resolver: the deck page is Cloudflare-walled, /pro/do.php is not ----
 // One API call per UNIQUE slug (the same deck rides several videos), bounded per run;
 // a failed call just leaves those entries as link-outs for the next nightly pass.
@@ -257,6 +346,16 @@ function selfcheck(){
   // slug decoder: malformed missing-? UTM + hyphenated deck name
   const sr2 = D.parseSlug(`Hulk-AntMan-Wong-Odin-Ironheart-Klaw_Sub-Mariner&utm_campaign=x`);
   check(!!sr2 && sr2.name === `Sub-Mariner`, `slug decoder: malformed utm + hyphen name (got ${sr2 ? sr2.name : `null`})`);
+  // reddit text extraction: inline, markdown-wrapped, chatter-only, and in-post dupes
+  const rCode = Buffer.from(JSON.stringify({ Name:`Reddit Deck`, Cards:[
+    {CardDefId:`Hulk`},{CardDefId:`AntMan`},{CardDefId:`Wong`},{CardDefId:`Odin`},
+    {CardDefId:`Klaw`},{CardDefId:`Cyclops`},{CardDefId:`Sentinel`},{CardDefId:`Hawkeye`}] })).toString(`base64`);
+  const rd1 = redditCodes(`My new deck! Code: ` + rCode + ` — enjoy`, D);
+  check(rd1.length === 1 && rd1[0].ids.length === 8 && rd1[0].name === `Reddit Deck`, `reddit: inline code glued to prose decodes`);
+  const rd2 = redditCodes(`deck below\n\n\`` + rCode + `\`\n`, D);
+  check(rd2.length === 1 && rd2[0].ids[0] === `Hulk`, `reddit: backtick-wrapped code decodes`);
+  check(redditCodes(`no code here, just chatter about Wong`, D).length === 0, `reddit: plain chatter yields nothing`);
+  check(redditCodes(rCode + `\n...also known as:\n` + rCode, D).length === 1, `reddit: the same code twice dedupes within a post`);
   // marvelsnapzone: deck-builder links decode fully; community pages become link-outs
   const zCode = Buffer.from(JSON.stringify({ Name:`Zone Deck`, Cards:[{CardDefId:`Hulk`},{CardDefId:`AntMan`},{CardDefId:`Wong`},{CardDefId:`Odin`}] })).toString(`base64`);
   const zDesc = `Deck: https://marvelsnapzone.com/deck-builder/?deck=${encodeURIComponent(zCode)}\n` +
@@ -298,6 +397,9 @@ async function main(){
     if(ok) anyOk = true;
     fresh = fresh.concat(decks);
   }
+  const rr = await fetchReddit(D, table.KNOWN);         // r/MarvelSnapDecks rides the same pipeline
+  if(rr.ok) anyOk = true;
+  fresh = fresh.concat(rr.decks);
   await resolveZoneDecks(fresh, table.KNOWN);           // fill marvelsnapzone link-outs via /pro/do.php
   await resolveFanDecks(fresh, table.KNOWN);            // fill snap.fan link-outs via their open API
   fresh.forEach(x => { if(x) delete x.fanId; });        // working field only — never written to the JSON

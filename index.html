@@ -4790,6 +4790,7 @@ const BUILTIN_CREATORS = [
   { name:'Coougarrr',        url:'https://www.youtube.com/@CoougarrrSNAP' },
   { name:'Unfitparrot',      url:'https://www.youtube.com/@Unfitparrot' },
   { name:'Snap Judgments',   url:'https://www.youtube.com/channel/UCRM70o4UWSPL839M9d42xGw' },
+  { name:'r/MarvelSnapDecks', url:'https://www.reddit.com/r/MarvelSnapDecks/' },   // nightly reddit harvest (posts + OP comments)
 ];
 /* one entry per creator NAME — a channel that's both built-in and followed in-app
    (Snap Judgments) merges instead of appearing twice */
@@ -5044,7 +5045,7 @@ function renderCreatorDecks(){
     } else if(cd.fan && httpOk(cd.fan)){
       acts.appendChild(linkBtn(cd.fan, 'View on snap.fan'));
     }
-    if(cd.url && httpOk(cd.url)) acts.appendChild(linkBtn(cd.url, 'Watch'));
+    if(cd.url && httpOk(cd.url)) acts.appendChild(linkBtn(cd.url, /reddit\.com/i.test(cd.url) ? 'Open post' : 'Watch'));
     if(cd.added){                                                 // R5-J: remove the whole channel + its decks
       const rm = el('button','abtn danger','Remove');
       rm.onclick = () => {

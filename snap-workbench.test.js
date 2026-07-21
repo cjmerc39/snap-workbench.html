@@ -820,6 +820,14 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   assert(_cdec.Name==='Test Deck' && Array.isArray(_cdec.Cards) && _cdec.Cards.length===w.eval('S.creatorDecks[0].ids.length')
     && _cdec.Cards.every(c=>c.CardDefId), 'the copied code is a valid Snap share code for that deck');
   assert(/Copied/.test(_ccBtn.textContent), 'the button confirms the copy');
+  // reddit-harvested decks (creator r/MarvelSnapDecks) render like any creator deck,
+  // with the link-out labelled for a post instead of a video
+  w.eval('S.creatorDecks=[{creator:"r/MarvelSnapDecks",video:"My spicy Wong list",url:"https://www.reddit.com/r/MarvelSnapDecks/comments/abc/x/",published:"2026-07-20",name:"Wong Spice",ids:["Hulk","AntMan","Wong"]}]; renderCreatorDecks();'); await sleep(20);
+  const _rrow = d.querySelector('#creatorlist .crow');
+  assert(_rrow!==null && /r\/MarvelSnapDecks/.test(_rrow.querySelector('.cr-creator').textContent), 'reddit deck renders with the subreddit as creator');
+  assert([..._rrow.querySelectorAll('a.abtn')].some(a=>a.textContent==='Open post' && /reddit\.com/.test(a.href)), 'reddit rows link out as "Open post", not "Watch"');
+  assert([..._rrow.querySelectorAll('button.abtn')].some(b=>b.textContent==='Copy code'), 'reddit decks get the Copy code button too');
+  assert(w.eval('creatorRoster().some(r=>r.name==="r/MarvelSnapDecks")'), 'the subreddit shows in the Following roster (mutable like any channel)');
 
   // --- marvelsnapzone (zone) + snap.fan (fan) link-outs render for undecodable entries ---
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+
@@ -1643,7 +1651,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   d.querySelector('#btn-managecr').click(); await sleep(20);
   const fpills = d.querySelectorAll('#modal .cr-fpill');
   assert(fpills.length>=3, 'R10: the manager lists the built-in creators ('+fpills.length+')');
-  assert([...fpills].every(a=>/^https:\/\/www\.youtube\.com\//.test(a.href)), 'R10: every manager row links to a YouTube channel');
+  assert([...fpills].every(a=>/^https:\/\/www\.(youtube|reddit)\.com\//.test(a.href)), 'R10: every manager row links to its source (YouTube channel or subreddit)');
   w.eval('closeModal(); S.addedCreators=[{id:"UCbt1SGMrWj5Q7TMXAfmTERQ",name:"RegisKillbin",handle:"@RegisKillbin"}]; S.addedCreatorDecks=[]; renderCreatorDecks();'); await sleep(20);
   d.querySelector('#btn-managecr').click(); await sleep(20);
   const regisPill = [...d.querySelectorAll('#modal .cr-fpill')].find(a=>/RegisKillbin/.test(a.textContent));
@@ -1861,8 +1869,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   fchip.click(); await sleep(20);
   assert(w.eval('S.crFilter')===null && d.querySelectorAll('#creatorlist .crow').length===2, 'R11.2: the chip clears the filter');
   d.querySelector('#btn-managecr').click(); await sleep(20);
-  assert([...d.querySelectorAll('#modal .cr-fpill')].every(a=>/^https:\/\/www\.youtube\.com\//.test(a.href)||/youtube\.com/.test(a.href)),
-    'R11.2: manager rows keep their channel hrefs for the ↗ link');
+  assert([...d.querySelectorAll('#modal .cr-fpill')].every(a=>/youtube\.com|reddit\.com/.test(a.href)),
+    'R11.2: manager rows keep their source hrefs for the ↗ link');
   w.eval('closeModal(); S.creatorDecks=window.__oldCD2; S.addedCreatorDecks=[]; S.addedCreators=[]; S.crFilter=null; persistCreators(); flushSaves(); renderCreatorDecks();'); await sleep(10);
 
   // --- expected-cost overrides ---
