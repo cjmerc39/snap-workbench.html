@@ -911,6 +911,9 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   w.eval('window.fetch=window.__ofetch;');
   d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(10);
   assert(d.querySelector('#creatorlist .cr-fresh .cr-fresh-age')!==null, 'FRESH: the Creator segment carries the same freshness control');
+  // date-only stamp (pre-updatedAt files): day granularity — hour counts would overstate the age by up to a day
+  w.eval('S.creatorDecksStamp=""; S.creatorDecksLabel=new Date(Date.now()-3*86400000).toISOString().slice(0,10); renderCreatorDecks();'); await sleep(10);
+  assert(/updated 3 days ago/.test(d.querySelector('#creatorlist .cr-fresh-age').textContent), 'FRESH: a date-only stamp shows day granularity, not fake hours');
 
   // --- marvelsnapzone (zone) + snap.fan (fan) link-outs render for undecodable entries ---
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+

@@ -4987,15 +4987,25 @@ function crRow(cd, cq){
   return row;
 }
 /* R17: data freshness — shared by the Creator and Reddit segments. Shows how old the
-   nightly file is and offers a plain re-download of creator-decks.json (never calls
-   reddit/youtube from the browser; can't trigger the harvest Action). */
+   harvested file is and offers a plain re-download of creator-decks.json (never calls
+   reddit/youtube from the browser; can't trigger the harvest Action, which runs
+   19:01 + 20:01 UTC — afternoons US-Eastern, not overnight). */
 function crAgeLabel(){
-  const t = Date.parse(S.creatorDecksStamp || S.creatorDecksLabel);   // full timestamp when available, date-only until then
+  const full = Date.parse(S.creatorDecksStamp);      // exact updatedAt stamp (harvester ≥ R17)
+  if(!isNaN(full)){
+    const h = Math.floor(Math.max(0, Date.now() - full) / 3600000);
+    if(h < 1) return 'updated within the hour';
+    if(h < 48) return 'updated ' + h + (h === 1 ? ' hour' : ' hours') + ' ago';
+    return 'updated ' + Math.floor(h / 24) + ' days ago';
+  }
+  // date-only stamp: no time of day to count hours from — claiming hours would overstate
+  // the age by up to a day, so stay at day granularity until an exact stamp arrives
+  const t = Date.parse(S.creatorDecksLabel);
   if(isNaN(t)) return '';
-  const h = Math.floor(Math.max(0, Date.now() - t) / 3600000);
-  if(h < 1) return 'updated within the hour';
-  if(h < 48) return 'updated ' + h + (h === 1 ? ' hour' : ' hours') + ' ago';
-  return 'updated ' + Math.floor(h / 24) + ' days ago';
+  const days = Math.floor(Math.max(0, Date.now() - t) / 86400000);
+  if(days < 1) return 'updated today';
+  if(days < 2) return 'updated yesterday';
+  return 'updated ' + days + ' days ago';
 }
 function crFreshRow(rerender){
   const row = el('div','cr-fresh');
@@ -5007,7 +5017,7 @@ function crFreshRow(rerender){
     const ok = await loadCreatorDecks(true);
     if(!ok){ toast('Could not reach the deck feed — try again shortly'); rerender(); return; }
     const changed = S.creatorDecks.map(cd => cd.url || cd.zone || cd.video).join('\n') !== sig;
-    toast(changed ? 'New decks arrived — list refreshed' : 'Nothing new yet — the harvest runs twice nightly');
+    toast(changed ? 'New decks arrived — list refreshed' : 'Nothing new yet — fresh decks land mid-afternoon (US Eastern)');
     rerender();
   };
   row.appendChild(b);
@@ -5044,7 +5054,7 @@ function renderRedditDecks(){
   wrap.appendChild(brow);
   wrap.appendChild(crFreshRow(renderRedditDecks));
   if(!all.length){
-    wrap.appendChild(el('div','warnbox','No Reddit decks right now — the nightly harvest keeps the last two weeks of posts that carry a share code (r/MarvelSnapDecks, r/MarvelSnapComp).'));
+    wrap.appendChild(el('div','warnbox','No Reddit decks right now — the daily harvest keeps the last two weeks of posts that carry a share code (r/MarvelSnapDecks, r/MarvelSnapComp).'));
     return;
   }
   if(sel) all = all.filter(cd => cd.creator === sel);
@@ -5054,13 +5064,13 @@ function renderRedditDecks(){
   }
   if(sortMode === 'new'){
     all = all.slice().sort((a,b) => String(b.published||'').localeCompare(String(a.published||'')));
-    wrap.appendChild(el('div','mnote','Newest posts first, whatever their upvotes. Codes come from the post or the poster’s comment; refreshed nightly. Tap Open post for the discussion.'));
+    wrap.appendChild(el('div','mnote','Newest posts first, whatever their upvotes. Codes come from the post or the poster’s comment; refreshed each afternoon. Tap Open post for the discussion.'));
   } else {
     // reddit's feeds carry no raw scores, but the weekly-top feed is upvote-ordered:
     // ranked decks first (best rank up top), then everything else newest-first
     all = all.slice().sort((a,b) =>
       ((a.rk || 999) - (b.rk || 999)) || String(b.published||'').localeCompare(String(a.published||'')));
-    wrap.appendChild(el('div','mnote','Most-upvoted this week first (▲ badges), then newest. Codes come from the post or the poster’s comment; refreshed nightly. Tap Open post for the discussion.'));
+    wrap.appendChild(el('div','mnote','Most-upvoted this week first (▲ badges), then newest. Codes come from the post or the poster’s comment; refreshed each afternoon. Tap Open post for the discussion.'));
   }
   all.forEach(cd => wrap.appendChild(crRow(cd, '')));
 }
@@ -5836,13 +5846,13 @@ function upcRow(u, withDate){
 function renderUpcoming(){
   const box = $('#upclist'); if(!box) return;
   if(!S.upcoming.length){
-    box.innerHTML = '<div class="odds-hint">Nothing datamined right now — this refreshes nightly with the card database.</div>';
+    box.innerHTML = '<div class="odds-hint">Nothing datamined right now — this refreshes each afternoon with the card database.</div>';
     return;
   }
   const sched = S.upcoming.filter(u => u.rel), mined = S.upcoming.filter(u => !u.rel);
   const row = u => upcRow(u, true);
   box.innerHTML =
-    '<div class="mnote">Straight from the game files via the nightly update. Stats and text often change before launch — nothing here counts toward decks yet.</div>' +
+    '<div class="mnote">Straight from the game files via the daily update. Stats and text often change before launch — nothing here counts toward decks yet.</div>' +
     (sched.length ? '<div class="coll-section">Scheduled releases <span class="cs-n">' + sched.length + '</span></div>' + sched.map(row).join('') : '') +
     (mined.length ? '<div class="coll-section">Datamined — no date yet <span class="cs-n">' + mined.length + '</span></div>' + mined.map(row).join('') : '');
   box.onclick = e => { const r = e.target.closest('.upc-row'); if(r) openUpcomingSheet(r.dataset.d); };
@@ -6069,7 +6079,7 @@ function seasonInfo(){
 function renderSeason(){
   const box = $('#ssnlist'); if(!box) return;
   const info = seasonInfo();
-  if(!info){ box.innerHTML = '<div class="odds-hint">No scheduled releases in the data right now — check back after the nightly update.</div>'; return; }
+  if(!info){ box.innerHTML = '<div class="odds-hint">No scheduled releases in the data right now — check back after the daily update.</div>'; return; }
   const days = iso => Math.ceil((Date.parse(iso) - Date.now()) / 86400000);
   const dtxt = n => n <= 0 ? 'today' : n === 1 ? 'tomorrow' : 'in ' + n + ' days';
   const next = info.sched[0];
@@ -6109,7 +6119,7 @@ function renderVariants(){
     box.innerHTML = '<div class="odds-hint">Loading variant art&hellip;</div>';
     ensureVariants().then(ok => {
       if(S.libPage !== 'var') return;   // user already navigated away
-      if(!ok){ box.innerHTML = '<div class="odds-hint">Variant data isn&rsquo;t available yet — it ships with the nightly update.</div>'; return; }
+      if(!ok){ box.innerHTML = '<div class="odds-hint">Variant data isn&rsquo;t available yet — it ships with the daily update.</div>'; return; }
       renderVariants();
     });
     return;
@@ -6250,7 +6260,7 @@ function otaChangeHtml(ch){
 function renderOtaHistory(){
   const box = $('#otalist'); if(!box) return;
   if(!S.cardChanges.length){
-    box.innerHTML = '<div class="odds-hint">No balance changes recorded yet — the nightly updater starts writing history from July 16, 2026 onward.</div>';
+    box.innerHTML = '<div class="odds-hint">No balance changes recorded yet — the daily updater starts writing history from July 16, 2026 onward.</div>';
     return;
   }
   // one collapsible group per patch date (newest first, newest open) — the ledger is
