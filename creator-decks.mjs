@@ -513,13 +513,14 @@ async function main(){
     }
   }
   const today = new Date().toISOString().slice(0, 10);
+  const nowIso = new Date().toISOString();           // R17: exact stamp — the app's "updated N hours ago" line reads this
 
   console.log(`fresh: ${fresh.length} | kept-from-prev (<${AGE_DAYS}d): ${keepPrev.length} | merged+deduped+capped: ${merged.length}`);
   const decodable = merged.filter(x => x.ids && x.ids.length).length;
   console.log(`  decodable decks (Save-a-copy): ${decodable} | link-out only (undecodable slug): ${merged.length - decodable}`);
 
   if(args.includes(`--dry`)){
-    console.log(JSON.stringify({ updated: today, decks: merged }, null, 2));
+    console.log(JSON.stringify({ updated: today, updatedAt: nowIso, decks: merged }, null, 2));
     return;
   }
   if(!anyOk){                                        // never clobber a good file to empty on a total-network failure
@@ -527,7 +528,7 @@ async function main(){
     return;
   }
   const redditChecked = [...new Set(prevChecked.concat(rr.checkedEmpty || []))].slice(-REDDIT_CHECKED_CAP);
-  fs.writeFileSync(OUT, JSON.stringify({ updated: today, decks: merged, redditChecked }, null, 2));
+  fs.writeFileSync(OUT, JSON.stringify({ updated: today, updatedAt: nowIso, decks: merged, redditChecked }, null, 2));
   console.log(`wrote ${merged.length} creator decks to ${OUT}`);
 
   // ---- R9: rolling 30-day stats ledger (separate file so the 14-day display window stays tight) ----

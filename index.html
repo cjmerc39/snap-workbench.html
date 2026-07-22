@@ -1195,6 +1195,9 @@ body.on-cards #searchbar.on ~ #btn-clearall, body.on-cards #searchbar.on ~ #tool
 .ver-restore:active{background:var(--gold); color:var(--iris-ink);}
 /* R12: buildability on creator rows */
 .cr-tools{margin:0 0 10px;}
+.cr-tools.rsort,.cr-tools.rsubs{display:flex; flex-wrap:wrap; gap:6px; margin:0 0 8px;}
+.cr-fresh{display:flex; align-items:center; gap:10px; margin:0 0 10px; font-size:11px; color:var(--faint);}
+.cr-fresh .abtn{font-size:11px; padding:5px 10px; margin-left:auto;}
 .cr-own{font-size:10px; font-weight:800; color:var(--dim); background:rgba(255,255,255,.06); border-radius:6px; padding:2px 7px; white-space:nowrap;}
 .cr-rank{font-size:10px; font-weight:800; color:var(--gold); background:rgba(255,255,255,.06); border-radius:6px; padding:2px 7px; white-space:nowrap;}
 .cr-own.full{color:#0b1f17; background:var(--ok);}
@@ -1686,6 +1689,7 @@ const S = {
   sim: null,               // WP2 goldfish draw snapshot { order:[ids], shown:n }
   creatorDecks: [],        // R4 harvested creator decks (from creator-decks.json)
   creatorDecksLabel: '',   // R4 "updated" date from creator-decks.json
+  creatorDecksStamp: '',   // R17 full "updatedAt" timestamp (once the harvester emits it) — powers the freshness line
   addedCreators: [],       // R5-J in-app added channels [{id:'UC…', name, handle}]
   addedCreatorDecks: [],   // R5-J decks harvested from those channels (creatorDecks row shape + added:true, chId)
   mySyns: [],              // user-declared synergies [{id, ids:[defids 2+], note}] — feed the fit engine
@@ -4982,40 +4986,82 @@ function crRow(cd, cq){
   row.appendChild(acts);
   return row;
 }
-/* the Reddit segment: harvested r/MarvelSnapDecks posts, newest first — same rows,
-   none of the channel chrome (follow manager / trending / per-creator filters) */
+/* R17: data freshness — shared by the Creator and Reddit segments. Shows how old the
+   nightly file is and offers a plain re-download of creator-decks.json (never calls
+   reddit/youtube from the browser; can't trigger the harvest Action). */
+function crAgeLabel(){
+  const t = Date.parse(S.creatorDecksStamp || S.creatorDecksLabel);   // full timestamp when available, date-only until then
+  if(isNaN(t)) return '';
+  const h = Math.floor(Math.max(0, Date.now() - t) / 3600000);
+  if(h < 1) return 'updated within the hour';
+  if(h < 48) return 'updated ' + h + (h === 1 ? ' hour' : ' hours') + ' ago';
+  return 'updated ' + Math.floor(h / 24) + ' days ago';
+}
+function crFreshRow(rerender){
+  const row = el('div','cr-fresh');
+  row.appendChild(el('span','cr-fresh-age', crAgeLabel() || 'freshness unknown'));
+  const b = el('button','abtn','↻ Check for new decks'); b.type = 'button';
+  b.onclick = async () => {
+    b.disabled = true; b.textContent = 'Checking…';
+    const sig = S.creatorDecks.map(cd => cd.url || cd.zone || cd.video).join('\n');
+    const ok = await loadCreatorDecks(true);
+    if(!ok){ toast('Could not reach the deck feed — try again shortly'); rerender(); return; }
+    const changed = S.creatorDecks.map(cd => cd.url || cd.zone || cd.video).join('\n') !== sig;
+    toast(changed ? 'New decks arrived — list refreshed' : 'Nothing new yet — the harvest runs twice nightly');
+    rerender();
+  };
+  row.appendChild(b);
+  return row;
+}
+/* the Reddit segment: harvested subreddit posts — same rows, none of the channel
+   chrome. R17: always-visible sort toggle + subreddit chips, both persisted in prefs
+   (crBuildable pattern) so they ride cross-device sync. */
+const REDDIT_SUBS = ['r/MarvelSnapDecks','r/MarvelSnapComp'];   // harvested subs — chips show even before a sub lands decks
 function renderRedditDecks(){
   const wrap = $('#redditlist'); if(!wrap) return;
   wrap.innerHTML = '';
   const hidden = new Set((S.prefs && S.prefs.hiddenCreators) || []);
   let all = S.creatorDecks.filter(isRedditDeck).filter(cd => !hidden.has(cd.creator));
+  // controls render before every early-out below, so an empty sub still shows the way back to All
+  const sortMode = S.prefs.redditSort === 'new' ? 'new' : 'top';
+  const srow = el('div','cr-tools rsort');
+  [['top','Top this week'],['new','Newest']].forEach(([k, label]) => {
+    const c = el('button','chip' + (sortMode === k ? ' on' : ''), label);
+    c.type = 'button';
+    c.onclick = () => { S.prefs.redditSort = k; sSet(K.prefs, S.prefs); renderRedditDecks(); };
+    srow.appendChild(c);
+  });
+  wrap.appendChild(srow);
+  const subs = [...new Set(REDDIT_SUBS.concat(all.map(cd => cd.creator)))].sort();
+  const sel = subs.indexOf(S.prefs.redditSub) >= 0 ? S.prefs.redditSub : null;
+  const brow = el('div','cr-tools rsubs');
+  ['All'].concat(subs).forEach(sname => {
+    const c = el('button','chip' + ((sel || 'All') === sname ? ' on' : ''), sname);
+    c.type = 'button';
+    c.onclick = () => { S.prefs.redditSub = sname === 'All' ? null : sname; sSet(K.prefs, S.prefs); renderRedditDecks(); };
+    brow.appendChild(c);
+  });
+  wrap.appendChild(brow);
+  wrap.appendChild(crFreshRow(renderRedditDecks));
   if(!all.length){
     wrap.appendChild(el('div','warnbox','No Reddit decks right now — the nightly harvest keeps the last two weeks of posts that carry a share code (r/MarvelSnapDecks, r/MarvelSnapComp).'));
     return;
   }
-  // subreddit filter — chips appear once more than one sub has decks
-  const subs = [...new Set(all.map(cd => cd.creator))].sort();
-  if(subs.length > 1 || S.redditSub){
-    const bar = el('div','cr-tools');
-    ['All'].concat(subs).forEach(sname => {
-      const on = (S.redditSub || 'All') === sname;
-      const c = el('button','chip' + (on ? ' on' : ''), sname);
-      c.type = 'button';
-      c.onclick = () => { S.redditSub = sname === 'All' ? null : sname; renderRedditDecks(); };
-      bar.appendChild(c);
-    });
-    wrap.appendChild(bar);
-  }
-  if(S.redditSub) all = all.filter(cd => cd.creator === S.redditSub);
+  if(sel) all = all.filter(cd => cd.creator === sel);
   if(!all.length){
-    wrap.appendChild(el('div','warnbox','No decks from ' + S.redditSub + ' in the current window.'));
+    wrap.appendChild(el('div','warnbox','No decks from ' + sel + ' in the current window.'));
     return;
   }
-  // reddit's feeds carry no raw scores, but the weekly-top feed is upvote-ordered:
-  // ranked decks first (best rank up top), then everything else newest-first
-  all = all.slice().sort((a,b) =>
-    ((a.rk || 999) - (b.rk || 999)) || String(b.published||'').localeCompare(String(a.published||'')));
-  wrap.appendChild(el('div','mnote','Most-upvoted this week first (▲ badges), then newest. Codes come from the post or the poster’s comment; refreshed nightly. Tap Open post for the discussion.'));
+  if(sortMode === 'new'){
+    all = all.slice().sort((a,b) => String(b.published||'').localeCompare(String(a.published||'')));
+    wrap.appendChild(el('div','mnote','Newest posts first, whatever their upvotes. Codes come from the post or the poster’s comment; refreshed nightly. Tap Open post for the discussion.'));
+  } else {
+    // reddit's feeds carry no raw scores, but the weekly-top feed is upvote-ordered:
+    // ranked decks first (best rank up top), then everything else newest-first
+    all = all.slice().sort((a,b) =>
+      ((a.rk || 999) - (b.rk || 999)) || String(b.published||'').localeCompare(String(a.published||'')));
+    wrap.appendChild(el('div','mnote','Most-upvoted this week first (▲ badges), then newest. Codes come from the post or the poster’s comment; refreshed nightly. Tap Open post for the discussion.'));
+  }
   all.forEach(cd => wrap.appendChild(crRow(cd, '')));
 }
 function renderCreatorDecks(){
@@ -5062,6 +5108,7 @@ function renderCreatorDecks(){
   }
   fsec.appendChild(mrow);
   wrap.appendChild(fsec);
+  wrap.appendChild(crFreshRow(renderCreatorDecks));   // R17: same freshness line + manual re-download as the Reddit segment
   // R14: field-level trending sits above the deck rows — it reads the 30-day ledger,
   // not the display decks, so it renders even while the 14-day window is empty.
   const tb = renderTrending(); if(tb) wrap.appendChild(tb);
@@ -5713,9 +5760,10 @@ async function loadSiteData(){
 }
 /* R4: harvested creator decks (creator-decks.json, generated daily by creator-decks.mjs).
    Mirrors loadSiteData: same-origin fetch, tolerant of absence (Saved > Creator stays empty). */
-async function loadCreatorDecks(){
+async function loadCreatorDecks(bust){
   try{
-    const r = await fetch('./creator-decks.json', {cache:'no-store'});
+    // bust: manual refresh — a throwaway query string sidesteps any CDN/proxy cache on the way
+    const r = await fetch('./creator-decks.json' + (bust ? '?r=' + Date.now() : ''), {cache:'no-store'});
     if(!r.ok) return false;
     const j = await r.json();
     const arr = Array.isArray(j) ? j : j.decks;
@@ -5727,6 +5775,7 @@ async function loadCreatorDecks(){
       rk:(Number.isInteger(x.rk) && x.rk > 0) ? x.rk : 0,   // weekly upvote rank (reddit decks)
       untapped:x.untapped?String(x.untapped):'', zone:x.zone?String(x.zone):'', fan:x.fan?String(x.fan):'' }));
     S.creatorDecksLabel = (j && j.updated) ? String(j.updated) : '';
+    S.creatorDecksStamp = (j && j.updatedAt && !isNaN(Date.parse(j.updatedAt))) ? String(j.updatedAt) : '';
     return true;
   }catch(e){ return false; }
 }

@@ -838,21 +838,41 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     'both subreddits show in the Following roster (mutable like any channel)');
   w.eval('S.creatorDecks=[{creator:"r/MarvelSnapComp",video:"Guide: Discard to Infinite",url:"https://www.reddit.com/r/MarvelSnapComp/comments/xyz/g/",published:"2026-07-21",name:"Comp Discard",ids:["Hulk","AntMan","Wong"]}]; renderRedditDecks();'); await sleep(10);
   assert(/r\/MarvelSnapComp/.test(d.querySelector('#redditlist .cr-creator').textContent), 'comp-sub decks land on the Reddit segment too');
-  // upvote-rank sort + subreddit filter chips
-  w.eval('S.redditSub=null; S.creatorDecks=[' +
+  // upvote-rank sort toggle + always-visible subreddit filter chips (both persisted in prefs)
+  w.eval('S.prefs.redditSub=null; S.prefs.redditSort=null; S.creatorDecks=[' +
     '{creator:"r/MarvelSnapDecks",video:"newest unranked",url:"https://www.reddit.com/r/MarvelSnapDecks/comments/n1/a/",published:"2026-07-21",name:"Unranked New",ids:["Hulk","AntMan"]},' +
     '{creator:"r/MarvelSnapDecks",video:"rank three",url:"https://www.reddit.com/r/MarvelSnapDecks/comments/r3/b/",published:"2026-07-15",name:"Rank Three",ids:["Hulk","Wong"],rk:3},' +
     '{creator:"r/MarvelSnapComp",video:"rank one",url:"https://www.reddit.com/r/MarvelSnapComp/comments/r1/c/",published:"2026-07-14",name:"Rank One",ids:["Hulk","Odin"],rk:1}]; renderRedditDecks();'); await sleep(10);
   const _rNames = [...d.querySelectorAll('#redditlist .cr-deckname')].map(x=>x.textContent);
-  assert(_rNames.join('|')==='Rank One|Rank Three|Unranked New', 'RSORT: ranked decks lead (best rank first), unranked follow newest-first');
+  assert(_rNames.join('|')==='Rank One|Rank Three|Unranked New', 'RSORT: default "Top this week" leads with ranked decks (best rank first), unranked follow newest-first');
   assert(/▲ #1 this week/.test(d.querySelector('#redditlist .crow .cr-rank').textContent), 'RSORT: the weekly rank badge renders');
-  const _chips = [...d.querySelectorAll('#redditlist .cr-tools .chip')].map(x=>x.textContent);
-  assert(_chips.join('|')==='All|r/MarvelSnapComp|r/MarvelSnapDecks', 'RSORT: filter chips list All + each sub with decks');
-  [...d.querySelectorAll('#redditlist .cr-tools .chip')].find(c=>c.textContent==='r/MarvelSnapComp').click(); await sleep(10);
+  assert([...d.querySelectorAll('#redditlist .rsort .chip')].map(x=>x.textContent).join('|')==='Top this week|Newest'
+    && d.querySelector('#redditlist .rsort .chip.on').textContent==='Top this week', 'RSORT: the sort toggle renders with Top this week as the default');
+  [...d.querySelectorAll('#redditlist .rsort .chip')].find(c=>c.textContent==='Newest').click(); await sleep(10);
+  assert([...d.querySelectorAll('#redditlist .cr-deckname')].map(x=>x.textContent).join('|')==='Unranked New|Rank Three|Rank One',
+    'RSORT: Newest sorts by date only, ranks ignored');
+  assert(w.eval('S.prefs.redditSort')==='new', 'RSORT: the sort choice persists in S.prefs (rides sync)');
+  [...d.querySelectorAll('#redditlist .rsort .chip')].find(c=>c.textContent==='Top this week').click(); await sleep(10);
+  assert([...d.querySelectorAll('#redditlist .cr-deckname')].map(x=>x.textContent).join('|')==='Rank One|Rank Three|Unranked New',
+    'RSORT: toggling back restores the rank-first order');
+  const _chips = [...d.querySelectorAll('#redditlist .rsubs .chip')].map(x=>x.textContent);
+  assert(_chips.join('|')==='All|r/MarvelSnapComp|r/MarvelSnapDecks', 'RSORT: filter chips list All + each harvested sub');
+  [...d.querySelectorAll('#redditlist .rsubs .chip')].find(c=>c.textContent==='r/MarvelSnapComp').click(); await sleep(10);
   assert(d.querySelectorAll('#redditlist .crow').length===1 && /Rank One/.test(d.getElementById('redditlist').textContent), 'RSORT: a sub chip filters to that sub');
-  [...d.querySelectorAll('#redditlist .cr-tools .chip')].find(c=>c.textContent==='All').click(); await sleep(10);
+  assert(w.eval('S.prefs.redditSub')==='r/MarvelSnapComp', 'RSORT: the sub choice persists in S.prefs (rides sync)');
+  [...d.querySelectorAll('#redditlist .rsubs .chip')].find(c=>c.textContent==='All').click(); await sleep(10);
   assert(d.querySelectorAll('#redditlist .crow').length===3, 'RSORT: the All chip clears the filter');
-  w.eval('S.redditSub=null;');
+  // chips never hide: a one-sub dataset still lists both harvested subs, and an empty sub keeps the way back visible
+  w.eval('S.creatorDecks=S.creatorDecks.filter(cd=>cd.creator!=="r/MarvelSnapComp"); renderRedditDecks();'); await sleep(10);
+  assert([...d.querySelectorAll('#redditlist .rsubs .chip')].map(x=>x.textContent).join('|')==='All|r/MarvelSnapComp|r/MarvelSnapDecks',
+    'RSORT: chips show every harvested sub even when only one has decks');
+  [...d.querySelectorAll('#redditlist .rsubs .chip')].find(c=>c.textContent==='r/MarvelSnapComp').click(); await sleep(10);
+  assert(/No decks from r\/MarvelSnapComp/.test(d.getElementById('redditlist').textContent), 'RSORT: an empty sub explains itself');
+  assert(d.querySelectorAll('#redditlist .rsubs .chip').length===3 && d.querySelectorAll('#redditlist .rsort .chip').length===2,
+    'RSORT: sort + sub controls stay visible on an empty sub');
+  [...d.querySelectorAll('#redditlist .rsubs .chip')].find(c=>c.textContent==='All').click(); await sleep(10);
+  assert(d.querySelectorAll('#redditlist .crow').length===2, 'RSORT: All recovers from an empty sub');
+  w.eval('S.prefs.redditSub=null; S.prefs.redditSort=null;');
   // back-to-top: appears only on the long deck lists once scrolled, and scrolls <main> home
   const _main = d.querySelector('main');
   assert(!d.getElementById('btn-top').classList.contains('on'), 'TOP: hidden before any scroll');
@@ -869,7 +889,28 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   w.eval('setTab("saved")'); await sleep(10);
   w.eval('S.creatorDecks=[]; renderRedditDecks();'); await sleep(10);
   assert(/No Reddit decks right now/.test(d.getElementById('redditlist').textContent), 'empty reddit pane explains itself');
+  assert(d.querySelectorAll('#redditlist .rsubs .chip').length===3, 'controls render even on a fully empty reddit pane');
+
+  // --- FRESH: freshness line + manual re-download (through loadCreatorDecks — mocked fetch, per the whitelist rule) ---
+  w.eval('window.__ofetch=window.fetch; window.__fN=0; window.__fU=""; ' +
+    'window.__pl={updated:"2026-07-20",updatedAt:new Date(Date.now()-5*3600000).toISOString(),decks:[' +
+    '{creator:"r/MarvelSnapDecks",video:"fresh one",url:"https://www.reddit.com/r/MarvelSnapDecks/comments/f1/a/",published:"2026-07-20",name:"Fresh One",ids:["Hulk","AntMan"],rk:2}]}; ' +
+    'window.fetch=async(u)=>{ window.__fN++; window.__fU=String(u); return {ok:true,json:async()=>window.__pl}; };');
+  await w.eval('(async()=>{ window.__cl3=await loadCreatorDecks(); })()'); await sleep(10);
+  assert(w.eval('window.__cl3===true && S.creatorDecksStamp===window.__pl.updatedAt'), 'FRESH: updatedAt survives the loadCreatorDecks whitelist');
+  w.eval('renderRedditDecks();'); await sleep(10);
+  assert(/updated 5 hours ago/.test(d.querySelector('#redditlist .cr-fresh-age').textContent), 'FRESH: the freshness line reads the stamp in hours');
+  const _fN0 = w.eval('window.__fN');
+  d.querySelector('#redditlist .cr-fresh .abtn').click(); await sleep(60);
+  assert(w.eval('window.__fN')===_fN0+1 && /creator-decks\.json\?r=\d+/.test(w.eval('window.__fU')), 'FRESH: refresh re-downloads creator-decks.json cache-busted');
+  assert(/Nothing new yet/.test(d.getElementById('toast').textContent), 'FRESH: unchanged data toasts "nothing new"');
+  w.eval('window.__pl.decks.push({creator:"r/MarvelSnapComp",video:"brand new",url:"https://www.reddit.com/r/MarvelSnapComp/comments/f2/b/",published:"2026-07-21",name:"Brand New",ids:["Hulk","Wong"]})');
+  d.querySelector('#redditlist .cr-fresh .abtn').click(); await sleep(60);
+  assert(/New decks arrived/.test(d.getElementById('toast').textContent), 'FRESH: new data toasts the arrival');
+  assert(d.querySelectorAll('#redditlist .crow').length===2, 'FRESH: the refreshed list re-renders with the new deck');
+  w.eval('window.fetch=window.__ofetch;');
   d.querySelector('#savedseg [data-seg="creator"]').click(); await sleep(10);
+  assert(d.querySelector('#creatorlist .cr-fresh .cr-fresh-age')!==null, 'FRESH: the Creator segment carries the same freshness control');
 
   // --- marvelsnapzone (zone) + snap.fan (fan) link-outs render for undecodable entries ---
   await w.eval('(async()=>{ const of=window.fetch; window.fetch=async(u)=>({ok:true,json:async()=>('+
