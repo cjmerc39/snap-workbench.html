@@ -1438,8 +1438,8 @@
     "RedHulkFracturedFrontier",
     "Isca",
     "Stature",
-    "BlackBolt",
     "ThanosFracturedFrontier",
+    "BlackBolt",
     "WilsonFisk"
    ]
   },
@@ -1657,6 +1657,24 @@
     "Makkari",
     "MobiusMMobius",
     "Bastion"
+   ]
+  },
+  {
+   "creator": "r/MarvelSnapDecks",
+   "published": "2026-07-16",
+   "ids": [
+    "HydraBob",
+    "TechnoOrganicVirus",
+    "Tarantula",
+    "IronPatriot",
+    "Nightmare",
+    "Viv",
+    "Starbrand",
+    "Crossbones",
+    "CullObsidian",
+    "WilsonFisk",
+    "RedSkull",
+    "GalactusFirstSteps"
    ]
   },
   {
@@ -2179,24 +2197,6 @@
     "Blink",
     "EbonyMaw",
     "Electro"
-   ]
-  },
-  {
-   "creator": "r/MarvelSnapDecks",
-   "published": "2026-07-16",
-   "ids": [
-    "HydraBob",
-    "TechnoOrganicVirus",
-    "Tarantula",
-    "IronPatriot",
-    "Nightmare",
-    "Viv",
-    "Starbrand",
-    "Crossbones",
-    "CullObsidian",
-    "WilsonFisk",
-    "RedSkull",
-    "GalactusFirstSteps"
    ]
   },
   {
@@ -2744,8 +2744,8 @@
   "PsylockeFracturedFrontier": 2,
   "RedHulkFracturedFrontier": 2,
   "Stature": 1,
-  "BlackBolt": 1,
   "ThanosFracturedFrontier": 1,
+  "BlackBolt": 1,
   "Domino": 2,
   "HellcowFracturedFrontier": 1,
   "EnSabahNur": 2,
@@ -2766,6 +2766,10 @@
   "Chameleon": 3,
   "Makkari": 1,
   "Bastion": 1,
+  "Nightmare": 1,
+  "Crossbones": 1,
+  "CullObsidian": 1,
+  "RedSkull": 2,
   "Agent13": 1,
   "ScarletSpider": 1,
   "AstralProjection": 1,
@@ -2799,10 +2803,6 @@
   "StrangeSupreme": 1,
   "HumanTorchFirstSteps": 1,
   "MrFantasticFirstSteps": 2,
-  "Nightmare": 1,
-  "Crossbones": 1,
-  "CullObsidian": 1,
-  "RedSkull": 2,
   "FenrisWolf": 1,
   "Mojo": 1,
   "Gorgon": 1,
@@ -4443,6 +4443,12 @@
   "HydraStomper|Tarantula": 2,
   "NegasonicTeenageWarhead|Tarantula": 2,
   "Supergiant|Tarantula": 2,
+  "HydraBob|RedSkull": 2,
+  "RedSkull|TechnoOrganicVirus": 2,
+  "RedSkull|Tarantula": 2,
+  "RedSkull|Starbrand": 2,
+  "RedSkull|WilsonFisk": 2,
+  "GalactusFirstSteps|WilsonFisk": 2,
   "Diamondback|KarimaShapandar": 2,
   "KarimaShapandar|ScorpionBrandNewDay": 2,
   "HighEvolutionary|Laufey": 2,
@@ -4485,7 +4491,6 @@
   "KittyPryde|Prodigy": 2,
   "Agony|JeffTheBabyDolphin": 2,
   "GalactusFirstSteps|Stardust": 2,
-  "GalactusFirstSteps|WilsonFisk": 2,
   "JoaquinTorres|MajesticWingbeat": 2,
   "Cosmo|TechnoOrganicVirus": 2,
   "MotherAskani|ShouLao": 2,
@@ -4563,11 +4568,6 @@
   "AirWalker|Angel": 2,
   "InvisibleWomanFirstSteps|TheThingFirstSteps": 2,
   "TheThingFirstSteps|Thena": 2,
-  "HydraBob|RedSkull": 2,
-  "RedSkull|TechnoOrganicVirus": 2,
-  "RedSkull|Tarantula": 2,
-  "RedSkull|Starbrand": 2,
-  "RedSkull|WilsonFisk": 2,
   "NegasonicTeenageWarhead|TechnoOrganicVirus": 2,
   "Martyr|NegasonicTeenageWarhead": 2,
   "Debrii|TechnoOrganicVirus": 2,
