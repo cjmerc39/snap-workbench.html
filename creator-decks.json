@@ -1,7 +1,179 @@
 {
-  "updated": "2026-07-22",
-  "updatedAt": "2026-07-22T21:17:46.776Z",
+  "updated": "2026-07-23",
+  "updatedAt": "2026-07-23T20:21:16.250Z",
   "decks": [
+    {
+      "creator": "Coougarrr",
+      "video": "You Built These Decks... I Had to Try Them | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=hF_bIFN9Roo",
+      "published": "2026-07-23",
+      "name": "",
+      "ids": [
+        "Taskmaster",
+        "ManSpider",
+        "AbsorbingMan",
+        "LunaSnow",
+        "Magik",
+        "Crystal",
+        "AdamWarlock",
+        "FastballSpecial",
+        "Agony",
+        "Martyr",
+        "ThePhoenixForce",
+        "Cosmo"
+      ]
+    },
+    {
+      "creator": "Coougarrr",
+      "video": "You Built These Decks... I Had to Try Them | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=hF_bIFN9Roo",
+      "published": "2026-07-23",
+      "name": "",
+      "ids": [
+        "MajesticWingbeat",
+        "WebSling",
+        "KittyPryde",
+        "NicoMinoru",
+        "Clea",
+        "Merlin",
+        "Cloak",
+        "WerewolfByNight",
+        "ShouLao",
+        "Galactus",
+        "Lockheed",
+        "MarvelBoy"
+      ]
+    },
+    {
+      "creator": "Coougarrr",
+      "video": "You Built These Decks... I Had to Try Them | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=hF_bIFN9Roo",
+      "published": "2026-07-23",
+      "name": "",
+      "ids": [
+        "Wasp",
+        "NicoMinoru",
+        "Pixie",
+        "MajesticWingbeat",
+        "Sandstorm",
+        "Rhino",
+        "Patriot",
+        "TheAncientOne",
+        "Debrii",
+        "IronMan",
+        "Valkyrie",
+        "Ozymandias"
+      ]
+    },
+    {
+      "creator": "Coougarrr",
+      "video": "You Built These Decks... I Had to Try Them | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=hF_bIFN9Roo",
+      "published": "2026-07-23",
+      "name": "",
+      "ids": [
+        "NicoMinoru",
+        "PunisherWarMachine",
+        "Cable",
+        "Mercury",
+        "LunaSnow",
+        "Wave",
+        "NegasonicTeenageWarhead",
+        "Hobgoblin",
+        "Cannonball",
+        "Galactus",
+        "GalactusFirstSteps",
+        "Loki"
+      ]
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "76% Win Rate   The Best Deck to Beat Scorpion Brand New Day! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=uJT4urHmAvo",
+      "published": "2026-07-23",
+      "name": "DougPie",
+      "ids": [
+        "KingEitri",
+        "TechnoOrganicVirus",
+        "Tarantula",
+        "ScarletWitch",
+        "ShadowlandsDaredevil",
+        "Lizard",
+        "ShadowKing",
+        "Starbrand",
+        "WilsonFisk",
+        "Sasquatch",
+        "Skaar",
+        "MonstroOctopus"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/dougpie/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "76% Win Rate   The Best Deck to Beat Scorpion Brand New Day! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=uJT4urHmAvo",
+      "published": "2026-07-23",
+      "name": "Aurora",
+      "ids": [
+        "Agony",
+        "SpiderManBrandNewDay",
+        "LukeCage",
+        "GrandMaster",
+        "StormHorseman",
+        "Brood",
+        "CaptainCarter",
+        "Maverick",
+        "HopeSummers",
+        "Prodigy",
+        "JubileeSilverSurfer",
+        "Stick"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/deck-aurora1dz41vz/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "76% Win Rate   The Best Deck to Beat Scorpion Brand New Day! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=uJT4urHmAvo",
+      "published": "2026-07-23",
+      "name": "Iris 76%wr",
+      "ids": [
+        "Batroc",
+        "SpiderManBrandNewDay",
+        "LukeCage",
+        "Kraven",
+        "SamWilson",
+        "Cosmo",
+        "HydraStomper",
+        "Mercury",
+        "Isca",
+        "Juggernaut",
+        "MilesMorales",
+        "Hellion"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/iris-76wr/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "76% Win Rate   The Best Deck to Beat Scorpion Brand New Day! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=uJT4urHmAvo",
+      "published": "2026-07-23",
+      "name": "Splat",
+      "ids": [
+        "SpiderManBrandNewDay",
+        "StormHorseman",
+        "Brood",
+        "CaptainCarter",
+        "SilverSurfer",
+        "Venus",
+        "Prodigy",
+        "ShadowKing",
+        "LunaSnow",
+        "Triton",
+        "Sera",
+        "Blink"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/splatgbzyof2/"
+    },
     {
       "creator": "Unfitparrot",
       "video": "Scorpion brought a NEW Archetype! Move Afflict!- Marvel Snap Infinite Deck Highlight",
@@ -246,6 +418,28 @@
     },
     {
       "creator": "r/MarvelSnapDecks",
+      "video": "BIG RED MACHINE! (CL: 29k)",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3w2cq/big_red_machine_cl_29k/",
+      "published": "2026-07-22",
+      "name": "BIG RED MACHINE v2",
+      "ids": [
+        "SilverSable",
+        "FastballSpecial",
+        "Boomerang",
+        "Scorpion",
+        "CassandraNova",
+        "RedGuardian",
+        "Diamondback",
+        "Jocasta",
+        "KarimaShapandar",
+        "Laufey",
+        "IronLad",
+        "ScorpionBrandNewDay"
+      ],
+      "rk": 4
+    },
+    {
+      "creator": "r/MarvelSnapDecks",
       "video": "(CL: 25827) Affliction Ramp, can probably fit ikari in",
       "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v38ppi/cl_25827_affliction_ramp_can_probably_fit_ikari_in/",
       "published": "2026-07-22",
@@ -372,7 +566,8 @@
         "Ajax",
         "Scorpion",
         "ScorpionBrandNewDay"
-      ]
+      ],
+      "rk": 25
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -670,8 +865,8 @@
         "RedHulkFracturedFrontier",
         "Isca",
         "Stature",
-        "ThanosFracturedFrontier",
         "BlackBolt",
+        "ThanosFracturedFrontier",
         "WilsonFisk"
       ],
       "zone": "https://marvelsnapzone.com/decks/stature-and-fractured-friendsvhg3hrf/"
@@ -1033,21 +1228,8 @@
       "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
       "published": "2026-07-16",
-      "name": "Afflict Move?",
-      "ids": [
-        "SpiderManBrandNewDay",
-        "SamWilson",
-        "AuntMay",
-        "Hazmat",
-        "RocketAndGroot",
-        "SpiderPunk",
-        "Laufey",
-        "SpiderMan2099",
-        "MilesMorales",
-        "HighEvolutionary",
-        "Ajax",
-        "Abomination"
-      ],
+      "name": "Afflict Move4zuti5q",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/afflict-move4zuti5q/"
     },
     {
@@ -1055,21 +1237,8 @@
       "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
       "published": "2026-07-16",
-      "name": "Agent Var",
-      "ids": [
-        "Quinjet",
-        "Agent13",
-        "VictoriaHand",
-        "GrandMaster",
-        "Mirage",
-        "Frigga",
-        "Gambit",
-        "Mercury",
-        "ShadowKing",
-        "GambitHorseman",
-        "MotherAskani",
-        "Stardust"
-      ],
+      "name": "Agent Vara4tuc65",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/agent-vara4tuc65/"
     },
     {
@@ -1078,20 +1247,7 @@
       "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
       "published": "2026-07-16",
       "name": "Smitty",
-      "ids": [
-        "Sunspot",
-        "LadyBullseye",
-        "StormHorseman",
-        "Magik",
-        "Wong",
-        "Shuri",
-        "SymbioteSpiderMan",
-        "ManSpider",
-        "FallenOne",
-        "StarlordMasterOfTheSun",
-        "Taskmaster",
-        "FinFangFoom"
-      ],
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/smitty/"
     },
     {
@@ -1099,155 +1255,9 @@
       "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
       "published": "2026-07-16",
-      "name": "Triton",
-      "ids": [
-        "KittyPryde",
-        "Agony",
-        "SpiderManBrandNewDay",
-        "HydraBob",
-        "Tarantula",
-        "ScarletWitch",
-        "Maverick",
-        "Cosmo",
-        "Triton",
-        "Isca",
-        "ScarletSpider",
-        "ShouLao"
-      ],
+      "name": "Deck Tritonokubk46",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/deck-tritonokubk46/"
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "Won TEN GAMES IN A ROW with Tarantula/Nightmare! 🕷️😱 (CL: 29k)",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyivb0/won_ten_games_in_a_row_with_tarantulanightmare_cl/",
-      "published": "2026-07-16",
-      "name": "TIRA ME A LAS ARANAS!",
-      "ids": [
-        "HydraBob",
-        "TechnoOrganicVirus",
-        "Tarantula",
-        "IronPatriot",
-        "Nightmare",
-        "Viv",
-        "Starbrand",
-        "Crossbones",
-        "CullObsidian",
-        "WilsonFisk",
-        "RedSkull",
-        "GalactusFirstSteps"
-      ],
-      "rk": 21
-    },
-    {
-      "creator": "Unfitparrot",
-      "video": "Kang has returned to CONQUER your way to Infinite! - Marvel Snap Deck Highlight",
-      "url": "https://www.youtube.com/watch?v=WkraLILUN5I",
-      "published": "2026-07-15",
-      "name": "MCU Villains",
-      "ids": [
-        "CosmicGhostRider",
-        "GambitHorseman",
-        "InfinityUltron",
-        "IronPatriot",
-        "Kang",
-        "KingEitri",
-        "LunaSnow",
-        "Quinjet",
-        "ShadowKing",
-        "ShangChi",
-        "TechnoOrganicVirus",
-        "Valentina"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/CosmicGhostRider-GambitHorseman-InfinityUltron-IronPatriot-Kang-KingEitri-LunaSnow-Quinjet-ShadowKing-ShangChi-TechnoOrganicVirus-Valentina_MCU%20Villains"
-    },
-    {
-      "creator": "Unfitparrot",
-      "video": "Bounce is now a CLIMBING DECK!! Boomerang supercharges bounce! - Marvel Snap Deck Highlight",
-      "url": "https://www.youtube.com/watch?v=1KugLDRwSeM",
-      "published": "2026-07-15",
-      "name": "Bouncearang",
-      "ids": [
-        "Beast",
-        "Boomerang",
-        "Falcon",
-        "GrandMaster",
-        "Hawkeye",
-        "HitMonkey",
-        "Iceman",
-        "NicoMinoru",
-        "RocketRaccoon",
-        "Sage",
-        "SilverSable",
-        "Toxin"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Beast-Boomerang-Falcon-GrandMaster-Hawkeye-HitMonkey-Iceman-NicoMinoru-RocketRaccoon-Sage-SilverSable-Toxin_Bouncearang"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "The Perfect 12! Thanos Destroy is FINALLY Meta! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=I6uPPAdlNfM",
-      "published": "2026-07-15",
-      "name": "Toxicsoulking32c870a",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/toxicsoulking32c870a/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "The Perfect 12! Thanos Destroy is FINALLY Meta! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=I6uPPAdlNfM",
-      "published": "2026-07-15",
-      "name": "Tetatonixg55556k",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/tetatonixg55556k/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "The Perfect 12! Thanos Destroy is FINALLY Meta! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=I6uPPAdlNfM",
-      "published": "2026-07-15",
-      "name": "Unhlpfulyoda 60 Wr",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/unhlpfulyoda-60-wr/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Boomerang Bounce Meta!? Ok Boomer! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=Jdebzh_3meA",
-      "published": "2026-07-15",
-      "name": "188ckd1",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/188ckd1/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Boomerang Bounce Meta!? Ok Boomer! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=Jdebzh_3meA",
-      "published": "2026-07-15",
-      "name": "Monkey Boomerang",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/monkey-boomerang/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "The Perfect 12! Thanos Destroy is FINALLY Meta! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=I6uPPAdlNfM",
-      "published": "2026-07-15",
-      "name": "Toxicsoulking",
-      "ids": [
-        "SilverSable",
-        "RocketRaccoon",
-        "AmericaChavez",
-        "NicoMinoru",
-        "Boomerang",
-        "Carnage",
-        "Toxin",
-        "GrandMaster",
-        "LinLie",
-        "Venom",
-        "MorganLeFay",
-        "Beast"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/toxicsoulking32c870a/"
     }
   ],
   "redditChecked": [
@@ -1325,6 +1335,12 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3c3qy/new_scorpion_decks_cl_29000/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3890i/jane_negative_for_infinite_cl_6175/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v308so/new_scorpion_deck_is_crazy_good_cl_24446/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v2voz0/is_this_galactus_deck_obvious_cl_6000/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v2voz0/is_this_galactus_deck_obvious_cl_6000/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v4dqvf/is_discard_still_viable_cl_4339/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1v4ervy/this_or_that_thursday_weekly_collection_thread/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v45elv/brand_new_cheat_cl_20k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v44ejp/just_got_him_anyone_got_a_decklist_cl_1818/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3v576/sub_1000_infinite_with_discard_cl_16_212/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3ubgn/bnd_scorpion_deck_cl_4224/"
   ]
 }
