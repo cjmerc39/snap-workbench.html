@@ -1,7 +1,73 @@
 {
-  "updated": "2026-07-23",
-  "updatedAt": "2026-07-23T21:13:40.182Z",
+  "updated": "2026-07-24",
+  "updatedAt": "2026-07-24T20:28:02.969Z",
   "decks": [
+    {
+      "creator": "Snap Judgments",
+      "video": "Oh, this Deck is BROKEN Broken......Play It! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=M7CxxU9Rd9w",
+      "published": "2026-07-24",
+      "name": "Ika",
+      "ids": [
+        "SpiderManBrandNewDay",
+        "Nightcrawler",
+        "JeffTheBabyDolphin",
+        "Kraven",
+        "SamWilson",
+        "AuntMay",
+        "RocketAndGroot",
+        "Rogue",
+        "Nocturne",
+        "MoonGirl",
+        "MilesMorales",
+        "SpiderSense"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/deck-ikatls9cki/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Oh, this Deck is BROKEN Broken......Play It! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=M7CxxU9Rd9w",
+      "published": "2026-07-24",
+      "name": "Jwala",
+      "ids": [
+        "NicoMinoru",
+        "HydraBob",
+        "LukeCage",
+        "Colossus",
+        "InvisibleWoman",
+        "JeffTheBabyLandShark",
+        "Magus",
+        "Cerebro",
+        "Mercury",
+        "Prodigy",
+        "ShadowKing",
+        "MotherAskani"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/jwalafgheklq/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Oh, this Deck is BROKEN Broken......Play It! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=M7CxxU9Rd9w",
+      "published": "2026-07-24",
+      "name": "Ika2",
+      "ids": [
+        "Echo",
+        "LukeCage",
+        "LadyBullseye",
+        "Scorpion",
+        "InvisibleWoman",
+        "Diamondback",
+        "Hazmat",
+        "TheAncientOne",
+        "LunaSnow",
+        "Malekith",
+        "Blink",
+        "ScorpionBrandNewDay"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/ika28vkim6b/"
+    },
     {
       "creator": "Coougarrr",
       "video": "You Built These Decks... I Had to Try Them | Marvel Snap",
@@ -63,6 +129,27 @@
         "IronMan",
         "Valkyrie",
         "Ozymandias"
+      ]
+    },
+    {
+      "creator": "Coougarrr",
+      "video": "You Built These Decks... I Had to Try Them | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=hF_bIFN9Roo",
+      "published": "2026-07-23",
+      "name": "",
+      "ids": [
+        "MaryJane",
+        "SamWilson",
+        "Venus",
+        "MadameWeb",
+        "Cosmo",
+        "SpiderHam",
+        "HydraBob",
+        "LinLie",
+        "ZombieMisterFantastic",
+        "Isca",
+        "FanFei",
+        "Aurora"
       ]
     },
     {
@@ -567,7 +654,7 @@
         "Scorpion",
         "ScorpionBrandNewDay"
       ],
-      "rk": 25
+      "rk": 21
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -720,7 +807,7 @@
         "GreenGoblin",
         "Selene"
       ],
-      "rk": 24
+      "rk": 22
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -741,7 +828,8 @@
         "Angela",
         "JeffTheBabyDolphin",
         "Stardust"
-      ]
+      ],
+      "rk": 25
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -784,7 +872,7 @@
         "AirWalker",
         "Angel"
       ],
-      "rk": 10
+      "rk": 11
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -1132,8 +1220,7 @@
         "Blink",
         "EbonyMaw",
         "Electro"
-      ],
-      "rk": 11
+      ]
     },
     {
       "creator": "Snap Judgments",
@@ -1184,80 +1271,18 @@
       "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
       "published": "2026-07-16",
-      "name": "Sugi Move",
-      "ids": [
-        "Batroc",
-        "SpiderManBrandNewDay",
-        "Tarantula",
-        "Kraven",
-        "SamWilson",
-        "Silk",
-        "Cosmo",
-        "HydraStomper",
-        "NegasonicTeenageWarhead",
-        "Supergiant",
-        "MilesMorales",
-        "WilsonFisk"
-      ],
+      "name": "Supergiant Rockspozrpog",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/supergiant-rockspozrpog/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
+      "published": "2026-07-16",
+      "name": "Sugi Move0akbk7c",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/sugi-move0akbk7c/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
-      "published": "2026-07-16",
-      "name": "c3",
-      "ids": [
-        "MBaku",
-        "LukeCage",
-        "Lockjaw",
-        "Quake",
-        "ScarletWitch",
-        "Cerebro",
-        "Chameleon",
-        "Frigga",
-        "Killmonger",
-        "Makkari",
-        "MobiusMMobius",
-        "Bastion"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/c390hqnwv/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
-      "published": "2026-07-16",
-      "name": "Afflict Move4zuti5q",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/afflict-move4zuti5q/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
-      "published": "2026-07-16",
-      "name": "Agent Vara4tuc65",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/agent-vara4tuc65/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
-      "published": "2026-07-16",
-      "name": "Smitty",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/smitty/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "You Won't Believe This OTA! They FINALLY Did It ! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=1Y3JEyipUVE",
-      "published": "2026-07-16",
-      "name": "Deck Tritonokubk46",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/deck-tritonokubk46/"
     }
   ],
   "redditChecked": [
@@ -1342,6 +1367,11 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v44ejp/just_got_him_anyone_got_a_decklist_cl_1818/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3v576/sub_1000_infinite_with_discard_cl_16_212/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3ubgn/bnd_scorpion_deck_cl_4224/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v4qq6c/need_some_help_on_this_deck_cl6524/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v4qq6c/need_some_help_on_this_deck_cl6524/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v5bo0q/this_deck_is_bad_cl_27277/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1v4rbz4/affliction_after_the_luke_cage_rework_a_scorpion/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v4x4fl/improvements_cl_20821/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v4rd6c/affliction_after_the_luke_cage_rework_a_scorpion/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v4qvrh/cl5351/"
   ]
 }
