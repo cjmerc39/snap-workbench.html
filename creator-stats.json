@@ -1474,8 +1474,8 @@
     "RedHulkFracturedFrontier",
     "Isca",
     "Stature",
-    "ThanosFracturedFrontier",
     "BlackBolt",
+    "ThanosFracturedFrontier",
     "WilsonFisk"
    ]
   },
@@ -2780,8 +2780,8 @@
   "PsylockeFracturedFrontier": 2,
   "RedHulkFracturedFrontier": 2,
   "Stature": 1,
-  "ThanosFracturedFrontier": 1,
   "BlackBolt": 1,
+  "ThanosFracturedFrontier": 1,
   "Domino": 2,
   "HellcowFracturedFrontier": 1,
   "EnSabahNur": 2,
