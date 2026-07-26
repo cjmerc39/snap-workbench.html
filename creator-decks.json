@@ -1,7 +1,227 @@
 {
-  "updated": "2026-07-25",
-  "updatedAt": "2026-07-25T21:01:57.333Z",
+  "updated": "2026-07-26",
+  "updatedAt": "2026-07-26T20:18:15.133Z",
   "decks": [
+    {
+      "creator": "Snap Judgments",
+      "video": "Batroc is the NEW META KING! Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=I_hm7yzpCvw",
+      "published": "2026-07-26",
+      "name": "1st Bu++",
+      "ids": [
+        "Batroc",
+        "SpiderManBrandNewDay",
+        "Kraven",
+        "SamWilson",
+        "Silk",
+        "Cosmo",
+        "HydraStomper",
+        "Copycat",
+        "Nocturne",
+        "Hellion",
+        "Alioth",
+        "Hulkling"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/1st-bu/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Batroc is the NEW META KING! Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=I_hm7yzpCvw",
+      "published": "2026-07-26",
+      "name": "2nd Derek",
+      "ids": [
+        "Batroc",
+        "SpiderManBrandNewDay",
+        "Kraven",
+        "SamWilson",
+        "Silk",
+        "Cosmo",
+        "HydraStomper",
+        "Nocturne",
+        "Hellion",
+        "WilsonFisk",
+        "Alioth",
+        "GalactusFirstSteps"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/2nd-derek256dy7d/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Batroc is the NEW META KING! Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=I_hm7yzpCvw",
+      "published": "2026-07-26",
+      "name": "3rd BetaRayBill",
+      "ids": [
+        "SpiderHam",
+        "HydraBob",
+        "Tarantula",
+        "ZombieMisterFantastic",
+        "Herbie",
+        "SamWilson",
+        "Cosmo",
+        "Venus",
+        "DraxAvatarOfLife",
+        "Isca",
+        "CosmicGhostRider",
+        "Aurora"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/3rd-betaraybill/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Batroc is the NEW META KING! Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=I_hm7yzpCvw",
+      "published": "2026-07-26",
+      "name": "4th Vad",
+      "ids": [
+        "Batroc",
+        "Elektra",
+        "SpiderManBrandNewDay",
+        "Kraven",
+        "SamWilson",
+        "Silk",
+        "Cosmo",
+        "HydraStomper",
+        "Nocturne",
+        "Enchantress",
+        "Hellion",
+        "GalactusFirstSteps"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/4th-vad/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Batroc is the NEW META KING! Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=I_hm7yzpCvw",
+      "published": "2026-07-26",
+      "name": "5th Wiccan",
+      "ids": [
+        "MajesticWingbeat",
+        "Echo",
+        "SpiderManBrandNewDay",
+        "AdamWarlock",
+        "JeffTheBabyDolphin",
+        "Magik",
+        "Maverick",
+        "Warlock",
+        "Wong",
+        "Shuri",
+        "Gwenpool",
+        "ZombieGalacti"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/5th-wiccan/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Batroc is the NEW META KING! Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=I_hm7yzpCvw",
+      "published": "2026-07-26",
+      "name": "6th Smlz",
+      "ids": [
+        "FastballSpecial",
+        "KidOmega",
+        "Carnage",
+        "Tombstone",
+        "Magik",
+        "Venom",
+        "AdamantiumInfusion",
+        "Shuri",
+        "SymbioteSpiderMan",
+        "BlackPanther",
+        "Nimrod",
+        "ArnimZola"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/6th-smlz/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Batroc is the NEW META KING! Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=I_hm7yzpCvw",
+      "published": "2026-07-26",
+      "name": "7th AyeItsJayce",
+      "ids": [
+        "KittyPryde",
+        "Iceman",
+        "SpiderManBrandNewDay",
+        "Surge",
+        "LukeCage",
+        "Merlin",
+        "Mysterio",
+        "Cosmo",
+        "MobiusMMobius",
+        "WerewolfByNight",
+        "ScarletSpider",
+        "ShouLao"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/7th-ayeitsjayce/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Batroc is the NEW META KING! Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=I_hm7yzpCvw",
+      "published": "2026-07-26",
+      "name": "8th DestroyKing",
+      "ids": [
+        "Deadpool",
+        "X23",
+        "MoiraX",
+        "Carnage",
+        "Tombstone",
+        "Wolverine",
+        "Killmonger",
+        "Venom",
+        "ShangChi",
+        "ArnimZola",
+        "Knull",
+        "Death"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/8th-destroyking/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Batroc is the NEW META KING! Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=I_hm7yzpCvw",
+      "published": "2026-07-26",
+      "name": "9th PiiPs",
+      "ids": [
+        "MajesticWingbeat",
+        "AmericaChavez",
+        "SpiderManBrandNewDay",
+        "AdamWarlock",
+        "Surge",
+        "JeffTheBabyDolphin",
+        "Magik",
+        "Maverick",
+        "SuperiorSpiderMan",
+        "Stick",
+        "Gwenpool",
+        "ZombieGalacti"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/9th-piips/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Batroc is the NEW META KING! Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=I_hm7yzpCvw",
+      "published": "2026-07-26",
+      "name": "10th Zulliber",
+      "ids": [
+        "Martyr",
+        "BuckyBarnes",
+        "Carnage",
+        "WadeWilson",
+        "Tombstone",
+        "Angel",
+        "Killmonger",
+        "Venom",
+        "Knull",
+        "Thanos",
+        "Dormammu",
+        "Death"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/10th-zulliber/"
+    },
     {
       "creator": "Snap Judgments",
       "video": "Easiest High Win Rate Deck to Pilot! Marvel Snap",
@@ -765,7 +985,7 @@
         "IronLad",
         "ScorpionBrandNewDay"
       ],
-      "rk": 4
+      "rk": 2
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -786,7 +1006,8 @@
         "ManThing",
         "AstralProjection",
         "ArnimZola"
-      ]
+      ],
+      "rk": 24
     },
     {
       "creator": "Snap Judgments",
@@ -874,7 +1095,7 @@
         "Scorpion",
         "ScorpionBrandNewDay"
       ],
-      "rk": 20
+      "rk": 15
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -917,7 +1138,7 @@
         "WebSling",
         "NicholasScratch"
       ],
-      "rk": 16
+      "rk": 12
     },
     {
       "creator": "Snap Judgments",
@@ -1027,7 +1248,7 @@
         "GreenGoblin",
         "Selene"
       ],
-      "rk": 22
+      "rk": 17
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -1048,7 +1269,8 @@
         "Angela",
         "JeffTheBabyDolphin",
         "Stardust"
-      ]
+      ],
+      "rk": 25
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -1090,225 +1312,7 @@
         "Jocasta",
         "AirWalker",
         "Angel"
-      ],
-      "rk": 11
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "[Fantastic Four- End of Turn]. Please Help (CL 25,451)",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0dlpa/fantastic_four_end_of_turn_please_help_cl_25451/",
-      "published": "2026-07-19",
-      "name": "",
-      "ids": [
-        "MarvelBoy",
-        "Sunspot",
-        "StrangeSupreme",
-        "Isca",
-        "InvisibleWomanFirstSteps",
-        "SubMariner",
-        "Thena",
-        "Lockheed",
-        "HumanTorchFirstSteps",
-        "MrFantasticFirstSteps",
-        "DraxAvatarOfLife",
-        "TheThingFirstSteps"
       ]
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "Worst deck cl33566",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0yfby/worst_deck_cl33566/",
-      "published": "2026-07-19",
-      "name": "",
-      "ids": [
-        "Mojo",
-        "Gorgon",
-        "Electro",
-        "ProfessorX",
-        "ToxieDoxie",
-        "Starhawk",
-        "Cobra",
-        "Boomerang",
-        "EsmeCuckoo",
-        "SuperAdaptoid",
-        "Yellowjacket",
-        "Bast"
-      ]
-    },
-    {
-      "creator": "Coougarrr",
-      "video": "This \"Anti-Synergy\" Was Actually Broken (A Tournament Story)",
-      "url": "https://www.youtube.com/watch?v=0S8eDZuguUY",
-      "published": "2026-07-18",
-      "name": "",
-      "ids": [
-        "MotherAskani",
-        "Cosmo",
-        "Frigga",
-        "ScarletWitch",
-        "Sentinel",
-        "Mystique",
-        "Quinjet",
-        "Bast",
-        "Cerebro",
-        "LukeCage",
-        "Armor",
-        "Nightcrawler"
-      ]
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
-      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
-      "published": "2026-07-18",
-      "name": "Stature and Fractured Friends",
-      "ids": [
-        "DoctorOctopusFracturedFrontier",
-        "IronPatriot",
-        "ShadowlandsDaredevil",
-        "PsylockeFracturedFrontier",
-        "Crystal",
-        "LunaSnow",
-        "RedHulkFracturedFrontier",
-        "Isca",
-        "Stature",
-        "BlackBolt",
-        "ThanosFracturedFrontier",
-        "WilsonFisk"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/stature-and-fractured-friendsvhg3hrf/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
-      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
-      "published": "2026-07-18",
-      "name": "Fractured Doc Ock",
-      "ids": [
-        "Nova",
-        "DoctorOctopusFracturedFrontier",
-        "JeffTheBabyDolphin",
-        "Brood",
-        "CaptainCarter",
-        "SilverSurfer",
-        "Killmonger",
-        "Venus",
-        "Nocturne",
-        "SebastianShaw",
-        "MotherAskani",
-        "Sera"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/fractured-doc-ock/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
-      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
-      "published": "2026-07-18",
-      "name": "Fractured Hellcow",
-      "ids": [
-        "Quicksilver",
-        "Domino",
-        "RedGuardian",
-        "Diamondback",
-        "Hazmat",
-        "HellcowFracturedFrontier",
-        "CalibanHorseman",
-        "Laufey",
-        "EnSabahNur",
-        "Malekith",
-        "Wiccan",
-        "Ajax"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/fractured-hellcow/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
-      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
-      "published": "2026-07-18",
-      "name": "Fractured Jane",
-      "ids": [
-        "Quicksilver",
-        "Domino",
-        "Diamondback",
-        "Hazmat",
-        "Speed",
-        "CalibanHorseman",
-        "JaneFosterFracturedFrontier",
-        "Jubilee",
-        "EnSabahNur",
-        "Malekith",
-        "Wiccan",
-        "Ajax"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/fractured-jane/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
-      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
-      "published": "2026-07-18",
-      "name": "Fractured Death",
-      "ids": [
-        "HydraBob",
-        "Martyr",
-        "JenniferKale",
-        "Lizard",
-        "Venom",
-        "Kraglin",
-        "LunaSnow",
-        "Gladiator",
-        "DeathFracturedFrontier",
-        "WilsonFisk",
-        "Destroyer",
-        "Death"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/fractured-death/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
-      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
-      "published": "2026-07-18",
-      "name": "Fractured Psylocke",
-      "ids": [
-        "Magik",
-        "SilverSurfer",
-        "HitMonkey",
-        "Killmonger",
-        "StrongGuy",
-        "Prodigy",
-        "PsylockeFracturedFrontier",
-        "ShadowKing",
-        "Wave",
-        "Sera",
-        "Blink",
-        "Onslaught"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/fractured-psylocke/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "NEW THANOS! NEW DEATH! Let's Go August Datamines and Decks!",
-      "url": "https://www.youtube.com/watch?v=J1XNtcNXs80",
-      "published": "2026-07-18",
-      "name": "Red Wolf",
-      "ids": [
-        "KingEitri",
-        "RedWolfFracturedFrontier",
-        "JeffTheBabyDolphin",
-        "ZombieMisterFantastic",
-        "SamWilson",
-        "MarvelBoy",
-        "Venus",
-        "Isca",
-        "JubileeSilverSurfer",
-        "Aurora",
-        "Mockingbird",
-        "Thanos"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/deck-red-wolftr7fwxh/"
     }
   ],
   "redditChecked": [
@@ -1402,6 +1406,13 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v6ejgz/cl_20183_this_has_been_a_really_fun_deck_to_play/",
     "https://www.reddit.com/r/marvelsnapcomp/comments/1v6ep23/brand_new_day_week_4/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v60f99/finally_got_aurora_rate_my_deck_cl_20k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v5rbkp/crazy_hi_i_mean_low_numbers_with_scorpion_bnd_cl/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v5rbkp/crazy_hi_i_mean_low_numbers_with_scorpion_bnd_cl/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v7cjqu/cl_20306_i_like_making_themed_decks_and_this_xmen/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1v6y5me/competitive_consensus_scorpion_brand_new_day/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v7aj97/pulled_aunt_may_today_looking_for_deck/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v77cro/first_auto_to_infinite_cl_18k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v73mzm/any_improvements_i_can_do_for_this_deck_cl_75k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v6v5pd/jail_deck_need_help_with_concept_cl_25000/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v6lt6y/new_to_marvel_snap_help_cl_888/"
   ]
 }
