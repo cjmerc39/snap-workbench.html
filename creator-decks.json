@@ -1,7 +1,73 @@
 {
-  "updated": "2026-07-27",
-  "updatedAt": "2026-07-27T21:19:48.137Z",
+  "updated": "2026-07-28",
+  "updatedAt": "2026-07-28T20:24:21.212Z",
   "decks": [
+    {
+      "creator": "Snap Judgments",
+      "video": "Sinister Six is Seriously Insane! Marvel Snap!",
+      "url": "https://www.youtube.com/watch?v=jl0aE3OmRRk",
+      "published": "2026-07-28",
+      "name": "Minimum Effort Snap",
+      "ids": [
+        "Chamber",
+        "Electro",
+        "LunaSnow",
+        "Wave",
+        "CosmicGhostRider",
+        "Blink",
+        "Enchantress",
+        "HydroMan",
+        "Alioth",
+        "Hulkling",
+        "GalactusFirstSteps",
+        "FinFangFoom"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/minimum-effort-snap/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Sinister Six is Seriously Insane! Marvel Snap!",
+      "url": "https://www.youtube.com/watch?v=jl0aE3OmRRk",
+      "published": "2026-07-28",
+      "name": "Sinister Noki?",
+      "ids": [
+        "KittyPryde",
+        "Quinjet",
+        "MariaHill",
+        "Thena",
+        "JeffTheBabyDolphin",
+        "Angela",
+        "Valentina",
+        "Venus",
+        "AgentCoulson",
+        "ElsaBloodstone",
+        "MotherAskani",
+        "SinisterSix"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/sinister-noki"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Sinister Six is Seriously Insane! Marvel Snap!",
+      "url": "https://www.youtube.com/watch?v=jl0aE3OmRRk",
+      "published": "2026-07-28",
+      "name": "Shang Enjoyer",
+      "ids": [
+        "Iceman",
+        "NicoMinoru",
+        "FastballSpecial",
+        "Carnage",
+        "LinLie",
+        "Marrow",
+        "Angel",
+        "Frigga",
+        "Makkari",
+        "Venom",
+        "MorganLeFay",
+        "ThePhoenixForce"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/shang-enjoyerfeqiio1/"
+    },
     {
       "creator": "Snap Judgments",
       "video": "Batroc is the NEW META KING! Best Deck! Marvel Snap",
@@ -1007,7 +1073,7 @@
         "AstralProjection",
         "ArnimZola"
       ],
-      "rk": 22
+      "rk": 18
     },
     {
       "creator": "Snap Judgments",
@@ -1094,8 +1160,7 @@
         "Ajax",
         "Scorpion",
         "ScorpionBrandNewDay"
-      ],
-      "rk": 14
+      ]
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -1137,8 +1202,7 @@
         "LinLie",
         "WebSling",
         "NicholasScratch"
-      ],
-      "rk": 11
+      ]
     },
     {
       "creator": "Snap Judgments",
@@ -1189,6 +1253,24 @@
       "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
       "published": "2026-07-20",
+      "name": "Deck Ikaqq8ucor",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/deck-ikaqq8ucor/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
+      "published": "2026-07-20",
+      "name": "Interrobang2gyinm1",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/interrobang2gyinm1/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
+      "published": "2026-07-20",
       "name": "Ika",
       "ids": [
         "HydraBob",
@@ -1205,112 +1287,6 @@
         "Ajax"
       ],
       "zone": "https://marvelsnapzone.com/decks/deck-ikaqq8ucor/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
-      "published": "2026-07-20",
-      "name": "Interrobang",
-      "ids": [
-        "SilverSable",
-        "RocketRaccoon",
-        "AmericaChavez",
-        "Iceman",
-        "NicoMinoru",
-        "Boomerang",
-        "Toxin",
-        "GrandMaster",
-        "JoaquinTorres",
-        "HitMonkey",
-        "Beast",
-        "ShouLao"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/interrobang2gyinm1/"
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "[CL: 23,844] Any tips on how to make my randomizer clog deck more, well...consistent?",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v1r282/cl_23844_any_tips_on_how_to_make_my_randomizer/",
-      "published": "2026-07-20",
-      "name": "",
-      "ids": [
-        "WerewolfByNight",
-        "Merlin",
-        "Hood",
-        "Sersi",
-        "Sentry",
-        "KateBishop",
-        "Wong",
-        "Annihilus",
-        "Jubilee",
-        "WhiteTiger",
-        "GreenGoblin",
-        "Selene"
-      ]
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "second Elsa infinite in a row(CL: 19k)",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v1wrus/second_elsa_infinite_in_a_rowcl_19k/",
-      "published": "2026-07-20",
-      "name": "",
-      "ids": [
-        "NicoMinoru",
-        "KittyPryde",
-        "ElsaBloodstone",
-        "Surge",
-        "PeniParker",
-        "Sasquatch",
-        "GalactusFirstSteps",
-        "Venus",
-        "FrankieRaye",
-        "Angela",
-        "JeffTheBabyDolphin",
-        "Stardust"
-      ]
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "Virus Deck",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v1dgb7/virus_deck/",
-      "published": "2026-07-20",
-      "name": "",
-      "ids": [
-        "WilsonFisk",
-        "ShangChi",
-        "NegasonicTeenageWarhead",
-        "Gambit",
-        "FenrisWolf",
-        "Debrii",
-        "TechnoOrganicVirus",
-        "IronPatriot",
-        "Quinjet",
-        "Martyr",
-        "SquirrelGirl",
-        "ScarletWitch"
-      ]
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "Tweek to Fantomex Meta took me to Infinite. (CL: 12,204.)",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v0nt9d/tweek_to_fantomex_meta_took_me_to_infinite_cl/",
-      "published": "2026-07-19",
-      "name": "",
-      "ids": [
-        "Fantomex",
-        "Gambit",
-        "Venom",
-        "MorganLeFay",
-        "WildChild",
-        "Carnage",
-        "Marrow",
-        "MoiraX",
-        "Blade",
-        "Jocasta",
-        "AirWalker",
-        "Angel"
-      ]
     }
   ],
   "redditChecked": [
@@ -1412,6 +1388,16 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v73mzm/any_improvements_i_can_do_for_this_deck_cl_75k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v6v5pd/jail_deck_need_help_with_concept_cl_25000/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v6lt6y/new_to_marvel_snap_help_cl_888/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8cz1j/zombie_galacti_deck_help_cl_4577/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8cz1j/zombie_galacti_deck_help_cl_4577/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v992ww/cl_16811_any_early_deck_ideas_for_this/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1v8zdbj/teamup_tuesday_weekly_alliances_thread/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v93tme/infinite_with_destroy_cl_13k/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1v8r0qd/weekly_release_discussion_sinister_six/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8wtr0/doom_supreme_having_a_blast_with_this_deck_in/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8tp4r/how_to_improve_my_deck_cl7915/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8qsgk/need_help_with_this_deck_sometimes_i_win_and/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8nwwz/been_trying_to_find_the_right_blend_of_high_evo/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8nlyo/need_some_help_with_arishem_cl_4366/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8hnhy/cl7129_help_improving_deck_i_just_started_messing/"
   ]
 }
