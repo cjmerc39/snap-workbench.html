@@ -1,7 +1,139 @@
 {
-  "updated": "2026-07-28",
-  "updatedAt": "2026-07-28T21:16:13.367Z",
+  "updated": "2026-07-29",
+  "updatedAt": "2026-07-29T20:18:57.103Z",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "Sinister Six is actually AMAZING!? 90% W/R at the top of Infinite! - Marvel Snap Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=B4k7wjFyh_Q",
+      "published": "2026-07-29",
+      "name": "Sin Six Turn 6",
+      "ids": [
+        "Bishop",
+        "BlackSwan",
+        "HitMonkey",
+        "Hood",
+        "HydraBob",
+        "JoaquinTorres",
+        "MoonGirl",
+        "Namorita",
+        "RocketRaccoon",
+        "SheHulk",
+        "SinisterSix",
+        "Titania"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Bishop-BlackSwan-HitMonkey-Hood-HydraBob-JoaquinTorres-MoonGirl-Namorita-RocketRaccoon-SheHulk-SinisterSix-Titania_Sin%20Six%20Turn%206"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "I TOLD YOU! Sinister Six New Archetype and Top 10 Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=CKB2XglkkTc",
+      "published": "2026-07-29",
+      "name": "Denish2",
+      "ids": [
+        "Blade",
+        "Gambit",
+        "CorvusGlaive",
+        "Jubilee",
+        "GhostRider",
+        "CosmicGhostRider",
+        "Legion",
+        "Blink",
+        "Hela",
+        "Odin",
+        "Magneto",
+        "Infinaut"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/denish2/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "I TOLD YOU! Sinister Six New Archetype and Top 10 Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=CKB2XglkkTc",
+      "published": "2026-07-29",
+      "name": "Denish",
+      "ids": [
+        "Wasp",
+        "Yellowjacket",
+        "HydraBob",
+        "AdamWarlock",
+        "IronPatriot",
+        "Lizard",
+        "LunaSnow",
+        "Wave",
+        "WilsonFisk",
+        "ArnimZola",
+        "Taskmaster",
+        "SinisterSix"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/denishvcr49gh/"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "This card is ABSOLUTELY INSANE!? An HONEST REVIEW of SINISTER SIX | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=mIeoPVlB9rk",
+      "published": "2026-07-28",
+      "name": "Furious Six",
+      "ids": [
+        "Agent13",
+        "Cable",
+        "Copycat",
+        "IronPatriot",
+        "LunaSnow",
+        "MariaHill",
+        "Mirage",
+        "NickFury",
+        "Quinjet",
+        "SinisterSix",
+        "TheCollector",
+        "Valentina"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Agent13-Cable-Copycat-IronPatriot-LunaSnow-MariaHill-Mirage-NickFury-Quinjet-SinisterSix-TheCollector-Valentina_Furious%20Six?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "This card is ABSOLUTELY INSANE!? An HONEST REVIEW of SINISTER SIX | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=mIeoPVlB9rk",
+      "published": "2026-07-28",
+      "name": "Sinister Zombies",
+      "ids": [
+        "AbsorbingMan",
+        "ArnimZola",
+        "JeffTheBabyDolphin",
+        "KittyPryde",
+        "SinisterSix",
+        "Surge",
+        "TheHunger",
+        "Venus",
+        "ZombieGiantMan",
+        "ZombieMisterFantastic",
+        "ZombieScarletWitch",
+        "ZombieSentry"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AbsorbingMan-ArnimZola-JeffTheBabyDolphin-KittyPryde-SinisterSix-Surge-TheHunger-Venus-ZombieGiantMan-ZombieMisterFantastic-ZombieScarletWitch-ZombieSentry_Sinister%20Zombies?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "This card is ABSOLUTELY INSANE!? An HONEST REVIEW of SINISTER SIX | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=mIeoPVlB9rk",
+      "published": "2026-07-28",
+      "name": "Infinity Six",
+      "ids": [
+        "Askanison",
+        "CosmicGhostRider",
+        "Cosmo",
+        "KingEitri",
+        "LukeCage",
+        "Mockingbird",
+        "Namorita",
+        "SinisterSix",
+        "Surge",
+        "Thanos",
+        "Venus",
+        "Wiccan"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Askanison-CosmicGhostRider-Cosmo-KingEitri-LukeCage-Mockingbird-Namorita-SinisterSix-Surge-Thanos-Venus-Wiccan_Infinity%20Six?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
     {
       "creator": "Snap Judgments",
       "video": "Sinister Six is Seriously Insane! Marvel Snap!",
@@ -1072,8 +1204,7 @@
         "ManThing",
         "AstralProjection",
         "ArnimZola"
-      ],
-      "rk": 18
+      ]
     },
     {
       "creator": "Snap Judgments",
@@ -1142,6 +1273,15 @@
       "zone": "https://marvelsnapzone.com/decks/zombiesgonomnomuuc54es/"
     },
     {
+      "creator": "Snap Judgments",
+      "video": "Scorpion Brand New Day BREAKS this 70% Win Rate Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=BOZm8tX-vKU",
+      "published": "2026-07-21",
+      "name": "Unhlpfulyoda 82wr 22g",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/unhlpfulyoda-82wr-22g/"
+    },
+    {
       "creator": "r/MarvelSnapDecks",
       "video": "Sun Scorpion ☀️🦂 CL13K",
       "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v2sq50/sun_scorpion_cl13k/",
@@ -1161,132 +1301,6 @@
         "Scorpion",
         "ScorpionBrandNewDay"
       ]
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "Infinite with lockdown",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v2s51x/infinite_with_lockdown/",
-      "published": "2026-07-21",
-      "name": "",
-      "ids": [
-        "EbonyMaw",
-        "JeffTheBabyLandShark",
-        "Storm",
-        "Electro",
-        "WarMachine",
-        "Infinaut",
-        "Lockjaw",
-        "ProfessorX",
-        "Nightcrawler",
-        "Blink",
-        "Titania",
-        "LunaSnow"
-      ]
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "Dusted off my oldest deck... Super fun spell-bounce deck (CL 27,548)",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v27ju3/dusted_off_my_oldest_deck_super_fun_spellbounce/",
-      "published": "2026-07-21",
-      "name": "",
-      "ids": [
-        "Beast",
-        "HitMonkey",
-        "Yellowjacket",
-        "Magneto",
-        "Bishop",
-        "WerewolfByNight",
-        "Merlin",
-        "Venus",
-        "Starhawk",
-        "LinLie",
-        "WebSling",
-        "NicholasScratch"
-      ]
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
-      "published": "2026-07-20",
-      "name": "Doc Guapo",
-      "ids": [
-        "SilverSable",
-        "RocketRaccoon",
-        "AmericaChavez",
-        "NicoMinoru",
-        "Surge",
-        "Boomerang",
-        "Toxin",
-        "GrandMaster",
-        "Sage",
-        "Beast",
-        "MotherAskani",
-        "Sasquatch"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/doc-guapo/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
-      "published": "2026-07-20",
-      "name": "FiendsFirefly",
-      "ids": [
-        "Miek",
-        "Echo",
-        "Scorn",
-        "Morbius",
-        "Marrow",
-        "Wolverine",
-        "Crystal",
-        "MoonGirl",
-        "Supergiant",
-        "ProximaMidnight",
-        "Modok",
-        "Blink"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/fiendsfirefly/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
-      "published": "2026-07-20",
-      "name": "Deck Ikaqq8ucor",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/deck-ikaqq8ucor/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
-      "published": "2026-07-20",
-      "name": "Interrobang2gyinm1",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/interrobang2gyinm1/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "The #1 Bounce Player's Best Boomerang Deck! Exclusively HERE! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=JnTxVF9EbgI",
-      "published": "2026-07-20",
-      "name": "Ika",
-      "ids": [
-        "HydraBob",
-        "LukeCage",
-        "LadyBullseye",
-        "Scorpion",
-        "Lizard",
-        "RedGuardian",
-        "Diamondback",
-        "Hazmat",
-        "NegasonicTeenageWarhead",
-        "Supergiant",
-        "Malekith",
-        "Ajax"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/deck-ikaqq8ucor/"
     }
   ],
   "redditChecked": [
@@ -1398,6 +1412,13 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8qsgk/need_help_with_this_deck_sometimes_i_win_and/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8nwwz/been_trying_to_find_the_right_blend_of_high_evo/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8nlyo/need_some_help_with_arishem_cl_4366/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8hnhy/cl7129_help_improving_deck_i_just_started_messing/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v8hnhy/cl7129_help_improving_deck_i_just_started_messing/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1va7e1n/spider_sense_cope_cl_17600/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1va7dpz/added_a_draft_mode_to_snapvault_because/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v9wsiv/my_first_ever_deck_cl_11k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v9rwr8/how_to_be_more_evil_cl_25k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v9pjrg/cl20766/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v9izoe/cl_30891_sinister_six_ideas/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v9dqmt/infinite_13_a_mixed_bag_of_fun_cards_and_rng_cl/"
   ]
 }
