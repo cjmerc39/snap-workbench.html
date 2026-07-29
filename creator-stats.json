@@ -1678,6 +1678,24 @@
    ]
   },
   {
+   "creator": "r/MarvelSnapDecks",
+   "published": "2026-07-21",
+   "ids": [
+    "EbonyMaw",
+    "JeffTheBabyLandShark",
+    "Storm",
+    "Electro",
+    "WarMachine",
+    "Infinaut",
+    "Lockjaw",
+    "ProfessorX",
+    "Nightcrawler",
+    "Blink",
+    "Titania",
+    "LunaSnow"
+   ]
+  },
+  {
    "creator": "Snap Judgments",
    "published": "2026-07-20",
    "ids": [
@@ -2323,24 +2341,6 @@
     "Ajax",
     "Scorpion",
     "ScorpionBrandNewDay"
-   ]
-  },
-  {
-   "creator": "r/MarvelSnapDecks",
-   "published": "2026-07-21",
-   "ids": [
-    "EbonyMaw",
-    "JeffTheBabyLandShark",
-    "Storm",
-    "Electro",
-    "WarMachine",
-    "Infinaut",
-    "Lockjaw",
-    "ProfessorX",
-    "Nightcrawler",
-    "Blink",
-    "Titania",
-    "LunaSnow"
    ]
   },
   {
@@ -3086,6 +3086,8 @@
   "GreenGoblin": 3,
   "Viper": 2,
   "Gorr": 1,
+  "EbonyMaw": 2,
+  "Storm": 1,
   "Scorn": 2,
   "DoctorOctopusFracturedFrontier": 2,
   "PsylockeFracturedFrontier": 2,
@@ -3125,8 +3127,6 @@
   "CaptainMarvel": 1,
   "WhiteWidow": 1,
   "RedHulk": 2,
-  "EbonyMaw": 2,
-  "Storm": 1,
   "MrSinister": 1,
   "Sersi": 1,
   "Sentry": 1,
@@ -4965,6 +4965,12 @@
   "Isca|Magik": 2,
   "Isca|Viper": 2,
   "RedGuardian|SilverSable": 2,
+  "EbonyMaw|Electro": 2,
+  "EbonyMaw|WarMachine": 2,
+  "EbonyMaw|Infinaut": 2,
+  "EbonyMaw|Lockjaw": 2,
+  "Blink|EbonyMaw": 2,
+  "Electro|ProfessorX": 2,
   "MotherAskani|SilverSable": 2,
   "MotherAskani|RocketRaccoon": 2,
   "AmericaChavez|GrandMaster": 3,
@@ -5104,12 +5110,6 @@
   "InvisibleWomanFirstSteps|Tarantula": 2,
   "Chameleon|GrandMaster": 2,
   "GrandMaster|Scorpion": 2,
-  "EbonyMaw|Electro": 2,
-  "EbonyMaw|WarMachine": 2,
-  "EbonyMaw|Infinaut": 2,
-  "EbonyMaw|Lockjaw": 2,
-  "Blink|EbonyMaw": 2,
-  "Electro|ProfessorX": 2,
   "KateBishop|WerewolfByNight": 2,
   "Starhawk|Yellowjacket": 2,
   "Fantomex|Gambit": 2,
