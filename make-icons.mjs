@@ -31,8 +31,8 @@ const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" heigh
        Snap DNA: the cost gem (built, blue) and the power gem (still a draft, orange). -->
   <g transform="rotate(-6 256 256)">
     <defs>
-      <clipPath id="doneClip"><polygon points="130,30 302,30 268,430 130,430"/></clipPath>
-      <clipPath id="printClip"><polygon points="302,30 382,30 382,430 268,430"/></clipPath>
+      <clipPath id="doneClip"><polygon points="130,30 382,30 382,218 222,430 130,430"/></clipPath>
+      <clipPath id="printClip"><polygon points="382,218 382,430 222,430"/></clipPath>
       <linearGradient id="gemC" x1="0" y1="0" x2="1" y2="1">
         <stop offset="0%" stop-color="#8fd4ff"/><stop offset="100%" stop-color="#2a86e0"/>
       </linearGradient>
@@ -44,51 +44,61 @@ const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" heigh
       </linearGradient>
     </defs>
     <rect x="152" y="104" width="208" height="304" rx="22" fill="#14091f" opacity=".5" filter="url(#soft)"/>
-    <!-- finished half: proper Snap anatomy — frame band, art window, cost orb, name, art breaking the frame -->
+    <!-- the card, REAL Snap anatomy (referenced against an actual card render):
+         full-bleed art behind a thin white frame; a glossy blue cost ORB poking
+         above the top-left corner; an orange power HEX top-right; the bolt-as-art
+         breaking the frame; the name as huge 3D letters drawn over everything. -->
     <g clip-path="url(#doneClip)">
-      <rect x="152" y="100" width="208" height="304" rx="22" fill="url(#card)"/>
-      <rect x="166" y="114" width="180" height="276" rx="14" fill="url(#art)"/>
-      <g stroke="#8f6bff" stroke-width="2.5" opacity=".45">
-        <line x1="256" y1="238" x2="196" y2="150"/><line x1="256" y1="238" x2="176" y2="238"/>
-        <line x1="256" y1="238" x2="200" y2="330"/><line x1="256" y1="238" x2="316" y2="150"/>
+      <rect x="152" y="100" width="208" height="304" rx="22" fill="url(#art)"/>
+      <g opacity=".5">
+        <polygon points="256,240 168,132 196,120" fill="#8f6bff"/>
+        <polygon points="256,240 152,252 152,220" fill="#8f6bff"/>
+        <polygon points="256,240 190,392 162,372" fill="#8f6bff"/>
+        <polygon points="256,240 336,136 356,158" fill="#8f6bff"/>
+        <polygon points="256,240 360,296 354,322" fill="#8f6bff"/>
+        <polygon points="256,240 234,104 264,102" fill="#8f6bff"/>
       </g>
-      <path d="M282 58 L192 288 L246 288 L224 376 L318 208 L262 208 Z" fill="#a984ff" stroke="#14091f" stroke-width="7" stroke-linejoin="round"/>
-      <rect x="152" y="100" width="208" height="304" rx="22" fill="none" stroke="#e4dbff" stroke-width="6"/>
-      <circle cx="186" cy="134" r="30" fill="url(#gemC)" stroke="#eaf6ff" stroke-width="4"/>
-      <text x="186" y="147" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="900" fill="#ffffff">6</text>
-      <text x="162" y="368" transform="rotate(-5 162 368)" font-family="Arial, sans-serif" font-style="italic" font-weight="900"
-        font-size="33" letter-spacing="1" fill="#ffffff" stroke="#14091f" stroke-width="7" paint-order="stroke">WORKBENCH</text>
+      <path d="M291 62 L199 297 L254 297 L231 388 L329 213 L271 213 Z" fill="#6b4fd0" transform="translate(9 6)"/>
+      <path d="M291 62 L199 297 L254 297 L231 388 L329 213 L271 213 Z" fill="#c9b6ff" stroke="#14091f" stroke-width="7" stroke-linejoin="round"/>
+      <rect x="152" y="100" width="208" height="304" rx="22" fill="none" stroke="#ffffff" stroke-width="6"/>
+      <!-- cost orb: dark ring, glossy blue sphere, electric rim -->
+      <circle cx="186" cy="122" r="35" fill="#0a1a3a"/>
+      <circle cx="186" cy="122" r="35" fill="none" stroke="#6fd0ff" stroke-width="3" opacity=".85"/>
+      <circle cx="186" cy="122" r="28" fill="url(#gemC)"/>
+      <path d="M170 110 a22 22 0 0 1 14 -9" fill="none" stroke="#eaf6ff" stroke-width="4" stroke-linecap="round" opacity=".95"/>
+      <text x="186" y="137" text-anchor="middle" font-family="Arial, sans-serif" font-style="italic" font-weight="900"
+        font-size="44" fill="#ffffff" stroke="#12325c" stroke-width="6" paint-order="stroke">6</text>
+      <!-- power hex: beveled orange gem -->
+      <polygon points="326,86 357,104 357,140 326,158 295,140 295,104" fill="url(#gemP)" stroke="#b34a10" stroke-width="5" stroke-linejoin="round"/>
+      <polygon points="326,94 350,108 350,136 326,150 302,136 302,108" fill="none" stroke="#ffd9a8" stroke-width="2.5" opacity=".9"/>
+      <text x="326" y="137" text-anchor="middle" font-family="Arial, sans-serif" font-style="italic" font-weight="900"
+        font-size="44" fill="#ffffff" stroke="#7a2f08" stroke-width="6" paint-order="stroke">12</text>
     </g>
-    <!-- blueprint half: the same card, still being drafted -->
+    <!-- the drafting corner: same card, still on the bench -->
     <g clip-path="url(#printClip)">
-      <rect x="152" y="100" width="208" height="304" rx="22" fill="#0c1c33" opacity=".92"/>
-      <g stroke="#5cc2ff" stroke-width="1.5" opacity=".18">
-        <line x1="152" y1="130" x2="360" y2="130"/><line x1="152" y1="164" x2="360" y2="164"/>
-        <line x1="152" y1="198" x2="360" y2="198"/><line x1="152" y1="232" x2="360" y2="232"/>
+      <rect x="152" y="100" width="208" height="304" rx="22" fill="#0c1c33" opacity=".94"/>
+      <g stroke="#5cc2ff" stroke-width="1.5" opacity=".2">
         <line x1="152" y1="266" x2="360" y2="266"/><line x1="152" y1="300" x2="360" y2="300"/>
         <line x1="152" y1="334" x2="360" y2="334"/><line x1="152" y1="368" x2="360" y2="368"/>
-        <line x1="186" y1="100" x2="186" y2="404"/><line x1="220" y1="100" x2="220" y2="404"/>
         <line x1="254" y1="100" x2="254" y2="404"/><line x1="288" y1="100" x2="288" y2="404"/>
         <line x1="322" y1="100" x2="322" y2="404"/>
       </g>
       <rect x="166" y="114" width="180" height="276" rx="14" fill="none" stroke="#5cc2ff" stroke-width="2.5" stroke-dasharray="8 7" opacity=".7"/>
-      <path d="M282 58 L192 288 L246 288 L224 376 L318 208 L262 208 Z" fill="none"
-        stroke="#8fd4ff" stroke-width="4" stroke-dasharray="9 7"/>
       <rect x="152" y="100" width="208" height="304" rx="22" fill="none"
         stroke="#5cc2ff" stroke-width="5" stroke-dasharray="14 10"/>
-      <circle cx="326" cy="134" r="30" fill="none" stroke="url(#gemP)" stroke-width="4" stroke-dasharray="8 7"/>
-      <text x="326" y="147" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="900"
-        fill="none" stroke="#ff9e6b" stroke-width="1.8">12</text>
       <g stroke="#5cc2ff" stroke-width="3" stroke-linecap="round" opacity=".7">
-        <line x1="306" y1="238" x2="318" y2="238"/><line x1="312" y1="232" x2="312" y2="244"/>
-        <line x1="330" y1="318" x2="342" y2="318"/><line x1="336" y1="312" x2="336" y2="324"/>
+        <line x1="318" y1="330" x2="330" y2="330"/><line x1="324" y1="324" x2="324" y2="336"/>
       </g>
     </g>
     <!-- the seam: the render line, still bright -->
-    <line x1="302" y1="92" x2="268" y2="420" stroke="#c9b6ff" stroke-width="10" opacity=".55" filter="url(#soft)"/>
-    <line x1="302" y1="92" x2="268" y2="420" stroke="#e4dbff" stroke-width="4"/>
-    <path d="M300 100 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6 Z" fill="#e4dbff"/>
-    <path d="M272 402 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 Z" fill="#c9b6ff"/>
+    <line x1="360" y1="218" x2="222" y2="404" stroke="#c9b6ff" stroke-width="10" opacity=".55" filter="url(#soft)"/>
+    <line x1="360" y1="218" x2="222" y2="404" stroke="#e4dbff" stroke-width="4"/>
+    <path d="M354 224 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6 Z" fill="#e4dbff"/>
+    <!-- the name: huge 3D letters over everything, overhanging the card like the real ones -->
+    <g transform="rotate(-3 256 384)" font-family="'Arial Black', Arial, sans-serif" font-style="italic" font-weight="900" font-size="76" letter-spacing="2">
+      <text x="258" y="416" text-anchor="middle" transform="translate(6 10)" fill="#2a1b45" stroke="#14091f" stroke-width="12" paint-order="stroke">WORK</text>
+      <text x="258" y="416" text-anchor="middle" fill="url(#card)" stroke="#14091f" stroke-width="7" paint-order="stroke">WORK</text>
+    </g>
   </g>
 </svg>`;
 
