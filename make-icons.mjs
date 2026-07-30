@@ -26,30 +26,69 @@ const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" heigh
     <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="6"/></filter>
   </defs>
   <rect width="512" height="512" fill="url(#bg)"/>
-  <!-- the forge: a card coming off the anvil, still hot -->
-  <ellipse cx="256" cy="300" rx="180" ry="120" fill="#8f6bff" opacity=".30" filter="url(#glow)"/>
-  <ellipse cx="256" cy="286" rx="120" ry="46" fill="#c9b6ff" opacity=".55" filter="url(#glow)"/>
-  <!-- anvil: horn left, waist, flared base; lilac rim light on the working face -->
-  <g>
-    <path d="M86 296 C130 272 182 268 214 268 L406 268 L406 322 L338 338 L338 390 L392 424 L392 456 L152 456 L152 424 L206 390 L206 338 L150 330 C112 322 86 310 86 296 Z"
-      fill="#1a0f30" stroke="#4b3573" stroke-width="4"/>
-    <path d="M100 293 C140 273 186 270 216 270 L402 270" fill="none" stroke="#c9b6ff" stroke-width="5" stroke-linecap="round" opacity=".85"/>
-  </g>
-  <ellipse cx="272" cy="470" rx="150" ry="14" fill="#000" opacity=".35"/>
-  <!-- the card, mid-forge -->
-  <g transform="rotate(-7 256 160)">
-    <rect x="186" y="58" width="140" height="200" rx="18" fill="#14091f" opacity=".5" filter="url(#soft)"/>
-    <rect x="186" y="52" width="140" height="200" rx="18" fill="url(#card)" stroke="#e4dbff" stroke-width="5"/>
-    <path d="M279 88 L218 186 L251 186 L236 234 L297 132 L262 132 Z" fill="#14091f"/>
-  </g>
-  <!-- sparks off the strike -->
-  <path d="M356 236 l6 17 17 6 -17 6 -6 17 -6 -17 -17 -6 17 -6 Z" fill="#e4dbff"/>
-  <path d="M150 220 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 Z" fill="#c9b6ff"/>
-  <path d="M382 176 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4 Z" fill="#a984ff"/>
-  <g stroke="#c9b6ff" stroke-width="4" stroke-linecap="round" opacity=".8">
-    <line x1="330" y1="250" x2="346" y2="238"/>
-    <line x1="176" y1="248" x2="162" y2="236"/>
-    <line x1="352" y1="278" x2="370" y2="274"/>
+  <ellipse cx="256" cy="256" rx="200" ry="185" fill="#8f6bff" opacity=".32" filter="url(#glow)"/>
+  <!-- one card, half forged, half blueprint: the seam is where the work happens.
+       Snap DNA: the cost gem (built, blue) and the power gem (still a draft, orange). -->
+  <g transform="rotate(-6 256 256)">
+    <defs>
+      <clipPath id="doneClip"><polygon points="130,30 302,30 268,430 130,430"/></clipPath>
+      <clipPath id="printClip"><polygon points="302,30 382,30 382,430 268,430"/></clipPath>
+      <linearGradient id="gemC" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#8fd4ff"/><stop offset="100%" stop-color="#2a86e0"/>
+      </linearGradient>
+      <linearGradient id="gemP" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#ffb488"/><stop offset="100%" stop-color="#e5642c"/>
+      </linearGradient>
+      <linearGradient id="art" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#241245"/><stop offset="100%" stop-color="#170c2e"/>
+      </linearGradient>
+    </defs>
+    <rect x="152" y="104" width="208" height="304" rx="22" fill="#14091f" opacity=".5" filter="url(#soft)"/>
+    <!-- finished half: proper Snap anatomy — frame band, art window, cost orb, name, art breaking the frame -->
+    <g clip-path="url(#doneClip)">
+      <rect x="152" y="100" width="208" height="304" rx="22" fill="url(#card)"/>
+      <rect x="166" y="114" width="180" height="276" rx="14" fill="url(#art)"/>
+      <g stroke="#8f6bff" stroke-width="2.5" opacity=".45">
+        <line x1="256" y1="238" x2="196" y2="150"/><line x1="256" y1="238" x2="176" y2="238"/>
+        <line x1="256" y1="238" x2="200" y2="330"/><line x1="256" y1="238" x2="316" y2="150"/>
+      </g>
+      <path d="M282 58 L192 288 L246 288 L224 376 L318 208 L262 208 Z" fill="#a984ff" stroke="#14091f" stroke-width="7" stroke-linejoin="round"/>
+      <rect x="152" y="100" width="208" height="304" rx="22" fill="none" stroke="#e4dbff" stroke-width="6"/>
+      <circle cx="186" cy="134" r="30" fill="url(#gemC)" stroke="#eaf6ff" stroke-width="4"/>
+      <text x="186" y="147" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="900" fill="#ffffff">6</text>
+      <text x="162" y="368" transform="rotate(-5 162 368)" font-family="Arial, sans-serif" font-style="italic" font-weight="900"
+        font-size="33" letter-spacing="1" fill="#ffffff" stroke="#14091f" stroke-width="7" paint-order="stroke">WORKBENCH</text>
+    </g>
+    <!-- blueprint half: the same card, still being drafted -->
+    <g clip-path="url(#printClip)">
+      <rect x="152" y="100" width="208" height="304" rx="22" fill="#0c1c33" opacity=".92"/>
+      <g stroke="#5cc2ff" stroke-width="1.5" opacity=".18">
+        <line x1="152" y1="130" x2="360" y2="130"/><line x1="152" y1="164" x2="360" y2="164"/>
+        <line x1="152" y1="198" x2="360" y2="198"/><line x1="152" y1="232" x2="360" y2="232"/>
+        <line x1="152" y1="266" x2="360" y2="266"/><line x1="152" y1="300" x2="360" y2="300"/>
+        <line x1="152" y1="334" x2="360" y2="334"/><line x1="152" y1="368" x2="360" y2="368"/>
+        <line x1="186" y1="100" x2="186" y2="404"/><line x1="220" y1="100" x2="220" y2="404"/>
+        <line x1="254" y1="100" x2="254" y2="404"/><line x1="288" y1="100" x2="288" y2="404"/>
+        <line x1="322" y1="100" x2="322" y2="404"/>
+      </g>
+      <rect x="166" y="114" width="180" height="276" rx="14" fill="none" stroke="#5cc2ff" stroke-width="2.5" stroke-dasharray="8 7" opacity=".7"/>
+      <path d="M282 58 L192 288 L246 288 L224 376 L318 208 L262 208 Z" fill="none"
+        stroke="#8fd4ff" stroke-width="4" stroke-dasharray="9 7"/>
+      <rect x="152" y="100" width="208" height="304" rx="22" fill="none"
+        stroke="#5cc2ff" stroke-width="5" stroke-dasharray="14 10"/>
+      <circle cx="326" cy="134" r="30" fill="none" stroke="url(#gemP)" stroke-width="4" stroke-dasharray="8 7"/>
+      <text x="326" y="147" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="900"
+        fill="none" stroke="#ff9e6b" stroke-width="1.8">12</text>
+      <g stroke="#5cc2ff" stroke-width="3" stroke-linecap="round" opacity=".7">
+        <line x1="306" y1="238" x2="318" y2="238"/><line x1="312" y1="232" x2="312" y2="244"/>
+        <line x1="330" y1="318" x2="342" y2="318"/><line x1="336" y1="312" x2="336" y2="324"/>
+      </g>
+    </g>
+    <!-- the seam: the render line, still bright -->
+    <line x1="302" y1="92" x2="268" y2="420" stroke="#c9b6ff" stroke-width="10" opacity=".55" filter="url(#soft)"/>
+    <line x1="302" y1="92" x2="268" y2="420" stroke="#e4dbff" stroke-width="4"/>
+    <path d="M300 100 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6 Z" fill="#e4dbff"/>
+    <path d="M272 402 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 Z" fill="#c9b6ff"/>
   </g>
 </svg>`;
 
