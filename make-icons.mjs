@@ -50,16 +50,31 @@ const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" heigh
          breaking the frame; the name as huge 3D letters drawn over everything. -->
     <g clip-path="url(#doneClip)">
       <rect x="152" y="100" width="208" height="304" rx="22" fill="url(#art)"/>
-      <g opacity=".5">
-        <polygon points="256,240 168,132 196,120" fill="#8f6bff"/>
-        <polygon points="256,240 152,252 152,220" fill="#8f6bff"/>
-        <polygon points="256,240 190,392 162,372" fill="#8f6bff"/>
-        <polygon points="256,240 336,136 356,158" fill="#8f6bff"/>
-        <polygon points="256,240 360,296 354,322" fill="#8f6bff"/>
-        <polygon points="256,240 234,104 264,102" fill="#8f6bff"/>
+      <!-- the default card back: aurora streaks falling behind the glowing hex emblem -->
+      <g stroke="#c9b6ff" stroke-linecap="round">
+        <line x1="200" y1="100" x2="200" y2="240" stroke-width="14" opacity=".10"/>
+        <line x1="256" y1="100" x2="256" y2="300" stroke-width="20" opacity=".13"/>
+        <line x1="312" y1="100" x2="312" y2="250" stroke-width="14" opacity=".10"/>
+        <line x1="180" y1="100" x2="180" y2="196" stroke-width="4" opacity=".35"/>
+        <line x1="222" y1="100" x2="222" y2="266" stroke-width="3" opacity=".5"/>
+        <line x1="243" y1="100" x2="243" y2="322" stroke-width="5" opacity=".45"/>
+        <line x1="270" y1="100" x2="270" y2="290" stroke-width="3" opacity=".55"/>
+        <line x1="292" y1="100" x2="292" y2="240" stroke-width="4" opacity=".4"/>
+        <line x1="330" y1="100" x2="330" y2="208" stroke-width="3" opacity=".35"/>
       </g>
-      <path d="M291 62 L199 297 L254 297 L231 388 L329 213 L271 213 Z" fill="#6b4fd0" transform="translate(9 6)"/>
-      <path d="M291 62 L199 297 L254 297 L231 388 L329 213 L271 213 Z" fill="#c9b6ff" stroke="#14091f" stroke-width="7" stroke-linejoin="round"/>
+      <circle cx="196" cy="308" r="5" fill="#c9b6ff" opacity=".35"/>
+      <circle cx="322" cy="330" r="4" fill="#c9b6ff" opacity=".3"/>
+      <circle cx="176" cy="238" r="3" fill="#e4dbff" opacity=".45"/>
+      <circle cx="336" cy="262" r="3.5" fill="#e4dbff" opacity=".4"/>
+      <circle cx="286" cy="356" r="3" fill="#c9b6ff" opacity=".3"/>
+      <ellipse cx="256" cy="252" rx="95" ry="90" fill="#8f6bff" opacity=".4" filter="url(#glow)"/>
+      <polygon points="256,174 323,213 323,291 256,330 189,291 189,213" fill="rgba(169,132,255,.14)"
+        stroke="#a984ff" stroke-width="12" stroke-linejoin="round" opacity=".8" filter="url(#soft)"/>
+      <polygon points="256,174 323,213 323,291 256,330 189,291 189,213" fill="none"
+        stroke="#efe9ff" stroke-width="5" stroke-linejoin="round"/>
+      <polygon points="256,192 308,222 308,282 256,312 204,282 204,222" fill="none"
+        stroke="#c9b6ff" stroke-width="2" stroke-linejoin="round" opacity=".6"/>
+      <rect x="158" y="106" width="196" height="292" rx="18" fill="none" stroke="#b9b3cc" stroke-width="2" opacity=".55"/>
       <rect x="152" y="100" width="208" height="304" rx="22" fill="none" stroke="#ffffff" stroke-width="6"/>
       <!-- cost orb: dark ring, glossy blue sphere, electric rim -->
       <circle cx="186" cy="122" r="35" fill="#0a1a3a"/>
@@ -94,11 +109,7 @@ const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" heigh
     <line x1="360" y1="218" x2="222" y2="404" stroke="#c9b6ff" stroke-width="10" opacity=".55" filter="url(#soft)"/>
     <line x1="360" y1="218" x2="222" y2="404" stroke="#e4dbff" stroke-width="4"/>
     <path d="M354 224 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6 Z" fill="#e4dbff"/>
-    <!-- the name: huge 3D letters over everything, overhanging the card like the real ones -->
-    <g transform="rotate(-3 256 384)" font-family="'Arial Black', Arial, sans-serif" font-style="italic" font-weight="900" font-size="76" letter-spacing="2">
-      <text x="258" y="416" text-anchor="middle" transform="translate(6 10)" fill="#2a1b45" stroke="#14091f" stroke-width="12" paint-order="stroke">WORK</text>
-      <text x="258" y="416" text-anchor="middle" fill="url(#card)" stroke="#14091f" stroke-width="7" paint-order="stroke">WORK</text>
-    </g>
+    <path d="M232 390 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 Z" fill="#c9b6ff"/>
   </g>
 </svg>`;
 
