@@ -1,6 +1,11 @@
 // Dev-only: regenerates icon-180/192/512.png (Lilac Nocturne card-fan mark).
 // node make-icons.mjs — renders the SVG below via Playwright at each size.
+// snap-logo.png is the OFFICIAL logo as published on marvelsnap.com's public
+// homepage (not extracted from game files) — composited per the owner's call.
 import { chromium } from 'playwright';
+import fs from 'fs';
+
+const LOGO = fs.readFileSync('snap-logo.png').toString('base64');
 
 const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" height="${px}" viewBox="0 0 512 512">
   <defs>
@@ -74,6 +79,7 @@ const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" heigh
         stroke="#efe9ff" stroke-width="5" stroke-linejoin="round"/>
       <polygon points="256,192 308,222 308,282 256,312 204,282 204,222" fill="none"
         stroke="#c9b6ff" stroke-width="2" stroke-linejoin="round" opacity=".6"/>
+      <image href="data:image/png;base64,${LOGO}" x="176" y="200" width="160" height="104" preserveAspectRatio="xMidYMid meet"/>
       <rect x="158" y="106" width="196" height="292" rx="18" fill="none" stroke="#b9b3cc" stroke-width="2" opacity=".55"/>
       <rect x="152" y="100" width="208" height="304" rx="22" fill="none" stroke="#ffffff" stroke-width="6"/>
       <!-- cost orb: dark ring, glossy blue sphere, electric rim -->
