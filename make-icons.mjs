@@ -19,8 +19,17 @@ const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" heigh
     </linearGradient>
     <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="22"/></filter>
     <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="6"/></filter>
-    <clipPath id="doneClip"><polygon points="0,0 512,0 512,11 189,512 0,512"/></clipPath>
-    <clipPath id="printClip"><polygon points="512,11 512,512 189,512"/></clipPath>
+    <!-- the drafting filter: the official logo as a blueprint — translucent blue
+         stencil + edge-traced linework, derived from the same PNG (no redraw) -->
+    <filter id="draft" x="-20%" y="-20%" width="140%" height="140%">
+      <feFlood flood-color="#2a6ea8" flood-opacity="0.45" result="fill"/>
+      <feComposite in="fill" in2="SourceAlpha" operator="in" result="sil"/>
+      <feColorMatrix in="SourceGraphic" type="matrix"
+        values="0 0 0 0 0.45  0 0 0 0 0.83  0 0 0 0 1  0.35 0.65 0.25 0 0" result="xray"/>
+      <feMerge><feMergeNode in="sil"/><feMergeNode in="xray"/></feMerge>
+    </filter>
+    <clipPath id="doneClip"><polygon points="0,0 365,0 151,512 0,512"/></clipPath>
+    <clipPath id="printClip"><polygon points="365,0 512,0 512,512 151,512"/></clipPath>
   </defs>
   <rect width="512" height="512" fill="url(#bg)"/>
   <ellipse cx="240" cy="220" rx="215" ry="200" fill="#8f6bff" opacity=".32" filter="url(#glow)"/>
@@ -44,12 +53,12 @@ const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" heigh
       <circle cx="176" cy="212" r="4" fill="#e4dbff" opacity=".45"/>
       <circle cx="330" cy="260" r="4.5" fill="#e4dbff" opacity=".4"/>
       <circle cx="200" cy="392" r="4" fill="#c9b6ff" opacity=".3"/>
-      <ellipse cx="236" cy="205" rx="115" ry="108" fill="#8f6bff" opacity=".42" filter="url(#glow)"/>
-      <polygon points="236,125 305,165 305,245 236,285 167,245 167,165" fill="rgba(169,132,255,.14)"
+      <ellipse cx="256" cy="256" rx="115" ry="108" fill="#8f6bff" opacity=".42" filter="url(#glow)"/>
+      <polygon points="256,176 325,216 325,296 256,336 187,296 187,216" fill="rgba(169,132,255,.14)"
         stroke="#a984ff" stroke-width="13" stroke-linejoin="round" opacity=".8" filter="url(#soft)"/>
-      <polygon points="236,125 305,165 305,245 236,285 167,245 167,165" fill="none"
+      <polygon points="256,176 325,216 325,296 256,336 187,296 187,216" fill="none"
         stroke="#efe9ff" stroke-width="6" stroke-linejoin="round"/>
-      <image href="data:image/png;base64,${LOGO}" x="151" y="150" width="170" height="110" preserveAspectRatio="xMidYMid meet"/>
+      <image href="data:image/png;base64,${LOGO}" x="171" y="201" width="170" height="110" preserveAspectRatio="xMidYMid meet"/>
       <rect x="113" y="48" width="286" height="416" rx="25" fill="none" stroke="#b9b3cc" stroke-width="2.5" opacity=".55"/>
       <rect x="106" y="41" width="300" height="430" rx="30" fill="none" stroke="#ffffff" stroke-width="8"/>
     </g>
@@ -65,25 +74,25 @@ const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" heigh
         <line x1="256" y1="41" x2="256" y2="471"/><line x1="306" y1="41" x2="306" y2="471"/>
         <line x1="356" y1="41" x2="356" y2="471"/>
       </g>
-      <!-- the emblem, still being drafted: a dashed hex echo -->
-      <polygon points="330,296 380,325 380,383 330,412 280,383 280,325" fill="none"
-        stroke="#5cc2ff" stroke-width="4.5" stroke-dasharray="11 9"/>
-      <g stroke="#5cc2ff" stroke-width="3.5" stroke-linecap="round" opacity=".8">
-        <line x1="330" y1="344" x2="330" y2="364"/><line x1="320" y1="354" x2="340" y2="354"/>
-      </g>
+      <!-- the SAME emblem and logo, continuing past the seam as a draft -->
+      <polygon points="256,176 325,216 325,296 256,336 187,296 187,216" fill="none"
+        stroke="#7fd4ff" stroke-width="6" stroke-dasharray="11 9" stroke-linejoin="round"/>
+      <image href="data:image/png;base64,${LOGO}" x="171" y="201" width="170" height="110"
+        preserveAspectRatio="xMidYMid meet" filter="url(#draft)"/>
       <g stroke="#5cc2ff" stroke-width="3" stroke-linecap="round" opacity=".6">
-        <line x1="360" y1="140" x2="374" y2="140"/><line x1="367" y1="133" x2="367" y2="147"/>
-        <line x1="290" y1="452" x2="302" y2="452"/><line x1="296" y1="446" x2="296" y2="458"/>
+        <line x1="360" y1="120" x2="374" y2="120"/><line x1="367" y1="113" x2="367" y2="127"/>
+        <line x1="330" y1="330" x2="344" y2="330"/><line x1="337" y1="323" x2="337" y2="337"/>
+        <line x1="250" y1="440" x2="262" y2="440"/><line x1="256" y1="434" x2="256" y2="446"/>
       </g>
       <rect x="113" y="48" width="286" height="416" rx="25" fill="none" stroke="#3a7fb8" stroke-width="2" stroke-dasharray="8 8" opacity=".6"/>
       <rect x="106" y="41" width="300" height="430" rx="30" fill="none"
         stroke="#5cc2ff" stroke-width="7" stroke-dasharray="18 12"/>
     </g>
-    <!-- the seam: the render line -->
-    <line x1="406" y1="175" x2="215" y2="471" stroke="#c9b6ff" stroke-width="13" opacity=".55" filter="url(#soft)"/>
-    <line x1="406" y1="175" x2="215" y2="471" stroke="#e4dbff" stroke-width="5"/>
-    <path d="M311 318 l7 19 19 7 -19 7 -7 19 -7 -19 -19 -7 19 -7 Z" fill="#e4dbff"/>
-    <path d="M396 190 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 Z" fill="#c9b6ff" opacity=".9"/>
+    <!-- the seam: the render line, straight through the emblem -->
+    <line x1="348" y1="41" x2="168" y2="471" stroke="#c9b6ff" stroke-width="13" opacity=".55" filter="url(#soft)"/>
+    <line x1="348" y1="41" x2="168" y2="471" stroke="#e4dbff" stroke-width="5"/>
+    <path d="M296 142 l7 19 19 7 -19 7 -7 19 -7 -19 -19 -7 19 -7 Z" fill="#e4dbff"/>
+    <path d="M192 392 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 Z" fill="#c9b6ff" opacity=".9"/>
   </g>
 </svg>`;
 
