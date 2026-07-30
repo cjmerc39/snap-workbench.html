@@ -1,7 +1,117 @@
 {
-  "updated": "2026-07-29",
-  "updatedAt": "2026-07-29T21:05:17.096Z",
+  "updated": "2026-07-30",
+  "updatedAt": "2026-07-30T20:23:36.792Z",
   "decks": [
+    {
+      "creator": "Snap Judgments",
+      "video": "This OTA Buffs the Tier 1 Deck NO ONE Talks About! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=Ea45MMNemJU",
+      "published": "2026-07-30",
+      "name": "Tucc Rules",
+      "ids": [
+        "Iceman",
+        "SpiderManBrandNewDay",
+        "Nightcrawler",
+        "LukeCage",
+        "JeffTheBabyLandShark",
+        "Mysterio",
+        "RocketAndGroot",
+        "Mercury",
+        "Isca",
+        "ProfessorX",
+        "TheThingFirstSteps",
+        "GalactusFirstSteps"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/tucc-rules"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "This OTA Buffs the Tier 1 Deck NO ONE Talks About! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=Ea45MMNemJU",
+      "published": "2026-07-30",
+      "name": "Okay, I guess",
+      "ids": [
+        "Quicksilver",
+        "HumanTorchFirstSteps",
+        "Venus",
+        "Mercury",
+        "Copycat",
+        "ShangChiMasterOfTheRings",
+        "KarenPage",
+        "Wiccan",
+        "CosmicGhostRider",
+        "TheThingFirstSteps",
+        "WilsonFisk",
+        "GalactusFirstSteps"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/okay-i-guess"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "This OTA Buffs the Tier 1 Deck NO ONE Talks About! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=Ea45MMNemJU",
+      "published": "2026-07-30",
+      "name": "Ramp Real?",
+      "ids": [
+        "Chamber",
+        "Lockjaw",
+        "Electro",
+        "Jubilee",
+        "DragonLord",
+        "Blink",
+        "WarMachine",
+        "DrDoom",
+        "RedHulk",
+        "Giganto",
+        "Infinaut",
+        "FinFangFoom"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/ramp-real"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "This OTA Buffs the Tier 1 Deck NO ONE Talks About! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=Ea45MMNemJU",
+      "published": "2026-07-30",
+      "name": "Wait... is this better?",
+      "ids": [
+        "X23",
+        "SquirrelGirl",
+        "UncleBen",
+        "Carnage",
+        "Tombstone",
+        "WeaponXWolverine",
+        "Killmonger",
+        "Muse",
+        "Venom",
+        "Debrii",
+        "Dormammu",
+        "Death"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/wait-is-this-better"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "This OTA Buffs the Tier 1 Deck NO ONE Talks About! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=Ea45MMNemJU",
+      "published": "2026-07-30",
+      "name": "Bullseye Again?",
+      "ids": [
+        "Miek",
+        "Blade",
+        "Morbius",
+        "TheCollector",
+        "ColleenWing",
+        "GrandMaster",
+        "Swarm",
+        "Bullseye",
+        "Gambit",
+        "Daken",
+        "MotherAskani",
+        "Modok"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/bullseye-again/"
+    },
     {
       "creator": "Unfitparrot",
       "video": "Sinister Six is actually AMAZING!? 90% W/R at the top of Infinite! - Marvel Snap Deck Highlight",
@@ -1124,6 +1234,24 @@
       "video": "Scorpion Brand New Day is the BEST Card Since Mother Askani! Top 10 Decks! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=-40laLvmO3k",
       "published": "2026-07-22",
+      "name": "Card Kage2y23ej7",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/card-kage2y23ej7/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Scorpion Brand New Day is the BEST Card Since Mother Askani! Top 10 Decks! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=-40laLvmO3k",
+      "published": "2026-07-22",
+      "name": "Bynxgs7nnbu",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/bynxgs7nnbu/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Scorpion Brand New Day is the BEST Card Since Mother Askani! Top 10 Decks! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=-40laLvmO3k",
+      "published": "2026-07-22",
       "name": "Card Kage",
       "ids": [
         "AdamWarlock",
@@ -1162,145 +1290,6 @@
         "ScorpionBrandNewDay"
       ],
       "zone": "https://marvelsnapzone.com/decks/bynxgs7nnbu/"
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "BIG RED MACHINE! (CL: 29k)",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3w2cq/big_red_machine_cl_29k/",
-      "published": "2026-07-22",
-      "name": "BIG RED MACHINE v2",
-      "ids": [
-        "SilverSable",
-        "FastballSpecial",
-        "Boomerang",
-        "Scorpion",
-        "CassandraNova",
-        "RedGuardian",
-        "Diamondback",
-        "Jocasta",
-        "KarimaShapandar",
-        "Laufey",
-        "IronLad",
-        "ScorpionBrandNewDay"
-      ],
-      "rk": 1
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "(CL: 25827) Affliction Ramp, can probably fit ikari in",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v38ppi/cl_25827_affliction_ramp_can_probably_fit_ikari_in/",
-      "published": "2026-07-22",
-      "name": "",
-      "ids": [
-        "CalibanHorseman",
-        "KarimaShapandar",
-        "ScorpionBrandNewDay",
-        "DragonLord",
-        "PolarisHorseman",
-        "Diamondback",
-        "Hazmat",
-        "Ajax",
-        "Jubilee",
-        "ManThing",
-        "AstralProjection",
-        "ArnimZola"
-      ]
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Scorpion Brand New Day BREAKS this 70% Win Rate Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=BOZm8tX-vKU",
-      "published": "2026-07-21",
-      "name": "Brady/Flash",
-      "ids": [
-        "AntMan",
-        "Goliath",
-        "PolarisHorseman",
-        "SamWilson",
-        "USAgent",
-        "CaptainAmerica",
-        "Cosmo",
-        "Diamondback",
-        "Moonstone",
-        "ManThing",
-        "Spectrum",
-        "ScorpionBrandNewDay"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/bradyflash/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Scorpion Brand New Day BREAKS this 70% Win Rate Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=BOZm8tX-vKU",
-      "published": "2026-07-21",
-      "name": "Ika 2",
-      "ids": [
-        "Hood",
-        "NicoMinoru",
-        "SpiderManBrandNewDay",
-        "Merlin",
-        "KateBishop",
-        "GreenGoblin",
-        "Magik",
-        "Viper",
-        "Debrii",
-        "Isca",
-        "Cannonball",
-        "Gorr"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/ika-2/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Scorpion Brand New Day BREAKS this 70% Win Rate Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=BOZm8tX-vKU",
-      "published": "2026-07-21",
-      "name": "ZombiesGoNomNom",
-      "ids": [
-        "SilverSable",
-        "LukeCage",
-        "Scorpion",
-        "Mysterio",
-        "RedGuardian",
-        "Diamondback",
-        "Hazmat",
-        "DragonOfTheMoon",
-        "Laufey",
-        "Malekith",
-        "AntiVenom",
-        "Ajax"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/zombiesgonomnomuuc54es/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Scorpion Brand New Day BREAKS this 70% Win Rate Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=BOZm8tX-vKU",
-      "published": "2026-07-21",
-      "name": "Unhlpfulyoda 82wr 22g",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/unhlpfulyoda-82wr-22g/"
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "Infinite with lockdown",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1v2s51x/infinite_with_lockdown/",
-      "published": "2026-07-21",
-      "name": "",
-      "ids": [
-        "EbonyMaw",
-        "JeffTheBabyLandShark",
-        "Storm",
-        "Electro",
-        "WarMachine",
-        "Infinaut",
-        "Lockjaw",
-        "ProfessorX",
-        "Nightcrawler",
-        "Blink",
-        "Titania",
-        "LunaSnow"
-      ]
     }
   ],
   "redditChecked": [
@@ -1419,6 +1408,27 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v9rwr8/how_to_be_more_evil_cl_25k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v9pjrg/cl20766/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v9izoe/cl_30891_sinister_six_ideas/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v9dqmt/infinite_13_a_mixed_bag_of_fun_cards_and_rng_cl/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v9dqmt/infinite_13_a_mixed_bag_of_fun_cards_and_rng_cl/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vb4syc/cerebro_5_has_felt_very_strong_cl5028/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1vb3ztm/first_time_ranked_infinite_climbed_from_rank/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vb1e7f/getting_almost_90wr_with_this_postinfinite_what/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1vauhr5/this_or_that_thursday_weekly_collection_thread/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vazue4/cl_5895_it_feels_like_it_shouldnt_work_but_it/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vaxe8t/cl_15058_this_deck_was_given_to_me_in_a_dream/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vawshj/conquestladder_surfer_deck_cl_32k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vav5i3/cl_29790_help_with_sin6_thanos_dormammu_deck/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vatqf0/sinister_6_deck_pretty_decent/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1varqz7/what_changed_do_you_think_id_need_in_this/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vanhbf/i_just_got_high_evolutionary_any_deck/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vakh4j/arishem_to_infinite_cl_8000/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vai9ce/returning_player_needs_help_making_a_deck_cl1035/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vah7f1/made_it_to_infinite_with_fantomex_and_sinister/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vafap1/second_time_infinite_cl_16852/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vaefkd/the_scorpion_brand_new_day_killer_cl_29k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vaea66/cl_10647_first_time_making_it_to_infinite_using/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vabkmt/second_time_reaching_infinite_first_time_was_with/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vaaz4i/cl_16878_sinister_6_galactus/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vaabjr/easy_cheap_series_3_infinite_deck_cl_2638/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1va9435/budget_sinister_six_deck_cl5350_post_infinite/"
   ]
 }
