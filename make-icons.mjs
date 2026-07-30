@@ -26,8 +26,8 @@ const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" heigh
         values="0 0 0 0 0.45  0 0 0 0 0.83  0 0 0 0 1  0.19 0.36 0.14 0 0" result="xray"/>
       <feMerge><feMergeNode in="sil"/><feMergeNode in="xray"/></feMerge>
     </filter>
-    <clipPath id="doneClip"><polygon points="0,0 400,0 112,512 0,512"/></clipPath>
-    <clipPath id="printClip"><polygon points="400,0 512,0 512,512 112,512"/></clipPath>
+    <clipPath id="doneClip"><polygon points="0,0 300,0 60,512 0,512"/></clipPath>
+    <clipPath id="printClip"><polygon points="300,0 512,0 512,512 60,512"/></clipPath>
   </defs>
   <!-- done side: the card-back surface itself, edge to edge -->
   <g clip-path="url(#doneClip)">
@@ -76,11 +76,18 @@ const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" heigh
       <line x1="300" y1="462" x2="316" y2="462"/><line x1="308" y1="454" x2="308" y2="470"/>
     </g>
   </g>
-  <!-- the render line, corner to corner -->
-  <line x1="400" y1="0" x2="112" y2="512" stroke="#c9b6ff" stroke-width="18" opacity=".55" filter="url(#soft)"/>
-  <line x1="400" y1="0" x2="112" y2="512" stroke="#e4dbff" stroke-width="6"/>
-  <path d="M330 108 l8 22 22 8 -22 8 -8 22 -8 -22 -22 -8 22 -8 Z" fill="#e4dbff"/>
-  <path d="M178 386 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6 Z" fill="#c9b6ff" opacity=".9"/>
+  <!-- the render line, corner to corner — and the pencil drawing it -->
+  <line x1="300" y1="0" x2="60" y2="512" stroke="#c9b6ff" stroke-width="18" opacity=".55" filter="url(#soft)"/>
+  <line x1="300" y1="0" x2="60" y2="512" stroke="#e4dbff" stroke-width="6"/>
+  <path d="M256 72 l8 22 22 8 -22 8 -8 22 -8 -22 -22 -8 22 -8 Z" fill="#e4dbff"/>
+  <g transform="translate(159 300) rotate(37)">
+    <path d="M0 0 L36 -15 L36 15 Z" fill="#e8d9b8" stroke="#14091f" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M0 0 L13 -5.5 L13 5.5 Z" fill="#14091f"/>
+    <rect x="36" y="-15" width="112" height="30" rx="3" fill="#8f6bff" stroke="#14091f" stroke-width="5"/>
+    <rect x="38" y="-13" width="108" height="9" rx="3" fill="#a984ff"/>
+    <rect x="148" y="-16" width="20" height="32" rx="5" fill="#c9b6ff" stroke="#14091f" stroke-width="5"/>
+  </g>
+  <path d="M148 288 l5 14 14 5 -14 5 -5 14 -5 -14 -14 -5 14 -5 Z" fill="#e4dbff"/>
 </svg>`;
 
 const browser = await chromium.launch();
