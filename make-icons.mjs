@@ -26,25 +26,31 @@ const SVG = (px) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" heigh
     <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="6"/></filter>
   </defs>
   <rect width="512" height="512" fill="url(#bg)"/>
-  <ellipse cx="256" cy="280" rx="190" ry="165" fill="#8f6bff" opacity=".38" filter="url(#glow)"/>
-  <!-- the fan: two backs peeking behind, the drawn card in front -->
-  <g transform="translate(256 260) scale(1.14) translate(-256 -260)">
-    <g transform="rotate(-14 256 560)">
-      <rect x="178" y="122" width="156" height="220" rx="20" fill="url(#backL)" stroke="#4b3573" stroke-width="4"/>
-    </g>
-    <g transform="rotate(13 256 560)">
-      <rect x="178" y="122" width="156" height="220" rx="20" fill="url(#backR)" stroke="#5a4187" stroke-width="4"/>
-    </g>
-    <g transform="rotate(-2 256 520)">
-      <rect x="176" y="118" width="160" height="228" rx="20" fill="#14091f" opacity=".55" filter="url(#soft)"/>
-      <rect x="176" y="114" width="160" height="228" rx="20" fill="url(#card)" stroke="#e4dbff" stroke-width="5"/>
-      <path d="M282 156 L212 268 L250 268 L232 322 L302 208 L262 208 Z" fill="#14091f"/>
-    </g>
+  <!-- the forge: a card coming off the anvil, still hot -->
+  <ellipse cx="256" cy="300" rx="180" ry="120" fill="#8f6bff" opacity=".30" filter="url(#glow)"/>
+  <ellipse cx="256" cy="286" rx="120" ry="46" fill="#c9b6ff" opacity=".55" filter="url(#glow)"/>
+  <!-- anvil: horn left, waist, flared base; lilac rim light on the working face -->
+  <g>
+    <path d="M86 296 C130 272 182 268 214 268 L406 268 L406 322 L338 338 L338 390 L392 424 L392 456 L152 456 L152 424 L206 390 L206 338 L150 330 C112 322 86 310 86 296 Z"
+      fill="#1a0f30" stroke="#4b3573" stroke-width="4"/>
+    <path d="M100 293 C140 273 186 270 216 270 L402 270" fill="none" stroke="#c9b6ff" stroke-width="5" stroke-linecap="round" opacity=".85"/>
   </g>
-  <!-- sparks -->
-  <path d="M368 118 l7 20 20 7 -20 7 -7 20 -7 -20 -20 -7 20 -7 Z" fill="#e4dbff"/>
-  <path d="M142 108 l5 14 14 5 -14 5 -5 14 -5 -14 -14 -5 14 -5 Z" fill="#a984ff"/>
-  <path d="M395 322 l4 11 11 4 -11 4 -4 11 -4 -11 -11 -4 11 -4 Z" fill="#c9b6ff" opacity=".9"/>
+  <ellipse cx="272" cy="470" rx="150" ry="14" fill="#000" opacity=".35"/>
+  <!-- the card, mid-forge -->
+  <g transform="rotate(-7 256 160)">
+    <rect x="186" y="58" width="140" height="200" rx="18" fill="#14091f" opacity=".5" filter="url(#soft)"/>
+    <rect x="186" y="52" width="140" height="200" rx="18" fill="url(#card)" stroke="#e4dbff" stroke-width="5"/>
+    <path d="M279 88 L218 186 L251 186 L236 234 L297 132 L262 132 Z" fill="#14091f"/>
+  </g>
+  <!-- sparks off the strike -->
+  <path d="M356 236 l6 17 17 6 -17 6 -6 17 -6 -17 -17 -6 17 -6 Z" fill="#e4dbff"/>
+  <path d="M150 220 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 Z" fill="#c9b6ff"/>
+  <path d="M382 176 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4 Z" fill="#a984ff"/>
+  <g stroke="#c9b6ff" stroke-width="4" stroke-linecap="round" opacity=".8">
+    <line x1="330" y1="250" x2="346" y2="238"/>
+    <line x1="176" y1="248" x2="162" y2="236"/>
+    <line x1="352" y1="278" x2="370" y2="274"/>
+  </g>
 </svg>`;
 
 const browser = await chromium.launch();
