@@ -1,7 +1,315 @@
 {
-  "updated": "2026-08-05",
-  "updatedAt": "2026-08-05T21:20:30.309Z",
+  "updated": "2026-08-07",
+  "updatedAt": "2026-08-07T00:47:42.133Z",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "Wong Surfer is back in a HUGE way with quickdraw! Giveaway! - Marvel Snap Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=BX7boRi32NA",
+      "published": "2026-08-06",
+      "name": "Wong Jane",
+      "ids": [
+        "Brood",
+        "Crystal",
+        "DoctorOctopusFracturedFrontier",
+        "Hazmat",
+        "JaneFosterFracturedFrontier",
+        "LukeCage",
+        "Magik",
+        "Mystique",
+        "SebastianShaw",
+        "Sera",
+        "SilverSurfer",
+        "Wong"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Brood-Crystal-DoctorOctopusFracturedFrontier-Hazmat-JaneFosterFracturedFrontier-LukeCage-Magik-Mystique-SebastianShaw-Sera-SilverSurfer-Wong_Wong%20Jane"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "11 Day 1 Infinite Decks to Climb with for NEW Thanos Season!",
+      "url": "https://www.youtube.com/watch?v=xwG76JpSe64",
+      "published": "2026-08-06",
+      "name": "Unhlpfulyoda",
+      "ids": [
+        "Quicksilver",
+        "Domino",
+        "CalibanHorseman",
+        "JaneFosterFracturedFrontier",
+        "Viv",
+        "Copycat",
+        "KarenPage",
+        "Wiccan",
+        "Blink",
+        "ThanosFracturedFrontier",
+        "GalactusFirstSteps",
+        "FinFangFoom"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/unhlpfulyodamgeh5ky/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "11 Day 1 Infinite Decks to Climb with for NEW Thanos Season!",
+      "url": "https://www.youtube.com/watch?v=xwG76JpSe64",
+      "published": "2026-08-06",
+      "name": "DT",
+      "ids": [
+        "Chamber",
+        "Lockjaw",
+        "Electro",
+        "Jubilee",
+        "DragonLord",
+        "Blink",
+        "WarMachine",
+        "ArnimZola",
+        "GalactusFirstSteps",
+        "Giganto",
+        "Infinaut",
+        "FinFangFoom"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/dt/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "11 Day 1 Infinite Decks to Climb with for NEW Thanos Season!",
+      "url": "https://www.youtube.com/watch?v=xwG76JpSe64",
+      "published": "2026-08-06",
+      "name": "squal",
+      "ids": [
+        "KingEitri",
+        "AwesomeAndy",
+        "Herbie",
+        "MarvelBoy",
+        "DraxAvatarOfLife",
+        "Venus",
+        "PsylockeFracturedFrontier",
+        "Caiera",
+        "Isca",
+        "ThanosFracturedFrontier",
+        "Aurora",
+        "Thanos"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/squal/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "11 Day 1 Infinite Decks to Climb with for NEW Thanos Season!",
+      "url": "https://www.youtube.com/watch?v=xwG76JpSe64",
+      "published": "2026-08-06",
+      "name": "Crunchtime",
+      "ids": [
+        "SpiderHam",
+        "HydraBob",
+        "Tarantula",
+        "ZombieMisterFantastic",
+        "AwesomeAndy",
+        "SamWilson",
+        "Cosmo",
+        "DraxAvatarOfLife",
+        "Venus",
+        "Isca",
+        "TheThingFirstSteps",
+        "Aurora"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/crunchtime/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "11 Day 1 Infinite Decks to Climb with for NEW Thanos Season!",
+      "url": "https://www.youtube.com/watch?v=xwG76JpSe64",
+      "published": "2026-08-06",
+      "name": "WWB",
+      "ids": [
+        "KittyPryde",
+        "SpiderManBrandNewDay",
+        "SubMariner",
+        "Clea",
+        "JeffTheBabyDolphin",
+        "Lockheed",
+        "Angela",
+        "Bishop",
+        "MarvelBoy",
+        "Venus",
+        "ElsaBloodstone",
+        "ShangChi"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/wwbsg5qxe7/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "11 Day 1 Infinite Decks to Climb with for NEW Thanos Season!",
+      "url": "https://www.youtube.com/watch?v=xwG76JpSe64",
+      "published": "2026-08-06",
+      "name": "HeartOTC",
+      "ids": [
+        "NicoMinoru",
+        "SpiderManBrandNewDay",
+        "KingEitri",
+        "Surge",
+        "IronPatriot",
+        "ShadowlandsDaredevil",
+        "Cable",
+        "JaneFosterFracturedFrontier",
+        "Kraglin",
+        "Juggernaut",
+        "ThanosFracturedFrontier",
+        "WilsonFisk"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/heartotc"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "11 Day 1 Infinite Decks to Climb with for NEW Thanos Season!",
+      "url": "https://www.youtube.com/watch?v=xwG76JpSe64",
+      "published": "2026-08-06",
+      "name": "notmydance",
+      "ids": [
+        "SpiderManBrandNewDay",
+        "StormHorseman",
+        "Brood",
+        "CaptainCarter",
+        "SilverSurfer",
+        "Venus",
+        "Prodigy",
+        "PsylockeFracturedFrontier",
+        "ShadowKing",
+        "LunaSnow",
+        "Sera",
+        "Blink"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/notmydance10crku9"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "11 Day 1 Infinite Decks to Climb with for NEW Thanos Season!",
+      "url": "https://www.youtube.com/watch?v=xwG76JpSe64",
+      "published": "2026-08-06",
+      "name": "Coougarrr",
+      "ids": [
+        "Quinjet",
+        "KingEitri",
+        "Surge",
+        "LadyBullseye",
+        "Valentina",
+        "JaneFosterFracturedFrontier",
+        "PsylockeFracturedFrontier",
+        "GambitHorseman",
+        "LunaSnow",
+        "Wong",
+        "ThanosFracturedFrontier",
+        "Agamotto"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/coougarrrh7hh9a9"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "11 Day 1 Infinite Decks to Climb with for NEW Thanos Season!",
+      "url": "https://www.youtube.com/watch?v=xwG76JpSe64",
+      "published": "2026-08-06",
+      "name": "Naka",
+      "ids": [
+        "Wasp",
+        "Iceman",
+        "NicoMinoru",
+        "KingEitri",
+        "HydraBob",
+        "AdamWarlock",
+        "Surge",
+        "HitMonkey",
+        "Thor",
+        "BetaRayBill",
+        "ThanosFracturedFrontier",
+        "JaneFoster"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/nakayfmryc8"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "11 Day 1 Infinite Decks to Climb with for NEW Thanos Season!",
+      "url": "https://www.youtube.com/watch?v=xwG76JpSe64",
+      "published": "2026-08-06",
+      "name": "Derek Infinite",
+      "ids": [
+        "Batroc",
+        "SpiderManBrandNewDay",
+        "Nightcrawler",
+        "Kraven",
+        "SamWilson",
+        "Silk",
+        "Cosmo",
+        "HydraStomper",
+        "Mercury",
+        "Prowler",
+        "Juggernaut",
+        "ThanosFracturedFrontier"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/derek-infinite"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of the new JANE FOSTER & PSYLOCKE | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=Fma6js-cyWI",
+      "published": "2026-08-05",
+      "name": "Fractured Frontier",
+      "ids": [
+        "Crystal",
+        "Domino",
+        "DraxAvatarOfLife",
+        "GalactusFirstSteps",
+        "JaneFosterFracturedFrontier",
+        "KarenPage",
+        "PsylockeFracturedFrontier",
+        "Quicksilver",
+        "Speed",
+        "ThanosFracturedFrontier",
+        "Venus",
+        "Wiccan"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Crystal-Domino-DraxAvatarOfLife-GalactusFirstSteps-JaneFosterFracturedFrontier-KarenPage-PsylockeFracturedFrontier-Quicksilver-Speed-ThanosFracturedFrontier-Venus-Wiccan_Fractured%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of the new JANE FOSTER & PSYLOCKE | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=Fma6js-cyWI",
+      "published": "2026-08-05",
+      "name": "Chonky Frontier",
+      "ids": [
+        "Blink",
+        "Crystal",
+        "Domino",
+        "DrDoom",
+        "GalactusFirstSteps",
+        "JaneFosterFracturedFrontier",
+        "Jubilee",
+        "PsylockeFracturedFrontier",
+        "Quicksilver",
+        "Speed",
+        "ThanosFracturedFrontier",
+        "Wiccan"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Blink-Crystal-Domino-DrDoom-GalactusFirstSteps-JaneFosterFracturedFrontier-Jubilee-PsylockeFracturedFrontier-Quicksilver-Speed-ThanosFracturedFrontier-Wiccan_Chonky%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of the new JANE FOSTER & PSYLOCKE | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=Fma6js-cyWI",
+      "published": "2026-08-05",
+      "name": "Zombie Frontier",
+      "ids": [
+        "AbsorbingMan",
+        "Crystal",
+        "JaneFosterFracturedFrontier",
+        "KittyPryde",
+        "Surge",
+        "ThanosFracturedFrontier",
+        "TheHunger",
+        "Venus",
+        "ZombieGiantMan",
+        "ZombieMisterFantastic",
+        "ZombieScarletWitch",
+        "ZombieSentry"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AbsorbingMan-Crystal-JaneFosterFracturedFrontier-KittyPryde-Surge-ThanosFracturedFrontier-TheHunger-Venus-ZombieGiantMan-ZombieMisterFantastic-ZombieScarletWitch-ZombieSentry_Zombie%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
     {
       "creator": "Unfitparrot",
       "video": "Is Shou-Lao Werewolf back!? New Thanos Fractured Frontier is CRAZY! - Marvel Snap Deck Highlight",
@@ -265,72 +573,6 @@
         "ThanosFracturedFrontier"
       ],
       "zone": "https://marvelsnapzone.com/decks/kumatyagames/"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "I LOVE THIS CARD!! An HONEST REVIEW of the NEW THANOS | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=SuFOnQ_WkEY",
-      "published": "2026-08-04",
-      "name": "Fractured Frontier",
-      "ids": [
-        "Crystal",
-        "Domino",
-        "DraxAvatarOfLife",
-        "GalactusFirstSteps",
-        "JaneFosterFracturedFrontier",
-        "KarenPage",
-        "PsylockeFracturedFrontier",
-        "Quicksilver",
-        "Speed",
-        "ThanosFracturedFrontier",
-        "Venus",
-        "Wiccan"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Crystal-Domino-DraxAvatarOfLife-GalactusFirstSteps-JaneFosterFracturedFrontier-KarenPage-PsylockeFracturedFrontier-Quicksilver-Speed-ThanosFracturedFrontier-Venus-Wiccan_Fractured%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "I LOVE THIS CARD!! An HONEST REVIEW of the NEW THANOS | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=SuFOnQ_WkEY",
-      "published": "2026-08-04",
-      "name": "Chonky Frontier",
-      "ids": [
-        "Blink",
-        "Crystal",
-        "Domino",
-        "DrDoom",
-        "GalactusFirstSteps",
-        "JaneFosterFracturedFrontier",
-        "Jubilee",
-        "PsylockeFracturedFrontier",
-        "Quicksilver",
-        "Speed",
-        "ThanosFracturedFrontier",
-        "Wiccan"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Blink-Crystal-Domino-DrDoom-GalactusFirstSteps-JaneFosterFracturedFrontier-Jubilee-PsylockeFracturedFrontier-Quicksilver-Speed-ThanosFracturedFrontier-Wiccan_Chonky%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "I LOVE THIS CARD!! An HONEST REVIEW of the NEW THANOS | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=SuFOnQ_WkEY",
-      "published": "2026-08-04",
-      "name": "Zombie Frontier",
-      "ids": [
-        "AbsorbingMan",
-        "Crystal",
-        "JaneFosterFracturedFrontier",
-        "KittyPryde",
-        "Surge",
-        "ThanosFracturedFrontier",
-        "TheHunger",
-        "Venus",
-        "ZombieGiantMan",
-        "ZombieMisterFantastic",
-        "ZombieScarletWitch",
-        "ZombieSentry"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AbsorbingMan-Crystal-JaneFosterFracturedFrontier-KittyPryde-Surge-ThanosFracturedFrontier-TheHunger-Venus-ZombieGiantMan-ZombieMisterFantastic-ZombieScarletWitch-ZombieSentry_Zombie%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
     },
     {
       "creator": "Snap Judgments",
@@ -836,7 +1078,7 @@
         "Viv",
         "WolverineHorseman"
       ],
-      "rk": 1
+      "rk": 2
     },
     {
       "creator": "Unfitparrot",
@@ -953,6 +1195,15 @@
       "video": "8 Best Meta Conquest Decks After the OTA! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=dMITSUVWzJM",
       "published": "2026-07-31",
+      "name": "Deck Aurora6rw7f9y",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/deck-aurora6rw7f9y/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "8 Best Meta Conquest Decks After the OTA! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=dMITSUVWzJM",
+      "published": "2026-07-31",
       "name": "Aurora",
       "ids": [
         "SpiderHam",
@@ -976,20 +1227,7 @@
       "url": "https://www.youtube.com/watch?v=Ea45MMNemJU",
       "published": "2026-07-30",
       "name": "Tucc Rules",
-      "ids": [
-        "Iceman",
-        "SpiderManBrandNewDay",
-        "Nightcrawler",
-        "LukeCage",
-        "JeffTheBabyLandShark",
-        "Mysterio",
-        "RocketAndGroot",
-        "Mercury",
-        "Isca",
-        "ProfessorX",
-        "TheThingFirstSteps",
-        "GalactusFirstSteps"
-      ],
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/tucc-rules"
     },
     {
@@ -997,21 +1235,8 @@
       "video": "This OTA Buffs the Tier 1 Deck NO ONE Talks About! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=Ea45MMNemJU",
       "published": "2026-07-30",
-      "name": "Okay, I guess",
-      "ids": [
-        "Quicksilver",
-        "HumanTorchFirstSteps",
-        "Venus",
-        "Mercury",
-        "Copycat",
-        "ShangChiMasterOfTheRings",
-        "KarenPage",
-        "Wiccan",
-        "CosmicGhostRider",
-        "TheThingFirstSteps",
-        "WilsonFisk",
-        "GalactusFirstSteps"
-      ],
+      "name": "Okay I Guess",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/okay-i-guess"
     },
     {
@@ -1019,21 +1244,8 @@
       "video": "This OTA Buffs the Tier 1 Deck NO ONE Talks About! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=Ea45MMNemJU",
       "published": "2026-07-30",
-      "name": "Ramp Real?",
-      "ids": [
-        "Chamber",
-        "Lockjaw",
-        "Electro",
-        "Jubilee",
-        "DragonLord",
-        "Blink",
-        "WarMachine",
-        "DrDoom",
-        "RedHulk",
-        "Giganto",
-        "Infinaut",
-        "FinFangFoom"
-      ],
+      "name": "Ramp Real",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/ramp-real"
     },
     {
@@ -1041,260 +1253,9 @@
       "video": "This OTA Buffs the Tier 1 Deck NO ONE Talks About! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=Ea45MMNemJU",
       "published": "2026-07-30",
-      "name": "Wait... is this better?",
-      "ids": [
-        "X23",
-        "SquirrelGirl",
-        "UncleBen",
-        "Carnage",
-        "WeaponXWolverine",
-        "Tombstone",
-        "Killmonger",
-        "Muse",
-        "Venom",
-        "Debrii",
-        "Dormammu",
-        "Death"
-      ],
+      "name": "Wait Is This Better",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/wait-is-this-better"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "This OTA Buffs the Tier 1 Deck NO ONE Talks About! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=Ea45MMNemJU",
-      "published": "2026-07-30",
-      "name": "Bullseye Again?",
-      "ids": [
-        "Miek",
-        "Blade",
-        "Morbius",
-        "TheCollector",
-        "GrandMaster",
-        "Swarm",
-        "ColleenWing",
-        "Bullseye",
-        "Gambit",
-        "Daken",
-        "MotherAskani",
-        "Modok"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/bullseye-again/"
-    },
-    {
-      "creator": "Unfitparrot",
-      "video": "Sinister Six is actually AMAZING!? 90% W/R at the top of Infinite! - Marvel Snap Deck Highlight",
-      "url": "https://www.youtube.com/watch?v=B4k7wjFyh_Q",
-      "published": "2026-07-29",
-      "name": "Sin Six Turn 6",
-      "ids": [
-        "Bishop",
-        "BlackSwan",
-        "HitMonkey",
-        "Hood",
-        "HydraBob",
-        "JoaquinTorres",
-        "MoonGirl",
-        "Namorita",
-        "RocketRaccoon",
-        "SheHulk",
-        "SinisterSix",
-        "Titania"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Bishop-BlackSwan-HitMonkey-Hood-HydraBob-JoaquinTorres-MoonGirl-Namorita-RocketRaccoon-SheHulk-SinisterSix-Titania_Sin%20Six%20Turn%206"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "I TOLD YOU! Sinister Six New Archetype and Top 10 Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=CKB2XglkkTc",
-      "published": "2026-07-29",
-      "name": "Denish2",
-      "ids": [
-        "Blade",
-        "Gambit",
-        "CorvusGlaive",
-        "Jubilee",
-        "GhostRider",
-        "CosmicGhostRider",
-        "Legion",
-        "Blink",
-        "Hela",
-        "Odin",
-        "Magneto",
-        "Infinaut"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/denish2/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "I TOLD YOU! Sinister Six New Archetype and Top 10 Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=CKB2XglkkTc",
-      "published": "2026-07-29",
-      "name": "Denish",
-      "ids": [
-        "Wasp",
-        "Yellowjacket",
-        "HydraBob",
-        "AdamWarlock",
-        "IronPatriot",
-        "Lizard",
-        "LunaSnow",
-        "Wave",
-        "WilsonFisk",
-        "ArnimZola",
-        "Taskmaster",
-        "SinisterSix"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/denishvcr49gh/"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "This card is ABSOLUTELY INSANE!? An HONEST REVIEW of SINISTER SIX | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=mIeoPVlB9rk",
-      "published": "2026-07-28",
-      "name": "Furious Six",
-      "ids": [
-        "Agent13",
-        "Cable",
-        "Copycat",
-        "IronPatriot",
-        "LunaSnow",
-        "MariaHill",
-        "Mirage",
-        "NickFury",
-        "Quinjet",
-        "SinisterSix",
-        "TheCollector",
-        "Valentina"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Agent13-Cable-Copycat-IronPatriot-LunaSnow-MariaHill-Mirage-NickFury-Quinjet-SinisterSix-TheCollector-Valentina_Furious%20Six?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "This card is ABSOLUTELY INSANE!? An HONEST REVIEW of SINISTER SIX | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=mIeoPVlB9rk",
-      "published": "2026-07-28",
-      "name": "Sinister Zombies",
-      "ids": [
-        "AbsorbingMan",
-        "ArnimZola",
-        "JeffTheBabyDolphin",
-        "KittyPryde",
-        "SinisterSix",
-        "Surge",
-        "TheHunger",
-        "Venus",
-        "ZombieGiantMan",
-        "ZombieMisterFantastic",
-        "ZombieScarletWitch",
-        "ZombieSentry"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AbsorbingMan-ArnimZola-JeffTheBabyDolphin-KittyPryde-SinisterSix-Surge-TheHunger-Venus-ZombieGiantMan-ZombieMisterFantastic-ZombieScarletWitch-ZombieSentry_Sinister%20Zombies?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "This card is ABSOLUTELY INSANE!? An HONEST REVIEW of SINISTER SIX | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=mIeoPVlB9rk",
-      "published": "2026-07-28",
-      "name": "Infinity Six",
-      "ids": [
-        "Askanison",
-        "CosmicGhostRider",
-        "Cosmo",
-        "KingEitri",
-        "LukeCage",
-        "Mockingbird",
-        "Namorita",
-        "SinisterSix",
-        "Surge",
-        "Thanos",
-        "Venus",
-        "Wiccan"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Askanison-CosmicGhostRider-Cosmo-KingEitri-LukeCage-Mockingbird-Namorita-SinisterSix-Surge-Thanos-Venus-Wiccan_Infinity%20Six?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Sinister Six is Seriously Insane! Marvel Snap!",
-      "url": "https://www.youtube.com/watch?v=jl0aE3OmRRk",
-      "published": "2026-07-28",
-      "name": "Minimum Effort Snap",
-      "ids": [
-        "Chamber",
-        "Electro",
-        "LunaSnow",
-        "Wave",
-        "CosmicGhostRider",
-        "Blink",
-        "Enchantress",
-        "HydroMan",
-        "Alioth",
-        "GalactusFirstSteps",
-        "Hulkling",
-        "FinFangFoom"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/minimum-effort-snap/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Sinister Six is Seriously Insane! Marvel Snap!",
-      "url": "https://www.youtube.com/watch?v=jl0aE3OmRRk",
-      "published": "2026-07-28",
-      "name": "Sinister Noki",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/sinister-noki"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Sinister Six is Seriously Insane! Marvel Snap!",
-      "url": "https://www.youtube.com/watch?v=jl0aE3OmRRk",
-      "published": "2026-07-28",
-      "name": "Shang Enjoyerfeqiio1",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/shang-enjoyerfeqiio1/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Sinister Six is Seriously Insane! Marvel Snap!",
-      "url": "https://www.youtube.com/watch?v=jl0aE3OmRRk",
-      "published": "2026-07-28",
-      "name": "Sinister Noki?",
-      "ids": [
-        "KittyPryde",
-        "Quinjet",
-        "MariaHill",
-        "Thena",
-        "JeffTheBabyDolphin",
-        "Angela",
-        "Valentina",
-        "Venus",
-        "AgentCoulson",
-        "ElsaBloodstone",
-        "MotherAskani",
-        "SinisterSix"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/sinister-noki"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Sinister Six is Seriously Insane! Marvel Snap!",
-      "url": "https://www.youtube.com/watch?v=jl0aE3OmRRk",
-      "published": "2026-07-28",
-      "name": "Shang Enjoyer",
-      "ids": [
-        "Iceman",
-        "NicoMinoru",
-        "FastballSpecial",
-        "Carnage",
-        "LinLie",
-        "Marrow",
-        "Angel",
-        "Frigga",
-        "Makkari",
-        "Venom",
-        "MorganLeFay",
-        "ThePhoenixForce"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/shang-enjoyerfeqiio1/"
     }
   ],
   "redditChecked": [
@@ -1507,6 +1468,19 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vft01u/frontier_thanos_high_evo_cl22000/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vfqx51/low_risk_high_reward_cl_4939/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vfoikd/cl_10811_help_me_optimize_it/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vfo68o/thanos_bounce_cl_20k/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vfo68o/thanos_bounce_cl_20k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vhkcf4/improvements_to_high_evo_cl_1023/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1vh53k8/this_or_that_thursday_weekly_collection_thread/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vhg128/devil_trigger_cl_21145/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vhernu/hit_infinite_with_this_fun_bounce_deck_cl_8174/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vheiek/help_building_a_new_ff_thanos_deck_5445_cl/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vh9qua/what_can_i_do_to_improve_these_two_decks_cl_313/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vh8bnv/hit_no_1_rank_for_1st_time_in_2_years_cl/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vh73xi/cl_22781_learned_something_new/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vh0g1e/any_way_to_improve_this_deck_cl_5500/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vgwgjx/easiest_time_rver_to_reach_infinity_cl_4049_does/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vgo6ym/vale_a_pena_comprar_o_passe_cl1239/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vgo31z/new_season_mechanics_old_school_spectrum_thanos/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vgmesk/thanos_ff_help_cl17299/"
   ]
 }
