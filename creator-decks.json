@@ -1,7 +1,117 @@
 {
-  "updated": "2026-08-11",
-  "updatedAt": "2026-08-11T20:55:46.391Z",
+  "updated": "2026-08-12",
+  "updatedAt": "2026-08-12T20:06:31.276Z",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "Sneaky Red Wolf makes Supergiant Dino DEVILISHLY good! - Marvel Snap Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=ILty5IQtuCY",
+      "published": "2026-08-12",
+      "name": "Wolf Dino Giant",
+      "ids": [
+        "AgentCoulson",
+        "Cosmo",
+        "DevilDinosaur",
+        "IronPatriot",
+        "KateBishop",
+        "MadThinker",
+        "Mirage",
+        "RedWolfFracturedFrontier",
+        "ShadowKing",
+        "Snowguard",
+        "Supergiant",
+        "TheCollector"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AgentCoulson-Cosmo-DevilDinosaur-IronPatriot-KateBishop-MadThinker-Mirage-RedWolfFracturedFrontier-ShadowKing-Snowguard-Supergiant-TheCollector_Wolf%20Dino%20Giant"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "90% Win Rate Easy Infinite Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=LLiipYYAI2E",
+      "published": "2026-08-12",
+      "name": "Illzo Red Gambit",
+      "ids": [
+        "Quinjet",
+        "Agent13",
+        "RedWolfFracturedFrontier",
+        "DoctorOctopusFracturedFrontier",
+        "VictoriaHand",
+        "Mirage",
+        "Valentina",
+        "Frigga",
+        "JaneFosterFracturedFrontier",
+        "GambitHorseman",
+        "MotherAskani",
+        "ThanosFracturedFrontier"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/illzo-red-gambit"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "90% Win Rate Easy Infinite Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=LLiipYYAI2E",
+      "published": "2026-08-12",
+      "name": "Minimum Effort Snap",
+      "ids": [
+        "Quicksilver",
+        "Domino",
+        "PsylockeFracturedFrontier",
+        "Namorita",
+        "LunaSnow",
+        "IronMan",
+        "Sera",
+        "CosmicGhostRider",
+        "ThanosFracturedFrontier",
+        "HydroMan",
+        "GalactusFirstSteps",
+        "FinFangFoom"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/minimum-effort-snap7f5oea6/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "90% Win Rate Easy Infinite Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=LLiipYYAI2E",
+      "published": "2026-08-12",
+      "name": "Infinite Jane Surfer",
+      "ids": [
+        "Nova",
+        "DoctorOctopusFracturedFrontier",
+        "JeffTheBabyDolphin",
+        "Brood",
+        "CaptainCarter",
+        "SilverSurfer",
+        "Killmonger",
+        "Venus",
+        "JaneFosterFracturedFrontier",
+        "Viv",
+        "Nocturne",
+        "SebastianShaw"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/infinite-jane-surfer"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "90% Win Rate Easy Infinite Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=LLiipYYAI2E",
+      "published": "2026-08-12",
+      "name": "Safety",
+      "ids": [
+        "Quinjet",
+        "Snowguard",
+        "Agent13",
+        "MariaHill",
+        "RedWolfFracturedFrontier",
+        "IronPatriot",
+        "Mercury",
+        "PsylockeFracturedFrontier",
+        "GambitHorseman",
+        "Cannonball",
+        "InfinityUltron",
+        "ThanosFracturedFrontier"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/safetyx3rzxv6/"
+    },
     {
       "creator": "Snap Judgments",
       "video": "Red Wolf is HUGE and early OTA notes! Marvel Snap",
@@ -45,28 +155,6 @@
         "ShangChi"
       ],
       "zone": "https://marvelsnapzone.com/decks/thinking-of-brady"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Red Wolf is HUGE and early OTA notes! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=SXJDcoYCfoU",
-      "published": "2026-08-11",
-      "name": "Stay Thirsty",
-      "ids": [
-        "Quicksilver",
-        "Domino",
-        "PsylockeFracturedFrontier",
-        "Namorita",
-        "LunaSnow",
-        "IronMan",
-        "Sera",
-        "CosmicGhostRider",
-        "ThanosFracturedFrontier",
-        "HydroMan",
-        "GalactusFirstSteps",
-        "FinFangFoom"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/stay-thirsty/"
     },
     {
       "creator": "Snap Judgments",
@@ -1107,21 +1195,17 @@
       "video": "Ranking Thanos Fractured Frontier and the rest of the BROKEN August Season of Marvel Snap!",
       "url": "https://www.youtube.com/watch?v=A5Te5YAD6Xs",
       "published": "2026-08-04",
+      "name": "Thanos Frontier 6 Thanos",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/thanos-frontier-6-thanos"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Ranking Thanos Fractured Frontier and the rest of the BROKEN August Season of Marvel Snap!",
+      "url": "https://www.youtube.com/watch?v=A5Te5YAD6Xs",
+      "published": "2026-08-04",
       "name": "Ramplock",
-      "ids": [
-        "Chamber",
-        "PsylockeFracturedFrontier",
-        "Electro",
-        "Jubilee",
-        "DragonLord",
-        "Blink",
-        "WarMachine",
-        "ArnimZola",
-        "GalactusFirstSteps",
-        "Giganto",
-        "Infinaut",
-        "FinFangFoom"
-      ],
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/ramplock"
     },
     {
@@ -1129,21 +1213,8 @@
       "video": "Ranking Thanos Fractured Frontier and the rest of the BROKEN August Season of Marvel Snap!",
       "url": "https://www.youtube.com/watch?v=A5Te5YAD6Xs",
       "published": "2026-08-04",
-      "name": "Buffs",
-      "ids": [
-        "Agony",
-        "SpiderManBrandNewDay",
-        "HydraBob",
-        "DoctorOctopusFracturedFrontier",
-        "JeffTheBabyDolphin",
-        "MrSinister",
-        "Tarantula",
-        "CaptainCarter",
-        "Maverick",
-        "SebastianShaw",
-        "JubileeSilverSurfer",
-        "Gwenpool"
-      ],
+      "name": "Buffs75q4mu8",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/buffs75q4mu8/"
     },
     {
@@ -1152,20 +1223,7 @@
       "url": "https://www.youtube.com/watch?v=A5Te5YAD6Xs",
       "published": "2026-08-04",
       "name": "Red Thanos Six",
-      "ids": [
-        "AmericaChavez",
-        "Iceman",
-        "KingEitri",
-        "AdamWarlock",
-        "RedWolfFracturedFrontier",
-        "Tarantula",
-        "JoaquinTorres",
-        "ShadowlandsDaredevil",
-        "WilsonFisk",
-        "Mockingbird",
-        "SinisterSix",
-        "Thanos"
-      ],
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/red-thanos-six/"
     },
     {
@@ -1185,103 +1243,6 @@
       "name": "Smlz Is A Cow",
       "ids": [],
       "zone": "https://marvelsnapzone.com/decks/smlz-is-a-cow/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Ranking Thanos Fractured Frontier and the rest of the BROKEN August Season of Marvel Snap!",
-      "url": "https://www.youtube.com/watch?v=A5Te5YAD6Xs",
-      "published": "2026-08-04",
-      "name": "Redpie",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/redpie/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Ranking Thanos Fractured Frontier and the rest of the BROKEN August Season of Marvel Snap!",
-      "url": "https://www.youtube.com/watch?v=A5Te5YAD6Xs",
-      "published": "2026-08-04",
-      "name": "Morgan Death",
-      "ids": [
-        "Nova",
-        "MoiraX",
-        "NicoMinoru",
-        "WildChild",
-        "Carnage",
-        "Marrow",
-        "Tombstone",
-        "Killmonger",
-        "Venom",
-        "MorganLeFay",
-        "DeathFracturedFrontier",
-        "Death"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/morgan-death/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Ranking Thanos Fractured Frontier and the rest of the BROKEN August Season of Marvel Snap!",
-      "url": "https://www.youtube.com/watch?v=A5Te5YAD6Xs",
-      "published": "2026-08-04",
-      "name": "Smlz is a Cow",
-      "ids": [
-        "LukeCage",
-        "LadyBullseye",
-        "Scorpion",
-        "Mystique",
-        "Magik",
-        "Hazmat",
-        "HellcowFracturedFrontier",
-        "Prodigy",
-        "TheAncientOne",
-        "LunaSnow",
-        "Blink",
-        "ScorpionBrandNewDay"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/smlz-is-a-cow/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Ranking Thanos Fractured Frontier and the rest of the BROKEN August Season of Marvel Snap!",
-      "url": "https://www.youtube.com/watch?v=A5Te5YAD6Xs",
-      "published": "2026-08-04",
-      "name": "RedPie",
-      "ids": [
-        "KingEitri",
-        "TechnoOrganicVirus",
-        "DoctorOctopusFracturedFrontier",
-        "Tarantula",
-        "ShadowlandsDaredevil",
-        "Lizard",
-        "ShadowKing",
-        "RedHulkFracturedFrontier",
-        "Starbrand",
-        "WilsonFisk",
-        "Sasquatch",
-        "Skaar"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/redpie/"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #194",
-      "url": "https://www.youtube.com/watch?v=Z47sR5kR7kY",
-      "published": "2026-08-01",
-      "name": "Move",
-      "ids": [
-        "Batroc",
-        "Cosmo",
-        "GalactusFirstSteps",
-        "HydraStomper",
-        "Kraven",
-        "MaryJane",
-        "Nightcrawler",
-        "ProfessorX",
-        "SamWilson",
-        "Silk",
-        "SpiderManBrandNewDay",
-        "Viv"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Batroc-Cosmo-GalactusFirstSteps-HydraStomper-Kraven-MaryJane-Nightcrawler-ProfessorX-SamWilson-Silk-SpiderManBrandNewDay-Viv_Move?utm_medium=affiliate&utm_campaign=alexcoccia"
     }
   ],
   "redditChecked": [
@@ -1560,6 +1521,15 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vl5eey/fastest_infinite_so_far_cl_38161/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vl2e8q/cl13226_infinite/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vkzvgj/infinite_with_the_gmannimrod_cl_40000/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vlsld2/cl13k_infinite_with_tech_ramp/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vlsld2/cl13k_infinite_with_tech_ramp/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vmhj3v/infinite_with_sinister_6_zombies_cl24388/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vmhj3c/high_evo_takes_me_to_infinite_once_again_budget/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vmgile/infinite_with_thanos_ff_aurora_cl_35138/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vm8qfo/any_improvements_for_this_doom_2099_deck_cl_15035/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vm86u5/opinions_and_suggestions_cl_13k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vm4m1m/hit_infinite_with_these_fun_as_hell_decks_cl31k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vm20nr/cl_13k_seeing_more_aurora_thanos_frontier_then/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vlxd1i/infinite_cl_28091_surfer_psylock_ff/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vluht9/infinite_with_daredevilto_virus_cl_39330/"
   ]
 }
