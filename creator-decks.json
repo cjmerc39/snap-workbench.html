@@ -1,7 +1,117 @@
 {
-  "updated": "2026-08-13",
-  "updatedAt": "2026-08-13T20:53:08.582Z",
+  "updated": "2026-08-14",
+  "updatedAt": "2026-08-14T19:54:28.194Z",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "Hydro-Man Pixie is IMPOSSIBLE to play around! Steal those cubes! - Marvel Snap Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=iqnAr6sfKo0",
+      "published": "2026-08-14",
+      "name": "Cold and Wet out West",
+      "ids": [
+        "Alioth",
+        "FinFangFoom",
+        "HydroMan",
+        "KingEitri",
+        "LunaSnow",
+        "MajesticWingbeat",
+        "MobiusMMobius",
+        "Pixie",
+        "PsylockeFracturedFrontier",
+        "ShadowlandsDaredevil",
+        "ThanosFracturedFrontier",
+        "Wasp"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Alioth-FinFangFoom-HydroMan-KingEitri-LunaSnow-MajesticWingbeat-MobiusMMobius-Pixie-PsylockeFracturedFrontier-ShadowlandsDaredevil-ThanosFracturedFrontier-Wasp_Cold%20and%20Wet%20out%20West"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "The #1 Ranked Deck and the Other Best Decks After the OTA! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=WY0tBjf9wEI",
+      "published": "2026-08-14",
+      "name": "Heart Aurora Thanos (Honifer)",
+      "ids": [
+        "SpiderHam",
+        "Iceman",
+        "HydraBob",
+        "Surge",
+        "AwesomeAndy",
+        "KateBishop",
+        "SamWilson",
+        "Venus",
+        "JaneFosterFracturedFrontier",
+        "Wong",
+        "ThanosFracturedFrontier",
+        "Aurora"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/heart-aurora-thanos-honifer"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "The #1 Ranked Deck and the Other Best Decks After the OTA! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=WY0tBjf9wEI",
+      "published": "2026-08-14",
+      "name": "Sizer 70% in 150g",
+      "ids": [
+        "Batroc",
+        "SpiderManBrandNewDay",
+        "LukeCage",
+        "Kraven",
+        "SamWilson",
+        "Silk",
+        "Cosmo",
+        "HydraStomper",
+        "Isca",
+        "Juggernaut",
+        "Hellion",
+        "ThanosFracturedFrontier"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/sizer-70-in-150g"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "The #1 Ranked Deck and the Other Best Decks After the OTA! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=WY0tBjf9wEI",
+      "published": "2026-08-14",
+      "name": "Chamo Rk 1",
+      "ids": [
+        "KingEitri",
+        "Martyr",
+        "TechnoOrganicVirus",
+        "KateBishop",
+        "ScarletWitch",
+        "ShadowlandsDaredevil",
+        "Lizard",
+        "ShadowKing",
+        "Kraglin",
+        "Starbrand",
+        "ThanosFracturedFrontier",
+        "WilsonFisk"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/chamo-rk-1"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "The #1 Ranked Deck and the Other Best Decks After the OTA! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=WY0tBjf9wEI",
+      "published": "2026-08-14",
+      "name": "Disco",
+      "ids": [
+        "Scorn",
+        "Blade",
+        "Morbius",
+        "ZombiePowerMan",
+        "Gambit",
+        "ColonelAmerica",
+        "CorvusGlaive",
+        "Dracula",
+        "Modok",
+        "Khonshu",
+        "Apocalypse",
+        "WeaponH"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/deck-disco/"
+    },
     {
       "creator": "Snap Judgments",
       "video": "Buffed Firehair + Phoenix Force = HOT FIRE! This 71% Win Rate Deck is GREAT! Marvel Snap",
@@ -1107,21 +1217,8 @@
       "video": "10 INSANE Decks! Thanos Fractured Frontier is BROKEN for Day 1 Infinite! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=2VKhhkMkJas",
       "published": "2026-08-05",
-      "name": "Safetyblade",
-      "ids": [
-        "Quicksilver",
-        "Domino",
-        "Venus",
-        "JaneFosterFracturedFrontier",
-        "PsylockeFracturedFrontier",
-        "KarenPage",
-        "Wiccan",
-        "CosmicGhostRider",
-        "InfinityUltron",
-        "ThanosFracturedFrontier",
-        "Alioth",
-        "GalactusFirstSteps"
-      ],
+      "name": "Safetyblade5zlfnpb",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/safetyblade5zlfnpb/"
     },
     {
@@ -1129,21 +1226,8 @@
       "video": "10 INSANE Decks! Thanos Fractured Frontier is BROKEN for Day 1 Infinite! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=2VKhhkMkJas",
       "published": "2026-08-05",
-      "name": "W",
-      "ids": [
-        "Quicksilver",
-        "Domino",
-        "MobiusMMobius",
-        "Mercury",
-        "PsylockeFracturedFrontier",
-        "ShadowKing",
-        "Wiccan",
-        "Cannonball",
-        "InfinityUltron",
-        "TheThingFirstSteps",
-        "ThanosFracturedFrontier",
-        "GalactusFirstSteps"
-      ],
+      "name": "Deck Wyuyjq5b",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/deck-wyuyjq5b/"
     },
     {
@@ -1151,21 +1235,8 @@
       "video": "10 INSANE Decks! Thanos Fractured Frontier is BROKEN for Day 1 Infinite! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=2VKhhkMkJas",
       "published": "2026-08-05",
-      "name": "DarkMoogle",
-      "ids": [
-        "Quicksilver",
-        "Domino",
-        "Speed",
-        "JaneFosterFracturedFrontier",
-        "PsylockeFracturedFrontier",
-        "Copycat",
-        "Stardust",
-        "Wiccan",
-        "CosmicGhostRider",
-        "ThanosFracturedFrontier",
-        "WilsonFisk",
-        "GalactusFirstSteps"
-      ],
+      "name": "Darkmoogle",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/darkmoogle/"
     },
     {
@@ -1173,21 +1244,8 @@
       "video": "10 INSANE Decks! Thanos Fractured Frontier is BROKEN for Day 1 Infinite! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=2VKhhkMkJas",
       "published": "2026-08-05",
-      "name": "Uenpo_me",
-      "ids": [
-        "KingEitri",
-        "ZombieMisterFantastic",
-        "Lockjaw",
-        "SamWilson",
-        "PsylockeFracturedFrontier",
-        "EnSabahNur",
-        "Wiccan",
-        "TheThingFirstSteps",
-        "ThanosFracturedFrontier",
-        "Aurora",
-        "Mockingbird",
-        "Thanos"
-      ],
+      "name": "Uenpomexgl6o3g",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/uenpomexgl6o3g/"
     },
     {
@@ -1198,89 +1256,9 @@
       "name": "Bynxal5bgyt",
       "ids": [],
       "zone": "https://marvelsnapzone.com/decks/bynxal5bgyt/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "10 INSANE Decks! Thanos Fractured Frontier is BROKEN for Day 1 Infinite! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=2VKhhkMkJas",
-      "published": "2026-08-05",
-      "name": "Pastra",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/pastra/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "10 INSANE Decks! Thanos Fractured Frontier is BROKEN for Day 1 Infinite! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=2VKhhkMkJas",
-      "published": "2026-08-05",
-      "name": "Kumatyagames",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/kumatyagames/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "10 INSANE Decks! Thanos Fractured Frontier is BROKEN for Day 1 Infinite! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=2VKhhkMkJas",
-      "published": "2026-08-05",
-      "name": "Pastra",
-      "ids": [
-        "Hawkeye",
-        "RocketRaccoon",
-        "AmericaChavez",
-        "Iceman",
-        "NicoMinoru",
-        "Boomerang",
-        "Toxin",
-        "Falcon",
-        "HitMonkey",
-        "Beast",
-        "MoonGirl",
-        "ThanosFracturedFrontier"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/pastra/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "10 INSANE Decks! Thanos Fractured Frontier is BROKEN for Day 1 Infinite! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=2VKhhkMkJas",
-      "published": "2026-08-05",
-      "name": "Kumatya_Games",
-      "ids": [
-        "Quicksilver",
-        "JuggernautHorseman",
-        "GrandMaster",
-        "Domino",
-        "Maverick",
-        "DraxAvatarOfLife",
-        "JaneFosterFracturedFrontier",
-        "PsylockeFracturedFrontier",
-        "Stick",
-        "Wiccan",
-        "IronMan",
-        "ThanosFracturedFrontier"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/kumatyagames/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Ranking Thanos Fractured Frontier and the rest of the BROKEN August Season of Marvel Snap!",
-      "url": "https://www.youtube.com/watch?v=A5Te5YAD6Xs",
-      "published": "2026-08-04",
-      "name": "Jane Surfer",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/jane-surfer"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v2d2jx/shoulao_by_night_to_infinite_cl_22576/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1uyg4o8/ota_balance_notes_07162026/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v2887z/4x_infinite_i_think_this_time_with_tov_in_two/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1uy3qj2/this_or_that_thursday_weekly_collection_thread/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1uxim6k/weekly_release_discussion_boomerang/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v279w4/any_ideas_cl8432/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1uw9jum/teamup_tuesday_weekly_alliances_thread/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v256rx/cl_22025_cerebro_6/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1uvc821/boomerang/",
     "https://www.reddit.com/r/marvelsnapcomp/comments/1uuw9yu/brand_new_day_week_2/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v1w1ef/infinite_with_trusty_old_mr_negative_cl_28042/",
     "https://www.reddit.com/r/marvelsnapcomp/comments/1uueyeo/competitive_consensus_tarantula/",
@@ -1571,6 +1549,15 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vmv0mv/snow_wolf_cl_29k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vmtfev/infinite_with_sera_combo_cl_28922/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vmt8xk/empowered_frontier_and_loki_tov_to_infinite_cl/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vnmqll/cl_7781_ran_it_back_for_infinite/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vnmqll/cl_7781_ran_it_back_for_infinite/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1voepka/firehair_red_wolf_cl_35472/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1voejql/big_multiple_man_fan_might_be_my_favorite_card_in/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1voawfj/just_hit_infinite_with_this_deck/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1voajzd/how_can_i_make_this_better_cl_2368/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1voa116/4ward_a_sneak_attack_deck_using_move_and_c4/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vo6eo5/how_to_improve_discard_deck_cl_1855/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vo5gw6/i_think_cowboy_thanos_made_nick_fury_playable_cl/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vnsamc/can_a_good_c10_deck_be_possible_cl_21348/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vnns54/it_was_a_tough_climb_but_thanos_ff_and_zombies/"
   ]
 }
