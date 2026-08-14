@@ -1,7 +1,28 @@
 {
   "updated": "2026-08-14",
-  "updatedAt": "2026-08-14T19:54:28.194Z",
+  "updatedAt": "2026-08-14T20:38:46.282Z",
   "decks": [
+    {
+      "creator": "Coougarrr",
+      "video": "Nobody Is Playing Doctor Octopus Like This | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=IVrH0qJpQxQ",
+      "published": "2026-08-14",
+      "name": "",
+      "ids": [
+        "SpiderManBrandNewDay",
+        "Agony",
+        "SubMariner",
+        "DoctorOctopusFracturedFrontier",
+        "Surge",
+        "SamWilson",
+        "CaptainCarter",
+        "Maverick",
+        "Prodigy",
+        "Isca",
+        "JubileeSilverSurfer",
+        "Stick"
+      ]
+    },
     {
       "creator": "Unfitparrot",
       "video": "Hydro-Man Pixie is IMPOSSIBLE to play around! Steal those cubes! - Marvel Snap Deck Highlight",
@@ -1247,20 +1268,9 @@
       "name": "Uenpomexgl6o3g",
       "ids": [],
       "zone": "https://marvelsnapzone.com/decks/uenpomexgl6o3g/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "10 INSANE Decks! Thanos Fractured Frontier is BROKEN for Day 1 Infinite! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=2VKhhkMkJas",
-      "published": "2026-08-05",
-      "name": "Bynxal5bgyt",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/bynxal5bgyt/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1uuw9yu/brand_new_day_week_2/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v1w1ef/infinite_with_trusty_old_mr_negative_cl_28042/",
     "https://www.reddit.com/r/marvelsnapcomp/comments/1uueyeo/competitive_consensus_tarantula/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v1u5x1/its_been_18_months_but_i_finally_got_back_to/",
     "https://www.reddit.com/r/marvelsnapcomp/comments/1uttolq/nico_minoru/",
@@ -1558,6 +1568,8 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vo6eo5/how_to_improve_discard_deck_cl_1855/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vo5gw6/i_think_cowboy_thanos_made_nick_fury_playable_cl/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vnsamc/can_a_good_c10_deck_be_possible_cl_21348/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vnns54/it_was_a_tough_climb_but_thanos_ff_and_zombies/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vnns54/it_was_a_tough_climb_but_thanos_ff_and_zombies/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1voino6/this_deck_as_been_so_much_fun_sitting_at_121_win/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1voig0y/silver_surferodin_on_reveal_cl1340/"
   ]
 }
