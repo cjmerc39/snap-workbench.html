@@ -1,7 +1,73 @@
 {
-  "updated": "2026-08-16",
-  "updatedAt": "2026-08-16T20:31:36.601Z",
+  "updated": "2026-08-17",
+  "updatedAt": "2026-08-17T19:36:37.943Z",
   "decks": [
+    {
+      "creator": "Snap Judgments",
+      "video": "70% Win Rate Evil Deck is Ready for a Meta Takeover! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=s84eWYna13E",
+      "published": "2026-08-17",
+      "name": "Kumatya_Games",
+      "ids": [
+        "Quinjet",
+        "MariaHill",
+        "RedWolfFracturedFrontier",
+        "VictoriaHand",
+        "LinLie",
+        "Mirage",
+        "Frigga",
+        "ShadowKing",
+        "GambitHorseman",
+        "Bastion",
+        "MotherAskani",
+        "DevilDinosaur"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/kumatyagamesj4zsv7w/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "70% Win Rate Evil Deck is Ready for a Meta Takeover! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=s84eWYna13E",
+      "published": "2026-08-17",
+      "name": "Braude 70% WR",
+      "ids": [
+        "KingEitri",
+        "MariaHill",
+        "IronPatriot",
+        "Valentina",
+        "Cosmo",
+        "PsylockeFracturedFrontier",
+        "GambitHorseman",
+        "ThanosFracturedFrontier",
+        "Mockingbird",
+        "Sasquatch",
+        "SinisterSix",
+        "Thanos"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/braude-70-wr/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "70% Win Rate Evil Deck is Ready for a Meta Takeover! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=s84eWYna13E",
+      "published": "2026-08-17",
+      "name": "Cinder",
+      "ids": [
+        "NicoMinoru",
+        "SpiderManBrandNewDay",
+        "KingEitri",
+        "Surge",
+        "SamWilson",
+        "ShadowlandsDaredevil",
+        "Cosmo",
+        "JaneFosterFracturedFrontier",
+        "Kraglin",
+        "Juggernaut",
+        "Malekith",
+        "ThanosFracturedFrontier"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/cinder/"
+    },
     {
       "creator": "Coougarrr",
       "video": "The Pixie Deck Everyone Forgot About | Marvel Snap",
@@ -1253,83 +1319,9 @@
         "Wiccan"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/AgentCoulson-Cable-Cobra-Eson-FenrisWolf-Gambit-Odin-PsylockeFracturedFrontier-ShadowKing-ShangChi-Valentina-Wiccan_Psylocke%20Fractured%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #195",
-      "url": "https://www.youtube.com/watch?v=KOKALdfIlIc",
-      "published": "2026-08-08",
-      "name": "SNAP Deck",
-      "ids": [
-        "ArnimZola",
-        "Blink",
-        "Blob",
-        "Cobra",
-        "GalactusFirstSteps",
-        "Gambit",
-        "Knull",
-        "Morph",
-        "NegasonicTeenageWarhead",
-        "Phastos",
-        "RedHulk",
-        "ShangChi"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/ArnimZola-Blink-Blob-Cobra-GalactusFirstSteps-Gambit-Knull-Morph-NegasonicTeenageWarhead-Phastos-RedHulk-ShangChi_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #195",
-      "url": "https://www.youtube.com/watch?v=KOKALdfIlIc",
-      "published": "2026-08-08",
-      "name": "Negative",
-      "ids": [
-        "ArnimZola",
-        "Blob",
-        "Cobra",
-        "Gorr",
-        "IronMan",
-        "JaneFoster",
-        "Knull",
-        "MrNegative",
-        "Mystique",
-        "RavonnaRenslayer",
-        "ShangChi",
-        "Valentina"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/ArnimZola-Blob-Cobra-Gorr-IronMan-JaneFoster-Knull-MrNegative-Mystique-RavonnaRenslayer-ShangChi-Valentina_Negative?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Thanos Fractured Frontier is BEST in a Control Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=ebsxW91dz4k",
-      "published": "2026-08-07",
-      "name": "Illzo",
-      "ids": [
-        "Quicksilver",
-        "Domino",
-        "Cosmo",
-        "MobiusMMobius",
-        "JaneFosterFracturedFrontier",
-        "PsylockeFracturedFrontier",
-        "ShadowKing",
-        "ShangChi",
-        "Wiccan",
-        "ThanosFracturedFrontier",
-        "WilsonFisk",
-        "GalactusFirstSteps"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/illzo/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v01hgo/what_can_i_improve_in_this_destroy_deck_cl_1685/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uzyzq1/black_hamzat_cl6500/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uzwws5/damn_can_it_go_any_higher_than_this_with_jsscl20k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uzsqff/lf_bounce_beast_deck_cl_22k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uzlafh/made_the_best_of_the_latest_ota_and_mixed_move/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uz7hqt/trying_to_cook_cause_im_bored_any_ideas_to/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyzayb/improvements_to_nonstandard_movement_deck_cl_27k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uywwzc/help_improving_my_c5_deck_cl_27k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyj6ca/cl6807_need_help_post_askani_nerf/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyhz4j/my_deck_for_bnd_scorpion_next_week_cl28789/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyg9zl/high_voltage_recommendations_cl_27162/",
@@ -1621,6 +1613,14 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vpqbqt/jean_grey_deck_cl_15251/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vpk68k/cl_17717_makeshift_thanos_ff_infinite/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vpexn6/infinite_cl_208k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vpe4kr/finally_made_it_to_infinite_with_my_favorite/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vpe4kr/finally_made_it_to_infinite_with_my_favorite/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vqv3jx/help_improving_my_destroy_deck_cl_260/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vqq9e3/cerebro_best_card_club_cl_10139/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vqos1l/infinite_first_time_ever_reaching_infinite_i_had/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vqg5cj/can_we_bring_back_cerebro_5/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vqg2t7/cl_33000/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vqfm5g/this_deck_easily_got_me_to_infinite_this_season/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vqctop/newish_player_help_please_cl_723/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vq836b/what_to_improve_cl_8760/"
   ]
 }
