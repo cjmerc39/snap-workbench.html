@@ -1,6 +1,6 @@
 {
   "updated": "2026-08-17",
-  "updatedAt": "2026-08-17T19:36:37.943Z",
+  "updatedAt": "2026-08-17T20:35:33.085Z",
   "decks": [
     {
       "creator": "Snap Judgments",
@@ -342,11 +342,11 @@
         "GhostSpider",
         "KidOmega",
         "Sparky",
-        "Firehair",
         "Hulkbuster",
         "PeniParker",
         "ScarletWitch",
         "DoctorStrange",
+        "Firehair",
         "MultipleMan",
         "ShangChi",
         "SymbioteSpiderMan"
@@ -932,9 +932,9 @@
       "name": "Thinking of Brady",
       "ids": [
         "KittyPryde",
-        "MadThinker",
         "SubMariner",
         "Clea",
+        "MadThinker",
         "RedWolfFracturedFrontier",
         "JeffTheBabyDolphin",
         "Angela",
@@ -976,8 +976,8 @@
       "name": "jeeeeet13",
       "ids": [
         "Quicksilver",
-        "Firehair",
         "Domino",
+        "Firehair",
         "Venom",
         "Venus",
         "JaneFosterFracturedFrontier",
@@ -1322,7 +1322,6 @@
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyj6ca/cl6807_need_help_post_askani_nerf/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyhz4j/my_deck_for_bnd_scorpion_next_week_cl28789/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1uyg9zl/high_voltage_recommendations_cl_27162/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1uwwshm/end_of_turn_easy_infinity_cl25285/",
@@ -1621,6 +1620,7 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vqg2t7/cl_33000/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vqfm5g/this_deck_easily_got_me_to_infinite_this_season/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vqctop/newish_player_help_please_cl_723/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vq836b/what_to_improve_cl_8760/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vq836b/what_to_improve_cl_8760/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vr2jnx/my_third_and_fastest_infinite_climb_yet_cl_5948/"
   ]
 }
