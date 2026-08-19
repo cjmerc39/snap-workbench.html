@@ -1,7 +1,139 @@
 {
-  "updated": "2026-08-18",
-  "updatedAt": "2026-08-18T20:32:53.063Z",
+  "updated": "2026-08-19",
+  "updatedAt": "2026-08-19T19:34:26.280Z",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "Hela for Destroy is here! The ULTIMATE reanimator card! - Marvel Snap Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=MvIIcKGu7ts",
+      "published": "2026-08-19",
+      "name": "Deathstroy",
+      "ids": [
+        "AdamantiumInfusion",
+        "BlackPanther",
+        "CassandraNova",
+        "DeathFracturedFrontier",
+        "Elixir",
+        "FastballSpecial",
+        "Firehair",
+        "KidOmega",
+        "Misery",
+        "Sage",
+        "WhiteTiger",
+        "ZombieCaptainMarvel"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AdamantiumInfusion-BlackPanther-CassandraNova-DeathFracturedFrontier-Elixir-FastballSpecial-Firehair-KidOmega-Misery-Sage-WhiteTiger-ZombieCaptainMarvel_Deathstroy"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Buff is Back... It's the Best... No Notes!  Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=p-drtj3DO0A",
+      "published": "2026-08-19",
+      "name": "Roram Sixnos",
+      "ids": [
+        "KingEitri",
+        "FastballSpecial",
+        "Surge",
+        "GrandMaster",
+        "Phastos",
+        "PsylockeFracturedFrontier",
+        "Namorita",
+        "AdamantiumInfusion",
+        "Misery",
+        "ThanosFracturedFrontier",
+        "SinisterSix",
+        "Thanos"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/roram-sixnosw7dkciu/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Buff is Back... It's the Best... No Notes!  Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=p-drtj3DO0A",
+      "published": "2026-08-19",
+      "name": "Smlz Buff Thanos",
+      "ids": [
+        "Agony",
+        "AmericaChavez",
+        "SpiderManBrandNewDay",
+        "SubMariner",
+        "Surge",
+        "DoctorOctopusFracturedFrontier",
+        "JeffTheBabyDolphin",
+        "Maverick",
+        "Prodigy",
+        "JubileeSilverSurfer",
+        "Stick",
+        "ThanosFracturedFrontier"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/smlz-buff-thanospr2h06w/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Buff is Back... It's the Best... No Notes!  Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=p-drtj3DO0A",
+      "published": "2026-08-19",
+      "name": "75% WR Sizer Hand",
+      "ids": [
+        "Quinjet",
+        "SpiderHam",
+        "Iceman",
+        "VictoriaHand",
+        "LinLie",
+        "Mirage",
+        "Frigga",
+        "ShadowKing",
+        "GambitHorseman",
+        "Bastion",
+        "MotherAskani",
+        "MoonGirl"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/75-wr-sizer-hand/"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of DEATH: FRACTURED FRONTIER | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=iugbq57eNeo",
+      "published": "2026-08-18",
+      "name": "Beta Ray Deth v2",
+      "ids": [
+        "BetaRayBill",
+        "DeathFracturedFrontier",
+        "Firehair",
+        "JaneFoster",
+        "Killmonger",
+        "KingEitri",
+        "Misery",
+        "Odin",
+        "RamaTut",
+        "Thor",
+        "Zabu",
+        "ZombieCaptainMarvel"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/BetaRayBill-DeathFracturedFrontier-Firehair-JaneFoster-Killmonger-KingEitri-Misery-Odin-RamaTut-Thor-Zabu-ZombieCaptainMarvel_Beta%20Ray%20Deth%20v2?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of DEATH: FRACTURED FRONTIER | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=iugbq57eNeo",
+      "published": "2026-08-18",
+      "name": "Titan Deth",
+      "ids": [
+        "Carnage",
+        "Death",
+        "DeathFracturedFrontier",
+        "Firehair",
+        "Hood",
+        "Killmonger",
+        "LadyDeathstrike",
+        "Misery",
+        "Mockingbird",
+        "Thanos",
+        "ThanosFracturedFrontier",
+        "WeaponXWolverine"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Carnage-Death-DeathFracturedFrontier-Firehair-Hood-Killmonger-LadyDeathstrike-Misery-Mockingbird-Thanos-ThanosFracturedFrontier-WeaponXWolverine_Titan%20Deth?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
     {
       "creator": "Snap Judgments",
       "video": "70% Win Rate Evil Deck is Ready for a Meta Takeover! Marvel Snap",
@@ -1061,6 +1193,15 @@
       "video": "Thanos with a GUN for ZOMBIES!!   Best Marvel Snap COMBO Decks",
       "url": "https://www.youtube.com/watch?v=DoFRpaNn_eQ",
       "published": "2026-08-09",
+      "name": "T450322az0e6hh",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/t450322az0e6hh/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Thanos with a GUN for ZOMBIES!!   Best Marvel Snap COMBO Decks",
+      "url": "https://www.youtube.com/watch?v=DoFRpaNn_eQ",
+      "published": "2026-08-09",
       "name": "@t450322",
       "ids": [
         "Sunspot",
@@ -1165,170 +1306,9 @@
         "Wiccan"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/Blink-Cosmo-Crystal-Domino-DraxAvatarOfLife-GrandMaster-JaneFosterFracturedFrontier-Juggernaut-KarenPage-Quicksilver-ThanosFracturedFrontier-Wiccan_Jane%20Foster%20Fractured%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #195",
-      "url": "https://www.youtube.com/watch?v=KOKALdfIlIc",
-      "published": "2026-08-08",
-      "name": "Jane Foster Fractured Frontier",
-      "ids": [
-        "Cable",
-        "IronPatriot",
-        "JaneFosterFracturedFrontier",
-        "Juggernaut",
-        "KingEitri",
-        "Kraglin",
-        "NicoMinoru",
-        "ShadowlandsDaredevil",
-        "SpiderManBrandNewDay",
-        "Surge",
-        "ThanosFracturedFrontier",
-        "WilsonFisk"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Cable-IronPatriot-JaneFosterFracturedFrontier-Juggernaut-KingEitri-Kraglin-NicoMinoru-ShadowlandsDaredevil-SpiderManBrandNewDay-Surge-ThanosFracturedFrontier-WilsonFisk_Jane%20Foster%20Fractured%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #195",
-      "url": "https://www.youtube.com/watch?v=KOKALdfIlIc",
-      "published": "2026-08-08",
-      "name": "Thanos",
-      "ids": [
-        "AdamantiumInfusion",
-        "AmericaChavez",
-        "FastballSpecial",
-        "IronPatriot",
-        "KingEitri",
-        "Lizard",
-        "SinisterSix",
-        "StrangeSupreme",
-        "Surge",
-        "Thanos",
-        "ThanosFracturedFrontier",
-        "WilsonFisk"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AdamantiumInfusion-AmericaChavez-FastballSpecial-IronPatriot-KingEitri-Lizard-SinisterSix-StrangeSupreme-Surge-Thanos-ThanosFracturedFrontier-WilsonFisk_Thanos?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #195",
-      "url": "https://www.youtube.com/watch?v=KOKALdfIlIc",
-      "published": "2026-08-08",
-      "name": "Thanos",
-      "ids": [
-        "Aurora",
-        "BlueMarvel",
-        "DraxAvatarOfLife",
-        "Herbie",
-        "HydraBob",
-        "MarvelBoy",
-        "Mockingbird",
-        "PsylockeFracturedFrontier",
-        "SpiderHam",
-        "Thanos",
-        "ThanosFracturedFrontier",
-        "ZombieMisterFantastic"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Aurora-BlueMarvel-DraxAvatarOfLife-Herbie-HydraBob-MarvelBoy-Mockingbird-PsylockeFracturedFrontier-SpiderHam-Thanos-ThanosFracturedFrontier-ZombieMisterFantastic_Thanos?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #195",
-      "url": "https://www.youtube.com/watch?v=KOKALdfIlIc",
-      "published": "2026-08-08",
-      "name": "Galacti",
-      "ids": [
-        "AdamWarlock",
-        "AmericaChavez",
-        "Forge",
-        "Gwenpool",
-        "JeffTheBabyDolphin",
-        "Magik",
-        "MajesticWingbeat",
-        "Maverick",
-        "Stick",
-        "SuperiorSpiderMan",
-        "Surge",
-        "ZombieGalacti"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AdamWarlock-AmericaChavez-Forge-Gwenpool-JeffTheBabyDolphin-Magik-MajesticWingbeat-Maverick-Stick-SuperiorSpiderMan-Surge-ZombieGalacti_Galacti?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #195",
-      "url": "https://www.youtube.com/watch?v=KOKALdfIlIc",
-      "published": "2026-08-08",
-      "name": "Aurora",
-      "ids": [
-        "Aurora",
-        "AwesomeAndy",
-        "Cosmo",
-        "Herbie",
-        "Isca",
-        "LukeCage",
-        "Mercury",
-        "SamWilson",
-        "SpiderHam",
-        "SpiderManBrandNewDay",
-        "TheThingFirstSteps",
-        "Venus"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Aurora-AwesomeAndy-Cosmo-Herbie-Isca-LukeCage-Mercury-SamWilson-SpiderHam-SpiderManBrandNewDay-TheThingFirstSteps-Venus_Aurora?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #195",
-      "url": "https://www.youtube.com/watch?v=KOKALdfIlIc",
-      "published": "2026-08-08",
-      "name": "SNAP Deck",
-      "ids": [
-        "Debrii",
-        "Domino",
-        "Dracula",
-        "DragonLord",
-        "EnSabahNur",
-        "Giganto",
-        "Hulk",
-        "Infinaut",
-        "Jubilee",
-        "Magneto",
-        "Quicksilver",
-        "RedHulk"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Debrii-Domino-Dracula-DragonLord-EnSabahNur-Giganto-Hulk-Infinaut-Jubilee-Magneto-Quicksilver-RedHulk_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #195",
-      "url": "https://www.youtube.com/watch?v=KOKALdfIlIc",
-      "published": "2026-08-08",
-      "name": "Psylocke Fractured Frontier",
-      "ids": [
-        "AgentCoulson",
-        "Cable",
-        "Cobra",
-        "Eson",
-        "FenrisWolf",
-        "Gambit",
-        "Odin",
-        "PsylockeFracturedFrontier",
-        "ShadowKing",
-        "ShangChi",
-        "Valentina",
-        "Wiccan"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AgentCoulson-Cable-Cobra-Eson-FenrisWolf-Gambit-Odin-PsylockeFracturedFrontier-ShadowKing-ShangChi-Valentina-Wiccan_Psylocke%20Fractured%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1v3ql00/decks_creatively_using_firehair/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3oxg3/solid_conquest_deck_cl_29853/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1v3gvt8/weekly_release_discussion_scorpion_brand_new_day/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3koyx/trying_to_create_a_fallen_one_deck_cl_27k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3k3rn/bored_in_infinite_need_a_new_deck_cl_32k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3jqmo/daken_combo_quick_guide_by_everythingrigged_cl/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3ivt1/did_i_cook_here_cl14650/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3isdm/horde_destroy_deck_cl_21587/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3c3qy/new_scorpion_decks_cl_29000/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1v3890i/jane_negative_for_infinite_cl_6175/",
@@ -1621,6 +1601,13 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vr56ja/fun_little_deck_to_get_you_to_infinite_cl_33092/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vr4rka/basic_question_about_deck_building_cl_1800/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vs0bmd/cl30193_luke_cage_should_be_reworked_back_to_its/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vrznr7/thoughts_improvements_cl_21_410/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vrznr7/thoughts_improvements_cl_21_410/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vsvg09/infinite_climbcl_13500/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vsv5zx/good_death_fractured_frontier_deck_cl_3500ish/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vsjg80/is_there_any_suggestion_for_improvement_cl_685/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vsdokc/this_deck_has_been_ripping_through_gold_conquest/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vsbvoe/had_manspider_for_a_week_this_card_is_silly_fun/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vs8nol/he_be_quietly_creepin_again_cl_17184_infinite/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vs3hif/guys_death_ff_is_meh_cl_12059/"
   ]
 }
