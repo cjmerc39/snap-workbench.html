@@ -1,7 +1,56 @@
 {
-  "updated": "2026-08-25",
-  "updatedAt": "2026-08-25T20:37:56.419Z",
+  "updated": "2026-08-26",
+  "updatedAt": "2026-08-26T21:47:44.729Z",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "New Hellcow is actually INSANE!? Clog and End of Turn COMBINED - Marvel Snap Infinite Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=Qm5NDYQtgzs",
+      "published": "2026-08-26",
+      "name": "Return of clog",
+      "ids": [
+        "AdamWarlock",
+        "Daredevil",
+        "GreenGoblin",
+        "HellcowFracturedFrontier",
+        "Hobgoblin",
+        "Hood",
+        "InvisibleWomanFirstSteps",
+        "Isca",
+        "KateBishop",
+        "LukeCage",
+        "Magik",
+        "ShangChi"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AdamWarlock-Daredevil-GreenGoblin-HellcowFracturedFrontier-Hobgoblin-Hood-InvisibleWomanFirstSteps-Isca-KateBishop-LukeCage-Magik-ShangChi_Return%20of%20clog"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "This Free Card is BROKEN! Undefeated Marvel Snap Deck!",
+      "url": "https://www.youtube.com/watch?v=U2bCHpbCy6k",
+      "published": "2026-08-26",
+      "name": "Fili",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/fili/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "This Free Card is BROKEN! Undefeated Marvel Snap Deck!",
+      "url": "https://www.youtube.com/watch?v=U2bCHpbCy6k",
+      "published": "2026-08-26",
+      "name": "Unfitparroti1rzeh3",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/unfitparroti1rzeh3/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "This Free Card is BROKEN! Undefeated Marvel Snap Deck!",
+      "url": "https://www.youtube.com/watch?v=U2bCHpbCy6k",
+      "published": "2026-08-26",
+      "name": "72 Wr Ff Hellcow",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/72-wr-ff-hellcow/"
+    },
     {
       "creator": "Alexander Coccia",
       "video": "The Best Marvel Snap Beginner & Early Decks in 2026 (& how to upgrade them)",
@@ -600,6 +649,42 @@
       "url": "https://www.youtube.com/watch?v=OWJuO7cZ354",
       "published": "2026-08-20",
       "name": "Denish Deathish",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/denish-deathish"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Winning with the New Death is Inevitable with 4 INCREDIBLE New Decks! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=OWJuO7cZ354",
+      "published": "2026-08-20",
+      "name": "Mango Best Death Ff",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/mango-best-death-ff"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Winning with the New Death is Inevitable with 4 INCREDIBLE New Decks! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=OWJuO7cZ354",
+      "published": "2026-08-20",
+      "name": "Dead Coougarrr Bounce",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/dead-coougarrr-bounce"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Winning with the New Death is Inevitable with 4 INCREDIBLE New Decks! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=OWJuO7cZ354",
+      "published": "2026-08-20",
+      "name": "Huskydeath",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/huskydeath/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Winning with the New Death is Inevitable with 4 INCREDIBLE New Decks! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=OWJuO7cZ354",
+      "published": "2026-08-20",
+      "name": "Denish Deathish",
       "ids": [
         "Deadpool",
         "X23",
@@ -643,15 +728,6 @@
       "video": "Winning with the New Death is Inevitable with 4 INCREDIBLE New Decks! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=OWJuO7cZ354",
       "published": "2026-08-20",
-      "name": "Dead Coougarrr Bounce",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/dead-coougarrr-bounce"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Winning with the New Death is Inevitable with 4 INCREDIBLE New Decks! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=OWJuO7cZ354",
-      "published": "2026-08-20",
       "name": "HuskyDeath",
       "ids": [
         "Hawkeye",
@@ -667,24 +743,6 @@
         "DeathFracturedFrontier",
         "ThanosFracturedFrontier"
       ],
-      "zone": "https://marvelsnapzone.com/decks/huskydeath/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Winning with the New Death is Inevitable with 4 INCREDIBLE New Decks! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=OWJuO7cZ354",
-      "published": "2026-08-20",
-      "name": "Mango Best Death Ff",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/mango-best-death-ff"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Winning with the New Death is Inevitable with 4 INCREDIBLE New Decks! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=OWJuO7cZ354",
-      "published": "2026-08-20",
-      "name": "Huskydeath",
-      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/huskydeath/"
     },
     {
@@ -723,6 +781,24 @@
       "video": "Buff is Back... It's the Best... No Notes!  Marvel Snap",
       "url": "https://www.youtube.com/watch?v=p-drtj3DO0A",
       "published": "2026-08-19",
+      "name": "Smlz Buff Thanospr2h06w",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/smlz-buff-thanospr2h06w/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Buff is Back... It's the Best... No Notes!  Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=p-drtj3DO0A",
+      "published": "2026-08-19",
+      "name": "75 Wr Sizer Hand",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/75-wr-sizer-hand/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Buff is Back... It's the Best... No Notes!  Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=p-drtj3DO0A",
+      "published": "2026-08-19",
       "name": "Smlz Buff Thanos",
       "ids": [
         "Agony",
@@ -739,15 +815,6 @@
         "ThanosFracturedFrontier"
       ],
       "zone": "https://marvelsnapzone.com/decks/smlz-buff-thanospr2h06w/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Buff is Back... It's the Best... No Notes!  Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=p-drtj3DO0A",
-      "published": "2026-08-19",
-      "name": "75 Wr Sizer Hand",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/75-wr-sizer-hand/"
     },
     {
       "creator": "Snap Judgments",
@@ -792,15 +859,6 @@
         "MoonGirl"
       ],
       "zone": "https://marvelsnapzone.com/decks/75-wr-sizer-hand/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Buff is Back... It's the Best... No Notes!  Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=p-drtj3DO0A",
-      "published": "2026-08-19",
-      "name": "Smlz Buff Thanospr2h06w",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/smlz-buff-thanospr2h06w/"
     },
     {
       "creator": "Alexander Coccia",
@@ -851,6 +909,33 @@
       "video": "70% Win Rate Evil Deck is Ready for a Meta Takeover! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=s84eWYna13E",
       "published": "2026-08-17",
+      "name": "Kumatyagamesj4zsv7w",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/kumatyagamesj4zsv7w/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "70% Win Rate Evil Deck is Ready for a Meta Takeover! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=s84eWYna13E",
+      "published": "2026-08-17",
+      "name": "Braude 70 Wr",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/braude-70-wr/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "70% Win Rate Evil Deck is Ready for a Meta Takeover! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=s84eWYna13E",
+      "published": "2026-08-17",
+      "name": "Cinder",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/cinder/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "70% Win Rate Evil Deck is Ready for a Meta Takeover! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=s84eWYna13E",
+      "published": "2026-08-17",
       "name": "Kumatya_Games",
       "ids": [
         "Quinjet",
@@ -867,15 +952,6 @@
         "DevilDinosaur"
       ],
       "zone": "https://marvelsnapzone.com/decks/kumatyagamesj4zsv7w/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "70% Win Rate Evil Deck is Ready for a Meta Takeover! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=s84eWYna13E",
-      "published": "2026-08-17",
-      "name": "Braude 70 Wr",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/braude-70-wr/"
     },
     {
       "creator": "Snap Judgments",
@@ -922,24 +998,6 @@
       "zone": "https://marvelsnapzone.com/decks/braude-70-wr/"
     },
     {
-      "creator": "Snap Judgments",
-      "video": "70% Win Rate Evil Deck is Ready for a Meta Takeover! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=s84eWYna13E",
-      "published": "2026-08-17",
-      "name": "Kumatyagamesj4zsv7w",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/kumatyagamesj4zsv7w/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "70% Win Rate Evil Deck is Ready for a Meta Takeover! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=s84eWYna13E",
-      "published": "2026-08-17",
-      "name": "Cinder",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/cinder/"
-    },
-    {
       "creator": "Coougarrr",
       "video": "The Pixie Deck Everyone Forgot About | Marvel Snap",
       "url": "https://www.youtube.com/watch?v=9QFERVHLSeQ",
@@ -974,21 +1032,8 @@
       "video": "Thanos Killer Budget Deck DOMINATES! Marvel Snap Best Tournament Decks",
       "url": "https://www.youtube.com/watch?v=EX9jqsvMGZw",
       "published": "2026-08-16",
-      "name": "2nd HannahsCatCafe",
-      "ids": [
-        "KingEitri",
-        "LukeCage",
-        "ZombieMisterFantastic",
-        "MarvelBoy",
-        "Cosmo",
-        "MobiusMMobius",
-        "Venus",
-        "EnSabahNur",
-        "ThanosFracturedFrontier",
-        "Aurora",
-        "Mockingbird",
-        "Thanos"
-      ],
+      "name": "2nd Hannahscatcafe",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/2nd-hannahscatcafe/"
     },
     {
@@ -1005,21 +1050,8 @@
       "video": "Thanos Killer Budget Deck DOMINATES! Marvel Snap Best Tournament Decks",
       "url": "https://www.youtube.com/watch?v=EX9jqsvMGZw",
       "published": "2026-08-16",
-      "name": "4th AndreVar14",
-      "ids": [
-        "SpiderHam",
-        "Echo",
-        "HydraBob",
-        "Surge",
-        "LukeCage",
-        "AwesomeAndy",
-        "SamWilson",
-        "Venus",
-        "JaneFosterFracturedFrontier",
-        "Wong",
-        "ThanosFracturedFrontier",
-        "Aurora"
-      ],
+      "name": "4th Andrevar14",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/4th-andrevar14/"
     },
     {
@@ -1036,105 +1068,12 @@
       "video": "Thanos Killer Budget Deck DOMINATES! Marvel Snap Best Tournament Decks",
       "url": "https://www.youtube.com/watch?v=EX9jqsvMGZw",
       "published": "2026-08-16",
-      "name": "6th BurgerEnjoyer",
-      "ids": [
-        "SpiderHam",
-        "Iceman",
-        "HydraBob",
-        "AwesomeAndy",
-        "SamWilson",
-        "ScarletWitch",
-        "Cosmo",
-        "Venus",
-        "Mercury",
-        "Isca",
-        "ThanosFracturedFrontier",
-        "Aurora"
-      ],
+      "name": "6th Burgerenjoyer",
+      "ids": [],
       "zone": "https://marvelsnapzone.com/decks/6th-burgerenjoyer/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Thanos Killer Budget Deck DOMINATES! Marvel Snap Best Tournament Decks",
-      "url": "https://www.youtube.com/watch?v=EX9jqsvMGZw",
-      "published": "2026-08-16",
-      "name": "7th Supergiantmain",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/7th-supergiantmain/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Thanos Killer Budget Deck DOMINATES! Marvel Snap Best Tournament Decks",
-      "url": "https://www.youtube.com/watch?v=EX9jqsvMGZw",
-      "published": "2026-08-16",
-      "name": "8th Corvuss",
-      "ids": [
-        "Batroc",
-        "SpiderManBrandNewDay",
-        "HydraBob",
-        "JeffTheBabyDolphin",
-        "Kraven",
-        "SamWilson",
-        "Silk",
-        "HydraStomper",
-        "MaryJane",
-        "Venus",
-        "JaneFosterFracturedFrontier",
-        "ThanosFracturedFrontier"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/8th-corvuss/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Thanos Killer Budget Deck DOMINATES! Marvel Snap Best Tournament Decks",
-      "url": "https://www.youtube.com/watch?v=EX9jqsvMGZw",
-      "published": "2026-08-16",
-      "name": "9th Chamo",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/9th-chamo/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Thanos Killer Budget Deck DOMINATES! Marvel Snap Best Tournament Decks",
-      "url": "https://www.youtube.com/watch?v=EX9jqsvMGZw",
-      "published": "2026-08-16",
-      "name": "10th Ika",
-      "ids": [
-        "Quinjet",
-        "NicoMinoru",
-        "Snowguard",
-        "TechnoOrganicVirus",
-        "Pixie",
-        "Valentina",
-        "MobiusMMobius",
-        "PsylockeFracturedFrontier",
-        "GambitHorseman",
-        "InfinityUltron",
-        "ThanosFracturedFrontier",
-        "Hulkling"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/10th-ika/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Thanos Killer Budget Deck DOMINATES! Marvel Snap Best Tournament Decks",
-      "url": "https://www.youtube.com/watch?v=EX9jqsvMGZw",
-      "published": "2026-08-16",
-      "name": "15 Shinomations",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/15-shinomations/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vbpeku/venom_is_perfect_in_sinister_six_cl_32k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vboqsq/doom_2099_cl_27230/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vbmz3y/need_suggestions_with_this_deck_cl_13165/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vbmeoy/another_infinity_conquest_with_cerebro_cl_32195/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vbjzgw/punishment_need_help_fixing_this_deck_cl524/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vbfqax/cl_24130_with_tombstone_getting_a_buff_i_tried/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vbdr3c/c3_to_infinite_cl_16743/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vbct4j/cl12400_antiblack_panther_decks/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vbady4/good_deck_for_rascala_hideoutcl4951_and_which/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vb9q45/this_just_burned_through_infinite_conquest_cl3459/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vctx14/sinister_horde_decklist_cl_30k/",
     "https://www.reddit.com/r/marvelsnapcomp/comments/1vc4lpc/til_weird_worlds_interaction_with_sinister_six/",
@@ -1425,6 +1364,15 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vxqkj5/draft_is_wild_this_one_got_me_my_first_5_wins_cl/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vxm7l5/cl_31451_hitting_infinite_with_sinister_six/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vxjo51/which_deck_should_i_continue_to_use_cl133/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vxgmbp/cl_2832_draft_mode_favorite_starter_set/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vxgmbp/cl_2832_draft_mode_favorite_starter_set/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vza07g/cl_8154_improving_aurora_deck/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vz79qm/infinite_galactus_cl9062/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vz64kd/cl162_how_can_i_improve_this_discarddestroy_deck/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vz352l/amazing_late_game_deck_cl1998/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vyu3qx/need_help_for_firehairdeath_ff_deck_idea_cl_854/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vysapz/cl3184_budget_human_torch_deck/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vyr7iv/scarlet_witch_cl_14012/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vyotvo/my_draftinspired_boost_deck_for_ladder_cl9273/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vyky9d/spiderman_noir_deck_cl_13k/"
   ]
 }
