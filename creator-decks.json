@@ -1,7 +1,73 @@
 {
-  "updated": "2026-09-04",
-  "updatedAt": "2026-09-04T22:18:50.219Z",
+  "updated": "2026-09-05",
+  "updatedAt": "2026-09-05T21:06:28.560Z",
   "decks": [
+    {
+      "creator": "Snap Judgments",
+      "video": "78% Win Rate & Rank 1! Dominate Marvel Snap with this SUPERIOR Deck!",
+      "url": "https://www.youtube.com/watch?v=ImkK0AB87Mc",
+      "published": "2026-09-05",
+      "name": "mastarpuppet",
+      "ids": [
+        "Quicksilver",
+        "Chameleon",
+        "Venus",
+        "JaneFosterFracturedFrontier",
+        "SuperiorSpiderMan",
+        "ShangChiMasterOfTheRings",
+        "RedOnslaught",
+        "RamaTut",
+        "KarenPage",
+        "Wiccan",
+        "IronLad",
+        "AntiPolarMagneto"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/mastarpuppet841o9ir/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "78% Win Rate & Rank 1! Dominate Marvel Snap with this SUPERIOR Deck!",
+      "url": "https://www.youtube.com/watch?v=ImkK0AB87Mc",
+      "published": "2026-09-05",
+      "name": "Roram",
+      "ids": [
+        "BlackKnight",
+        "Blade",
+        "LukeCage",
+        "GrandMaster",
+        "LadySif",
+        "LunaSnow",
+        "GhostRider",
+        "EnSabahNur",
+        "Stryfe",
+        "AntiPolarMagneto",
+        "Dormammu",
+        "FinFangFoom"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/roramxucgwjr/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "78% Win Rate & Rank 1! Dominate Marvel Snap with this SUPERIOR Deck!",
+      "url": "https://www.youtube.com/watch?v=ImkK0AB87Mc",
+      "published": "2026-09-05",
+      "name": "Unhlpfulyoda",
+      "ids": [
+        "AmericaChavez",
+        "SpiderManBrandNewDay",
+        "Surge",
+        "Tarantula",
+        "AwesomeAndy",
+        "Starhawk",
+        "Venus",
+        "JaneFosterFracturedFrontier",
+        "MrFantasticFirstSteps",
+        "Juggernaut",
+        "SuperiorIronMan",
+        "ThanosFracturedFrontier"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/unhlpfulyoda6xny91t/"
+    },
     {
       "creator": "Snap Judgments",
       "video": "Play These Decks for the EASIEST And FASTEST Infinite In Marvel Snap! They're SO Strong!",
@@ -777,28 +843,6 @@
       "video": "Do YOU Want to Hit Infinite? These are the BEST Day 1 Infinite Decks! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=KpT2MNeZpRg",
       "published": "2026-09-02",
-      "name": "Unhlpfulyoda",
-      "ids": [
-        "AmericaChavez",
-        "SpiderManBrandNewDay",
-        "Surge",
-        "Tarantula",
-        "AwesomeAndy",
-        "Starhawk",
-        "Venus",
-        "JaneFosterFracturedFrontier",
-        "MrFantasticFirstSteps",
-        "Juggernaut",
-        "SuperiorIronMan",
-        "ThanosFracturedFrontier"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/unhlpfulyoda6xny91t/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Do YOU Want to Hit Infinite? These are the BEST Day 1 Infinite Decks! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=KpT2MNeZpRg",
-      "published": "2026-09-02",
       "name": "Derek",
       "ids": [
         "RavonnaRenslayer",
@@ -1043,7 +1087,7 @@
         "Domino",
         "ThanosFracturedFrontier"
       ],
-      "rk": 22
+      "rk": 24
     },
     {
       "creator": "Snap Judgments",
@@ -1264,59 +1308,9 @@
         "Sunspot"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/Abomination-Cyclops-Hazmat-HellcowFracturedFrontier-HighEvolutionary-Hulk-LukeCage-Magik-MistyKnight-Nebula-Rogue-Sunspot_Hellcow%20Fractured%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #198",
-      "url": "https://www.youtube.com/watch?v=-sq-vwUbxsY",
-      "published": "2026-08-29",
-      "name": "SNAP Deck",
-      "ids": [
-        "AdamWarlock",
-        "BlackCat",
-        "BruceBanner",
-        "Fantasticar",
-        "Havok",
-        "HydraBob",
-        "InvisibleWomanFirstSteps",
-        "Isca",
-        "Jocasta",
-        "Prodigy",
-        "Sunspot",
-        "Thena"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AdamWarlock-BlackCat-BruceBanner-Fantasticar-Havok-HydraBob-InvisibleWomanFirstSteps-Isca-Jocasta-Prodigy-Sunspot-Thena_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Unfitparrot",
-      "video": "Red Hulk is the PERFECT addition to one of the BEST DECKS! - Marvel Snap Infinite Deck Highlight",
-      "url": "https://www.youtube.com/watch?v=JQgMljzUIzA",
-      "published": "2026-08-27",
-      "name": "Hulkin Virus",
-      "ids": [
-        "Ares",
-        "KingEitri",
-        "Lizard",
-        "Martyr",
-        "MonstroOctopus",
-        "RedHulkFracturedFrontier",
-        "Sasquatch",
-        "ShadowlandsDaredevil",
-        "Skaar",
-        "Starbrand",
-        "TechnoOrganicVirus",
-        "WilsonFisk"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Ares-KingEitri-Lizard-Martyr-MonstroOctopus-RedHulkFracturedFrontier-Sasquatch-ShadowlandsDaredevil-Skaar-Starbrand-TechnoOrganicVirus-WilsonFisk_Hulkin%20Virus"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vk247d/negativity_is_so_fun_cl_22261/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vk226j/hope_this_helps_also_i_am_open_to_improvements/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vk0xyn/how_to_improve_cl_5473/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vlo98y/wong_decks_after_infinity_cl_772/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1vlp69p/ota_balance_notes_08132026/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vlifxl/infinite_cl_35_239/",
     "https://www.reddit.com/r/marvelsnapcomp/comments/1vliaf7/teamup_tuesday_weekly_alliances_thread/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vlggba/5x_infinite_after_a_1_year_break_hit_infinite/",
     "https://www.reddit.com/r/marvelsnapcomp/comments/1vlbrri/weekly_release_discussion_redwolf_fractured/",
@@ -1610,6 +1604,12 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1w72niz/deck_code_request_for_supreme_strange_or_infinity/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1w6v2fe/scorpion_bnd_cl_8700/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1w6tgue/new_season_super_early_infinite_cl24k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w6rx8u/infinite_with_doom_2099_cl_35885/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w6rx8u/infinite_with_doom_2099_cl_35885/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w88vtj/this_sera_combo_deck_is_surprisingly_strong_in/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w85hk8/antipolar_control_cl_35875/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w82vci/i_want_to_hit_infinity_but_im_cl_6566/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w7z1q2/infinite_cl_40720/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w7x5ki/flame_my_deck_iam_having_so_much_fun_with_it/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w7n807/sinister_six_help_cl_10361/"
   ]
 }
