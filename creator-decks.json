@@ -1,7 +1,50 @@
 {
-  "updated": "2026-09-05",
-  "updatedAt": "2026-09-05T22:03:03.985Z",
+  "updated": "2026-09-06",
+  "updatedAt": "2026-09-06T21:14:16.891Z",
   "decks": [
+    {
+      "creator": "Coougarrr",
+      "video": "Why Hela Is STILL One of Marvel Snap's Best Decks",
+      "url": "https://www.youtube.com/watch?v=JonooN0LLGw",
+      "published": "2026-09-06",
+      "name": "",
+      "ids": [
+        "Blade",
+        "CorvusGlaive",
+        "Gambit",
+        "GhostRider",
+        "Jubilee",
+        "Supergiant",
+        "Blink",
+        "Legion",
+        "Gorr",
+        "Hela",
+        "Odin",
+        "FinFangFoom"
+      ]
+    },
+    {
+      "creator": "Unfitparrot",
+      "video": "This old combo deck is still a MONSTER! META DESTROYER! - Marvel Snap Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=jLUVe9Da6PI",
+      "published": "2026-09-06",
+      "name": "EOT",
+      "ids": [
+        "AdamWarlock",
+        "BruceBanner",
+        "Fantasticar",
+        "Havok",
+        "HydraBob",
+        "InvisibleWomanFirstSteps",
+        "Isca",
+        "Jocasta",
+        "Prodigy",
+        "SpiderManBrandNewDay",
+        "Sunspot",
+        "Thena"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AdamWarlock-BruceBanner-Fantasticar-Havok-HydraBob-InvisibleWomanFirstSteps-Isca-Jocasta-Prodigy-SpiderManBrandNewDay-Sunspot-Thena_EOT"
+    },
     {
       "creator": "Snap Judgments",
       "video": "78% Win Rate & Rank 1! Dominate Marvel Snap with this SUPERIOR Deck!",
@@ -1086,8 +1129,7 @@
         "Quicksilver",
         "Domino",
         "ThanosFracturedFrontier"
-      ],
-      "rk": 24
+      ]
     },
     {
       "creator": "Snap Judgments",
@@ -1264,66 +1306,9 @@
         "Wiccan"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/Crystal-Domino-DraxAvatarOfLife-GalactusFirstSteps-JaneFosterFracturedFrontier-KarenPage-PsylockeFracturedFrontier-Quicksilver-Speed-ThanosFracturedFrontier-Venus-Wiccan_Thanos?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #198",
-      "url": "https://www.youtube.com/watch?v=-sq-vwUbxsY",
-      "published": "2026-08-29",
-      "name": "Hellcow Fractured Frontier",
-      "ids": [
-        "Crystal",
-        "Hazmat",
-        "HellcowFracturedFrontier",
-        "LukeCage",
-        "LunaSnow",
-        "Magik",
-        "Mystique",
-        "Onslaught",
-        "Rogue",
-        "Scorpion",
-        "ScorpionBrandNewDay",
-        "Sera"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Crystal-Hazmat-HellcowFracturedFrontier-LukeCage-LunaSnow-Magik-Mystique-Onslaught-Rogue-Scorpion-ScorpionBrandNewDay-Sera_Hellcow%20Fractured%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #198",
-      "url": "https://www.youtube.com/watch?v=-sq-vwUbxsY",
-      "published": "2026-08-29",
-      "name": "Hellcow Fractured Frontier",
-      "ids": [
-        "Abomination",
-        "Cyclops",
-        "Hazmat",
-        "HellcowFracturedFrontier",
-        "HighEvolutionary",
-        "Hulk",
-        "LukeCage",
-        "Magik",
-        "MistyKnight",
-        "Nebula",
-        "Rogue",
-        "Sunspot"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Abomination-Cyclops-Hazmat-HellcowFracturedFrontier-HighEvolutionary-Hulk-LukeCage-Magik-MistyKnight-Nebula-Rogue-Sunspot_Hellcow%20Fractured%20Frontier?utm_medium=affiliate&utm_campaign=alexcoccia"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vlggba/5x_infinite_after_a_1_year_break_hit_infinite/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1vlbrri/weekly_release_discussion_redwolf_fractured/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vlfwxy/cl_1542_thoughts_on_my_discard_deck_ive_had/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vlea57/cl22791_7_days_to_infinite/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vldpog/suprise_infinate_deck_cl_16250/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vlaja4/infinite_4x_with_move_cl10209/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vl8fd4/cl_17416_hit_infinite_on_day_2_of_new_season_just/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vl7ei8/infinite_25462_cl/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vl5eey/fastest_infinite_so_far_cl_38161/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vl2e8q/cl13226_infinite/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vkzvgj/infinite_with_the_gmannimrod_cl_40000/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vlsld2/cl13k_infinite_with_tech_ramp/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1vmhj3v/infinite_with_sinister_6_zombies_cl24388/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vmhj3c/high_evo_takes_me_to_infinite_once_again_budget/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vmgile/infinite_with_thanos_ff_aurora_cl_35138/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1vm8qfo/any_improvements_for_this_doom_2099_deck_cl_15035/",
@@ -1610,6 +1595,19 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1w7z1q2/infinite_cl_40720/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1w7x5ki/flame_my_deck_iam_having_so_much_fun_with_it/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1w7n807/sinister_six_help_cl_10361/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1w8dwkk/axis_invasion_week_1/"
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1w8dwkk/axis_invasion_week_1/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w985te/ramp_deck_questions_cl_378/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1w93w4z/competitive_consensus_red_onslaught/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w94d35/tempo_deck_featuring_antipolar_magneto_and/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w92byg/looking_for_zombie_hell_cl_3k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w90vyj/did_i_accidentally_make_an_op_deck_cl2544/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w90qb9/how_long_will_it_take_to_be_collection_complete/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w8v6bg/is_this_deck_awful_cl9347/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w8um0z/cl_11k_infinite_in_101_games_with_zombie_ff/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w8qlaw/darkhawk_is_my_fav_and_here_is_the_deck_i_used/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w8pl20/necromancer_zombies_cl_17k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w8oe3d/so_far_this_deck_has_worked_but_i_think_it_could/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w8nynw/infinite_cl_226k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w8m424/thorbill_deck_to_infinite_no_series_5_cards_cl/"
   ]
 }
