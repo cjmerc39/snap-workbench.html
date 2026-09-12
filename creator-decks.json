@@ -1,6 +1,6 @@
 {
   "updated": "2026-09-12",
-  "updatedAt": "2026-09-12T21:35:31.057Z",
+  "updatedAt": "2026-09-12T22:07:53.768Z",
   "decks": [
     {
       "creator": "Alexander Coccia",
@@ -646,8 +646,8 @@
       "name": "mastarpuppet",
       "ids": [
         "Quicksilver",
-        "Chameleon",
         "Venus",
+        "Chameleon",
         "JaneFosterFracturedFrontier",
         "SuperiorSpiderMan",
         "ShangChiMasterOfTheRings",
@@ -826,9 +826,9 @@
         "LukeCage",
         "Brood",
         "SilverSurfer",
+        "Venus",
         "Killmonger",
         "Rogue",
-        "Venus",
         "JaneFosterFracturedFrontier",
         "SebastianShaw",
         "RedHulkFracturedFrontier",
@@ -893,8 +893,8 @@
         "CorvusGlaive",
         "Jubilee",
         "GhostRider",
-        "Legion",
         "Blink",
+        "Legion",
         "Enchantress",
         "Hela",
         "AgathaHarkness",
@@ -1180,9 +1180,9 @@
         "Surge",
         "IronPatriot",
         "PsylockeFracturedFrontier",
-        "GambitHorseman",
         "Triton",
         "MoonGirl",
+        "GambitHorseman",
         "SuperiorIronMan",
         "ThanosFracturedFrontier"
       ],
@@ -1204,8 +1204,8 @@
         "Merlin",
         "WerewolfByNight",
         "PsylockeFracturedFrontier",
-        "SuperiorIronMan",
         "ShouLao",
+        "SuperiorIronMan",
         "Sasquatch"
       ],
       "zone": "https://marvelsnapzone.com/decks/snap-idkt08fvi1/"
