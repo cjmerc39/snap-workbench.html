@@ -1,7 +1,139 @@
 {
-  "updated": "2026-09-21",
-  "updatedAt": "2026-09-21T23:08:46.529Z",
+  "updated": "2026-09-22",
+  "updatedAt": "2026-09-22T21:59:29.870Z",
   "decks": [
+    {
+      "creator": "Alexander Coccia",
+      "video": "I LOVE THIS CARD! An HONEST REVIEW of the NEW CARNAGE | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=7wCruQTlWns",
+      "published": "2026-09-22",
+      "name": "Friendly Move",
+      "ids": [
+        "Batroc",
+        "FriendlyNeighborhoodCarnage",
+        "GrandMaster",
+        "Heimdall",
+        "HydraStomper",
+        "Kraven",
+        "MaryJane",
+        "SamWilson",
+        "Silk",
+        "SpiderManBrandNewDay",
+        "SpiderPunk",
+        "Venus"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Batroc-FriendlyNeighborhoodCarnage-GrandMaster-Heimdall-HydraStomper-Kraven-MaryJane-SamWilson-Silk-SpiderManBrandNewDay-SpiderPunk-Venus_Friendly%20Move?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "I LOVE THIS CARD! An HONEST REVIEW of the NEW CARNAGE | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=7wCruQTlWns",
+      "published": "2026-09-22",
+      "name": "Friendly Dagger",
+      "ids": [
+        "Dagger",
+        "FriendlyNeighborhoodCarnage",
+        "GhostSpider",
+        "Heimdall",
+        "HumanTorch",
+        "IronFist",
+        "Kraven",
+        "MadameWeb",
+        "MaryJane",
+        "SpiderPunk",
+        "Topaz",
+        "Vulture"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Dagger-FriendlyNeighborhoodCarnage-GhostSpider-Heimdall-HumanTorch-IronFist-Kraven-MadameWeb-MaryJane-SpiderPunk-Topaz-Vulture_Friendly%20Dagger?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Friendly Neigborhood Carnage is F'n OP in This Rank 1 Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=eRfN2LT1qUs",
+      "published": "2026-09-22",
+      "name": "Kun Move",
+      "ids": [
+        "Arana",
+        "GhostSpider",
+        "MadameWeb",
+        "Hulkbuster",
+        "PeniParker",
+        "DoctorStrange",
+        "MultipleMan",
+        "HumanTorch",
+        "Cosmo",
+        "FriendlyNeighborhoodCarnage",
+        "Juggernaut",
+        "SymbioteSpiderMan"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/kun-move6hyel1k/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Friendly Neigborhood Carnage is F'n OP in This Rank 1 Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=eRfN2LT1qUs",
+      "published": "2026-09-22",
+      "name": "Derek",
+      "ids": [
+        "Batroc",
+        "SpiderManBrandNewDay",
+        "SamWilson",
+        "Kraven",
+        "Silk",
+        "Cosmo",
+        "HydraStomper",
+        "FriendlyNeighborhoodCarnage",
+        "Prowler",
+        "Juggernaut",
+        "Stardust",
+        "Hellion"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/derekyshjx8k/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Friendly Neigborhood Carnage is F'n OP in This Rank 1 Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=eRfN2LT1qUs",
+      "published": "2026-09-22",
+      "name": "Sizer",
+      "ids": [
+        "Arana",
+        "GhostSpider",
+        "IronFist",
+        "Vulture",
+        "MadameWeb",
+        "Dagger",
+        "Sparky",
+        "Toxin",
+        "LinLie",
+        "Frigga",
+        "FriendlyNeighborhoodCarnage",
+        "Beast"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/sizerkuvmnnt/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Friendly Neigborhood Carnage is F'n OP in This Rank 1 Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=eRfN2LT1qUs",
+      "published": "2026-09-22",
+      "name": "Counter",
+      "ids": [
+        "SpiderManBrandNewDay",
+        "Nightcrawler",
+        "JeffTheBabyDolphin",
+        "Kraven",
+        "JeffTheBabyLandShark",
+        "MobiusMMobius",
+        "Mercury",
+        "ShadowKing",
+        "Nocturne",
+        "SpiderSense",
+        "Cannonball",
+        "ThanosFracturedFrontier"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/deck-counterj8wmemh/"
+    },
     {
       "creator": "Snap Judgments",
       "video": "Zombie Magneto! No One is Talking about this SICK Combo! Marvel Snap",
@@ -1164,108 +1296,9 @@
         "Wasp"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/Abomination-Cosmo-Cyclops-HighEvolutionary-Hulk-Kluh-MistyKnight-Scorpion-Shocker-Sunspot-ThanosFracturedFrontier-Wasp_Sad%20Evo"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of KLUH | Marvel Snap First Impressions",
-      "url": "https://www.youtube.com/watch?v=Jhv_MzyMR64",
-      "published": "2026-09-08",
-      "name": "KLUH OVE",
-      "ids": [
-        "Abomination",
-        "Cyclops",
-        "HighEvolutionary",
-        "Hulk",
-        "JaneFosterFracturedFrontier",
-        "Kluh",
-        "MistyKnight",
-        "Nebula",
-        "Scorpion",
-        "Shocker",
-        "ThanosFracturedFrontier",
-        "Wasp"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Abomination-Cyclops-HighEvolutionary-Hulk-JaneFosterFracturedFrontier-Kluh-MistyKnight-Nebula-Scorpion-Shocker-ThanosFracturedFrontier-Wasp_KLUH%20OVE?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of KLUH | Marvel Snap First Impressions",
-      "url": "https://www.youtube.com/watch?v=Jhv_MzyMR64",
-      "published": "2026-09-08",
-      "name": "Kluh",
-      "ids": [
-        "AntiPolarMagneto",
-        "Giganto",
-        "Ikari",
-        "Kluh",
-        "Martyr",
-        "MobiusMMobius",
-        "Nightmare",
-        "Pixie",
-        "RedSkull",
-        "Starbrand",
-        "TechnoOrganicVirus",
-        "TyphoidMary"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AntiPolarMagneto-Giganto-Ikari-Kluh-Martyr-MobiusMMobius-Nightmare-Pixie-RedSkull-Starbrand-TechnoOrganicVirus-TyphoidMary_Kluh"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "You NEED Kluh! Let Me Explain WHY He's OP! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=uymw4W2NSV8",
-      "published": "2026-09-08",
-      "name": "Sizer Dino Dream",
-      "ids": [
-        "Quinjet",
-        "Snowguard",
-        "SpiderManBrandNewDay",
-        "IronPatriot",
-        "Mirage",
-        "Valentina",
-        "ShadowKing",
-        "GambitHorseman",
-        "TheAncientOne",
-        "MsMarvel",
-        "DevilDinosaur",
-        "ThanosFracturedFrontier"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Quinjet-Snowguard-SpiderManBrandNewDay-IronPatriot-Mirage-Valentina-ShadowKing-GambitHorseman-TheAncientOne-MsMarvel-DevilDinosaur-ThanosFracturedFrontier_Sizer%20Dino%20Dream"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "You NEED Kluh! Let Me Explain WHY He's OP! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=uymw4W2NSV8",
-      "published": "2026-09-08",
-      "name": "Derek",
-      "ids": [
-        "RavonnaRenslayer",
-        "KateBishop",
-        "Sage",
-        "Mystique",
-        "Magik",
-        "PsylockeFracturedFrontier",
-        "ShadowKing",
-        "Moonstone",
-        "AntiVenom",
-        "IronMan",
-        "Valkyrie",
-        "Gorr"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/derek74qifb9/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w2ti2c/little_improvements_with_this_ramp_deck_cl1402/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1w23u9p/fractured_frontier_week_4/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w2ter6/ive_been_having_so_much_fun_with_this_deck_and_im/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w2spzw/came_back_after_a_two_year_hiatus_and_really/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w2qyvg/i_need_help_with_my_zoo_zombies_deck_cl_26891/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w2q0p8/god_tier_split/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w2mupn/cl_4388_returning_player_trying_to_cobble/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w2a2if/only_played_for_2_month_during_launch_and_just/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w22t3w/wanted_to_share_my_favorite_ongoing_deck_cl_31450/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w3qeuk/for_both_thanos_and_thanos_ff_please_cl_is_23971/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w3q6nc/how_to_improve_this_deck_cl_2413/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1w3nzth/need_help_with_deck_building_cl35k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1w3h8gy/wolverine_spells_deck_cl10k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1w39xdp/was_hoping_to_get_some_ideas_for_a_dormammu/",
@@ -1554,6 +1587,17 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmd259/2099_temu_cl6194/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wm6u4i/how_to_remove_scorpion_bnd_from_the_game_cl_19k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wlwjqg/cl5944_been_having_a_bunch_of_fun_with_this/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wluy0h/war_machine_decks_cl5646/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wluy0h/war_machine_decks_cl5646/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wnn6km/just_opened_a_series_5_pack_was_it_a_great_pull/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1wnabap/teamup_tuesday_weekly_alliances_thread/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wnn2fo/spice_this_up_guys_cl_13954/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1wmtatt/competitive_consensus_friendly_neighborhood/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wnlrqc/the_deck_has_rounded_itself_out_cl_31561/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wnk1wh/for_when_you_absolutely_positively_dont_want_to/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wnhjsa/fun_twist_to_horde_deck_ps_no_cow_girl_thanos_cl/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wndvsg/loki_ff_cl_22215/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmzpim/hit_infinite_cl_14895/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmwc2k/affliction_has_too_many_fun_cards_that_are/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmvclj/thought_on_this_deck_and_if_theyre_any_card_i/"
   ]
 }
