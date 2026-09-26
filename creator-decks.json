@@ -1,7 +1,72 @@
 {
-  "updated": "2026-09-25",
-  "updatedAt": "2026-09-25T23:14:47.099Z",
+  "updated": "2026-09-26",
+  "updatedAt": "2026-09-26T21:59:25.131Z",
   "decks": [
+    {
+      "creator": "Snap Judgments",
+      "video": "Win More Games with the Highest Win Rate Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=_QBlZSbe89U",
+      "published": "2026-09-26",
+      "name": "Jompool",
+      "ids": [
+        "Quicksilver",
+        "LukeCage",
+        "Domino",
+        "CassandraNova",
+        "CalibanHorseman",
+        "Terrax",
+        "NegasonicTeenageWarhead",
+        "Rockslide",
+        "Wiccan",
+        "IronLad",
+        "Darkhawk",
+        "ThanosFracturedFrontier"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/jompool/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Win More Games with the Highest Win Rate Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=_QBlZSbe89U",
+      "published": "2026-09-26",
+      "name": "Yoda",
+      "ids": [
+        "Quicksilver",
+        "Domino",
+        "Speed",
+        "CalibanHorseman",
+        "JaneFosterFracturedFrontier",
+        "CaptainMarvel",
+        "KarenPage",
+        "Crossbones",
+        "CullObsidian",
+        "DragonLord",
+        "ThanosFracturedFrontier",
+        "AntiPolarMagneto"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/yoda/"
+    },
+    {
+      "creator": "r/MarvelSnapDecks",
+      "video": "My HighVoltage deck (CL: 8628)",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1wqiohr/my_highvoltage_deck_cl_8628/",
+      "published": "2026-09-26",
+      "name": "",
+      "ids": [
+        "Valentina",
+        "AgentCoulson",
+        "NickFury",
+        "Agent13",
+        "Cable",
+        "TheCollector",
+        "VictoriaHand",
+        "FinFangFoom",
+        "Quinjet",
+        "DevilDinosaur",
+        "GrandMaster",
+        "Mirage"
+      ]
+    },
     {
       "creator": "Coougarrr",
       "video": "You Haven't Seen Agamotto Used Like This | Marvel Snap",
@@ -1249,84 +1314,9 @@
         "Valentina"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/Arishem-Enchantress-Eson-GambitHorseman-InfinityUltron-IronPatriot-Mockingbird-Quinjet-RogueScionOfDivision-ShangChi-Stardust-Valentina_Rogue%20Arishem?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "My games with the NEW ROGUE were WILD! But is she WORTH GETTING? An Honest Review.",
-      "url": "https://www.youtube.com/watch?v=b6k3atSLQfI",
-      "published": "2026-09-15",
-      "name": "Mariner Rogue",
-      "ids": [
-        "ElsaBloodstone",
-        "JeffTheBabyDolphin",
-        "KittyPryde",
-        "MarvelBoy",
-        "Nebula",
-        "RogueScionOfDivision",
-        "SpiderManBrandNewDay",
-        "Stardust",
-        "SubMariner",
-        "Surge",
-        "ThanosFracturedFrontier",
-        "Venus"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/ElsaBloodstone-JeffTheBabyDolphin-KittyPryde-MarvelBoy-Nebula-RogueScionOfDivision-SpiderManBrandNewDay-Stardust-SubMariner-Surge-ThanosFracturedFrontier-Venus_Mariner%20Rogue?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "The Best Thanos x Thanos Deck... and How to Use NEW Rogue Best! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=gxzS6kTQp8c",
-      "published": "2026-09-15",
-      "name": "Coougarrr",
-      "ids": [
-        "MajesticWingbeat",
-        "Agony",
-        "NicoMinoru",
-        "PeniParker",
-        "Pixie",
-        "MrFantasticFirstSteps",
-        "LunaSnow",
-        "SymbioteSpiderMan",
-        "ManSpider",
-        "FallenOne",
-        "Taskmaster",
-        "FinFangFoom"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/coougarrr98artxk/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "The Best Thanos x Thanos Deck... and How to Use NEW Rogue Best! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=gxzS6kTQp8c",
-      "published": "2026-09-15",
-      "name": "AndreVar14",
-      "ids": [
-        "Yellowjacket",
-        "MajesticWingbeat",
-        "NicoMinoru",
-        "Merlin",
-        "JoaquinTorres",
-        "WerewolfByNight",
-        "Prowler",
-        "PsylockeFracturedFrontier",
-        "MotherAskani",
-        "ShouLao",
-        "SuperiorIronMan",
-        "Sasquatch"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/andrevar14ijs83d7/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w72niz/deck_code_request_for_supreme_strange_or_infinity/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w6v2fe/scorpion_bnd_cl_8700/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w6tgue/new_season_super_early_infinite_cl24k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w6rx8u/infinite_with_doom_2099_cl_35885/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w88vtj/this_sera_combo_deck_is_surprisingly_strong_in/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w85hk8/antipolar_control_cl_35875/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w82vci/i_want_to_hit_infinity_but_im_cl_6566/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w7z1q2/infinite_cl_40720/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1w7x5ki/flame_my_deck_iam_having_so_much_fun_with_it/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1w7n807/sinister_six_help_cl_10361/",
     "https://www.reddit.com/r/marvelsnapcomp/comments/1w8dwkk/axis_invasion_week_1/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1w985te/ramp_deck_questions_cl_378/",
@@ -1617,6 +1607,15 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wpsdfy/infinite_deck/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wpqxni/is_there_a_way_to_make_this_kind_of_deck_viable/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wplk62/agent_venom_decks_cl_10000/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wpi2di/spidey_noir_is_so_funny_cl_8031/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wpi2di/spidey_noir_is_so_funny_cl_8031/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wqzha1/try_these_cl_23445/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1wqt3gp/axis_inversion_week_4/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wqy01h/cl_19000_this_deck_made_it_to_infinite_2_seasons/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1wqrm9k/farming_high_voltage_this_weekend_try_kazoo/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wquwck/my_high_voltage_deck_cl4054/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wqk4av/step_1_rama_tut_step_2_step_3_profit_cl29280/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wqiuxk/infinite_with_wong_star_lord_and_antipolar/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wqfstn/improve_this_deck_cl_7_692/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wqc4tw/i_havent_played_in_over_a_year_what_are_some/"
   ]
 }
