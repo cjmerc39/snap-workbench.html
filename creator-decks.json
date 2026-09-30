@@ -1,7 +1,117 @@
 {
-  "updated": "2026-09-29",
-  "updatedAt": "2026-09-29T23:37:02.138Z",
+  "updated": "2026-09-30",
+  "updatedAt": "2026-09-30T22:57:59.030Z",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "Is Scarlet Witch Queen of Chaos a NEW META STAPLE!?!? - Marvel Snap Infinite Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=kcTZ7TNG8Dk",
+      "published": "2026-09-30",
+      "name": "WolfWitch",
+      "ids": [
+        "Bishop",
+        "DeafeningChord",
+        "Hood",
+        "KateBishop",
+        "Merlin",
+        "NicholasScratch",
+        "NicoMinoru",
+        "ScarletWitchQueenOfChaos",
+        "TheCollector",
+        "TheInversion",
+        "Venus",
+        "WerewolfByNight"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Bishop-DeafeningChord-Hood-KateBishop-Merlin-NicholasScratch-NicoMinoru-ScarletWitchQueenOfChaos-TheCollector-TheInversion-Venus-WerewolfByNight_WolfWitch"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "New Meta Queen is in the Rank 1 Deck! We COOKED! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=sPYrflWMpVk",
+      "published": "2026-09-30",
+      "name": "Sakasa",
+      "ids": [
+        "TheHunger",
+        "FastballSpecial",
+        "KidOmega",
+        "ZombieMisterFantastic",
+        "Firehair",
+        "Venom",
+        "ScarletWitchQueenOfChaos",
+        "ZombieScarletWitch",
+        "AdamantiumInfusion",
+        "AbsorbingMan",
+        "Misery",
+        "ZombieGiantMan"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/sakasapx80d4k/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "New Meta Queen is in the Rank 1 Deck! We COOKED! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=sPYrflWMpVk",
+      "published": "2026-09-30",
+      "name": "Derek",
+      "ids": [
+        "Yellowjacket",
+        "MajesticWingbeat",
+        "NicoMinoru",
+        "Merlin",
+        "JoaquinTorres",
+        "WerewolfByNight",
+        "PsylockeFracturedFrontier",
+        "ScarletWitchQueenOfChaos",
+        "MotherAskani",
+        "ShouLao",
+        "SuperiorIronMan",
+        "Sasquatch"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/derek9tdedxc/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "New Meta Queen is in the Rank 1 Deck! We COOKED! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=sPYrflWMpVk",
+      "published": "2026-09-30",
+      "name": "Fudge",
+      "ids": [
+        "Quicksilver",
+        "Domino",
+        "CalibanHorseman",
+        "JaneFosterFracturedFrontier",
+        "ScarletWitchQueenOfChaos",
+        "Jubilee",
+        "EnSabahNur",
+        "KarenPage",
+        "Ikari",
+        "Legion",
+        "ThanosFracturedFrontier",
+        "AntiPolarMagneto"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/fudge4guiukx/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "New Meta Queen is in the Rank 1 Deck! We COOKED! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=sPYrflWMpVk",
+      "published": "2026-09-30",
+      "name": "Jwala",
+      "ids": [
+        "Quinjet",
+        "IronPatriot",
+        "Valentina",
+        "Cable",
+        "ShadowKing",
+        "Juggernaut",
+        "GambitHorseman",
+        "Stardust",
+        "RogueScionOfDivision",
+        "ThanosFracturedFrontier",
+        "Blob",
+        "Arishem"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/jwala0mh69zy/"
+    },
     {
       "creator": "Snap Judgments",
       "video": "Chaos Scarlet Witch is CRACKED! Finally, A Spell Deck! Marvel Snap",
@@ -241,7 +351,7 @@
         "GrandMaster",
         "Mirage"
       ],
-      "rk": 23
+      "rk": 25
     },
     {
       "creator": "Coougarrr",
@@ -1206,129 +1316,9 @@
         "Valentina"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/KingEitri-KittyPryde-MajesticWingbeat-NicoMinoru-PsylockeFracturedFrontier-Sasquatch-ShadowlandsDaredevil-ShouLao-SuperiorIronMan-Surge-ThanosFracturedFrontier-Valentina_Superior%20Iron%20Man"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #201",
-      "url": "https://www.youtube.com/watch?v=fgTsJ_aexSM",
-      "published": "2026-09-19",
-      "name": "Cerebro 3",
-      "ids": [
-        "Armor",
-        "Bast",
-        "Cerebro",
-        "Cosmo",
-        "JenniferKale",
-        "LukeCage",
-        "MBaku",
-        "Mystique",
-        "Nightcrawler",
-        "ScarletWitch",
-        "Sentinel",
-        "Valkyrie"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Armor-Bast-Cerebro-Cosmo-JenniferKale-LukeCage-MBaku-Mystique-Nightcrawler-ScarletWitch-Sentinel-Valkyrie_Cerebro%203"
-    },
-    {
-      "creator": "Coougarrr",
-      "video": "This Pair Breaks EVERY Game of Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=OFWkth5_4jE",
-      "published": "2026-09-18",
-      "name": "",
-      "ids": [
-        "Blade",
-        "MajesticWingbeat",
-        "Quinjet",
-        "GrandMaster",
-        "GhostTheFirstRider",
-        "LadySif",
-        "PsylockeFracturedFrontier",
-        "MotherAskani",
-        "InfinityUltron",
-        "IronMan",
-        "Gorr",
-        "Khonshu"
-      ]
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play this! 72% Win Rate #1 Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=-s5rjE-5hsM",
-      "published": "2026-09-18",
-      "name": "S Six",
-      "ids": [
-        "Wasp",
-        "Yellowjacket",
-        "Echo",
-        "SpiderManBrandNewDay",
-        "AdamWarlock",
-        "FastballSpecial",
-        "Venom",
-        "HopeSummers",
-        "Crystal",
-        "Starbrand",
-        "AdamantiumInfusion",
-        "SinisterSix"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/deck-s-six/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play this! 72% Win Rate #1 Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=-s5rjE-5hsM",
-      "published": "2026-09-18",
-      "name": "Jwala",
-      "ids": [
-        "Quinjet",
-        "IronPatriot",
-        "Valentina",
-        "Cable",
-        "ShadowKing",
-        "Juggernaut",
-        "GambitHorseman",
-        "Stardust",
-        "RogueScionOfDivision",
-        "ThanosFracturedFrontier",
-        "Blob",
-        "Arishem"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/jwalamif3oha/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play this! 72% Win Rate #1 Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=-s5rjE-5hsM",
-      "published": "2026-09-18",
-      "name": "SMLZ",
-      "ids": [
-        "MajesticWingbeat",
-        "Agony",
-        "AmericaChavez",
-        "SpiderManBrandNewDay",
-        "Surge",
-        "JeffTheBabyDolphin",
-        "MrSinister",
-        "Maverick",
-        "JubileeSilverSurfer",
-        "Stick",
-        "SuperiorIronMan",
-        "ThanosFracturedFrontier"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/smlz0uq11uh/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1watc6b/improvements_cl_8925/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1was8c2/shoulao_by_night_venus_ff_to_infinite_cl_24071/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wanvuc/please_help_me_im_bad_at_this_game_cl450/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wakt47/help_with_destroy_deck_cl1500/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1waknqx/i_need_thanos_psylocke_and_jane_foster_im_cl_1132/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wb36or/dragon_lord_dracula_deck_cl_17720/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbyhhg/fifth_infinite_straight_cl_418k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wby5fi/wiccan_to_infinite_cl_38000/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbwhbb/any_tips_cl_3629/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbuqlg/since_regis_wont_do_it_cl_273k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbnszt/brand_new_hows_my_deck_cl_250/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbn7tq/just_got_back_in_the_game_after_2_years_cl_5575/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbi1oy/improve_my_deck_cl_2653/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbf2cw/returning_since_last_season_hit_infinite_twice/",
@@ -1617,6 +1607,17 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtdbbh/is_there_any_better_version_of_my_deck_cl12678/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtbx3e/ggz_cl_322k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wt7maf/oq_melhorar_nesse_deck_com_um_nível_de_coleção/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wsyqov/cl_22053_infinite_deck/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wsyqov/cl_22053_infinite_deck/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wuddnk/legendary_thanos_ff_draft_deck_cl_14500/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1wu60u6/cl_26088_post_infinite_rank_18000_ive_had/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wubwz9/scarlet_witch_queen_of_chaos_cl_17669/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wuajiv/funtastic_4_cl_30k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wu8qqa/infinite_with_spider_sense_ft_queen_of_chaos_cl/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wu7zyj/cl_21566_i_wouldnt_use_it_to_climb_but_its_really/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wu2u17/bug_or_no_cl_24k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wu144k/need_help_completing_this_deck_cl_8000/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtxj1g/this_new_draft_kinda_sucks_cl24k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtty3b/off_meta_cook_cl13k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtq03r/i_cl_19460_am_an_arishem_main_and_just_got_kang/"
   ]
 }
