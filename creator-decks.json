@@ -1,7 +1,51 @@
 {
-  "updated": "2026-09-30",
-  "updatedAt": "2026-09-30T23:38:53.254Z",
+  "updated": "2026-10-01",
+  "updatedAt": "2026-10-01T23:06:50.383Z",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "Finally! 80% W/R with Superior Iron Man and it felt INSANE! - Marvel Snap Infinite Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=_pEvmnkXfj4",
+      "published": "2026-10-01",
+      "name": "Fallen Iron",
+      "ids": [
+        "AmericaChavez",
+        "Enchantress",
+        "FallenOne",
+        "Galacta",
+        "JeffTheBabyDolphin",
+        "LadyBullseye",
+        "MajesticWingbeat",
+        "PsylockeFracturedFrontier",
+        "Shuri",
+        "SpiderManBrandNewDay",
+        "SuperiorIronMan",
+        "Viv"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AmericaChavez-Enchantress-FallenOne-Galacta-JeffTheBabyDolphin-LadyBullseye-MajesticWingbeat-PsylockeFracturedFrontier-Shuri-SpiderManBrandNewDay-SuperiorIronMan-Viv_Fallen%20Iron"
+    },
+    {
+      "creator": "r/MarvelSnapDecks",
+      "video": "DANCE MAGIC DANCE! (CL: 31k)",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1wukv85/dance_magic_dance_cl_31k/",
+      "published": "2026-10-01",
+      "name": "DANCE MAGIC DANCE",
+      "ids": [
+        "Quinjet",
+        "KingEitri",
+        "NicholasScratch",
+        "Merlin",
+        "IronPatriot",
+        "Valentina",
+        "TheInversion",
+        "ScarletWitchQueenOfChaos",
+        "Wong",
+        "Juggernaut",
+        "GambitHorseman",
+        "Agamotto"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Quinjet-KingEitri-NicholasScratch-Merlin-IronPatriot-Valentina-TheInversion-ScarletWitchQueenOfChaos-Wong-Juggernaut-GambitHorseman-Agamotto_DANCE%20MAGIC%20DANCE"
+    },
     {
       "creator": "Unfitparrot",
       "video": "Is Scarlet Witch Queen of Chaos a NEW META STAPLE!?!? - Marvel Snap Infinite Deck Highlight",
@@ -351,7 +395,7 @@
         "GrandMaster",
         "Mirage"
       ],
-      "rk": 25
+      "rk": 19
     },
     {
       "creator": "Coougarrr",
@@ -1272,63 +1316,9 @@
         "Venom"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/Carnage-CassandraNova-DeathFracturedFrontier-Firehair-Iceman-JaneFosterFracturedFrontier-Korg-Misery-NicoMinoru-Sage-SilverSable-Venom_Death%20FF"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #201",
-      "url": "https://www.youtube.com/watch?v=fgTsJ_aexSM",
-      "published": "2026-09-19",
-      "name": "Fastball",
-      "ids": [
-        "AdamantiumInfusion",
-        "ArnimZola",
-        "BlackPanther",
-        "Carnage",
-        "FastballSpecial",
-        "KidOmega",
-        "Magik",
-        "Nimrod",
-        "Shuri",
-        "SymbioteSpiderMan",
-        "ThePhoenixForce",
-        "Venom"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AdamantiumInfusion-ArnimZola-BlackPanther-Carnage-FastballSpecial-KidOmega-Magik-Nimrod-Shuri-SymbioteSpiderMan-ThePhoenixForce-Venom_Fastball"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #201",
-      "url": "https://www.youtube.com/watch?v=fgTsJ_aexSM",
-      "published": "2026-09-19",
-      "name": "Superior Iron Man",
-      "ids": [
-        "KingEitri",
-        "KittyPryde",
-        "MajesticWingbeat",
-        "NicoMinoru",
-        "PsylockeFracturedFrontier",
-        "Sasquatch",
-        "ShadowlandsDaredevil",
-        "ShouLao",
-        "SuperiorIronMan",
-        "Surge",
-        "ThanosFracturedFrontier",
-        "Valentina"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/KingEitri-KittyPryde-MajesticWingbeat-NicoMinoru-PsylockeFracturedFrontier-Sasquatch-ShadowlandsDaredevil-ShouLao-SuperiorIronMan-Surge-ThanosFracturedFrontier-Valentina_Superior%20Iron%20Man"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbn7tq/just_got_back_in_the_game_after_2_years_cl_5575/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbi1oy/improve_my_deck_cl_2653/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbf2cw/returning_since_last_season_hit_infinite_twice/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbejtg/help_improve_my_strange_supreme_deck_cl_15000/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbdp47/activation_station_to_infinite_cl_33443/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbbq19/is_there_anything_i_can_do_to_improve_this/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbbhte/any_redwing_players_out_there_cl_18958/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wba7t6/surge_venus_in_evothanos_cl_2030/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wb9xp9/late_but_we_here_cl_9055/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wb9f3r/smoothest_infinite_in_a_few_seasons_placed/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wb4uli/just_started_about_maybe_a_week_ago_ish_and_made/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wb3wkh/cl_6100_this_deck_has_been_a_lot_of_fun_anything/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbzufm/alguém_pode_me_ajudar_a_melhorar_esse_deck_cl/",
@@ -1618,6 +1608,16 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wu144k/need_help_completing_this_deck_cl_8000/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtxj1g/this_new_draft_kinda_sucks_cl24k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtty3b/off_meta_cook_cl13k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtq03r/i_cl_19460_am_an_arishem_main_and_just_got_kang/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtq03r/i_cl_19460_am_an_arishem_main_and_just_got_kang/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvcwg7/cl4715/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1wvdt3g/ota_balance_notes_1012026/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wv3uct/mixing_my_favorite_cards_gambit_and_bullseye_give/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1wv07z5/this_or_that_thursday_weekly_collection_thread/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wv2ye8/this_deck_can_get_some_cool_combos_cl_18755/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wv28z7/had_to_remove_lady_ashkani_and_victoria_hand_to/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wuut2y/cl_9261_help_with_big_stuff_deck/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wurmd1/what_should_i_buy_series_5_season_or_scarlet/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wul6ib/anyone_still_run_him_cl_2850/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wul5w6/2nd_pmv_from_draft_24k_cl/"
   ]
 }
