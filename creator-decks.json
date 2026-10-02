@@ -1,7 +1,73 @@
 {
-  "updated": "2026-10-01",
-  "updatedAt": "2026-10-01T23:51:21.899Z",
+  "updated": "2026-10-02",
+  "updatedAt": "2026-10-02T22:56:51.242Z",
   "decks": [
+    {
+      "creator": "Snap Judgments",
+      "video": "Post OTA, Win Infinite and Borders with these GREAT Decks! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=FAmIGaeulXA",
+      "published": "2026-10-02",
+      "name": "AndreVar14",
+      "ids": [
+        "Quinjet",
+        "Iceman",
+        "NicoMinoru",
+        "HydraBob",
+        "Martyr",
+        "TechnoOrganicVirus",
+        "IronPatriot",
+        "Cable",
+        "MobiusMMobius",
+        "ShadowKing",
+        "Stardust",
+        "ThanosFracturedFrontier"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/andrevar14olfinwy/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Post OTA, Win Infinite and Borders with these GREAT Decks! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=FAmIGaeulXA",
+      "published": "2026-10-02",
+      "name": "Ika",
+      "ids": [
+        "Hood",
+        "Iceman",
+        "NicoMinoru",
+        "Merlin",
+        "KateBishop",
+        "Mysterio",
+        "TheInversion",
+        "WerewolfByNight",
+        "ScarletWitchQueenOfChaos",
+        "ShadowKing",
+        "Sentry",
+        "Annihilus"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/deck-ikao0isitf/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Post OTA, Win Infinite and Borders with these GREAT Decks! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=FAmIGaeulXA",
+      "published": "2026-10-02",
+      "name": "tatmitos",
+      "ids": [
+        "Batroc",
+        "SpiderManBrandNewDay",
+        "SamWilson",
+        "Kraven",
+        "ScarletWitch",
+        "Silk",
+        "Cosmo",
+        "HydraStomper",
+        "FriendlyNeighborhoodCarnage",
+        "Prowler",
+        "Juggernaut",
+        "Stardust"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/tatmitos/"
+    },
     {
       "creator": "Unfitparrot",
       "video": "Finally! 80% W/R with Superior Iron Man and it felt INSANE! - Marvel Snap Infinite Deck Highlight",
@@ -44,7 +110,8 @@
         "GambitHorseman",
         "Agamotto"
       ],
-      "untapped": "https://snap.untapped.gg/en/decks/Quinjet-KingEitri-NicholasScratch-Merlin-IronPatriot-Valentina-TheInversion-ScarletWitchQueenOfChaos-Wong-Juggernaut-GambitHorseman-Agamotto_DANCE%20MAGIC%20DANCE"
+      "untapped": "https://snap.untapped.gg/en/decks/Quinjet-KingEitri-NicholasScratch-Merlin-IronPatriot-Valentina-TheInversion-ScarletWitchQueenOfChaos-Wong-Juggernaut-GambitHorseman-Agamotto_DANCE%20MAGIC%20DANCE",
+      "rk": 24
     },
     {
       "creator": "Unfitparrot",
@@ -121,8 +188,8 @@
       "ids": [
         "Quicksilver",
         "Domino",
-        "CalibanHorseman",
         "JaneFosterFracturedFrontier",
+        "CalibanHorseman",
         "ScarletWitchQueenOfChaos",
         "Jubilee",
         "EnSabahNur",
@@ -341,9 +408,9 @@
       "ids": [
         "Quicksilver",
         "Domino",
+        "JaneFosterFracturedFrontier",
         "Speed",
         "CalibanHorseman",
-        "JaneFosterFracturedFrontier",
         "CaptainMarvel",
         "KarenPage",
         "Crossbones",
@@ -395,7 +462,7 @@
         "GrandMaster",
         "Mirage"
       ],
-      "rk": 18
+      "rk": 16
     },
     {
       "creator": "Coougarrr",
@@ -1198,8 +1265,8 @@
         "Jubilee",
         "GhostRider",
         "RogueScionOfDivision",
-        "Blink",
         "Legion",
+        "Blink",
         "Hela",
         "Odin",
         "Infinaut",
@@ -1250,87 +1317,9 @@
         "Venus"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/AdamWarlock-AmericaChavez-ElsaBloodstone-JaneFosterFracturedFrontier-KittyPryde-MarvelBoy-Nebula-NicoMinoru-Nightcrawler-SpiderHam-ThanosFracturedFrontier-Venus_Venus"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #201",
-      "url": "https://www.youtube.com/watch?v=fgTsJ_aexSM",
-      "published": "2026-09-19",
-      "name": "Move",
-      "ids": [
-        "Batroc",
-        "Cosmo",
-        "HydraStomper",
-        "JaneFosterFracturedFrontier",
-        "Juggernaut",
-        "Kraven",
-        "Nightcrawler",
-        "Nocturne",
-        "SamWilson",
-        "Silk",
-        "SpiderManBrandNewDay",
-        "ThanosFracturedFrontier"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Batroc-Cosmo-HydraStomper-JaneFosterFracturedFrontier-Juggernaut-Kraven-Nightcrawler-Nocturne-SamWilson-Silk-SpiderManBrandNewDay-ThanosFracturedFrontier_Move"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #201",
-      "url": "https://www.youtube.com/watch?v=fgTsJ_aexSM",
-      "published": "2026-09-19",
-      "name": "Venus",
-      "ids": [
-        "Angela",
-        "Bishop",
-        "Clea",
-        "ElsaBloodstone",
-        "JeffTheBabyDolphin",
-        "KittyPryde",
-        "MarvelBoy",
-        "Nightcrawler",
-        "ShangChi",
-        "SpiderManBrandNewDay",
-        "ThanosFracturedFrontier",
-        "Venus"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Angela-Bishop-Clea-ElsaBloodstone-JeffTheBabyDolphin-KittyPryde-MarvelBoy-Nightcrawler-ShangChi-SpiderManBrandNewDay-ThanosFracturedFrontier-Venus_Venus"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #201",
-      "url": "https://www.youtube.com/watch?v=fgTsJ_aexSM",
-      "published": "2026-09-19",
-      "name": "Death FF",
-      "ids": [
-        "Carnage",
-        "CassandraNova",
-        "DeathFracturedFrontier",
-        "Firehair",
-        "Iceman",
-        "JaneFosterFracturedFrontier",
-        "Korg",
-        "Misery",
-        "NicoMinoru",
-        "Sage",
-        "SilverSable",
-        "Venom"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Carnage-CassandraNova-DeathFracturedFrontier-Firehair-Iceman-JaneFosterFracturedFrontier-Korg-Misery-NicoMinoru-Sage-SilverSable-Venom_Death%20FF"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wb4uli/just_started_about_maybe_a_week_ago_ish_and_made/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wb3wkh/cl_6100_this_deck_has_been_a_lot_of_fun_anything/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wbzufm/alguém_pode_me_ajudar_a_melhorar_esse_deck_cl/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wcqock/classic_thor_to_infinite_cl_9k/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1wcwg97/ota_balance_notes_09102026/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wcpo1m/fight_the_meta_3_cl_21604/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1wcwbkz/high_voltage/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wcp1he/agent_venom_to_infinite_cl_16000/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1wck29b/this_or_that_thursday_weekly_collection_thread/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wcn2me/cl2500/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wclwxy/another_off_meta_infinite_month_cl_18k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wcljst/kluh_deck_took_me_to_infinite_give_it_a_try_cl/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wcjtqm/ramp_is_still_good_cl_2507/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wcgsmi/improve_my_deck_cl_2697/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wcgmzr/ideas_for_sup_iron_man_cl_5500/",
@@ -1618,6 +1607,18 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wuut2y/cl_9261_help_with_big_stuff_deck/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wurmd1/what_should_i_buy_series_5_season_or_scarlet/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wul6ib/anyone_still_run_him_cl_2850/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wul5w6/2nd_pmv_from_draft_24k_cl/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wul5w6/2nd_pmv_from_draft_24k_cl/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1ww6sr6/50_in_draft_with_this_deck_cl_24500/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1ww6g4x/wondering_how_to_build_him_cl_2850/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1ww2spm/nerfed_nah_cl31114/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1ww1u5l/cl1000_thoughts_from_experienced_players_on/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1ww1b6h/cl13164_looking_for_a_techno_virus_deck_thats_not/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1ww1a8j/cl13164_help_me_improve_this_technology_deck_i/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvyqde/how_do_people_play_high_evolutionary_cl_2686/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvy6j6/hit_monkey_worth_3k_for_my_surfer_deck_cl1100/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvsyv4/cl_5878_queen_of_zombies_to_infinite/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvod2s/cl_4715/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvkk1b/cl4668_finally_got_maverick_any_improvements_or/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvgboj/cl_866_any_improvements/"
   ]
 }
