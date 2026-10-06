@@ -1,7 +1,117 @@
 {
   "updated": "2026-10-06",
-  "updatedAt": "2026-10-06T01:17:03.001Z",
+  "updatedAt": "2026-10-06T23:01:12.271Z",
   "decks": [
+    {
+      "creator": "Snap Judgments",
+      "video": "October Season Tier List & Best Decks! NEW Killmonger BREAKS the Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=kiGmPcWr000",
+      "published": "2026-10-06",
+      "name": "VampireKillmonger",
+      "ids": [
+        "MajesticWingbeat",
+        "TheHunger",
+        "WebSling",
+        "NicholasScratch",
+        "VampireKillmonger",
+        "JoaquinTorres",
+        "Venus",
+        "WerewolfByNight",
+        "ScarletWitchQueenOfChaos",
+        "ZombieScarletWitch",
+        "ZombieGiantMan",
+        "Sasquatch"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/vampirekillmonger/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "October Season Tier List & Best Decks! NEW Killmonger BREAKS the Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=kiGmPcWr000",
+      "published": "2026-10-06",
+      "name": "Zombie Blade",
+      "ids": [
+        "DeafeningChord",
+        "TheHunger",
+        "SpiderManBrandNewDay",
+        "NicholasScratch",
+        "ZombieSentry",
+        "ZombieMisterFantastic",
+        "ZombieBlade",
+        "Venus",
+        "ScarletWitchQueenOfChaos",
+        "ZombieScarletWitch",
+        "AbsorbingMan",
+        "ZombieGiantMan"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/deck-zombie-blade/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "October Season Tier List & Best Decks! NEW Killmonger BREAKS the Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=kiGmPcWr000",
+      "published": "2026-10-06",
+      "name": "Destroy Zombies",
+      "ids": [
+        "TheHunger",
+        "FastballSpecial",
+        "ZombieNova",
+        "KidOmega",
+        "ZombieMisterFantastic",
+        "Firehair",
+        "Venom",
+        "ZombieVenom",
+        "ZombieScarletWitch",
+        "AdamantiumInfusion",
+        "AbsorbingMan",
+        "ZombieGiantMan"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/destroy-zombies/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "October Season Tier List & Best Decks! NEW Killmonger BREAKS the Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=kiGmPcWr000",
+      "published": "2026-10-06",
+      "name": "Zombie Cat",
+      "ids": [
+        "Scorn",
+        "Blade",
+        "Morbius",
+        "Gambit",
+        "CorvusGlaive",
+        "ZombieBlackCat",
+        "LadySif",
+        "Dracula",
+        "ProximaMidnight",
+        "Modok",
+        "Khonshu",
+        "Apocalypse"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/deck-zombie-cat/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "October Season Tier List & Best Decks! NEW Killmonger BREAKS the Best Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=kiGmPcWr000",
+      "published": "2026-10-06",
+      "name": "Power Stolen",
+      "ids": [
+        "SilverSable",
+        "PolarisHorseman",
+        "VampireKillmonger",
+        "GrandMaster",
+        "ZombieBlade",
+        "CassandraNova",
+        "RocketAndGroot",
+        "Laufey",
+        "VampireDeaconFrost",
+        "DragonLord",
+        "ScorpionBrandNewDay",
+        "VampireEnchantress"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/power-stolen/"
+    },
     {
       "creator": "Alexander Coccia",
       "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #203",
@@ -1207,128 +1317,9 @@
         "SymbioteSpiderMan"
       ],
       "zone": "https://marvelsnapzone.com/decks/deck-friendly-carnage/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "82% Win Rate! Insane Friendly Neigborhood Carnage Cooks! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=D6LN6VoorJg",
-      "published": "2026-09-23",
-      "name": "Friendly Neighborhood carnage 2",
-      "ids": [
-        "SpiderManBrandNewDay",
-        "Nightcrawler",
-        "JeffTheBabyDolphin",
-        "AuntMay",
-        "JeffTheBabyLandShark",
-        "Venus",
-        "MaryJane",
-        "FriendlyNeighborhoodCarnage",
-        "Mercury",
-        "MoonGirl",
-        "SpiderSense",
-        "ThanosFracturedFrontier"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/friendly-neighborhood-carnage-2/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "82% Win Rate! Insane Friendly Neigborhood Carnage Cooks! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=D6LN6VoorJg",
-      "published": "2026-09-23",
-      "name": "18-4 82% High Infinite",
-      "ids": [
-        "Batroc",
-        "SpiderManBrandNewDay",
-        "Nightcrawler",
-        "SamWilson",
-        "Kraven",
-        "LinLie",
-        "Silk",
-        "HydraStomper",
-        "FriendlyNeighborhoodCarnage",
-        "TheAncientOne",
-        "Juggernaut",
-        "Hellion"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/184-82-high-infinite/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "82% Win Rate! Insane Friendly Neigborhood Carnage Cooks! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=D6LN6VoorJg",
-      "published": "2026-09-23",
-      "name": "Feel The Rainbow",
-      "ids": [
-        "SpiderManBrandNewDay",
-        "GhostSpider",
-        "Vulture",
-        "MadameWeb",
-        "Dagger",
-        "Kraven",
-        "Cloak",
-        "Cosmo",
-        "HydraStomper",
-        "SpiderPunk",
-        "FriendlyNeighborhoodCarnage",
-        "Heimdall"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/feel-the-rainbow/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "82% Win Rate! Insane Friendly Neigborhood Carnage Cooks! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=D6LN6VoorJg",
-      "published": "2026-09-23",
-      "name": "Friendly Neighborhood carnage 4",
-      "ids": [
-        "Vulture",
-        "MadameWeb",
-        "Dagger",
-        "GrandMaster",
-        "Kraven",
-        "Cloak",
-        "Venus",
-        "HydraStomper",
-        "MaryJane",
-        "FriendlyNeighborhoodCarnage",
-        "AbsorbingMan",
-        "Heimdall"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/friendly-neighborhood-carnage-4/"
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "FN STARDUST (CL: 31k)",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1wolysq/fn_stardust_cl_31k/",
-      "published": "2026-09-23",
-      "name": "FN STARDUST",
-      "ids": [
-        "Arana",
-        "Dagger",
-        "DoctorStrange",
-        "FriendlyNeighborhoodCarnage",
-        "GhostSpider",
-        "Heimdall",
-        "HumanTorch",
-        "MadameWeb",
-        "SpiderPunk",
-        "Stardust",
-        "Topaz",
-        "Vulture"
-      ]
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wczs45/good_decks_for_high_voltage_for_returners_cl_7716/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wcyc9y/first_time_hitting_infinite_cl3250/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wdu8o8/for_my_fellow_cerebro_enjoyers_i_started_messing/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wdu3gc/how_to_improve_this_deck_i_dont_have_ff_thanos_or/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1welsqa/lets_talk_about_sandstorm_deck_cl10600/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1welhxc/axis_inversion_week_2/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1weji9k/should_i_make_any_changes_here_cl2952/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1weib8y/surprisingly_effective_superior_iron_man_deck_cl/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wee1h6/trying_to_rebuild_a_surfer_deck_any_suggestions/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wed7ne/i_just_hit_infinite_with_my_favorite_deck_cl_18k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1webqol/im_a_returning_player_just_made_this_deck_what/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1we9p5l/first_time_infinite_cl5826/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1we67jb/superior_ironman_is_pretty_strong_too_infinite_cl/",
@@ -1618,6 +1609,16 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wxu22f/search_a_fn_carnage_deck_but_not_a_normal_move/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wxtm4t/rein_of_the_ironmen_cl_23135/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wxt2og/cl_36_800_just_hit_infinite_and_looking_for_new/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1wyphv4/weekly_release_discussion_zombie_venom/"
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1wyphv4/weekly_release_discussion_zombie_venom/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wz7kc8/last_minute_infinitecl_36640/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1wz3cw2/teamup_tuesday_weekly_alliances_thread/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wz1zre/7_shots_of_remy_cl_32k/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1wz1cv5/sp_premium_pass_card_zombie_blade/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wz0chx/i_just_got_the_new_loki_variant_from_draft_mode/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1wz0udt/season_pass_card_discussion_vampire_killmonger/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wyzlml/final_hot_100_cl33517/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wywbza/this_control_deck_won_me_some_games_cl_13500/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wyucjf/is_this_a_good_surfer_deck_any_recommendations/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wyta68/i_have_no_zombie_witch/"
   ]
 }
