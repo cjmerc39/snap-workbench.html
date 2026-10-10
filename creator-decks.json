@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-09",
-  "updatedAt": "2026-10-09T23:57:42.372Z",
+  "updated": "2026-10-10",
+  "updatedAt": "2026-10-10T22:26:06.167Z",
   "decks": [
     {
       "creator": "Alexander Coccia",
@@ -29,22 +29,22 @@
       "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
       "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
       "published": "2026-10-09",
-      "name": "Magneto",
+      "name": "High Evo",
       "ids": [
-        "AntiPolarMagneto",
-        "CalibanHorseman",
-        "CaptainMarvel",
-        "CosmicGhostRider",
-        "Domino",
-        "EnSabahNur",
+        "Abomination",
+        "Cosmo",
+        "Cyclops",
+        "HighEvolutionary",
+        "Hulk",
         "JaneFosterFracturedFrontier",
-        "Jubilee",
-        "KarenPage",
-        "Quicksilver",
-        "Speed",
+        "MistyKnight",
+        "Nebula",
+        "Scorpion",
+        "Shocker",
+        "Sunspot",
         "ThanosFracturedFrontier"
       ],
-      "untapped": "https://snap.untapped.gg/en/decks/AntiPolarMagneto-CalibanHorseman-CaptainMarvel-CosmicGhostRider-Domino-EnSabahNur-JaneFosterFracturedFrontier-Jubilee-KarenPage-Quicksilver-Speed-ThanosFracturedFrontier_Magneto?utm_medium=affiliate&utm_campaign=alexcoccia"
+      "untapped": "https://snap.untapped.gg/en/decks/Abomination-Cosmo-Cyclops-HighEvolutionary-Hulk-JaneFosterFracturedFrontier-MistyKnight-Nebula-Scorpion-Shocker-Sunspot-ThanosFracturedFrontier_High%20Evo?utm_medium=affiliate&utm_campaign=alexcoccia"
     },
     {
       "creator": "Alexander Coccia",
@@ -397,6 +397,28 @@
         "Ronan"
       ],
       "zone": "https://marvelsnapzone.com/decks/onrevealgg/"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
+      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
+      "published": "2026-10-09",
+      "name": "Magneto",
+      "ids": [
+        "AntiPolarMagneto",
+        "CalibanHorseman",
+        "CaptainMarvel",
+        "CosmicGhostRider",
+        "Domino",
+        "EnSabahNur",
+        "JaneFosterFracturedFrontier",
+        "Jubilee",
+        "KarenPage",
+        "Quicksilver",
+        "Speed",
+        "ThanosFracturedFrontier"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AntiPolarMagneto-CalibanHorseman-CaptainMarvel-CosmicGhostRider-Domino-EnSabahNur-JaneFosterFracturedFrontier-Jubilee-KarenPage-Quicksilver-Speed-ThanosFracturedFrontier_Magneto?utm_medium=affiliate&utm_campaign=alexcoccia"
     },
     {
       "creator": "Alexander Coccia",
@@ -953,28 +975,6 @@
       "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #203",
       "url": "https://www.youtube.com/watch?v=NQIShG2O-vI",
       "published": "2026-10-03",
-      "name": "High Evo",
-      "ids": [
-        "Abomination",
-        "Cosmo",
-        "Cyclops",
-        "HighEvolutionary",
-        "Hulk",
-        "JaneFosterFracturedFrontier",
-        "MistyKnight",
-        "Nebula",
-        "Scorpion",
-        "Shocker",
-        "Sunspot",
-        "ThanosFracturedFrontier"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Abomination-Cosmo-Cyclops-HighEvolutionary-Hulk-JaneFosterFracturedFrontier-MistyKnight-Nebula-Scorpion-Shocker-Sunspot-ThanosFracturedFrontier_High%20Evo?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #203",
-      "url": "https://www.youtube.com/watch?v=NQIShG2O-vI",
-      "published": "2026-10-03",
       "name": "Superior Iron Man",
       "ids": [
         "IronPatriot",
@@ -1311,15 +1311,6 @@
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wh286e/looking_for_a_move_deck_cl92k/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1wh17zn/teamup_tuesday_weekly_alliances_thread/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wh18to/open_to_suggestions_on_my_theft_deck_cl_28k/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1wgyrfo/weekly_release_discussion_rogue_scion_of_division/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wgwmh6/how_can_i_make_this_a_killer_hand_cl_2759/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wgsvas/second_time_infinite_with_this_deckcl_1826/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wgqtzy/first_time_hitting_infinite_ever_cl937/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wgjaqi/something_borrowed_something_new_deck_this_season/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1whf8kl/double_thanos_cl18463/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wi5b3g/cl_5000_improvements_for_this_deck/",
     "https://www.reddit.com/r/marvelsnapcomp/comments/1whm95z/team_clash_91620269232026/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wi1tad/this_deck_is_super_sick_cl16103/",
@@ -1610,6 +1601,15 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1daud/what_are_the_missing_cards_cl_32273/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1cu82/partners_infinite_deck_cl_20140/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1cru3/infinite_w_rocks_cl_24160/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1by22/planning_for_deacon_frost_cl_135k/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1by22/planning_for_deacon_frost_cl_135k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x2rge0/easy_weekend_gold_cl_26817/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1x2quqb/vampires_vs_zombies_week_1/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x2qpex/for_anyone_struggling_this_season_doom_2099_has/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x2ngjl/what_can_i_use_this_for_cl_2927/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x2l1d5/so_i_might_have_cooked_cl5895/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x2kg1q/need_advice_for_possible_changecl_5898/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x2fzb1/i_think_god_doesnt_want_me_to_own_shadow_king/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x2fj2x/beat_meta_decks_withronan_cl_39k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x25njs/cl_39000_moon_girl_is_the_mvp_this_season_top_1000/"
   ]
 }
