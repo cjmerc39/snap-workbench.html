@@ -1,6 +1,6 @@
 {
   "updated": "2026-10-13",
-  "updatedAt": "2026-10-13T01:16:21.278Z",
+  "updatedAt": "2026-10-13T01:58:27.151Z",
   "decks": [
     {
       "creator": "Snap Judgments",
@@ -23,6 +23,28 @@
         "LivingTribunal"
       ],
       "zone": "https://marvelsnapzone.com/decks/mr-lander-1st/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Unstoppable NEW Meta Crushing Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=3v-Mu0yH7GM",
+      "published": "2026-10-11",
+      "name": "FelixAnimator - 2nd",
+      "ids": [
+        "Hood",
+        "Blade",
+        "WildChild",
+        "BuckyBarnes",
+        "Carnage",
+        "Marrow",
+        "Gambit",
+        "Killmonger",
+        "MobiusMMobius",
+        "ShadowKing",
+        "ZombieCaptainMarvel",
+        "Fantomex"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/felixanimator-2nd/"
     },
     {
       "creator": "Snap Judgments",
@@ -89,6 +111,28 @@
         "AntiPolarMagneto"
       ],
       "zone": "https://marvelsnapzone.com/decks/dubs-all-day-5th/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Unstoppable NEW Meta Crushing Deck! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=3v-Mu0yH7GM",
+      "published": "2026-10-11",
+      "name": "Sugar Honey Ice Tea - 6th",
+      "ids": [
+        "Quinjet",
+        "Iceman",
+        "NicoMinoru",
+        "HydraBob",
+        "Martyr",
+        "TechnoOrganicVirus",
+        "IronPatriot",
+        "Cable",
+        "MobiusMMobius",
+        "ShadowKing",
+        "Stardust",
+        "ThanosFracturedFrontier"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/sugar-honey-ice-tea-6th/"
     },
     {
       "creator": "Snap Judgments",
@@ -267,226 +311,6 @@
       "zone": "https://marvelsnapzone.com/decks/roman12-16th/"
     },
     {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
-      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
-      "published": "2026-10-09",
-      "name": "Magneto",
-      "ids": [
-        "AntiPolarMagneto",
-        "CalibanHorseman",
-        "CaptainMarvel",
-        "Domino",
-        "EnSabahNur",
-        "JaneFosterFracturedFrontier",
-        "Jubilee",
-        "KarenPage",
-        "Quicksilver",
-        "RogueScionOfDivision",
-        "Speed",
-        "ThanosFracturedFrontier"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AntiPolarMagneto-CalibanHorseman-CaptainMarvel-Domino-EnSabahNur-JaneFosterFracturedFrontier-Jubilee-KarenPage-Quicksilver-RogueScionOfDivision-Speed-ThanosFracturedFrontier_Magneto?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
-      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
-      "published": "2026-10-09",
-      "name": "High Evo",
-      "ids": [
-        "Abomination",
-        "Cosmo",
-        "Cyclops",
-        "HighEvolutionary",
-        "Hulk",
-        "JaneFosterFracturedFrontier",
-        "MistyKnight",
-        "Nebula",
-        "Scorpion",
-        "Shocker",
-        "Sunspot",
-        "ThanosFracturedFrontier"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Abomination-Cosmo-Cyclops-HighEvolutionary-Hulk-JaneFosterFracturedFrontier-MistyKnight-Nebula-Scorpion-Shocker-Sunspot-ThanosFracturedFrontier_High%20Evo?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
-      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
-      "published": "2026-10-09",
-      "name": "Zombie",
-      "ids": [
-        "JoaquinTorres",
-        "MajesticWingbeat",
-        "NicholasScratch",
-        "Sasquatch",
-        "ScarletWitchQueenOfChaos",
-        "TheHunger",
-        "VampireKillmonger",
-        "Venus",
-        "WebSling",
-        "WerewolfByNight",
-        "ZombieGiantMan",
-        "ZombieScarletWitch"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/JoaquinTorres-MajesticWingbeat-NicholasScratch-Sasquatch-ScarletWitchQueenOfChaos-TheHunger-VampireKillmonger-Venus-WebSling-WerewolfByNight-ZombieGiantMan-ZombieScarletWitch_Zombie?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
-      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
-      "published": "2026-10-09",
-      "name": "Scarlet Witch",
-      "ids": [
-        "GambitHorseman",
-        "IronPatriot",
-        "MajesticWingbeat",
-        "MariaHill",
-        "MotherAskani",
-        "PsylockeFracturedFrontier",
-        "Sasquatch",
-        "ScarletWitch",
-        "ScarletWitchQueenOfChaos",
-        "ShadowKing",
-        "SuperiorIronMan",
-        "Valentina"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/GambitHorseman-IronPatriot-MajesticWingbeat-MariaHill-MotherAskani-PsylockeFracturedFrontier-Sasquatch-ScarletWitch-ScarletWitchQueenOfChaos-ShadowKing-SuperiorIronMan-Valentina_Scarlet%20Witch?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
-      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
-      "published": "2026-10-09",
-      "name": "Fastball",
-      "ids": [
-        "AbsorbingMan",
-        "AdamantiumInfusion",
-        "Agony",
-        "ArnimZola",
-        "BlackPanther",
-        "FastballSpecial",
-        "Hulkbuster",
-        "LunaSnow",
-        "ManSpider",
-        "PeniParker",
-        "SymbioteSpiderMan",
-        "Taskmaster"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AbsorbingMan-AdamantiumInfusion-Agony-ArnimZola-BlackPanther-FastballSpecial-Hulkbuster-LunaSnow-ManSpider-PeniParker-SymbioteSpiderMan-Taskmaster_Fastball?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
-      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
-      "published": "2026-10-09",
-      "name": "Fantomex",
-      "ids": [
-        "Blade",
-        "BuckyBarnes",
-        "Carnage",
-        "Fantomex",
-        "Gambit",
-        "Hood",
-        "Killmonger",
-        "Marrow",
-        "MobiusMMobius",
-        "ShadowKing",
-        "WildChild",
-        "ZombieCaptainMarvel"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Blade-BuckyBarnes-Carnage-Fantomex-Gambit-Hood-Killmonger-Marrow-MobiusMMobius-ShadowKing-WildChild-ZombieCaptainMarvel_Fantomex?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
-      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
-      "published": "2026-10-09",
-      "name": "New Zombies",
-      "ids": [
-        "AbsorbingMan",
-        "JoaquinTorres",
-        "KittyPryde",
-        "ScarletWitchQueenOfChaos",
-        "Surge",
-        "TheHunger",
-        "VampireKillmonger",
-        "Venus",
-        "ZombieBlade",
-        "ZombieGiantMan",
-        "ZombieMisterFantastic",
-        "ZombieScarletWitch"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AbsorbingMan-JoaquinTorres-KittyPryde-ScarletWitchQueenOfChaos-Surge-TheHunger-VampireKillmonger-Venus-ZombieBlade-ZombieGiantMan-ZombieMisterFantastic-ZombieScarletWitch_New%20Zombies?utm_medium=affiliate&utm_campaign=alexcoccia?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
-      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
-      "published": "2026-10-09",
-      "name": "Virus",
-      "ids": [
-        "Cable",
-        "HydraBob",
-        "Iceman",
-        "IronPatriot",
-        "Martyr",
-        "MobiusMMobius",
-        "NicoMinoru",
-        "Quinjet",
-        "ShadowKing",
-        "Stardust",
-        "TechnoOrganicVirus",
-        "ThanosFracturedFrontier"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Cable-HydraBob-Iceman-IronPatriot-Martyr-MobiusMMobius-NicoMinoru-Quinjet-ShadowKing-Stardust-TechnoOrganicVirus-ThanosFracturedFrontier_Virus?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
-      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
-      "published": "2026-10-09",
-      "name": "SNAP Deck",
-      "ids": [
-        "BetaRayBill",
-        "Gorr",
-        "Iceman",
-        "IronLad",
-        "JaneFoster",
-        "KingEitri",
-        "Lockjaw",
-        "Nebula",
-        "Phastos",
-        "Surge",
-        "ThanosFracturedFrontier",
-        "Thor"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/BetaRayBill-Gorr-Iceman-IronLad-JaneFoster-KingEitri-Lockjaw-Nebula-Phastos-Surge-ThanosFracturedFrontier-Thor_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
-      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
-      "published": "2026-10-09",
-      "name": "Destroy",
-      "ids": [
-        "BuckyBarnes",
-        "Carnage",
-        "Deadpool",
-        "Death",
-        "Killmonger",
-        "Knull",
-        "SquirrelGirl",
-        "Tombstone",
-        "Venom",
-        "Wolverine",
-        "X23",
-        "ZombieVenom"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/BuckyBarnes-Carnage-Deadpool-Death-Killmonger-Knull-SquirrelGirl-Tombstone-Venom-Wolverine-X23-ZombieVenom_Destroy?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
       "creator": "Snap Judgments",
       "video": "Play these 10 Decks that got Easy Infinite FAST! Marvel Snap Decks!",
       "url": "https://www.youtube.com/watch?v=H3Cal4Im9f0",
@@ -623,6 +447,28 @@
       "video": "Play these 10 Decks that got Easy Infinite FAST! Marvel Snap Decks!",
       "url": "https://www.youtube.com/watch?v=H3Cal4Im9f0",
       "published": "2026-10-09",
+      "name": "Fastball",
+      "ids": [
+        "Agony",
+        "FastballSpecial",
+        "Hulkbuster",
+        "PeniParker",
+        "LunaSnow",
+        "AdamantiumInfusion",
+        "AbsorbingMan",
+        "SymbioteSpiderMan",
+        "ManSpider",
+        "BlackPanther",
+        "ArnimZola",
+        "Taskmaster"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/deck-fastballdau9ft5/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Play these 10 Decks that got Easy Infinite FAST! Marvel Snap Decks!",
+      "url": "https://www.youtube.com/watch?v=H3Cal4Im9f0",
+      "published": "2026-10-09",
       "name": "Snap Complete 59% WR in 112",
       "ids": [
         "Quinjet",
@@ -639,6 +485,28 @@
         "WilsonFisk"
       ],
       "zone": "https://marvelsnapzone.com/decks/snap-complete-59-wr-in-112/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Play these 10 Decks that got Easy Infinite FAST! Marvel Snap Decks!",
+      "url": "https://www.youtube.com/watch?v=H3Cal4Im9f0",
+      "published": "2026-10-09",
+      "name": "Snap Complete 58% in 510",
+      "ids": [
+        "Sunspot",
+        "Nebula",
+        "MistyKnight",
+        "Scorpion",
+        "Shocker",
+        "Cosmo",
+        "JaneFosterFracturedFrontier",
+        "Cyclops",
+        "HighEvolutionary",
+        "ThanosFracturedFrontier",
+        "Abomination",
+        "Hulk"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/snap-complete-58-in-510/"
     },
     {
       "creator": "Snap Judgments",
@@ -672,6 +540,116 @@
         "AntiPolarMagneto",
         "CalibanHorseman",
         "CaptainMarvel",
+        "Domino",
+        "EnSabahNur",
+        "JaneFosterFracturedFrontier",
+        "Jubilee",
+        "KarenPage",
+        "Quicksilver",
+        "RogueScionOfDivision",
+        "Speed",
+        "ThanosFracturedFrontier"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AntiPolarMagneto-CalibanHorseman-CaptainMarvel-Domino-EnSabahNur-JaneFosterFracturedFrontier-Jubilee-KarenPage-Quicksilver-RogueScionOfDivision-Speed-ThanosFracturedFrontier_Magneto?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
+      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
+      "published": "2026-10-09",
+      "name": "Scarlet Witch",
+      "ids": [
+        "GambitHorseman",
+        "IronPatriot",
+        "MajesticWingbeat",
+        "MariaHill",
+        "MotherAskani",
+        "PsylockeFracturedFrontier",
+        "Sasquatch",
+        "ScarletWitch",
+        "ScarletWitchQueenOfChaos",
+        "ShadowKing",
+        "SuperiorIronMan",
+        "Valentina"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/GambitHorseman-IronPatriot-MajesticWingbeat-MariaHill-MotherAskani-PsylockeFracturedFrontier-Sasquatch-ScarletWitch-ScarletWitchQueenOfChaos-ShadowKing-SuperiorIronMan-Valentina_Scarlet%20Witch?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
+      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
+      "published": "2026-10-09",
+      "name": "New Zombies",
+      "ids": [
+        "AbsorbingMan",
+        "JoaquinTorres",
+        "KittyPryde",
+        "ScarletWitchQueenOfChaos",
+        "Surge",
+        "TheHunger",
+        "VampireKillmonger",
+        "Venus",
+        "ZombieBlade",
+        "ZombieGiantMan",
+        "ZombieMisterFantastic",
+        "ZombieScarletWitch"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AbsorbingMan-JoaquinTorres-KittyPryde-ScarletWitchQueenOfChaos-Surge-TheHunger-VampireKillmonger-Venus-ZombieBlade-ZombieGiantMan-ZombieMisterFantastic-ZombieScarletWitch_New%20Zombies?utm_medium=affiliate&utm_campaign=alexcoccia?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
+      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
+      "published": "2026-10-09",
+      "name": "SNAP Deck",
+      "ids": [
+        "BetaRayBill",
+        "Gorr",
+        "Iceman",
+        "IronLad",
+        "JaneFoster",
+        "KingEitri",
+        "Lockjaw",
+        "Nebula",
+        "Phastos",
+        "Surge",
+        "ThanosFracturedFrontier",
+        "Thor"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/BetaRayBill-Gorr-Iceman-IronLad-JaneFoster-KingEitri-Lockjaw-Nebula-Phastos-Surge-ThanosFracturedFrontier-Thor_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
+      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
+      "published": "2026-10-09",
+      "name": "Destroy",
+      "ids": [
+        "BuckyBarnes",
+        "Carnage",
+        "Deadpool",
+        "Death",
+        "Killmonger",
+        "Knull",
+        "SquirrelGirl",
+        "Tombstone",
+        "Venom",
+        "Wolverine",
+        "X23",
+        "ZombieVenom"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/BuckyBarnes-Carnage-Deadpool-Death-Killmonger-Knull-SquirrelGirl-Tombstone-Venom-Wolverine-X23-ZombieVenom_Destroy?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
+      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
+      "published": "2026-10-09",
+      "name": "Magneto",
+      "ids": [
+        "AntiPolarMagneto",
+        "CalibanHorseman",
+        "CaptainMarvel",
         "CosmicGhostRider",
         "Domino",
         "EnSabahNur",
@@ -683,28 +661,6 @@
         "ThanosFracturedFrontier"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/AntiPolarMagneto-CalibanHorseman-CaptainMarvel-CosmicGhostRider-Domino-EnSabahNur-JaneFosterFracturedFrontier-Jubilee-KarenPage-Quicksilver-Speed-ThanosFracturedFrontier_Magneto?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of ZOMBIE VENOM | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=jEFkctFzHXg",
-      "published": "2026-10-08",
-      "name": "New Horde Destroy",
-      "ids": [
-        "Deadpool",
-        "Death",
-        "Killmonger",
-        "MoiraX",
-        "Muse",
-        "SquirrelGirl",
-        "Tombstone",
-        "Venom",
-        "WeaponXWolverine",
-        "X23",
-        "ZombieGiantMan",
-        "ZombieVenom"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Deadpool-Death-Killmonger-MoiraX-Muse-SquirrelGirl-Tombstone-Venom-WeaponXWolverine-X23-ZombieGiantMan-ZombieVenom_New%20Horde%20Destroy?utm_medium=affiliate&utm_campaign=alexcoccia"
     },
     {
       "creator": "Unfitparrot",
@@ -928,25 +884,25 @@
     },
     {
       "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of VAMPIRE KILLMONGER & ZOMBIE BLADE | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=f61H18004YA",
-      "published": "2026-10-07",
-      "name": "Vampire by Night",
+      "video": "An HONEST REVIEW of ZOMBIE VENOM | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=jEFkctFzHXg",
+      "published": "2026-10-08",
+      "name": "New Horde Destroy",
       "ids": [
-        "Clea",
-        "JoaquinTorres",
-        "MarvelBoy",
-        "NicholasScratch",
-        "Prowler",
-        "ScarletWitchQueenOfChaos",
-        "ShouLao",
-        "SpiderManBrandNewDay",
-        "TheCollector",
-        "VampireKillmonger",
-        "Venus",
-        "WerewolfByNight"
+        "Deadpool",
+        "Death",
+        "Killmonger",
+        "MoiraX",
+        "Muse",
+        "SquirrelGirl",
+        "Tombstone",
+        "Venom",
+        "WeaponXWolverine",
+        "X23",
+        "ZombieGiantMan",
+        "ZombieVenom"
       ],
-      "untapped": "https://snap.untapped.gg/en/decks/Clea-JoaquinTorres-MarvelBoy-NicholasScratch-Prowler-ScarletWitchQueenOfChaos-ShouLao-SpiderManBrandNewDay-TheCollector-VampireKillmonger-Venus-WerewolfByNight_Vampire%20by%20Night?utm_medium=affiliate&utm_campaign=alexcoccia"
+      "untapped": "https://snap.untapped.gg/en/decks/Deadpool-Death-Killmonger-MoiraX-Muse-SquirrelGirl-Tombstone-Venom-WeaponXWolverine-X23-ZombieGiantMan-ZombieVenom_New%20Horde%20Destroy?utm_medium=affiliate&utm_campaign=alexcoccia"
     },
     {
       "creator": "Unfitparrot",
@@ -1019,6 +975,28 @@
       "video": "Vampire Killmonger is the NEWEST BROKEN Season Pass Card! Must Play Best Decks! MarvelSnap",
       "url": "https://www.youtube.com/watch?v=mxeREMjlan0",
       "published": "2026-10-07",
+      "name": "Honifer",
+      "ids": [
+        "MajesticWingbeat",
+        "TheHunger",
+        "WebSling",
+        "NicholasScratch",
+        "VampireKillmonger",
+        "JoaquinTorres",
+        "Venus",
+        "WerewolfByNight",
+        "ScarletWitchQueenOfChaos",
+        "ZombieScarletWitch",
+        "ZombieGiantMan",
+        "Sasquatch"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/honiferhkvolte/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Vampire Killmonger is the NEWEST BROKEN Season Pass Card! Must Play Best Decks! MarvelSnap",
+      "url": "https://www.youtube.com/watch?v=mxeREMjlan0",
+      "published": "2026-10-07",
       "name": "Safetyblade0qnsx49",
       "ids": [],
       "zone": "https://marvelsnapzone.com/decks/safetyblade0qnsx49/"
@@ -1058,6 +1036,28 @@
       "name": "Huskypuppies",
       "ids": [],
       "zone": "https://marvelsnapzone.com/decks/huskypuppies/"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of VAMPIRE KILLMONGER & ZOMBIE BLADE | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=f61H18004YA",
+      "published": "2026-10-07",
+      "name": "Vampire by Night",
+      "ids": [
+        "Clea",
+        "JoaquinTorres",
+        "MarvelBoy",
+        "NicholasScratch",
+        "Prowler",
+        "ScarletWitchQueenOfChaos",
+        "ShouLao",
+        "SpiderManBrandNewDay",
+        "TheCollector",
+        "VampireKillmonger",
+        "Venus",
+        "WerewolfByNight"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Clea-JoaquinTorres-MarvelBoy-NicholasScratch-Prowler-ScarletWitchQueenOfChaos-ShouLao-SpiderManBrandNewDay-TheCollector-VampireKillmonger-Venus-WerewolfByNight_Vampire%20by%20Night?utm_medium=affiliate&utm_campaign=alexcoccia"
     },
     {
       "creator": "Snap Judgments",
