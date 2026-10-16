@@ -1,7 +1,95 @@
 {
-  "updated": "2026-10-15",
-  "updatedAt": "2026-10-15T23:01:07.761Z",
+  "updated": "2026-10-16",
+  "updatedAt": "2026-10-16T22:02:38.361Z",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "Two new cards and an OTA buff! Horde Destroy is here to stay! - Marvel Snap Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=6gKx1ICYLBQ",
+      "published": "2026-10-16",
+      "name": "Horde destroy",
+      "ids": [
+        "BuckyBarnes",
+        "Carnage",
+        "Elixir",
+        "Firehair",
+        "Hood",
+        "Misery",
+        "Venom",
+        "ZombieCaptainMarvel",
+        "ZombieGiantMan",
+        "ZombieMisterFantastic",
+        "ZombieNova",
+        "ZombieVenom"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/BuckyBarnes-Carnage-Elixir-Firehair-Hood-Misery-Venom-ZombieCaptainMarvel-ZombieGiantMan-ZombieMisterFantastic-ZombieNova-ZombieVenom_Horde%20destroy"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "THIS Is How You Win After the OTA! Best Decks! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=IlrfaoLIF_o",
+      "published": "2026-10-16",
+      "name": "Merit",
+      "ids": [
+        "Batroc",
+        "SpiderManBrandNewDay",
+        "Vulture",
+        "SamWilson",
+        "Kraven",
+        "Silk",
+        "Cosmo",
+        "HydraStomper",
+        "MobiusMMobius",
+        "FriendlyNeighborhoodCarnage",
+        "Juggernaut",
+        "Hellion"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/merit/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "THIS Is How You Win After the OTA! Best Decks! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=IlrfaoLIF_o",
+      "published": "2026-10-16",
+      "name": "Aurora",
+      "ids": [
+        "Quinjet",
+        "Loki",
+        "NicoMinoru",
+        "LukeCage",
+        "Gorgon",
+        "Valentina",
+        "Cable",
+        "MobiusMMobius",
+        "ScarletWitchQueenOfChaos",
+        "ShadowKing",
+        "GambitHorseman",
+        "Stardust"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/deck-aurora99ai95a/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "THIS Is How You Win After the OTA! Best Decks! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=IlrfaoLIF_o",
+      "published": "2026-10-16",
+      "name": "Gamba Goblin",
+      "ids": [
+        "MajesticWingbeat",
+        "TheHunger",
+        "NicholasScratch",
+        "VampireKillmonger",
+        "Angela",
+        "JoaquinTorres",
+        "Bishop",
+        "Venus",
+        "Cosmo",
+        "ZombieScarletWitch",
+        "Juggernaut",
+        "ZombieGiantMan"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/gamba-goblin/"
+    },
     {
       "creator": "Unfitparrot",
       "video": "Vampire Enchantress is a whole NEW WAY to build Aurora decks! - Marvel Snap Deck Highlight",
@@ -1017,6 +1105,60 @@
       "video": "Play These Decks for Infinite FAST and Easy! These are So Powerful! Marvel Snap",
       "url": "https://www.youtube.com/watch?v=cO7aaMZL9c4",
       "published": "2026-10-08",
+      "name": "Deck Bu4bpapet",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/deck-bu4bpapet/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Play These Decks for Infinite FAST and Easy! These are So Powerful! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=cO7aaMZL9c4",
+      "published": "2026-10-08",
+      "name": "Moogle",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/moogle/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Play These Decks for Infinite FAST and Easy! These are So Powerful! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=cO7aaMZL9c4",
+      "published": "2026-10-08",
+      "name": "Andrevar14535pok6",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/andrevar14535pok6/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Play These Decks for Infinite FAST and Easy! These are So Powerful! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=cO7aaMZL9c4",
+      "published": "2026-10-08",
+      "name": "Jwalact850cd",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/jwalact850cd/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Play These Decks for Infinite FAST and Easy! These are So Powerful! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=cO7aaMZL9c4",
+      "published": "2026-10-08",
+      "name": "18dcwgx",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/18dcwgx/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Play These Decks for Infinite FAST and Easy! These are So Powerful! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=cO7aaMZL9c4",
+      "published": "2026-10-08",
+      "name": "Snap Idklbyjlj0",
+      "ids": [],
+      "zone": "https://marvelsnapzone.com/decks/snap-idklbyjlj0/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Play These Decks for Infinite FAST and Easy! These are So Powerful! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=cO7aaMZL9c4",
+      "published": "2026-10-08",
       "name": "Bu++",
       "ids": [
         "FastballSpecial",
@@ -1099,163 +1241,9 @@
         "Arishem"
       ],
       "zone": "https://marvelsnapzone.com/decks/jwalact850cd/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play These Decks for Infinite FAST and Easy! These are So Powerful! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=cO7aaMZL9c4",
-      "published": "2026-10-08",
-      "name": "18dcwgx",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/18dcwgx/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play These Decks for Infinite FAST and Easy! These are So Powerful! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=cO7aaMZL9c4",
-      "published": "2026-10-08",
-      "name": "Snap Idklbyjlj0",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/snap-idklbyjlj0/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play These Decks for Infinite FAST and Easy! These are So Powerful! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=cO7aaMZL9c4",
-      "published": "2026-10-08",
-      "name": "コウタ",
-      "ids": [
-        "SilverSable",
-        "AdamWarlock",
-        "Scorpion",
-        "CassandraNova",
-        "Mystique",
-        "Magik",
-        "Hazmat",
-        "Prodigy",
-        "Laufey",
-        "Sera",
-        "ScorpionBrandNewDay",
-        "Onslaught"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/18dcwgx/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play These Decks for Infinite FAST and Easy! These are So Powerful! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=cO7aaMZL9c4",
-      "published": "2026-10-08",
-      "name": "Snap IDK",
-      "ids": [
-        "LadyBullseye",
-        "Scorpion",
-        "Mystique",
-        "Magik",
-        "Hazmat",
-        "HellcowFracturedFrontier",
-        "Rogue",
-        "TheAncientOne",
-        "LunaSnow",
-        "Sera",
-        "ScorpionBrandNewDay",
-        "Onslaught"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/snap-idklbyjlj0/"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of VAMPIRE KILLMONGER & ZOMBIE BLADE | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=f61H18004YA",
-      "published": "2026-10-07",
-      "name": "Vampire by Night",
-      "ids": [
-        "Clea",
-        "JoaquinTorres",
-        "MarvelBoy",
-        "NicholasScratch",
-        "Prowler",
-        "ScarletWitchQueenOfChaos",
-        "ShouLao",
-        "SpiderManBrandNewDay",
-        "TheCollector",
-        "VampireKillmonger",
-        "Venus",
-        "WerewolfByNight"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Clea-JoaquinTorres-MarvelBoy-NicholasScratch-Prowler-ScarletWitchQueenOfChaos-ShouLao-SpiderManBrandNewDay-TheCollector-VampireKillmonger-Venus-WerewolfByNight_Vampire%20by%20Night?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Unfitparrot",
-      "video": "This spell scaler deck looks to be AMAZING this season! - Marvel Snap Deck Highlight",
-      "url": "https://www.youtube.com/watch?v=t3N38oF0z4I",
-      "published": "2026-10-07",
-      "name": "Vamps and Spells",
-      "ids": [
-        "Bishop",
-        "Clea",
-        "JeffTheBabyDolphin",
-        "MarvelBoy",
-        "NicholasScratch",
-        "ScarletWitchQueenOfChaos",
-        "SpiderManBrandNewDay",
-        "SubMariner",
-        "TheCollector",
-        "VampireKillmonger",
-        "Venus",
-        "WerewolfByNight"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Bishop-Clea-JeffTheBabyDolphin-MarvelBoy-NicholasScratch-ScarletWitchQueenOfChaos-SpiderManBrandNewDay-SubMariner-TheCollector-VampireKillmonger-Venus-WerewolfByNight_Vamps%20and%20Spells"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Vampire Killmonger is the NEWEST BROKEN Season Pass Card! Must Play Best Decks! MarvelSnap",
-      "url": "https://www.youtube.com/watch?v=mxeREMjlan0",
-      "published": "2026-10-07",
-      "name": "Smlzkc90lgn",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/smlzkc90lgn/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Vampire Killmonger is the NEWEST BROKEN Season Pass Card! Must Play Best Decks! MarvelSnap",
-      "url": "https://www.youtube.com/watch?v=mxeREMjlan0",
-      "published": "2026-10-07",
-      "name": "Daddyyhtvxgo3",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/daddyyhtvxgo3/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Vampire Killmonger is the NEWEST BROKEN Season Pass Card! Must Play Best Decks! MarvelSnap",
-      "url": "https://www.youtube.com/watch?v=mxeREMjlan0",
-      "published": "2026-10-07",
-      "name": "Honiferhkvolte",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/honiferhkvolte/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Vampire Killmonger is the NEWEST BROKEN Season Pass Card! Must Play Best Decks! MarvelSnap",
-      "url": "https://www.youtube.com/watch?v=mxeREMjlan0",
-      "published": "2026-10-07",
-      "name": "Safetyblade0qnsx49",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/safetyblade0qnsx49/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wl3nbp/i_really_like_playing_this_chunky_deck_but_i_feel/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wl3lje/fun_kang_deck/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmp8u8/dragon_lord_cl_14129/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1wlw1ck/darkhawkronan/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmoh5q/i_built_this_deck_for_pixie_but_i_feel_like_shes/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmlll5/since_the_nerf_whats_a_good_deck_with_isca_and/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmkyhv/werewolfsasquatch_combo_cl_30952/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmkg5c/how_can_i_make_this_deck_more_consistent_cl_7521/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmhoro/negative_tribunal_negative_destroy_to_infinite_cl/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmfz70/help_with_free_negative_deck_cl_2358/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmfmv5/does_this_seem_like_solid_cook_for_a_deck_themed/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmd259/2099_temu_cl6194/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wm6u4i/how_to_remove_scorpion_bnd_from_the_game_cl_19k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wlwjqg/cl5944_been_having_a_bunch_of_fun_with_this/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wluy0h/war_machine_decks_cl5646/",
@@ -1543,6 +1531,18 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x683ig/stale_meta_inspire_me_please_cl26k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x67e7r/grand_arena_hulk_destroy_deck_cl18000/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x66l6y/vamp_ramp_2099_cl_31k/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1x6zf6a/ota_balance_notes_10152026/"
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1x6zf6a/ota_balance_notes_10152026/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7s9fk/returning_player_looking_for_help_with_a_silver/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7s2sd/infinite_with_vampire_ench_cl_22k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7oqfd/giant_modok_cl_17k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7liio/grand_arena_what_did_i_do_cl_18954/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7k0jj/busco_consejos_para_optimizar_este_mazo_de/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7gx1y/who_do_i_target_next_cl_11461/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7afyw/pixie_deck_updated_for_current_meta_cl_316k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x786u3/made_a_zombie_deck_cl1564/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x76own/alternative_affliction_got_me_to_infinite_cl_2021/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x75jx3/another_7_shots_of_remy_cl_32k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x75i4j/infinite_with_destructozombie_after_the_ota_cl_39k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x726y5/ota_straight_to_infinite_cl20k/"
   ]
 }
