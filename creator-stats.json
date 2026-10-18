@@ -1606,24 +1606,6 @@
    ]
   },
   {
-   "creator": "r/MarvelSnapDecks",
-   "published": "2026-10-18",
-   "ids": [
-    "SntnlChmpn10",
-    "Quinjet",
-    "TechnoOrganicVirus",
-    "DoctorOctopusFracturedFrontier",
-    "Goose",
-    "VampireKillmonger",
-    "VictoriaHand",
-    "IronPatriot",
-    "Valentina",
-    "Rogue",
-    "ShadowKing",
-    "Wong"
-   ]
-  },
-  {
    "creator": "r/MarvelSnapComp",
    "published": "2026-10-07",
    "ids": [
@@ -1639,6 +1621,24 @@
     "TheAncientOne",
     "Blink",
     "ScorpionBrandNewDay"
+   ]
+  },
+  {
+   "creator": "r/MarvelSnapDecks",
+   "published": "2026-10-18",
+   "ids": [
+    "SntnlChmpn10",
+    "Quinjet",
+    "TechnoOrganicVirus",
+    "DoctorOctopusFracturedFrontier",
+    "Goose",
+    "VampireKillmonger",
+    "VictoriaHand",
+    "IronPatriot",
+    "Valentina",
+    "Rogue",
+    "ShadowKing",
+    "Wong"
    ]
   },
   {
@@ -3114,10 +3114,10 @@
   "Maximus": 1,
   "NegasonicTeenageWarhead": 2,
   "Ronan": 1,
+  "Selene": 2,
   "SntnlChmpn10": 1,
   "DoctorOctopusFracturedFrontier": 1,
   "Goose": 1,
-  "Selene": 2,
   "Sentry": 2,
   "Annihilus": 2,
   "MoonGirl": 2,
@@ -4938,9 +4938,6 @@
   "Iceman|Valentina": 2,
   "TechnoOrganicVirus|Valentina": 3,
   "Stardust|WilsonFisk": 2,
-  "IronPatriot|Wong": 2,
-  "Valentina|Wong": 3,
-  "ShadowKing|Wong": 2,
   "Magik|Selene": 2,
   "HellcowFracturedFrontier|LadyBullseye": 2,
   "Hazmat|HellcowFracturedFrontier": 2,
@@ -4949,6 +4946,9 @@
   "HellcowFracturedFrontier|Mystique": 2,
   "HellcowFracturedFrontier|TheAncientOne": 2,
   "HellcowFracturedFrontier|ScorpionBrandNewDay": 3,
+  "IronPatriot|Wong": 2,
+  "Valentina|Wong": 3,
+  "ShadowKing|Wong": 2,
   "DeafeningChord|Frigga": 3,
   "DeafeningChord|Prowler": 2,
   "Frigga|MajesticWingbeat": 2,
