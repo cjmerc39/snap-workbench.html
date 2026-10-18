@@ -1,7 +1,28 @@
 {
-  "updated": "2026-10-17",
-  "updatedAt": "2026-10-17T22:08:36.179Z",
+  "updated": "2026-10-18",
+  "updatedAt": "2026-10-18T21:25:37.564Z",
   "decks": [
+    {
+      "creator": "r/MarvelSnapDecks",
+      "video": "(CL: 25,000) Grand Arena: sentinel appears to be the worst deck but I think I cracked it with a custom deck",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1x8yrzy/cl_25000_grand_arena_sentinel_appears_to_be_the/",
+      "published": "2026-10-18",
+      "name": "",
+      "ids": [
+        "SntnlChmpn10",
+        "Quinjet",
+        "TechnoOrganicVirus",
+        "DoctorOctopusFracturedFrontier",
+        "Goose",
+        "VampireKillmonger",
+        "VictoriaHand",
+        "IronPatriot",
+        "Valentina",
+        "Rogue",
+        "ShadowKing",
+        "Wong"
+      ]
+    },
     {
       "creator": "Alexander Coccia",
       "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #205",
@@ -1297,27 +1318,9 @@
         "ZombieSentry"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/AbsorbingMan-Angela-JeffTheBabyDolphin-ScarletWitchQueenOfChaos-SpiderManBrandNewDay-TheHunger-Venus-ZombieBlade-ZombieGiantMan-ZombieMisterFantastic-ZombieScarletWitch-ZombieSentry_Hoardin"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play These Decks for Infinite FAST and Easy! These are So Powerful! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=cO7aaMZL9c4",
-      "published": "2026-10-08",
-      "name": "Roramed4b1no",
-      "ids": [],
-      "zone": "https://marvelsnapzone.com/decks/roramed4b1no/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wndvsg/loki_ff_cl_22215/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmzpim/hit_infinite_cl_14895/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmwc2k/affliction_has_too_many_fun_cards_that_are/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wmvclj/thought_on_this_deck_and_if_theyre_any_card_i/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wojgph/finally_made_infinite_this_deck_served_me/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1woihil/man_spider_to_infinite_cl_14208/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1woh5wb/cl_23696_negative_brought_me_to_infinite_once/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wogshq/anti_meta_namor_deck_17k_cl/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wof2cc/anti_polar_magneto_deck_without_thanosff_cl24k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1woe6ay/hit_infinity_with_high_evo_deck_cl_13240/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wodzzi/my_stupid_deck_idea_i_had_when_i_got_a_red_skull/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wod3xo/new_carnage_is_really_good_cl11k/",
@@ -1608,6 +1611,15 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x86zm3/my_fav_deck_except_my_boi_galactus_ofc_cl_9270/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7y7ih/got_inspired_for_a_magnethanos_deck_any_possible/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7xbka/infinite_baby/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7ui1j/who_should_go_cl_9k/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7ui1j/who_should_go_cl_9k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x9ejd3/infinite_with_death_ff_and_firehair_second_season/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1x9ahks/competitive_consensus_vampire_enchantress/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x9c1lc/little_dopamine_boost_in_grand_arena_cl8012/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1x99yiv/cl_31k_the_case_for_stardustzombie_venom_in/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x9b722/cl9269/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x8u7xi/how_to_improve_my_zombievampire_deck_cl_8910/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x8tu2t/how_do_i_make_this_dino_deck_better_cl_961/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x8rt89/okhelp_plz_cl_37092/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x8p6zh/finally_finished_my_infinite_sprint_with_a_pretty/"
   ]
 }
