@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-18",
-  "updatedAt": "2026-10-18T22:22:26.641Z",
+  "updated": "2026-10-19",
+  "updatedAt": "2026-10-19T22:54:34.016Z",
   "decks": [
     {
       "creator": "r/MarvelSnapDecks",
@@ -21,7 +21,8 @@
         "Rogue",
         "ShadowKing",
         "Wong"
-      ]
+      ],
+      "rk": 22
     },
     {
       "creator": "Alexander Coccia",
@@ -633,9 +634,9 @@
         "PsylockeFracturedFrontier",
         "ScarletWitchQueenOfChaos",
         "MotherAskani",
-        "ThanosFracturedFrontier",
         "ShouLao",
-        "SuperiorIronMan"
+        "SuperiorIronMan",
+        "ThanosFracturedFrontier"
       ],
       "zone": "https://marvelsnapzone.com/decks/dougpied3ymu60/"
     },
@@ -1321,15 +1322,6 @@
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wodzzi/my_stupid_deck_idea_i_had_when_i_got_a_red_skull/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wod3xo/new_carnage_is_really_good_cl11k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wo99ca/fn_carnage_slotted_into_a_venusbishop_deck_cl8311/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wo7b6l/this_meme_galactus_deck_actually_got_me_to_rank/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wo72u0/new_carnage_is_fun_just_have_to_think_outside_the/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wo18vu/is_it_possible_to_have_fun_without_spending_real/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wo0gwc/agamottoblack_panther_cl_56k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wnz5ro/please_help_me_build_a_move_deck_cl8492/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wnxic2/goofy_deck_cl_206/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wnw0zr/mr_neg_got_me_to_infinite_cl_276k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wnu2t4/anyway_i_can_make_this_deck_better_cl_18550/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wokoe0/warlock_superior_im_to_infinite_cl_328k/",
@@ -1620,6 +1612,15 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x8tu2t/how_do_i_make_this_dino_deck_better_cl_961/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x8rt89/okhelp_plz_cl_37092/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x8p6zh/finally_finished_my_infinite_sprint_with_a_pretty/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x9g332/is_this_a_good_ultron_deck_what_would_card_would/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x9g332/is_this_a_good_ultron_deck_what_would_card_would/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xa9x53/first_time_back_to_back_infinite_cl_37400/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xa8pnn/cl_14k_deacon_frost_deck_thoughts/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xa82q1/infinite_with_zombie_galacti_cl_24k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xa70uh/cl_9880_getting_back_into_the_game_any/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x9ty9s/is_she_worth_i_kinda_dont_have_a_lot_of_cards_lol/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x9po9l/genuinely_the_most_fun_deck_ive_played_in_marvel/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x9ojqn/cl_335k_if_you_want_a_fun_hulk_dump_deck_in_grand/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x9ntmq/got_back_in_the_game_and_got_to_infinite_with/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x9j51x/for_any_remaining_ramp_enjoyers_how_are_yall/"
   ]
 }
