@@ -1150,9 +1150,9 @@
     "PsylockeFracturedFrontier",
     "ScarletWitchQueenOfChaos",
     "MotherAskani",
+    "ThanosFracturedFrontier",
     "ShouLao",
-    "SuperiorIronMan",
-    "ThanosFracturedFrontier"
+    "SuperiorIronMan"
    ]
   },
   {
@@ -4501,8 +4501,8 @@
   "NicholasScratch|SuperiorIronMan": 2,
   "PsylockeFracturedFrontier|VampireKillmonger": 5,
   "MotherAskani|VampireKillmonger": 5,
-  "SuperiorIronMan|VampireKillmonger": 7,
   "ThanosFracturedFrontier|VampireKillmonger": 3,
+  "SuperiorIronMan|VampireKillmonger": 7,
   "JoaquinTorres|ThanosFracturedFrontier": 2,
   "Elektra|MajesticWingbeat": 2,
   "Iceman|MajesticWingbeat": 3,
