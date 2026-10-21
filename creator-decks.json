@@ -1,7 +1,117 @@
 {
-  "updated": "2026-10-20",
-  "updatedAt": "2026-10-20T23:07:19.482Z",
+  "updated": "2026-10-21",
+  "updatedAt": "2026-10-21T22:17:02.128Z",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "NOW is the time to play Discard! Zombie Black Cat + 6 drop discard! - Marvel Snap Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=_e4STa0Wgz4",
+      "published": "2026-10-21",
+      "name": "ZBC",
+      "ids": [
+        "Apocalypse",
+        "Blade",
+        "ColleenWing",
+        "Dracula",
+        "Gambit",
+        "Khonshu",
+        "Modok",
+        "Morbius",
+        "RedShift",
+        "Swarm",
+        "WeaponH",
+        "ZombieBlackCat"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Apocalypse-Blade-ColleenWing-Dracula-Gambit-Khonshu-Modok-Morbius-RedShift-Swarm-WeaponH-ZombieBlackCat_ZBC"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of ZOMBIE BLACK CAT | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=f6HJzvLGbcU",
+      "published": "2026-10-20",
+      "name": "Cat & Khonshu",
+      "ids": [
+        "Apocalypse",
+        "Blade",
+        "ColleenWing",
+        "CorvusGlaive",
+        "Dracula",
+        "Khonshu",
+        "LadySif",
+        "Modok",
+        "Morbius",
+        "Scorn",
+        "Swarm",
+        "ZombieBlackCat"
+      ],
+      "untapped": "http://snap.untapped.gg/en/decks/Apocalypse-Blade-ColleenWing-CorvusGlaive-Dracula-Khonshu-LadySif-Modok-Morbius-Scorn-Swarm-ZombieBlackCat_Cat%20&%20Khonshu?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of ZOMBIE BLACK CAT | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=f6HJzvLGbcU",
+      "published": "2026-10-20",
+      "name": "Black Moon",
+      "ids": [
+        "Daken",
+        "Marrow",
+        "Miek",
+        "Modok",
+        "MoonGirl",
+        "Morbius",
+        "ProximaMidnight",
+        "Scorn",
+        "Supergiant",
+        "TheCollector",
+        "Wolverine",
+        "ZombieBlackCat"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Daken-Marrow-Miek-Modok-MoonGirl-Morbius-ProximaMidnight-Scorn-Supergiant-TheCollector-Wolverine-ZombieBlackCat_Black%20Moon?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of ZOMBIE BLACK CAT | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=f6HJzvLGbcU",
+      "published": "2026-10-20",
+      "name": "Classic Discard",
+      "ids": [
+        "Apocalypse",
+        "Blade",
+        "ColleenWing",
+        "Dracula",
+        "Gambit",
+        "LadySif",
+        "Modok",
+        "Morbius",
+        "ProximaMidnight",
+        "Scorn",
+        "WeaponH",
+        "ZombieBlackCat"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Apocalypse-Blade-ColleenWing-Dracula-Gambit-LadySif-Modok-Morbius-ProximaMidnight-Scorn-WeaponH-ZombieBlackCat_Classic%20Discard?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of ZOMBIE BLACK CAT | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=f6HJzvLGbcU",
+      "published": "2026-10-20",
+      "name": "Cat",
+      "ids": [
+        "ArnimZola",
+        "Blade",
+        "Bullseye",
+        "ColleenWing",
+        "Daken",
+        "Frigga",
+        "Modok",
+        "Morbius",
+        "Scorn",
+        "Swarm",
+        "TheCollector",
+        "ZombieBlackCat"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/ArnimZola-Blade-Bullseye-ColleenWing-Daken-Frigga-Modok-Morbius-Scorn-Swarm-TheCollector-ZombieBlackCat_Cat"
+    },
     {
       "creator": "r/MarvelSnapDecks",
       "video": "Discard with new Zombie Black Cat (CL: ~42000)",
@@ -21,7 +131,8 @@
         "ZombieBlackCat",
         "Khonshu",
         "Blade"
-      ]
+      ],
+      "rk": 12
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -43,7 +154,7 @@
         "ShadowKing",
         "Wong"
       ],
-      "rk": 21
+      "rk": 24
     },
     {
       "creator": "Alexander Coccia",
@@ -1208,126 +1319,9 @@
         "Galactus"
       ],
       "zone": "https://marvelsnapzone.com/decks/scavey/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play these 10 Decks that got Easy Infinite FAST! Marvel Snap Decks!",
-      "url": "https://www.youtube.com/watch?v=H3Cal4Im9f0",
-      "published": "2026-10-09",
-      "name": "Thanos Move",
-      "ids": [
-        "Arana",
-        "Nightcrawler",
-        "JeffTheBabyDolphin",
-        "JeffTheBabyLandShark",
-        "SpiderMan",
-        "MobiusMMobius",
-        "Mercury",
-        "ShadowKing",
-        "Nocturne",
-        "SpiderSense",
-        "Cannonball",
-        "ThanosFracturedFrontier"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/thanos-movezygacpn/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play these 10 Decks that got Easy Infinite FAST! Marvel Snap Decks!",
-      "url": "https://www.youtube.com/watch?v=H3Cal4Im9f0",
-      "published": "2026-10-09",
-      "name": "Snap Complete 59% WR in 112",
-      "ids": [
-        "Quinjet",
-        "Iceman",
-        "HydraBob",
-        "Martyr",
-        "TechnoOrganicVirus",
-        "IronPatriot",
-        "Valentina",
-        "MobiusMMobius",
-        "ShadowKing",
-        "Stardust",
-        "ThanosFracturedFrontier",
-        "WilsonFisk"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/snap-complete-59-wr-in-112/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play these 10 Decks that got Easy Infinite FAST! Marvel Snap Decks!",
-      "url": "https://www.youtube.com/watch?v=H3Cal4Im9f0",
-      "published": "2026-10-09",
-      "name": "Onreveal.gg",
-      "ids": [
-        "Iceman",
-        "HydraBob",
-        "Gorgon",
-        "MasterMold",
-        "Maximus",
-        "MobiusMMobius",
-        "ScarletWitchQueenOfChaos",
-        "ShadowKing",
-        "NegasonicTeenageWarhead",
-        "Supergiant",
-        "Stardust",
-        "Ronan"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/onrevealgg/"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #204",
-      "url": "https://www.youtube.com/watch?v=a6UI4Xok8Rs",
-      "published": "2026-10-09",
-      "name": "Magneto",
-      "ids": [
-        "AntiPolarMagneto",
-        "CalibanHorseman",
-        "CaptainMarvel",
-        "CosmicGhostRider",
-        "Domino",
-        "EnSabahNur",
-        "JaneFosterFracturedFrontier",
-        "Jubilee",
-        "KarenPage",
-        "Quicksilver",
-        "Speed",
-        "ThanosFracturedFrontier"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AntiPolarMagneto-CalibanHorseman-CaptainMarvel-CosmicGhostRider-Domino-EnSabahNur-JaneFosterFracturedFrontier-Jubilee-KarenPage-Quicksilver-Speed-ThanosFracturedFrontier_Magneto?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of ZOMBIE VENOM | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=jEFkctFzHXg",
-      "published": "2026-10-08",
-      "name": "New Horde Destroy",
-      "ids": [
-        "Deadpool",
-        "Death",
-        "Killmonger",
-        "MoiraX",
-        "Muse",
-        "SquirrelGirl",
-        "Tombstone",
-        "Venom",
-        "WeaponXWolverine",
-        "X23",
-        "ZombieGiantMan",
-        "ZombieVenom"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Deadpool-Death-Killmonger-MoiraX-Muse-SquirrelGirl-Tombstone-Venom-WeaponXWolverine-X23-ZombieGiantMan-ZombieVenom_New%20Horde%20Destroy?utm_medium=affiliate&utm_campaign=alexcoccia"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wpd6gz/achieved_infinite_this_season_with_arishem_cl_7592/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wpcc4j/this_tech_deck_help_me_got_to_infinite_this/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wpb7oe/deck_suggestions_cl_30453/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wpak15/hellcow_destroy_cl36633/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wpaf82/infinite_with_major_victory_cl_13k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wpa7fi/been_about_a_year_since_i_last_played_what_cards/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wp5tq7/got_to_infinite_with_this_chaotic_deck_cl_10020/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wp47mu/cl_15628_good_shang_chi_master_of_the_ten_rings/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1woyxb4/took_people_advice_and_it_definitely_working_out/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wox9rd/cl_1300_i_need_alternatives_to_crystal_on_my/",
@@ -1620,6 +1614,13 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xan3q5/easy_climb_with_galactus_cl14421/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xaf5tx/queria_dicas_de_como_gastar_com_sabedoria_minhas/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xadvcn/ghost_rider_lover_relapses_cl_21956_ghost_rider/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xacmj9/second_infinite_in_a_row_with_this_affliction/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xacmj9/second_infinite_in_a_row_with_this_affliction/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xbx13d/superior_ironman_cl_5116/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xba10s/i_need_help_understanding_what_happened_in_this/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xbrjij/surfer_control_to_infinite_cl_34_386/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xb76t9/patch_notes_10202026/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xbfpzl/got_me_to_infinite_and_still_climbingspreading/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xbds0c/which_card_should_i_cut_from_one_of_my_alltime/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xb972j/infinite_with_manspider_galactus_cl_37010/"
   ]
 }
