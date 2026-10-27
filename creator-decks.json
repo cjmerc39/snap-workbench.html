@@ -1,7 +1,117 @@
 {
-  "updated": "2026-10-26",
-  "updatedAt": "2026-10-26T23:42:55.213Z",
+  "updated": "2026-10-27",
+  "updatedAt": "2026-10-27T22:58:43.602Z",
   "decks": [
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of DEACON FROST & VAMPIRE CHAVEZ | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=BNHXNRthaTk",
+      "published": "2026-10-27",
+      "name": "Scream",
+      "ids": [
+        "Batroc",
+        "Juggernaut",
+        "Kraven",
+        "Polaris",
+        "RocketAndGroot",
+        "Scream",
+        "SilverSable",
+        "SpiderMan",
+        "SpiderPunk",
+        "VampireAmericaChavez",
+        "VampireDeaconFrost",
+        "VampireEnchantress"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Batroc-Juggernaut-Kraven-Polaris-RocketAndGroot-Scream-SilverSable-SpiderMan-SpiderPunk-VampireAmericaChavez-VampireDeaconFrost-VampireEnchantress_Scream?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of DEACON FROST & VAMPIRE CHAVEZ | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=BNHXNRthaTk",
+      "published": "2026-10-27",
+      "name": "Deacon Horde",
+      "ids": [
+        "JoaquinTorres",
+        "MajesticWingbeat",
+        "SilverSable",
+        "TheHunger",
+        "VampireAmericaChavez",
+        "VampireDeaconFrost",
+        "VampireEnchantress",
+        "VampireKillmonger",
+        "Venus",
+        "ZombieBlade",
+        "ZombieGiantMan",
+        "ZombieScarletWitch"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/JoaquinTorres-MajesticWingbeat-SilverSable-TheHunger-VampireAmericaChavez-VampireDeaconFrost-VampireEnchantress-VampireKillmonger-Venus-ZombieBlade-ZombieGiantMan-ZombieScarletWitch_Deacon%20Horde?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "This is HUGE! Best Card of The Season is HERE! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=hFkaESz2oHk",
+      "published": "2026-10-27",
+      "name": "Vampire Zombie",
+      "ids": [
+        "SilverSable",
+        "TheHunger",
+        "VampireKillmonger",
+        "JoaquinTorres",
+        "ZombieBlade",
+        "Venus",
+        "ScarletWitchQueenOfChaos",
+        "ZombieScarletWitch",
+        "VampireDeaconFrost",
+        "Stryfe",
+        "ZombieGiantMan",
+        "VampireEnchantress"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/vampire-zombierkd5sil/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "This is HUGE! Best Card of The Season is HERE! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=hFkaESz2oHk",
+      "published": "2026-10-27",
+      "name": "WorstSnapBlog",
+      "ids": [
+        "MajesticWingbeat",
+        "SilverSable",
+        "Boomerang",
+        "VampireKillmonger",
+        "CassandraNova",
+        "RocketAndGroot",
+        "DragonOfTheMoon",
+        "Laufey",
+        "VampireDeaconFrost",
+        "Ajax",
+        "Enchantress",
+        "VampireEnchantress"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/worstsnapblog/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "This is HUGE! Best Card of The Season is HERE! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=hFkaESz2oHk",
+      "published": "2026-10-27",
+      "name": "Zodrex",
+      "ids": [
+        "SilverSable",
+        "VampireKillmonger",
+        "ZombieBlade",
+        "CassandraNova",
+        "DragonOfTheMoon",
+        "ScarletWitchQueenOfChaos",
+        "Laufey",
+        "VampireDeaconFrost",
+        "EnSabahNur",
+        "Stryfe",
+        "VampireEnchantress",
+        "AntiPolarMagneto"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/zodrexis6s0wx/"
+    },
     {
       "creator": "Snap Judgments",
       "video": "SHOCKING Off Meta Decks with a HUGE Win Rate! Thank Me Later! Marvel Snap",
@@ -198,6 +308,28 @@
         "Helicarrier"
       ],
       "zone": "https://marvelsnapzone.com/decks/huskypuppieszr95mp0/"
+    },
+    {
+      "creator": "r/MarvelSnapDecks",
+      "video": "I just took this Agatha deck to the top 200 - it’s the most perfect, cube efficient deck I’ve ever played (CL 18k)",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1xelccl/i_just_took_this_agatha_deck_to_the_top_200_its/",
+      "published": "2026-10-24",
+      "name": "",
+      "ids": [
+        "AgathaHarkness",
+        "BlackBolt",
+        "GhostRider",
+        "LadySif",
+        "BlackKnight",
+        "SpiderHam",
+        "ShangChi",
+        "LadyDeathstrike",
+        "Stature",
+        "WildChild",
+        "RedShift",
+        "CalibanHorseman"
+      ],
+      "rk": 1
     },
     {
       "creator": "Alexander Coccia",
@@ -701,8 +833,7 @@
         "ZombieBlackCat",
         "Khonshu",
         "Blade"
-      ],
-      "rk": 13
+      ]
     },
     {
       "creator": "r/MarvelSnapDecks",
@@ -1186,158 +1317,9 @@
         "GambitHorseman"
       ],
       "zone": "https://marvelsnapzone.com/decks/minimumeffort/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "77% Win Rate   Win with NEW Meta Control! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=TdT82oXhA0Y",
-      "published": "2026-10-14",
-      "name": "Bynx",
-      "ids": [
-        "GrandMaster",
-        "Herbie",
-        "JenniferKale",
-        "InvisibleWoman",
-        "Killmonger",
-        "ShadowKing",
-        "MrFantasticFirstSteps",
-        "Namorita",
-        "Supergiant",
-        "Malekith",
-        "Ikari",
-        "AntiPolarMagneto"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/bynxzqpjc3i/"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of VAMPIRE ENCHANTRESS | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=DjdiAghI28Y",
-      "published": "2026-10-13",
-      "name": "Enchanted Horde",
-      "ids": [
-        "AbsorbingMan",
-        "JoaquinTorres",
-        "KittyPryde",
-        "ScarletWitchQueenOfChaos",
-        "TheHunger",
-        "VampireEnchantress",
-        "VampireKillmonger",
-        "Venus",
-        "ZombieBlade",
-        "ZombieGiantMan",
-        "ZombieMisterFantastic",
-        "ZombieScarletWitch"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AbsorbingMan-JoaquinTorres-KittyPryde-ScarletWitchQueenOfChaos-TheHunger-VampireEnchantress-VampireKillmonger-Venus-ZombieBlade-ZombieGiantMan-ZombieMisterFantastic-ZombieScarletWitch_Enchanted%20Horde?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of VAMPIRE ENCHANTRESS | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=DjdiAghI28Y",
-      "published": "2026-10-13",
-      "name": "Evolvedtress",
-      "ids": [
-        "Abomination",
-        "Ajax",
-        "Gorgon",
-        "HellcowFracturedFrontier",
-        "HighEvolutionary",
-        "PolarisHorseman",
-        "Quicksilver",
-        "RocketAndGroot",
-        "Scorpion",
-        "TheThing",
-        "VampireEnchantress",
-        "Wasp"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Abomination-Ajax-Gorgon-HellcowFracturedFrontier-HighEvolutionary-PolarisHorseman-Quicksilver-RocketAndGroot-Scorpion-TheThing-VampireEnchantress-Wasp_Evolvedtress?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Win More Using the Best Tips and Plays for the Best Decks in Marvel Snap!!",
-      "url": "https://www.youtube.com/watch?v=523lPT4VSBE",
-      "published": "2026-10-13",
-      "name": "Braude - 7th",
-      "ids": [
-        "Batroc",
-        "SpiderManBrandNewDay",
-        "Vulture",
-        "SamWilson",
-        "Kraven",
-        "Cloak",
-        "Silk",
-        "Cosmo",
-        "HydraStomper",
-        "FriendlyNeighborhoodCarnage",
-        "Hellion",
-        "Heimdall"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/braude-7th/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Win More Using the Best Tips and Plays for the Best Decks in Marvel Snap!!",
-      "url": "https://www.youtube.com/watch?v=523lPT4VSBE",
-      "published": "2026-10-13",
-      "name": "Mr Lander - 1st",
-      "ids": [
-        "Arana",
-        "GhostSpider",
-        "MadameWeb",
-        "Sparky",
-        "PeniParker",
-        "DoctorStrange",
-        "MultipleMan",
-        "HumanTorch",
-        "Magik",
-        "Hercules",
-        "SymbioteSpiderMan",
-        "LivingTribunal"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/mr-lander-1st/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Win More Using the Best Tips and Plays for the Best Decks in Marvel Snap!!",
-      "url": "https://www.youtube.com/watch?v=523lPT4VSBE",
-      "published": "2026-10-13",
-      "name": "Dougpie",
-      "ids": [
-        "MajesticWingbeat",
-        "Quinjet",
-        "NicoMinoru",
-        "NicholasScratch",
-        "VampireKillmonger",
-        "JoaquinTorres",
-        "PsylockeFracturedFrontier",
-        "ScarletWitchQueenOfChaos",
-        "MotherAskani",
-        "ThanosFracturedFrontier",
-        "ShouLao",
-        "SuperiorIronMan"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/dougpied3ymu60/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtbx3e/ggz_cl_322k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wt7maf/oq_melhorar_nesse_deck_com_um_nível_de_coleção/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wsyqov/cl_22053_infinite_deck/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wuddnk/legendary_thanos_ff_draft_deck_cl_14500/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1wu60u6/cl_26088_post_infinite_rank_18000_ive_had/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wubwz9/scarlet_witch_queen_of_chaos_cl_17669/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wuajiv/funtastic_4_cl_30k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wu8qqa/infinite_with_spider_sense_ft_queen_of_chaos_cl/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wu7zyj/cl_21566_i_wouldnt_use_it_to_climb_but_its_really/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wu2u17/bug_or_no_cl_24k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wu144k/need_help_completing_this_deck_cl_8000/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtxj1g/this_new_draft_kinda_sucks_cl24k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtty3b/off_meta_cook_cl13k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wtq03r/i_cl_19460_am_an_arishem_main_and_just_got_kang/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvcwg7/cl4715/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1wvdt3g/ota_balance_notes_1012026/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wv3uct/mixing_my_favorite_cards_gambit_and_bullseye_give/",
     "https://www.reddit.com/r/marvelsnapcomp/comments/1wv07z5/this_or_that_thursday_weekly_collection_thread/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wv2ye8/this_deck_can_get_some_cool_combos_cl_18755/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wv28z7/had_to_remove_lady_ashkani_and_victoria_hand_to/",
@@ -1620,6 +1602,23 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xfhwf5/sugestões_de_decks_para_mim_cl_8746/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xfhfdy/a_super_fun_chaotic_deck_that_wins_games/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xfh5lm/mandatory_infinite_post_cl22k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xfh4f0/super_excited_about_vampire_deacon_frost_deck/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xfh4f0/super_excited_about_vampire_deacon_frost_deck/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xh5uiq/hit_infinite_cl25421/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xgtbxw/teamup_tuesday_weekly_alliances_thread/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xgwozr/zombie_scarlet_witch_cl_1466/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xgmgya/cl_10692_giving_opponents_nightmares_with/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xgvreq/best_decks_for_zombie_black_cat_cl_14412/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xgfxzm/ltgm_deadpools_diner_oct_7nov_2/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xguysi/amélioration_sur_ce_deck_cl_32k/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xgem3u/weekly_release_discussion_vampire_deacon_frost/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xgudm4/rogue_scion_of_division_cl_224k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xgt6y4/if_you_have_black_cat_this_deck_has_been_pretty/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xgsq4o/how_can_i_make_this_deck_better_tribunalsummons/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xgrl2z/ways_of_improving_this_deck_cl10k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xgmhxq/cl_10692_giving_opponents_nightmares_with/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xgllpv/discard_to_infinite_cl15500/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xgk1ya/actually_made_it_to_infinite_with_ramatut_but_how/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xgixnw/absolutely_tearing_through_gold_conquest_with/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xggpxv/feedback_needed_on_vampire_deacon_frost_deck_cl/"
   ]
 }
