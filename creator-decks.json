@@ -1,50 +1,116 @@
 {
-  "updated": "2026-10-28",
-  "updatedAt": "2026-10-28T23:59:54.933Z",
+  "updated": "2026-10-29",
+  "updatedAt": "2026-10-29T23:14:59.462Z",
   "decks": [
     {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of DEACON FROST & VAMPIRE CHAVEZ | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=BNHXNRthaTk",
-      "published": "2026-10-27",
-      "name": "Scream",
+      "creator": "Unfitparrot",
+      "video": "Vampire deck is even BETTER THAN I EXPECTED!? Make Deadpool's Diner easy mode! - Marvel Snap Deck",
+      "url": "https://www.youtube.com/watch?v=jIbskLgGtu4",
+      "published": "2026-10-28",
+      "name": "Steal yo stats",
       "ids": [
-        "Batroc",
-        "Juggernaut",
-        "Kraven",
-        "Polaris",
-        "RocketAndGroot",
-        "Scream",
-        "SilverSable",
-        "SpiderMan",
-        "SpiderPunk",
-        "VampireAmericaChavez",
-        "VampireDeaconFrost",
-        "VampireEnchantress"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Batroc-Juggernaut-Kraven-Polaris-RocketAndGroot-Scream-SilverSable-SpiderMan-SpiderPunk-VampireAmericaChavez-VampireDeaconFrost-VampireEnchantress_Scream?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of DEACON FROST & VAMPIRE CHAVEZ | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=BNHXNRthaTk",
-      "published": "2026-10-27",
-      "name": "Deacon Horde",
-      "ids": [
+        "CassandraNova",
+        "DragonOfTheMoon",
         "JoaquinTorres",
         "MajesticWingbeat",
+        "NicoMinoru",
         "SilverSable",
-        "TheHunger",
+        "ThanosFracturedFrontier",
         "VampireAmericaChavez",
         "VampireDeaconFrost",
         "VampireEnchantress",
         "VampireKillmonger",
-        "Venus",
-        "ZombieBlade",
-        "ZombieGiantMan",
-        "ZombieScarletWitch"
+        "ZombieBlade"
       ],
-      "untapped": "https://snap.untapped.gg/en/decks/JoaquinTorres-MajesticWingbeat-SilverSable-TheHunger-VampireAmericaChavez-VampireDeaconFrost-VampireEnchantress-VampireKillmonger-Venus-ZombieBlade-ZombieGiantMan-ZombieScarletWitch_Deacon%20Horde?utm_medium=affiliate&utm_campaign=alexcoccia"
+      "untapped": "https://snap.untapped.gg/en/decks/CassandraNova-DragonOfTheMoon-JoaquinTorres-MajesticWingbeat-NicoMinoru-SilverSable-ThanosFracturedFrontier-VampireAmericaChavez-VampireDeaconFrost-VampireEnchantress-VampireKillmonger-ZombieBlade_Steal%20yo%20stats"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Vampire Deacon is INCREDIBLE with This COMBO!! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=Iw68TEEpbzM",
+      "published": "2026-10-28",
+      "name": "Sasaka",
+      "ids": [
+        "DeafeningChord",
+        "MajesticWingbeat",
+        "AmericaChavez",
+        "AdamWarlock",
+        "Surge",
+        "ScarletWitch",
+        "Magik",
+        "Maverick",
+        "Stick",
+        "Gwenpool",
+        "Galacta",
+        "Galactus"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/sasakaysk8kjw/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Vampire Deacon is INCREDIBLE with This COMBO!! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=Iw68TEEpbzM",
+      "published": "2026-10-28",
+      "name": "Bynx",
+      "ids": [
+        "SilverSable",
+        "Zabu",
+        "Surge",
+        "ZombieBlade",
+        "CassandraNova",
+        "Rogue",
+        "VampireAmericaChavez",
+        "Laufey",
+        "VampireDeaconFrost",
+        "Stardust",
+        "Stryfe",
+        "VampireEnchantress"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/bynxzaztxhz/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Vampire Deacon is INCREDIBLE with This COMBO!! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=Iw68TEEpbzM",
+      "published": "2026-10-28",
+      "name": "Safetyblade",
+      "ids": [
+        "SilverSable",
+        "NicoMinoru",
+        "LukeCage",
+        "VampireKillmonger",
+        "ZombieBlade",
+        "MobiusMMobius",
+        "RocketAndGroot",
+        "VampireAmericaChavez",
+        "Laufey",
+        "VampireDeaconFrost",
+        "Kluh",
+        "VampireEnchantress"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/safetybladenbp4ogd/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "Vampire Deacon is INCREDIBLE with This COMBO!! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=Iw68TEEpbzM",
+      "published": "2026-10-28",
+      "name": "Sakasa2",
+      "ids": [
+        "SilverSable",
+        "LukeCage",
+        "VampireKillmonger",
+        "JoaquinTorres",
+        "CassandraNova",
+        "DragonOfTheMoon",
+        "SuperiorSpiderMan",
+        "Laufey",
+        "VampireDeaconFrost",
+        "ArnimZola",
+        "VampireEnchantress",
+        "AntiPolarMagneto"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/sakasa2/"
     },
     {
       "creator": "Snap Judgments",
@@ -111,6 +177,50 @@
         "AntiPolarMagneto"
       ],
       "zone": "https://marvelsnapzone.com/decks/zodrexis6s0wx/"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of DEACON FROST & VAMPIRE CHAVEZ | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=BNHXNRthaTk",
+      "published": "2026-10-27",
+      "name": "Scream",
+      "ids": [
+        "Batroc",
+        "Juggernaut",
+        "Kraven",
+        "Polaris",
+        "RocketAndGroot",
+        "Scream",
+        "SilverSable",
+        "SpiderMan",
+        "SpiderPunk",
+        "VampireAmericaChavez",
+        "VampireDeaconFrost",
+        "VampireEnchantress"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Batroc-Juggernaut-Kraven-Polaris-RocketAndGroot-Scream-SilverSable-SpiderMan-SpiderPunk-VampireAmericaChavez-VampireDeaconFrost-VampireEnchantress_Scream?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of DEACON FROST & VAMPIRE CHAVEZ | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=BNHXNRthaTk",
+      "published": "2026-10-27",
+      "name": "Deacon Horde",
+      "ids": [
+        "JoaquinTorres",
+        "MajesticWingbeat",
+        "SilverSable",
+        "TheHunger",
+        "VampireAmericaChavez",
+        "VampireDeaconFrost",
+        "VampireEnchantress",
+        "VampireKillmonger",
+        "Venus",
+        "ZombieBlade",
+        "ZombieGiantMan",
+        "ZombieScarletWitch"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/JoaquinTorres-MajesticWingbeat-SilverSable-TheHunger-VampireAmericaChavez-VampireDeaconFrost-VampireEnchantress-VampireKillmonger-Venus-ZombieBlade-ZombieGiantMan-ZombieScarletWitch_Deacon%20Horde?utm_medium=affiliate&utm_campaign=alexcoccia"
     },
     {
       "creator": "Snap Judgments",
@@ -332,6 +442,50 @@
       "rk": 1
     },
     {
+      "creator": "Snap Judgments",
+      "video": "OMG! 70% Win Rate Thors Answers EVERYTHING! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=nY1rvgXJ81g",
+      "published": "2026-10-23",
+      "name": "Pastrasnap",
+      "ids": [
+        "Miek",
+        "Swarm",
+        "Morbius",
+        "Marrow",
+        "Wolverine",
+        "Bullseye",
+        "ZombieBlackCat",
+        "MoonGirl",
+        "Supergiant",
+        "ProximaMidnight",
+        "Modok",
+        "Blink"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/pastrasnap/"
+    },
+    {
+      "creator": "Snap Judgments",
+      "video": "OMG! 70% Win Rate Thors Answers EVERYTHING! Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=nY1rvgXJ81g",
+      "published": "2026-10-23",
+      "name": "Fighting Nagisa",
+      "ids": [
+        "Blade",
+        "Swarm",
+        "Morbius",
+        "GrandMaster",
+        "ColleenWing",
+        "Gambit",
+        "CorvusGlaive",
+        "ZombieBlackCat",
+        "Dracula",
+        "Modok",
+        "Khonshu",
+        "Apocalypse"
+      ],
+      "zone": "https://marvelsnapzone.com/decks/fighting-nagisavi10xft/"
+    },
+    {
       "creator": "Alexander Coccia",
       "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #206",
       "url": "https://www.youtube.com/watch?v=J49ZPzaXEj8",
@@ -550,50 +704,6 @@
         "ZombieBlackCat"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/Blade-Bullseye-ColleenWing-Jocasta-Miek-Modok-Morbius-Prodigy-Scorn-Swarm-TheCollector-ZombieBlackCat_Discard?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "OMG! 70% Win Rate Thors Answers EVERYTHING! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=nY1rvgXJ81g",
-      "published": "2026-10-23",
-      "name": "Pastrasnap",
-      "ids": [
-        "Miek",
-        "Swarm",
-        "Morbius",
-        "Marrow",
-        "Wolverine",
-        "Bullseye",
-        "ZombieBlackCat",
-        "MoonGirl",
-        "Supergiant",
-        "ProximaMidnight",
-        "Modok",
-        "Blink"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/pastrasnap/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "OMG! 70% Win Rate Thors Answers EVERYTHING! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=nY1rvgXJ81g",
-      "published": "2026-10-23",
-      "name": "Fighting Nagisa",
-      "ids": [
-        "Blade",
-        "Swarm",
-        "Morbius",
-        "GrandMaster",
-        "ColleenWing",
-        "Gambit",
-        "CorvusGlaive",
-        "ZombieBlackCat",
-        "Dracula",
-        "Modok",
-        "Khonshu",
-        "Apocalypse"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/fighting-nagisavi10xft/"
     },
     {
       "creator": "Snap Judgments",
@@ -1207,59 +1317,9 @@
         "Stardust"
       ],
       "zone": "https://marvelsnapzone.com/decks/deck-aurora99ai95a/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "THIS Is How You Win After the OTA! Best Decks! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=IlrfaoLIF_o",
-      "published": "2026-10-16",
-      "name": "Magneto",
-      "ids": [
-        "Domino",
-        "JaneFosterFracturedFrontier",
-        "CalibanHorseman",
-        "BaronZemo",
-        "Jubilee",
-        "CaptainMarvel",
-        "EnSabahNur",
-        "IronLad",
-        "DragonLord",
-        "Gorr",
-        "AntiPolarMagneto",
-        "FinFangFoom"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/deck-magnetoup8fhzr/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "THIS Is How You Win After the OTA! Best Decks! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=IlrfaoLIF_o",
-      "published": "2026-10-16",
-      "name": "Gamba Goblin",
-      "ids": [
-        "MajesticWingbeat",
-        "TheHunger",
-        "NicholasScratch",
-        "VampireKillmonger",
-        "Angela",
-        "JoaquinTorres",
-        "Bishop",
-        "Venus",
-        "Cosmo",
-        "ZombieScarletWitch",
-        "Juggernaut",
-        "ZombieGiantMan"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/gamba-goblin/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1ww1u5l/cl1000_thoughts_from_experienced_players_on/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1ww1b6h/cl13164_looking_for_a_techno_virus_deck_thats_not/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1ww1a8j/cl13164_help_me_improve_this_technology_deck_i/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvyqde/how_do_people_play_high_evolutionary_cl_2686/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvy6j6/hit_monkey_worth_3k_for_my_surfer_deck_cl1100/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvsyv4/cl_5878_queen_of_zombies_to_infinite/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvod2s/cl_4715/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvkk1b/cl4668_finally_got_maverick_any_improvements_or/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1wvgboj/cl_866_any_improvements/",
@@ -1553,6 +1613,12 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xhjfw2/please_can_you_help_improve_my_surfer_deck_cl_1784/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xhg8nk/struggled_this_season_until_i_switched_to_this_cl/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xhg485/frost_cl_22k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xhc5hj/fun_with_deacon_frost_cl_27k/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xhc5hj/fun_with_deacon_frost_cl_27k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xisgik/was_super_busy_the_first_half_of_the_season_but/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xiz8hl/ota_balance_notes_10292026/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xirus7/cl_14597_deacon_frost_deck_i_broke_infinite_with/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xiksmk/this_or_that_thursday_weekly_collection_thread/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xii14c/try_this_deck_out_pushed_through_the_high_90s/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xi7cpg/big_deac_energy_cl_31k/"
   ]
 }
