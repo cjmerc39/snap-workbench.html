@@ -1,7 +1,29 @@
 {
-  "updated": "2026-11-05",
-  "updatedAt": "2026-11-05T00:51:27.838Z",
+  "updated": "2026-11-06",
+  "updatedAt": "2026-11-06T00:04:08.001Z",
   "decks": [
+    {
+      "creator": "r/MarvelSnapDecks",
+      "video": "Greedy 30 card Arishem to Infinite CL: 18,938",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1xomvp3/greedy_30_card_arishem_to_infinite_cl_18938/",
+      "published": "2026-11-05",
+      "name": "",
+      "ids": [
+        "Agamotto",
+        "Arishem",
+        "Blob",
+        "Galacta",
+        "Galactus",
+        "GambitHorseman",
+        "Hulkling",
+        "Legion",
+        "Mockingbird",
+        "Stardust",
+        "TechnoOrganicVirus",
+        "Thanos"
+      ],
+      "rk": 23
+    },
     {
       "creator": "Snap Judgments",
       "video": "94% Win Rate Counter the WHOLE Meta and WIN in Infinite! Marvel Snap",
@@ -791,241 +813,9 @@
         "RedShift",
         "CalibanHorseman"
       ]
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #206",
-      "url": "https://www.youtube.com/watch?v=J49ZPzaXEj8",
-      "published": "2026-10-23",
-      "name": "Zombie",
-      "ids": [
-        "JoaquinTorres",
-        "MajesticWingbeat",
-        "NicholasScratch",
-        "Sasquatch",
-        "ScarletWitchQueenOfChaos",
-        "TheHunger",
-        "VampireKillmonger",
-        "Venus",
-        "WerewolfByNight",
-        "ZombieBlade",
-        "ZombieGiantMan",
-        "ZombieMisterFantastic"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/JoaquinTorres-MajesticWingbeat-NicholasScratch-Sasquatch-ScarletWitchQueenOfChaos-TheHunger-VampireKillmonger-Venus-WerewolfByNight-ZombieBlade-ZombieGiantMan-ZombieMisterFantastic_Zombie?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #206",
-      "url": "https://www.youtube.com/watch?v=J49ZPzaXEj8",
-      "published": "2026-10-23",
-      "name": "SNAP Deck",
-      "ids": [
-        "Arana",
-        "Cosmo",
-        "DoctorStrange",
-        "FriendlyNeighborhoodCarnage",
-        "GhostSpider",
-        "HumanTorch",
-        "Juggernaut",
-        "MadameWeb",
-        "MultipleMan",
-        "PeniParker",
-        "SpiderPunk",
-        "SymbioteSpiderMan"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Arana-Cosmo-DoctorStrange-FriendlyNeighborhoodCarnage-GhostSpider-HumanTorch-Juggernaut-MadameWeb-MultipleMan-PeniParker-SpiderPunk-SymbioteSpiderMan_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #206",
-      "url": "https://www.youtube.com/watch?v=J49ZPzaXEj8",
-      "published": "2026-10-23",
-      "name": "Created Cards Deck",
-      "ids": [
-        "GambitHorseman",
-        "IronPatriot",
-        "MajesticWingbeat",
-        "MariaHill",
-        "MotherAskani",
-        "PsylockeFracturedFrontier",
-        "Sasquatch",
-        "ScarletWitch",
-        "ScarletWitchQueenOfChaos",
-        "ShadowKing",
-        "SuperiorIronMan",
-        "Valentina"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/GambitHorseman-IronPatriot-MajesticWingbeat-MariaHill-MotherAskani-PsylockeFracturedFrontier-Sasquatch-ScarletWitch-ScarletWitchQueenOfChaos-ShadowKing-SuperiorIronMan-Valentina_Created%20Cards%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #206",
-      "url": "https://www.youtube.com/watch?v=J49ZPzaXEj8",
-      "published": "2026-10-23",
-      "name": "Magneto",
-      "ids": [
-        "AntiPolarMagneto",
-        "BaronZemo",
-        "CalibanHorseman",
-        "CaptainMarvel",
-        "Domino",
-        "DragonLord",
-        "EnSabahNur",
-        "GalactusFirstSteps",
-        "IronLad",
-        "Jubilee",
-        "ScarletWitchQueenOfChaos",
-        "VampireEnchantress"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AntiPolarMagneto-BaronZemo-CalibanHorseman-CaptainMarvel-Domino-DragonLord-EnSabahNur-GalactusFirstSteps-IronLad-Jubilee-ScarletWitchQueenOfChaos-VampireEnchantress_Magneto?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #206",
-      "url": "https://www.youtube.com/watch?v=J49ZPzaXEj8",
-      "published": "2026-10-23",
-      "name": "Venus",
-      "ids": [
-        "AdamWarlock",
-        "AmericaChavez",
-        "ElsaBloodstone",
-        "JaneFosterFracturedFrontier",
-        "KittyPryde",
-        "MarvelBoy",
-        "Nebula",
-        "NicoMinoru",
-        "Nightcrawler",
-        "SpiderHam",
-        "ThanosFracturedFrontier",
-        "Venus"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AdamWarlock-AmericaChavez-ElsaBloodstone-JaneFosterFracturedFrontier-KittyPryde-MarvelBoy-Nebula-NicoMinoru-Nightcrawler-SpiderHam-ThanosFracturedFrontier-Venus_Venus?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #206",
-      "url": "https://www.youtube.com/watch?v=J49ZPzaXEj8",
-      "published": "2026-10-23",
-      "name": "Virus",
-      "ids": [
-        "Cable",
-        "HydraBob",
-        "Iceman",
-        "IronPatriot",
-        "Martyr",
-        "MobiusMMobius",
-        "NicoMinoru",
-        "Quinjet",
-        "ShadowKing",
-        "ShangChi",
-        "TechnoOrganicVirus",
-        "ThanosFracturedFrontier"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Cable-HydraBob-Iceman-IronPatriot-Martyr-MobiusMMobius-NicoMinoru-Quinjet-ShadowKing-ShangChi-TechnoOrganicVirus-ThanosFracturedFrontier_Virus?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #206",
-      "url": "https://www.youtube.com/watch?v=J49ZPzaXEj8",
-      "published": "2026-10-23",
-      "name": "Fantomex",
-      "ids": [
-        "Blade",
-        "BuckyBarnes",
-        "Carnage",
-        "Fantomex",
-        "Gambit",
-        "Hood",
-        "Killmonger",
-        "Marrow",
-        "MobiusMMobius",
-        "ShadowKing",
-        "WildChild",
-        "ZombieCaptainMarvel"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Blade-BuckyBarnes-Carnage-Fantomex-Gambit-Hood-Killmonger-Marrow-MobiusMMobius-ShadowKing-WildChild-ZombieCaptainMarvel_Fantomex?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #206",
-      "url": "https://www.youtube.com/watch?v=J49ZPzaXEj8",
-      "published": "2026-10-23",
-      "name": "Discard",
-      "ids": [
-        "Blade",
-        "Bullseye",
-        "ColleenWing",
-        "Jocasta",
-        "Miek",
-        "Modok",
-        "Morbius",
-        "Prodigy",
-        "Scorn",
-        "Swarm",
-        "TheCollector",
-        "ZombieBlackCat"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Blade-Bullseye-ColleenWing-Jocasta-Miek-Modok-Morbius-Prodigy-Scorn-Swarm-TheCollector-ZombieBlackCat_Discard?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "OMG! 70% Win Rate Thors Answers EVERYTHING! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=nY1rvgXJ81g",
-      "published": "2026-10-23",
-      "name": "Pastrasnap",
-      "ids": [
-        "Miek",
-        "Swarm",
-        "Morbius",
-        "Marrow",
-        "Wolverine",
-        "Bullseye",
-        "ZombieBlackCat",
-        "MoonGirl",
-        "Supergiant",
-        "ProximaMidnight",
-        "Modok",
-        "Blink"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/pastrasnap/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "OMG! 70% Win Rate Thors Answers EVERYTHING! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=nY1rvgXJ81g",
-      "published": "2026-10-23",
-      "name": "Fighting Nagisa",
-      "ids": [
-        "Blade",
-        "Swarm",
-        "Morbius",
-        "GrandMaster",
-        "ColleenWing",
-        "Gambit",
-        "CorvusGlaive",
-        "ZombieBlackCat",
-        "Dracula",
-        "Modok",
-        "Khonshu",
-        "Apocalypse"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/fighting-nagisavi10xft/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1rffj/double_thanos_for_my_quickest_infinite_cl_11299/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1qzyv/replacement_for_jane_foster_thor_cl_24011/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1l827/hitting_infinite_was_easier_than_ever_with_these/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1ixl6/surf_over_the_meta_75_to_infinite_in_a_few_hours/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1gw0p/i_dont_have_karen_page_and_caliban_what_should_i/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1daud/what_are_the_missing_cards_cl_32273/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1cu82/partners_infinite_deck_cl_20140/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1cru3/infinite_w_rocks_cl_24160/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x1by22/planning_for_deacon_frost_cl_135k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x2rge0/easy_weekend_gold_cl_26817/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1x2quqb/vampires_vs_zombies_week_1/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x2qpex/for_anyone_struggling_this_season_doom_2099_has/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x2ngjl/what_can_i_use_this_for_cl_2927/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x2l1d5/so_i_might_have_cooked_cl5895/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x2kg1q/need_advice_for_possible_changecl_5898/",
@@ -1313,6 +1103,18 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xnhv6a/double_merlin_deck_cl_32129/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xnhdm2/won_an_infinity_conquest_last_night_using_this/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xnfx7j/how_could_i_make_this_deck_better_cl_6466/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xnc37z/all_spells_deck_cl_4725/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xnc37z/all_spells_deck_cl_4725/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xouvo3/sanctum_showdown_cl_6597/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xoktky/this_or_that_thursday_weekly_collection_thread/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xosz6k/loki_tov_to_my_quickest_infinite_cl_12115/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xoqc1f/ongoing_to_infinite_cl_33000/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xomkrw/4cost_riot_edit_suggestions_cl28218/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xojtkz/had_solid_results_with_this_deck_but_any_valid/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xojmt9/cl_1988_i_finally_got_him_quick_inquiry_please/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xoiikz/man_this_deck_is_fun_cl_36k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xogc12/ill_never_top_this_cl_37118/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xo7zjq/cl_37821_howard_arthur/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xo6e89/i_know_it_can_be_nuked_by_techbut_i_promise_this/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xo64ar/am_i_cl_20296_evil_for_playing_this_deck/"
   ]
 }
