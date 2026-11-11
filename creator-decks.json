@@ -1,12 +1,78 @@
 {
-  "updated": "2026-11-10",
-  "updatedAt": "2026-11-10T02:40:22.364Z",
+  "updated": "2026-11-11",
+  "updatedAt": "2026-11-11T00:01:35.560Z",
   "decks": [
     {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of LANCELOT | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=5hT9ci34Q48",
+      "published": "2026-11-10",
+      "name": "Lancalot 2099",
+      "ids": [
+        "AntiPolarMagneto",
+        "ArthurPendragon",
+        "CaptainBritain",
+        "CaptainMarvel",
+        "Doom2099",
+        "DrDoom",
+        "DragonLord",
+        "IronLad",
+        "Lancelot",
+        "MobiusMMobius",
+        "Moondragon",
+        "Mordred"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AntiPolarMagneto-ArthurPendragon-CaptainBritain-CaptainMarvel-Doom2099-DrDoom-DragonLord-IronLad-Lancelot-MobiusMMobius-Moondragon-Mordred_Lancalot%202099?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of LANCELOT | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=5hT9ci34Q48",
+      "published": "2026-11-10",
+      "name": "Specelot",
+      "ids": [
+        "AntMan",
+        "CaptainAmerica",
+        "CaptainCarter",
+        "Cosmo",
+        "Goliath",
+        "IronMan",
+        "JJonahJameson",
+        "Lancelot",
+        "LukeCage",
+        "SamWilson",
+        "Spectrum",
+        "Stardust"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AntMan-CaptainAmerica-CaptainCarter-Cosmo-Goliath-IronMan-JJonahJameson-Lancelot-LukeCage-SamWilson-Spectrum-Stardust_Specelot?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of LANCELOT | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=5hT9ci34Q48",
+      "published": "2026-11-10",
+      "name": "Lancaurora",
+      "ids": [
+        "Aurora",
+        "AwesomeAndy",
+        "DraxAvatarOfLife",
+        "HydraBob",
+        "Isca",
+        "Lancelot",
+        "SamWilson",
+        "SpiderHam",
+        "SuperSkrull",
+        "TheThingFirstSteps",
+        "Venus",
+        "ZombieMisterFantastic"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Aurora-AwesomeAndy-DraxAvatarOfLife-HydraBob-Isca-Lancelot-SamWilson-SpiderHam-SuperSkrull-TheThingFirstSteps-Venus-ZombieMisterFantastic_Lancaurora?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
       "creator": "r/MarvelSnapDecks",
-      "video": "Budget steal deck 68% W/R (CL: 7,000)",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1xrkbse/budget_steal_deck_68_wr_cl_7000/",
-      "published": "2026-11-09",
+      "video": "Low cortisol climb to infinite with budget steal deck (CL: 7,400)",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1xt17i8/low_cortisol_climb_to_infinite_with_budget_steal/",
+      "published": "2026-11-10",
       "name": "",
       "ids": [
         "CassandraNova",
@@ -637,7 +703,7 @@
         "TechnoOrganicVirus",
         "Thanos"
       ],
-      "rk": 22
+      "rk": 20
     },
     {
       "creator": "Alexander Coccia",
@@ -1254,82 +1320,9 @@
         "VampireDeaconFrost"
       ],
       "zone": "https://marvelsnapzone.com/decks/derekrnrputk/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Deacon Frost is CRACKED! 87% Win Rate & Rank 1 Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=jfrocOQqcYw",
-      "published": "2026-10-31",
-      "name": "HuskyPuppies",
-      "ids": [
-        "SilverSable",
-        "Elektra",
-        "NicoMinoru",
-        "ZombieBlade",
-        "Rhino",
-        "Tombstone",
-        "WerewolfByNight",
-        "ZombieVenom",
-        "DragonOfTheMoon",
-        "Laufey",
-        "VampireDeaconFrost",
-        "Dormammu"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/huskypuppies524755v/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Deacon Frost is CRACKED! 87% Win Rate & Rank 1 Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=jfrocOQqcYw",
-      "published": "2026-10-31",
-      "name": "Unhlpfulyoda",
-      "ids": [
-        "SilverSable",
-        "LukeCage",
-        "VampireKillmonger",
-        "ZombieBlade",
-        "MobiusMMobius",
-        "ScarletWitchQueenOfChaos",
-        "ShadowKing",
-        "VampireAmericaChavez",
-        "Juggernaut",
-        "VampireDeaconFrost",
-        "Kluh",
-        "VampireEnchantress"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/unhlpfulyoda0vb88f5/"
-    },
-    {
-      "creator": "Unfitparrot",
-      "video": "This deck BUFFS EVERYTHING! Win games easy! - Marvel Snap Deck Highlight",
-      "url": "https://www.youtube.com/watch?v=JPO0hWsZdrw",
-      "published": "2026-10-30",
-      "name": "Buff Father",
-      "ids": [
-        "Brood",
-        "Forge",
-        "JeffTheBabyDolphin",
-        "JubileeSilverSurfer",
-        "Maverick",
-        "MrSinister",
-        "SpiderManBrandNewDay",
-        "Stick",
-        "Surge",
-        "Viv",
-        "WolverineHorseman",
-        "Zabu"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Brood-Forge-JeffTheBabyDolphin-JubileeSilverSurfer-Maverick-MrSinister-SpiderManBrandNewDay-Stick-Surge-Viv-WolverineHorseman-Zabu_Buff%20Father"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x6nymd/been_loving_zombie_nova_cl_19465/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x6nd75/last_spot_cl_14290/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x6m7o4/not_breaking_any_new_ground_here_butcl_37089/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x6i5wk/do_you_have_any_plans_for_deacon_frost_am_i/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x6hy11/i_love_gambling_cl_283k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x6f4qy/any_suggestions_for_this_deck_cl_14377/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x6a1xf/never_really_shared_decks_ive_been_using_in_snap/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x69mr7/returning_player/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x683ig/stale_meta_inspire_me_please_cl26k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x67e7r/grand_arena_hulk_destroy_deck_cl18000/",
@@ -1622,6 +1615,13 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xrnfhf/i_love_the_name_but_i_feel_like_this_could_be/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xrkx60/fun_sanctum_deck_cl_15875/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xrk8ay/cl_40000_no_grind_just_casual_play_completed/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1xsaz87/cl_6250_affliction_card_recommendations/"
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xsaz87/cl_6250_affliction_card_recommendations/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xt24oo/third_time_hitting_infinite_with_zombies_and/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xsp2lx/teamup_tuesday_weekly_alliances_thread/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xsqqao/captain_britain_cl_11k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xsk3k1/easy_infinite_with_good_old_thanos_control_cl/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xsjivq/cl_19000_this_deck_made_it_to_infinite_without/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xsfsmz/what_do_you_think_is_the_missing_piece_to_this/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xscoev/deck_to_infinity_cl12000/"
   ]
 }
