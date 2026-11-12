@@ -1,7 +1,28 @@
 {
-  "updated": "2026-11-11",
-  "updatedAt": "2026-11-11T00:32:51.314Z",
+  "updated": "2026-11-12",
+  "updatedAt": "2026-11-12T01:29:28.326Z",
   "decks": [
+    {
+      "creator": "r/MarvelSnapDecks",
+      "video": "Tried to throw something together for the new card and it's been working better than I expected it to (CL 24,490)",
+      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtx2mg/tried_to_throw_something_together_for_the_new/",
+      "published": "2026-11-11",
+      "name": "Laurora",
+      "ids": [
+        "Aurora",
+        "AwesomeAndy",
+        "DraxAvatarOfLife",
+        "HydraBob",
+        "Isca",
+        "Kluh",
+        "Lancelot",
+        "LukeCage",
+        "MobiusMMobius",
+        "Mysterio",
+        "SpiderHam",
+        "Wong"
+      ]
+    },
     {
       "creator": "Alexander Coccia",
       "video": "An HONEST REVIEW of LANCELOT | Marvel Snap",
@@ -703,7 +724,7 @@
         "TechnoOrganicVirus",
         "Thanos"
       ],
-      "rk": 21
+      "rk": 19
     },
     {
       "creator": "Alexander Coccia",
@@ -1298,50 +1319,9 @@
         "Zabu"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/AmericaChavez-AntiPolarMagneto-CaptainMarvel-EnSabahNur-JaneFosterFracturedFrontier-Phastos-PsylockeFracturedFrontier-RedOnslaught-SuperiorIronMan-Surge-ThanosFracturedFrontier-Zabu_SNAP%20Deck?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Deacon Frost is CRACKED! 87% Win Rate & Rank 1 Deck! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=jfrocOQqcYw",
-      "published": "2026-10-31",
-      "name": "Derek",
-      "ids": [
-        "SilverSable",
-        "AmericaChavez",
-        "NicoMinoru",
-        "Surge",
-        "Boomerang",
-        "Toxin",
-        "VampireKillmonger",
-        "LinLie",
-        "ZombieBlade",
-        "Frigga",
-        "Beast",
-        "VampireDeaconFrost"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/derekrnrputk/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x69mr7/returning_player/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x683ig/stale_meta_inspire_me_please_cl26k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x67e7r/grand_arena_hulk_destroy_deck_cl18000/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x66l6y/vamp_ramp_2099_cl_31k/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1x6zf6a/ota_balance_notes_10152026/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7s9fk/returning_player_looking_for_help_with_a_silver/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7s2sd/infinite_with_vampire_ench_cl_22k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7oqfd/giant_modok_cl_17k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7liio/grand_arena_what_did_i_do_cl_18954/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7k0jj/busco_consejos_para_optimizar_este_mazo_de/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7gx1y/who_do_i_target_next_cl_11461/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x7afyw/pixie_deck_updated_for_current_meta_cl_316k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x786u3/made_a_zombie_deck_cl1564/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x76own/alternative_affliction_got_me_to_infinite_cl_2021/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x75jx3/another_7_shots_of_remy_cl_32k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x75i4j/infinite_with_destructozombie_after_the_ota_cl_39k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x726y5/ota_straight_to_infinite_cl20k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1x8k75l/weird_deck/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1x8get4/vampires_vs_zombies_week_2/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x8k093/infinite_with_updated_deck_from_last_season_and/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x8c8la/a_winning_hand_without_one_card_cl7100/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1x8bqjd/grand_arena_rocket_cl_11010/",
@@ -1622,6 +1602,25 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xsk3k1/easy_infinite_with_good_old_thanos_control_cl/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xsjivq/cl_19000_this_deck_made_it_to_infinite_without/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xsfsmz/what_do_you_think_is_the_missing_piece_to_this/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xscoev/deck_to_infinity_cl12000/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xscoev/deck_to_infinity_cl12000/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtyclh/lancelot_he_sure_does_cl_32k/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xt8mje/cl_8500_post_infinite_rank_5k_surf4_my_pride_and/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtxujg/try_this_deck_wolverine_horseman_lancelot_pile/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtxqn4/a_relaxing_climb_to_infinite_this_season_cl_21392/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtwbex/pixie_cerebro_gave_me_the_cleanest_sweep_to/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtw6jc/zombies_truly_are_just_undefeated_lol_just_got_to/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xttvk2/this_deck_goes_kinda_crazy_ngl_cl19879/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xttafz/yay_and_the_two_decks_that_got_me_there_thank_you/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtrvdv/series_5_cards_cl84k/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtqvn3/worth_the_tokens_cl20410/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtohbg/bastiongoing_deck_guide_cl_14900/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtniuw/this_deck_sux_cl_32912/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtiiya/infinite_again_cl20070/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtdvmp/arthur_2099_to_infinite_cl_25815/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtcln1/infinite_with_agatha_cl41574/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtb23n/infinite_with_big_bois_deck_cl7153/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtakvm/cl_9457_how_would_you_turn_this_into_an_infinite/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xt8omh/cl_14k_what_do_you_guys_think/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xt8nax/cl_8500_post_infinite_rank_5k_surf4_my_pride_and/"
   ]
 }
