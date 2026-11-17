@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-15",
-  "updatedAt": "2026-11-15T23:55:32.171Z",
+  "updated": "2026-11-17",
+  "updatedAt": "2026-11-17T02:27:18.789Z",
   "decks": [
     {
       "creator": "Alexander Coccia",
@@ -1272,61 +1272,9 @@
         "ZombieGalacti"
       ],
       "untapped": "https://snap.untapped.gg/en/decks/MajesticWingbeat-AmericaChavez-AdamWarlock-Surge-DoctorOctopusFracturedFrontier-Magik-Maverick-SuperiorSpiderMan-JubileeSilverSurfer-Stick-ArthurPendragon-ZombieGalacti_NakaGalacti"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "November Season Tier List & Best New Decks! NEW Merlin is SO Strong! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=11OBx9pyA5w",
-      "published": "2026-11-03",
-      "name": "New Merlin",
-      "ids": [
-        "DeafeningChord",
-        "MajesticWingbeat",
-        "MerlinOfAvalon",
-        "NicholasScratch",
-        "VampireKillmonger",
-        "JoaquinTorres",
-        "Venus",
-        "Frigga",
-        "ScarletWitchQueenOfChaos",
-        "MotherAskani",
-        "SuperiorIronMan",
-        "Sasquatch"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/new-merlin/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "November Season Tier List & Best New Decks! NEW Merlin is SO Strong! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=11OBx9pyA5w",
-      "published": "2026-11-03",
-      "name": "Lancelot",
-      "ids": [
-        "SpiderHam",
-        "HydraBob",
-        "SamWilson",
-        "ZombieMisterFantastic",
-        "MobiusMMobius",
-        "DraxAvatarOfLife",
-        "Lancelot",
-        "Stardust",
-        "Stryfe",
-        "Kluh",
-        "Aurora",
-        "VampireEnchantress"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/deck-lancelot/"
     }
   ],
   "redditChecked": [
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xbds0c/which_card_should_i_cut_from_one_of_my_alltime/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xb972j/infinite_with_manspider_galactus_cl_37010/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xcw3ch/finished_my_infinite_grind_for_the_month_cl_17k/",
-    "https://www.reddit.com/r/marvelsnapcomp/comments/1xcjdtw/this_or_that_thursday_weekly_collection_thread/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xcvzsi/thoughts_on_this_deck_cl_15637/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xcvcvd/zombies_got_me_to_infinite_cl19210/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xcuxxx/infinite_with_this_kinda_home_brew_cl_40k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xcucte/zombie_dormammu_cl_31k/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xco2us/my_1st_time_in_infinite_cl3220/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xcfizh/thanos_ff_virus_to_infinite_cl_30832/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xcasfb/not_sure_how_but_this_deck_is_doing_quite_well/",
@@ -1618,6 +1566,14 @@
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xwzbo2/ramp_deck_tips/",
     "https://www.reddit.com/r/marvelsnapcomp/comments/1xwhkfb/knights_of_avalon_week_2/",
     "https://www.reddit.com/r/MarvelSnapDecks/comments/1xwsygw/sneaky_climb_to_infinite_cl_178k/",
-    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xwov89/cerebro_5_for_high_voltage_cl_7914/"
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xwov89/cerebro_5_for_high_voltage_cl_7914/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xy220o/ive_hit_infinite_from_zero_in_ten_days_of_snap/",
+    "https://www.reddit.com/r/marvelsnapcomp/comments/1xy7579/weekly_release_discussion_elder_dragon_of_the_moon/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xxruxz/cl_8658_any_suggestions_on_upgrades_to_make_this/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xxoqvf/any_upgrades_or_moves/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xxfqto/arishem_to_infinite/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xxfaka/my_first_big_numbers_win_cl4345/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xxea3h/i_dont_feel_good_about_this_cl_25319/",
+    "https://www.reddit.com/r/MarvelSnapDecks/comments/1xxbhfn/budget_steal_deck_80_wr_cl_8000/"
   ]
 }
