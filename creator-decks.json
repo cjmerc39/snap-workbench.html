@@ -1,7 +1,29 @@
 {
-  "updated": "2026-11-18",
-  "updatedAt": "2026-11-18T02:23:13.186Z",
+  "updated": "2026-11-19",
+  "updatedAt": "2026-11-19T01:09:01.910Z",
   "decks": [
+    {
+      "creator": "Unfitparrot",
+      "video": "Moon Rocks! The best deck just got better!!  - Marvel Snap Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=80x7zZuxHoo",
+      "published": "2026-11-18",
+      "name": "Dragon Rocks",
+      "ids": [
+        "BlueMarvel",
+        "Debrii",
+        "ElderDragonOfTheMoon",
+        "Herbie",
+        "LunaSnow",
+        "Mockingbird",
+        "Ozymandias",
+        "Patriot",
+        "Rhino",
+        "Sandstorm",
+        "SeleneHorseman",
+        "ShadowKing"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/BlueMarvel-Debrii-ElderDragonOfTheMoon-Herbie-LunaSnow-Mockingbird-Ozymandias-Patriot-Rhino-Sandstorm-SeleneHorseman-ShadowKing_Dragon%20Rocks"
+    },
     {
       "creator": "Alexander Coccia",
       "video": "An HONEST REVIEW of ELDER DRAGON OF THE MOON | Marvel Snap",
@@ -877,203 +899,6 @@
         "FinFangFoom"
       ],
       "zone": "https://marvelsnapzone.com/decks/fourth-locationwh8ek68/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play THESE Decks if YOU Want to Hit Infinite EASY! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=S0Hyy0GpSgM",
-      "published": "2026-11-05",
-      "name": "Sulman",
-      "ids": [
-        "LukeCage",
-        "LadyBullseye",
-        "Scorpion",
-        "Mystique",
-        "Magik",
-        "Hazmat",
-        "HellcowFracturedFrontier",
-        "Rogue",
-        "LunaSnow",
-        "Sera",
-        "Blink",
-        "ScorpionBrandNewDay"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/sulman/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play THESE Decks if YOU Want to Hit Infinite EASY! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=S0Hyy0GpSgM",
-      "published": "2026-11-05",
-      "name": "Snap IDK",
-      "ids": [
-        "LadyBullseye",
-        "Scorpion",
-        "Mystique",
-        "Magik",
-        "Hazmat",
-        "HellcowFracturedFrontier",
-        "Rogue",
-        "TheAncientOne",
-        "LunaSnow",
-        "Sera",
-        "ScorpionBrandNewDay",
-        "Onslaught"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/snap-idk0sw0a6i/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play THESE Decks if YOU Want to Hit Infinite EASY! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=S0Hyy0GpSgM",
-      "published": "2026-11-05",
-      "name": "Nightwing",
-      "ids": [
-        "MajesticWingbeat",
-        "TheHunger",
-        "MerlinOfAvalon",
-        "NicholasScratch",
-        "VampireKillmonger",
-        "JoaquinTorres",
-        "ZombieBlade",
-        "Venus",
-        "ScarletWitchQueenOfChaos",
-        "ZombieScarletWitch",
-        "ZombieGiantMan",
-        "Sasquatch"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/nightwing/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play THESE Decks if YOU Want to Hit Infinite EASY! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=S0Hyy0GpSgM",
-      "published": "2026-11-05",
-      "name": "Kickerofelves",
-      "ids": [
-        "SilverSable",
-        "VampireKillmonger",
-        "ZombieBlade",
-        "CassandraNova",
-        "ScarletWitchQueenOfChaos",
-        "DragonOfTheMoon",
-        "EnSabahNur",
-        "Laufey",
-        "VampireDeaconFrost",
-        "Stryfe",
-        "VampireEnchantress",
-        "AntiPolarMagneto"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/kickerofelves/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play THESE Decks if YOU Want to Hit Infinite EASY! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=S0Hyy0GpSgM",
-      "published": "2026-11-05",
-      "name": "pixel jesus",
-      "ids": [
-        "MerlinOfAvalon",
-        "StrangeSupreme",
-        "IronPatriot",
-        "Valentina",
-        "Cosmo",
-        "MobiusMMobius",
-        "ScarletWitchQueenOfChaos",
-        "ShadowKing",
-        "GambitHorseman",
-        "Stardust",
-        "ThanosFracturedFrontier",
-        "Thanos"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/pixel-jesus/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play THESE Decks if YOU Want to Hit Infinite EASY! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=S0Hyy0GpSgM",
-      "published": "2026-11-05",
-      "name": "living in past tense",
-      "ids": [
-        "DeafeningChord",
-        "MajesticWingbeat",
-        "KittyPryde",
-        "NicoMinoru",
-        "NicholasScratch",
-        "VampireKillmonger",
-        "Angela",
-        "Bishop",
-        "Venus",
-        "Cosmo",
-        "ScarletSpider",
-        "ShouLao"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/living-in-past-tense/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play THESE Decks if YOU Want to Hit Infinite EASY! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=S0Hyy0GpSgM",
-      "published": "2026-11-05",
-      "name": "fudge",
-      "ids": [
-        "DeafeningChord",
-        "MajesticWingbeat",
-        "MerlinOfAvalon",
-        "NicholasScratch",
-        "Merlin",
-        "VampireKillmonger",
-        "JoaquinTorres",
-        "MobiusMMobius",
-        "ScarletWitchQueenOfChaos",
-        "WerewolfByNight",
-        "ShouLao",
-        "SuperiorIronMan"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/fudge6zbz2x7/"
-    },
-    {
-      "creator": "Snap Judgments",
-      "video": "Play THESE Decks if YOU Want to Hit Infinite EASY! Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=S0Hyy0GpSgM",
-      "published": "2026-11-05",
-      "name": "Derek",
-      "ids": [
-        "X23",
-        "MoiraX",
-        "NicoMinoru",
-        "UncleBen",
-        "ZombieNova",
-        "Carnage",
-        "Tombstone",
-        "Killmonger",
-        "Venom",
-        "ZombieVenom",
-        "MorganLeFay",
-        "SinisterSix"
-      ],
-      "zone": "https://marvelsnapzone.com/decks/derekevfgr6e/"
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "Greedy 30 card Arishem to Infinite CL: 18,938",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1xomvp3/greedy_30_card_arishem_to_infinite_cl_18938/",
-      "published": "2026-11-05",
-      "name": "",
-      "ids": [
-        "Agamotto",
-        "Arishem",
-        "Blob",
-        "Galacta",
-        "Galactus",
-        "GambitHorseman",
-        "Hulkling",
-        "Legion",
-        "Mockingbird",
-        "Stardust",
-        "TechnoOrganicVirus",
-        "Thanos"
-      ]
     }
   ],
   "redditChecked": [
