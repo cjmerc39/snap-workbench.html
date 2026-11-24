@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-23",
-  "updatedAt": "2026-11-23T00:47:08.548Z",
+  "updated": "2026-11-24",
+  "updatedAt": "2026-11-24T04:21:43.055Z",
   "decks": [
     {
       "creator": "Alexander Coccia",
@@ -591,93 +591,6 @@
         "Mysterio",
         "SpiderHam",
         "Wong"
-      ]
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of LANCELOT | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=5hT9ci34Q48",
-      "published": "2026-11-10",
-      "name": "Lancalot 2099",
-      "ids": [
-        "AntiPolarMagneto",
-        "ArthurPendragon",
-        "CaptainBritain",
-        "CaptainMarvel",
-        "Doom2099",
-        "DrDoom",
-        "DragonLord",
-        "IronLad",
-        "Lancelot",
-        "MobiusMMobius",
-        "Moondragon",
-        "Mordred"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AntiPolarMagneto-ArthurPendragon-CaptainBritain-CaptainMarvel-Doom2099-DrDoom-DragonLord-IronLad-Lancelot-MobiusMMobius-Moondragon-Mordred_Lancalot%202099?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of LANCELOT | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=5hT9ci34Q48",
-      "published": "2026-11-10",
-      "name": "Specelot",
-      "ids": [
-        "AntMan",
-        "CaptainAmerica",
-        "CaptainCarter",
-        "Cosmo",
-        "Goliath",
-        "IronMan",
-        "JJonahJameson",
-        "Lancelot",
-        "LukeCage",
-        "SamWilson",
-        "Spectrum",
-        "Stardust"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/AntMan-CaptainAmerica-CaptainCarter-Cosmo-Goliath-IronMan-JJonahJameson-Lancelot-LukeCage-SamWilson-Spectrum-Stardust_Specelot?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "Alexander Coccia",
-      "video": "An HONEST REVIEW of LANCELOT | Marvel Snap",
-      "url": "https://www.youtube.com/watch?v=5hT9ci34Q48",
-      "published": "2026-11-10",
-      "name": "Lancaurora",
-      "ids": [
-        "Aurora",
-        "AwesomeAndy",
-        "DraxAvatarOfLife",
-        "HydraBob",
-        "Isca",
-        "Lancelot",
-        "SamWilson",
-        "SpiderHam",
-        "SuperSkrull",
-        "TheThingFirstSteps",
-        "Venus",
-        "ZombieMisterFantastic"
-      ],
-      "untapped": "https://snap.untapped.gg/en/decks/Aurora-AwesomeAndy-DraxAvatarOfLife-HydraBob-Isca-Lancelot-SamWilson-SpiderHam-SuperSkrull-TheThingFirstSteps-Venus-ZombieMisterFantastic_Lancaurora?utm_medium=affiliate&utm_campaign=alexcoccia"
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "Low cortisol climb to infinite with budget steal deck (CL: 7,400)",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1xt17i8/low_cortisol_climb_to_infinite_with_budget_steal/",
-      "published": "2026-11-10",
-      "name": "",
-      "ids": [
-        "CassandraNova",
-        "Iceman",
-        "Juggernaut",
-        "Kluh",
-        "MobiusMMobius",
-        "ScarletWitchQueenOfChaos",
-        "ShadowKing",
-        "SilverSable",
-        "VampireDeaconFrost",
-        "VampireEnchantress",
-        "VampireKillmonger",
-        "ZombieBlade"
       ]
     }
   ],
