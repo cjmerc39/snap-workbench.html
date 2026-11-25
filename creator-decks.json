@@ -1,7 +1,51 @@
 {
-  "updated": "2026-11-24",
-  "updatedAt": "2026-11-24T04:48:07.349Z",
+  "updated": "2026-11-25",
+  "updatedAt": "2026-11-25T03:05:40.465Z",
   "decks": [
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of SIR PERCY BLACK KNIGHT | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=HjvHbMbvtuA",
+      "published": "2026-11-24",
+      "name": "Sir Percy 4",
+      "ids": [
+        "ArthurPendragon",
+        "Bastion",
+        "CaptainBritain",
+        "MoonGirl",
+        "Moonstone",
+        "MotherAskani",
+        "Quinjet",
+        "ShangChi",
+        "SirPercyBlackKnight",
+        "Surge",
+        "VictoriaHand",
+        "Zabu"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/ArthurPendragon-Bastion-CaptainBritain-MoonGirl-Moonstone-MotherAskani-Quinjet-ShangChi-SirPercyBlackKnight-Surge-VictoriaHand-Zabu_Sir%20Percy%204?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
+    {
+      "creator": "Alexander Coccia",
+      "video": "An HONEST REVIEW of SIR PERCY BLACK KNIGHT | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=HjvHbMbvtuA",
+      "published": "2026-11-24",
+      "name": "Sir Ari Eson",
+      "ids": [
+        "Alioth",
+        "Arishem",
+        "Blob",
+        "Eson",
+        "GambitHorseman",
+        "IronPatriot",
+        "Mockingbird",
+        "NickFury",
+        "Quinjet",
+        "RogueScionOfDivision",
+        "SirPercyBlackKnight",
+        "Valentina"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/Alioth-Arishem-Blob-Eson-GambitHorseman-IronPatriot-Mockingbird-NickFury-Quinjet-RogueScionOfDivision-SirPercyBlackKnight-Valentina_Sir%20Ari%20Eson?utm_medium=affiliate&utm_campaign=alexcoccia"
+    },
     {
       "creator": "Alexander Coccia",
       "video": "TOP 10 BEST DECKS IN MARVEL SNAP | Weekly Marvel Snap Meta Report #210",
@@ -570,27 +614,6 @@
         "TyphoidMary",
         "Zabu",
         "Zero"
-      ]
-    },
-    {
-      "creator": "r/MarvelSnapDecks",
-      "video": "Tried to throw something together for the new card and it's been working better than I expected it to (CL 24,490)",
-      "url": "https://www.reddit.com/r/MarvelSnapDecks/comments/1xtx2mg/tried_to_throw_something_together_for_the_new/",
-      "published": "2026-11-11",
-      "name": "Laurora",
-      "ids": [
-        "Aurora",
-        "AwesomeAndy",
-        "DraxAvatarOfLife",
-        "HydraBob",
-        "Isca",
-        "Kluh",
-        "Lancelot",
-        "LukeCage",
-        "MobiusMMobius",
-        "Mysterio",
-        "SpiderHam",
-        "Wong"
       ]
     }
   ],
