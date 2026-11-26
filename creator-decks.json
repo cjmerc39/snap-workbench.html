@@ -1,7 +1,50 @@
 {
-  "updated": "2026-11-25",
-  "updatedAt": "2026-11-25T03:34:29.290Z",
+  "updated": "2026-11-26",
+  "updatedAt": "2026-11-26T02:13:38.421Z",
   "decks": [
+    {
+      "creator": "Coougarrr",
+      "video": "My Secret Tech to Make Daken MORE POWERFUL | Marvel Snap",
+      "url": "https://www.youtube.com/watch?v=S56JenDtXtY",
+      "published": "2026-11-25",
+      "name": "",
+      "ids": [
+        "MajesticWingbeat",
+        "Quinjet",
+        "NicoMinoru",
+        "KnightsVow",
+        "Surge",
+        "GrandMaster",
+        "LinLie",
+        "Bullseye",
+        "Killmonger",
+        "Daken",
+        "MotherAskani",
+        "MoonGirl"
+      ]
+    },
+    {
+      "creator": "Unfitparrot",
+      "video": "Explosive Black Knight Combo! This deck plays EVERY CARD!- Marvel Snap Deck Highlight",
+      "url": "https://www.youtube.com/watch?v=JSOsn4dsaCo",
+      "published": "2026-11-25",
+      "name": "Polar Night",
+      "ids": [
+        "AntiPolarMagneto",
+        "ArthurPendragon",
+        "Blink",
+        "CalibanHorseman",
+        "Domino",
+        "DragonLord",
+        "EnSabahNur",
+        "Jubilee",
+        "MobiusMMobius",
+        "Quicksilver",
+        "SirPercyBlackKnight",
+        "WolverineHorseman"
+      ],
+      "untapped": "https://snap.untapped.gg/en/decks/AntiPolarMagneto-ArthurPendragon-Blink-CalibanHorseman-Domino-DragonLord-EnSabahNur-Jubilee-MobiusMMobius-Quicksilver-SirPercyBlackKnight-WolverineHorseman_Polar%20Night"
+    },
     {
       "creator": "Alexander Coccia",
       "video": "An HONEST REVIEW of SIR PERCY BLACK KNIGHT | Marvel Snap",
